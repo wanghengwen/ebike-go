@@ -1,0 +1,103 @@
+# 配置优先级（低 → 高）：本文件 < Nacos ebike-device-worker.yml / kafka.yaml < 环境变量
+# 运行时以 Pod 日志 [config] effective kafka to_saas=... 为准
+#
+# 与 Java ebike-device-worker 对齐：
+#   - Kafka consumer group / topic / brokers：Nacos kafka.yaml + ebike-device-worker.yml
+#   - PostgreSQL：Nacos spring.datasource（不做 DATABASE_NAME 覆盖）
+#   - Redis / FastId：Nacos xyy_ops
+#
+# 切流前请先缩容 Java worker（同 consumer group 下不可双实例消费）。
+#
+# 环境变量（可选）：
+#   KAFKA_ENABLED=true|false
+#   KAFKA_PUSH_ENABLED=true|false
+#   NACOS_REGISTER_ENABLED=true|false
+
+server:
+  port: "8080"
+
+proxy:
+  # 固定指向 Java 后端 Service（切主流量到 Go 后仍走 Java，避免回环）
+  target_url: "http://ebike-device-worker-java.prod.svc.cluster.local:8080"
+  live_list:
+    - /ebike/gps/getBatchOrderTrajectory
+    - /ebike/gps/getOrderTrajectory
+    - /ebike/gps/saveOrderTrajectory
+    - /ebike/gps/saveMovingEBikeTrajectory
+    - /ebike/gps/getTrajectory
+    - /cmd/getEbikeCmd
+    - /ebike/gps/getBatchOrderTrajectoryDistance
+    - /ebike/gps/getMetric
+    - /ebike/gps/getMovingEBikeTrajectory
+    - /ebike/gps/saveMovingEBikeTrajectory
+    - /ebike/gps/saveOrderTrajectory
+    - /cmd/saveEbikeCmd
+  record_list: []
+nacos:
+  serverAddr: 192.168.2.20
+  port: 8848
+  namespace: prod
+  group: xyy
+  registerEnabled: true
+
+database:
+  dsn: ""  # Nacos spring.datasource
+
+redis:
+  addr: ""
+  password: ""
+  prefix: ""
+  db: 0
+
+spring:
+  application:
+    name: ebike-device-worker
+  xyy:
+    fastid:
+      enabled: true
+      server-addr: fastid.luopingtech.com
+      namespace: prod
+      groupId: xyy
+      app-name: ebike-device-worker
+
+kafka:
+  enabled: true
+  push_enabled: true
+  brokers:
+    - "localhost:9092"  # Nacos kafka.yaml 覆盖
+  topics:
+    data_topic: "data-topic"
+    event_topic: "event-topic"
+    alarm_topic: "alarm-topic"
+    to_saas_topic: "saas_0"  # consume ecu.kafka.parent-topic；集群无 to-saas topic
+  consumers:
+    # 留空，由 Nacos spring.kafka.consumer.group-id-* 填充（与 Java 同名）
+    group_data: ""
+    group_event: ""
+    group_alarm: ""
+    data_concurrency: 1
+    event_concurrency: 1
+    alarm_concurrency: 1
+    batch_size: 500
+    batch_wait_ms: 100
+    start_offset: latest
+
+persist_config:
+  persist_batch_size: 20
+  persist_limit_size: 50
+  persist_interval_ms: 1000
+  table_suffix: ""
+  #玉环项目需要有数据库后缀_new
+  #table_suffix: "_new"
+
+caffeine:
+  device_tenant_mapping_cache_size: 100000
+  tenant_cache_size: 2000
+  timeout_sec: 120
+
+xyy:
+  gray_tenant_ids: []
+
+paas:
+  enabled: false
+  base_url: ""

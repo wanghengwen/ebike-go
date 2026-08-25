@@ -1,0 +1,139 @@
+# ebike-fence-go 灰度切流部署
+#
+# K8s 资源命名与 Java 版对齐规则：
+#   Java: Deployment/Service 名 ebike-fence，label app=ebike-fence, lang=java
+#   Go:   Deployment/Service 名 ebike-fence-go，label app=ebike-fence-go, lang=go
+#   Nacos 注册名仍为 ebike-fence（见 conf/application-k8s.yml server.name，与 K8s label 无关）
+#
+# 路由策略（proxy_gateway.go，需 xyy.proxy.targetUrl 非空）：
+#   liveList   → Go 原生处理
+#   recordList → 转发 Java 并打 [RECORD] 日志
+#   其余路径   → DRY_RUN=true 时 Go+Java 双跑比对，客户端仍收 Java 响应
+#
+# DRY_RUN 与 Nacos 注册已解耦：
+#   DRY_RUN=true                → 影子比对（打印 [SHADOW MATCH/DIFF]）
+#   NACOS_REGISTER_ENABLED=true → 注册到 Nacos（可与 DRY_RUN 同时为 true）
+#
+# 若 Java ebike-fence 仍在 Nacos，流量会在 Java/Go 间随机分配；影子阶段建议 Java 降权或注销。
+# Go 转发 Java 使用 ClusterIP：http://ebike-fence.prod.svc.cluster.local:8080
+#
+# 部署前：
+#   1. 编译: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/ebike-fence-go .
+#   2. 构建并推送镜像后更新下方 image tag
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ebike-fence-go
+  namespace: prod
+  labels:
+    app: ebike-fence-go
+    lang: go
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-fence-go
+      lang: go
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: ebike-fence-go
+        lang: go
+    spec:
+      terminationGracePeriodSeconds: 75
+      containers:
+        - name: ebike-fence-go
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-fence-go:v1.0.31
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: GOMEMLIMIT
+              value: 256MiB
+            - name: DRY_RUN
+              value: "true"
+            - name: NACOS_REGISTER_ENABLED
+              value: "true"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    curl -sf -X POST http://127.0.0.1:8080/actuator/deregisterService || true;
+                    sleep 15
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "2"
+              memory: 384Mi
+            requests:
+              cpu: 500m
+              memory: 64Mi
+          volumeMounts:
+            - name: logs
+              mountPath: /logs
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+        - name: logs
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebike-fence-go
+  namespace: prod
+  labels:
+    app: ebike-fence-go
+    lang: go
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-fence-go
+    lang: go

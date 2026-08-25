@@ -1,0 +1,83 @@
+{
+  "path": "/riding_card_order/page",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 9,
+  "samples": [
+    {
+      "fingerprint": "c31dac7cd07f",
+      "success": true,
+      "code": "0",
+      "dataRaw": "{\"count\":0,\"pageNum\":1,\"pageSize\":10,\"orders\":null,\"searchCount\":true,\"list\":[]}}",
+      "cusTimeMs": 4,
+      "request": {
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "朱雯兰",
+          "pin": "b_3ba4f5880482053",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178273738924662861282043"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 227587649840878077,
+        "type": 1
+      },
+      "source": "0.log.20260705-190049:12948"
+    },
+    {
+      "fingerprint": "b460c4357e7e",
+      "success": true,
+      "code": "0",
+      "dataRaw": "{\"count\":0,\"pageNum\":1,\"pageSize\":10,\"orders\":null,\"searchCount\":true,\"list\":[]}}",
+      "cusTimeMs": 5,
+      "request": {
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "1007",
+          "traceId": "178286792455783943177137"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 364881328207300695,
+        "type": 1
+      },
+      "source": "0.log.20260705-190049:17431"
+    },
+    {
+      "fingerprint": "bf9a29a5b6e1",
+      "success": true,
+      "code": "0",
+      "dataRaw": "{\"count\":0,\"pageNum\":1,\"pageSize\":10,\"orders\":null,\"searchCount\":true,\"list\":[]}}",
+      "cusTimeMs": 5,
+      "request": {
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178340490290034386417399"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 227587649840878077,
+        "type": 1
+      },
+      "source": "0.log:5401"
+    }
+  ]
+}

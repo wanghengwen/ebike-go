@@ -1,0 +1,59 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ebike-device-openapi-go K8s/生产配置（参考 ebike-device-paas-go/conf 布局）
+#
+# 用法二选一：
+#   A) 作为 Nacos data-id `ebike-device-openapi.yml`(group xyy) 的内容参考；
+#   B) 作为本地文件直接加载：设 CONFIG_PATH=conf/application-k8s.yml。
+# redis / kafka 由 Nacos xyy_ops 组的 redis.yaml / kafka.yaml 加载，这里不重复。
+# ${ENV:default} 占位仅在经 Nacos 下发时由 resolvePlaceholders 解析；
+# 作为本地文件直读时不解析占位，请改用明确值或依赖环境变量覆盖。
+#
+# 配置优先级：环境变量(最高) > Nacos > 本地文件 > 内置默认。
+# MQTT 相关环境变量：MQTT_BROKER / MQTT_USERNAME / MQTT_PASSWORD / MQTT_ENABLED。
+# ─────────────────────────────────────────────────────────────────────────────
+
+xyy:
+  bin2UpdateHost: true
+  cloud: "${CLOUD:aliyun}"
+  router:
+    routerSwitch: true
+    anvelinkOpenapiUrl: "http://ebike-device-openapi-anvelink.prod.svc.cluster.local:8080"
+    excludeUrls: []
+
+timeout-config:
+  connectTimeoutMs: 2000
+  readTimeoutMs: 15000
+
+# device_info_/imei_car_ 在 Redis db4（与 ecu_login 所在 db 可能不同）
+# 也可用环境变量 REDIS_DEVICE_DATABASE=4
+spring:
+  redis:
+    device-database: 4
+
+# 泺平 MQTT（EMQX）接入：内置 MQTT 客户端 + 共享订阅收发
+# 请将本段同步到 Nacos：data-id=ebike-device-openapi.yml, group=xyy, namespace=prod
+# 环境变量 MQTT_BROKER / MQTT_USERNAME / MQTT_PASSWORD / MQTT_ENABLED 仍可覆盖。
+mqtt:
+  enabled: true
+  broker: "tcp://dev.luopingtech.com:1883"
+  username: "myuser"
+  password: "mypass"
+  clientIdPrefix: "ebike-device-openapi-"   # clientId = 前缀 + Pod 名(hostname)
+  sharedGroup: "device-openapi"                    # 共享订阅组：$share/device-openapi/ecu/brpt/...
+  publishQos: 0
+  subscribeQos: 0
+  keepAliveSeconds: 30
+  cleanSession: true
+  rptTopic: "ecu/brpt/ebike/#"
+  rspTopic: ""
+  # connected 不再订阅/处理；上线仅由 brpt 上行（cmd=35 / 其它帧）驱动。
+  connectedTopic: ""
+  # 可选：EMQX 下线事件（共享订阅）。需 ACL 放开 $SYS。留空则仅靠 lastSeen 扫描。
+  disconnectedTopic: "$SYS/brokers/+/clients/+/disconnected"
+  # 空闲心跳约 10 分钟 → TTL 取约 3 倍，避免误判离线
+  onlineTtlSeconds: 1800
+  syncWaitMs: 0
+  # 上行消息处理背压：有界 worker 池 + 单条处理超时
+  workerPoolSize: 32
+  workerQueueSize: 256
+  messageTimeoutMs: 3000

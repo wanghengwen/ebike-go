@@ -1,0 +1,121 @@
+#
+# 部署前：
+#   1. 编译: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/ebike-analyze-go .
+#   2. 构建并推送镜像后更新下方 image tag
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ebike-analyze-go
+  namespace: prod
+  labels:
+    app: ebike-analyze-go
+    lang: go
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-analyze-go
+      lang: go
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: ebike-analyze-go
+        lang: go
+    spec:
+      terminationGracePeriodSeconds: 75
+      containers:
+        - name: ebike-analyze-go
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-analyze-go:v1.0.5
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GIN_MODE
+              value: debug
+            - name: GOMEMLIMIT
+              value: 384MiB
+            - name: DRY_RUN
+              value: "true"
+            - name: NACOS_REGISTER_ENABLED
+              value: "true"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    curl -sf -X POST http://127.0.0.1:8080/actuator/deregisterService || true;
+                    sleep 15
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "2"
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 128Mi
+          volumeMounts:
+            - name: logs
+              mountPath: /logs
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+        - name: logs
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebike-analyze-go
+  namespace: prod
+  labels:
+    app: ebike-analyze-go
+    lang: go
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-analyze-go
+    lang: go

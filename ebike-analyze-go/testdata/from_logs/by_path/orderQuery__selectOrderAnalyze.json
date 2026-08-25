@@ -1,0 +1,95 @@
+{
+  "path": "/orderQuery/selectOrderAnalyze",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 8,
+  "samples": [
+    {
+      "fingerprint": "7e5117793232",
+      "success": true,
+      "code": "0",
+      "dataRaw": "OrderLocationAnalyzeCO(total=0, pCount=0, nCount=0, oList=[])}",
+      "cusTimeMs": 2,
+      "request": {
+        "commandContext": {
+          "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+          "ip": "172.16.1.159",
+          "name": "王总",
+          "pin": "b_32b328e001816b3",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "01985ced-df01-49d7-8555-495a8d88017e"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 244068824482587140,
+        "startTime": [
+          1783440000000,
+          1783526399000
+        ]
+      },
+      "source": "0.log:15835"
+    },
+    {
+      "fingerprint": "a8ef611bc433",
+      "success": true,
+      "code": "0",
+      "dataRaw": "OrderLocationAnalyzeCO(total=0, pCount=0, nCount=0, oList=[])}",
+      "cusTimeMs": 2,
+      "request": {
+        "commandContext": {
+          "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+          "ip": "172.16.1.159",
+          "name": "王总",
+          "pin": "b_32b328e001816b3",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "f3404f90-ff9d-4ed3-8af8-61f1254a0ab8"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 244068824482587140,
+        "startTime": [
+          1782835200000,
+          1785513599000
+        ]
+      },
+      "source": "0.log:15859"
+    },
+    {
+      "fingerprint": "e2f4ab4bc1d0",
+      "success": true,
+      "code": "0",
+      "dataRaw": "OrderLocationAnalyzeCO(total=0, pCount=0, nCount=0, oList=[])}",
+      "cusTimeMs": 3,
+      "request": {
+        "commandContext": {
+          "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+          "ip": "192.168.2.20",
+          "name": "赵坤鹏",
+          "pin": "b_3289379801817ad",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "1000",
+          "traceId": "070cddbd-0fd2-41f8-aa97-b968439d04a6"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 274684702135689202,
+        "startTime": [
+          1781280000000,
+          1781366399000
+        ]
+      },
+      "source": "0.log.20260615-130107:26277"
+    }
+  ]
+}

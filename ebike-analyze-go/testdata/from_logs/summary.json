@@ -1,0 +1,72 @@
+{
+  "generatedAt": "2026-07-10T11:35:31",
+  "logFiles": [
+    "0.log.20260615-130107",
+    "0.log.20260626-160520",
+    "0.log.20260705-190049",
+    "0.log"
+  ],
+  "skippedPaths": [
+    "/analyze/member",
+    "/carServiceStatistics/getList",
+    "/orderQuery/selectOrderCount",
+    "/parking/orderStatistics/list",
+    "/user/ageStatistic/v2",
+    "/user/allUserStatistic",
+    "/user/userStatisticHour"
+  ],
+  "totalRecords": 176,
+  "parseErrors": 0,
+  "uniquePaths": 7,
+  "paths": [
+    {
+      "path": "/userQuery/selectUserCount",
+      "totalSeen": 130,
+      "uniqueShapes": 57,
+      "samplesKept": 3,
+      "file": "by_path/userQuery__selectUserCount.json"
+    },
+    {
+      "path": "/car-statistics/queryByCarList",
+      "totalSeen": 15,
+      "uniqueShapes": 10,
+      "samplesKept": 3,
+      "file": "by_path/car-statistics__queryByCarList.json"
+    },
+    {
+      "path": "/riding_card_order/page",
+      "totalSeen": 9,
+      "uniqueShapes": 4,
+      "samplesKept": 3,
+      "file": "by_path/riding_card_order__page.json"
+    },
+    {
+      "path": "/orderQuery/selectOrderAnalyze",
+      "totalSeen": 8,
+      "uniqueShapes": 6,
+      "samplesKept": 3,
+      "file": "by_path/orderQuery__selectOrderAnalyze.json"
+    },
+    {
+      "path": "/user/ageStatistic",
+      "totalSeen": 8,
+      "uniqueShapes": 8,
+      "samplesKept": 3,
+      "file": "by_path/user__ageStatistic.json"
+    },
+    {
+      "path": "/parking/statistics",
+      "totalSeen": 5,
+      "uniqueShapes": 3,
+      "samplesKept": 3,
+      "file": "by_path/parking__statistics.json"
+    },
+    {
+      "path": "/parking/getParkingInAndOutflow",
+      "totalSeen": 1,
+      "uniqueShapes": 1,
+      "samplesKept": 1,
+      "file": "by_path/parking__getParkingInAndOutflow.json"
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: map-service
+  name: map-service
+  namespace: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: map-service
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: map-service
+        lang: go
+    spec:
+      containers:
+        - env:
+            # Web framework mode
+            - name: GIN_MODE
+              value: release
+            # Nacos Configs
+            - name: NACOS_REGISTER_ENABLED
+              value: 'true'
+            - name: NACOS_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            # Service Port
+            - name: SERVER_PORT
+              value: '8080'
+            # Downward API: Pass Pod IP for Nacos registration
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/map-service-go:v1.0.3
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - >-
+                    curl -X POST "http://localhost:8080/actuator/deregisterService" || true;
+                    sleep 15;
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            # Faster initial delay since Go starts in milliseconds
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: map-service
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            # Significantly reduced limits/requests for Go
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          volumeMounts:
+            - mountPath: /logs
+              name: volume-localtime
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 45
+      volumes:
+        - emptyDir: {}
+          name: volume-localtime
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: map-service
+  name: map-service
+  namespace: prod
+spec:
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: map-service
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/service-weight: ''
+  labels:
+    app: map-service
+  name: map-service
+  namespace: prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: map.luopingtech.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: map-service
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific

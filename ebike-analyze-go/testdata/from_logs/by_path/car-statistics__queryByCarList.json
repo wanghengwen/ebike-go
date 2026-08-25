@@ -1,0 +1,99 @@
+{
+  "path": "/car-statistics/queryByCarList",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 15,
+  "samples": [
+    {
+      "fingerprint": "c5cc91ee93cb",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[]}",
+      "cusTimeMs": 3,
+      "request": {
+        "carIds": [
+          "100600000",
+          "100600004",
+          "100603516",
+          "100603523",
+          "100603525"
+        ],
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178270129948493077361295"
+        },
+        "endTime": "2026-06-29T23:59:59",
+        "serviceId": 227596718664324575,
+        "startTime": "2026-06-29T00:00:00"
+      },
+      "source": "0.log.20260705-190049:10406"
+    },
+    {
+      "fingerprint": "869f62f210e3",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[]}",
+      "cusTimeMs": 3,
+      "request": {
+        "carIds": [
+          "100600000"
+        ],
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "赵坤鹏",
+          "pin": "b_3289379801817ad",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "1003",
+          "traceId": "178357188464562111680379"
+        },
+        "endTime": "2026-07-09T23:59:59",
+        "serviceId": 234425751024698753,
+        "startTime": "2026-07-09T00:00:00"
+      },
+      "source": "0.log:13414"
+    },
+    {
+      "fingerprint": "7f844846cbd2",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[]}",
+      "cusTimeMs": 4,
+      "request": {
+        "carIds": [
+          "100600100",
+          "100600101",
+          "100600102",
+          "100600103",
+          "100600104",
+          "100600105",
+          "100600106",
+          "100600107",
+          "100600108",
+          "100600109"
+        ],
+        "commandContext": {
+          "ip": "172.16.1.159",
+          "name": "武士勇",
+          "pin": "b_4b360bb024811db",
+          "platform": "pc",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "1003",
+          "traceId": "178263547643786902455857"
+        },
+        "endTime": "2025-12-31T23:59:59",
+        "serviceId": 338362359727786125,
+        "startTime": "2025-01-01T00:00:00"
+      },
+      "source": "0.log.20260705-190049:7481"
+    }
+  ]
+}

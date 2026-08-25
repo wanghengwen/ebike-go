@@ -1,0 +1,101 @@
+{
+  "path": "/user/ageStatistic",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 8,
+  "samples": [
+    {
+      "fingerprint": "35c18a0a03e3",
+      "success": true,
+      "code": "0",
+      "dataRaw": "AgeStatisticCO(have_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=1, threeAgeScope=1, fourAgeScope=1, total=3), male=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=1, threeAgeScope=3, fourAgeScope=3, total=7), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=10), no_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), male=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=0))}",
+      "cusTimeMs": 5,
+      "request": {
+        "commandContext": {
+          "deviceId": "18d660b8-bd27-49f4-9b46-3b0933ac82c4",
+          "ip": "172.16.1.159",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178332434026071212355185"
+        },
+        "serviceIds": [
+          227596718664324575
+        ]
+      },
+      "source": "0.log:2570"
+    },
+    {
+      "fingerprint": "8ad483ecb2df",
+      "success": true,
+      "code": "0",
+      "dataRaw": "AgeStatisticCO(have_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=1, threeAgeScope=3, fourAgeScope=7, total=11), male=AgeStatisticCO.AgeMap(oneAgeScope=1, twoAgeScope=1, threeAgeScope=13, fourAgeScope=12, total=30), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=41), no_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), male=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=0))}",
+      "cusTimeMs": 5,
+      "request": {
+        "commandContext": {
+          "deviceId": "387b92b8-0675-4daf-9fd1-a20a039d6218",
+          "ip": "172.16.1.159",
+          "name": "王总",
+          "pin": "b_32b328e001816b3",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178358663286962874904378"
+        },
+        "serviceIds": [
+          227587649840878077,
+          227596718664324575,
+          235016899585908371,
+          237237277418854233,
+          239659044120824479,
+          244068824482587140,
+          247595548830867740,
+          250398659236601525
+        ]
+      },
+      "source": "0.log:15882"
+    },
+    {
+      "fingerprint": "dc7c13671863",
+      "success": true,
+      "code": "0",
+      "dataRaw": "AgeStatisticCO(have_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=1, threeAgeScope=3, fourAgeScope=8, total=12), male=AgeStatisticCO.AgeMap(oneAgeScope=1, twoAgeScope=1, threeAgeScope=15, fourAgeScope=16, total=37), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=49), no_riding_qualification=AgeStatisticCO.RidingQualification(female=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), male=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), unknown=AgeStatisticCO.AgeMap(oneAgeScope=0, twoAgeScope=0, threeAgeScope=0, fourAgeScope=0, total=0), total=0))}",
+      "cusTimeMs": 7,
+      "request": {
+        "commandContext": {
+          "deviceId": "18d660b8-bd27-49f4-9b46-3b0933ac82c4",
+          "ip": "172.16.1.159",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "178332432931419017641383"
+        },
+        "serviceIds": [
+          227587649840878077,
+          227596718664324575,
+          235016899585908371,
+          237237277418854233,
+          239659044120824479,
+          244068824482587140,
+          247595548830867740,
+          247636456246873814,
+          247787628358275956,
+          250398659236601525,
+          270786518950875403,
+          362296827341443870,
+          362628699464403217,
+          364476458820181163,
+          364476826039361235
+        ]
+      },
+      "source": "0.log:2554"
+    }
+  ]
+}

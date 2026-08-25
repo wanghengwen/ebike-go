@@ -1,0 +1,13 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.log
+*.sh
+diff_summary.txt
+.idea/
+.vscode/
+bin/
+build/
+vendor/

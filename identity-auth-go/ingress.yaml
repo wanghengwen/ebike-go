@@ -1,0 +1,25 @@
+# 可选：需要对外暴露 auth.luopingtech.com 时再 apply
+# kubectl apply -f ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: underscores_in_headers on;
+    nginx.ingress.kubernetes.io/service-weight: ""
+  labels:
+    app: identity-auth
+  name: identity-auth
+  namespace: prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: auth.luopingtech.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: identity-auth
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific

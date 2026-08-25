@@ -1,0 +1,103 @@
+{
+  "path": "/parking/statistics",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 5,
+  "samples": [
+    {
+      "fingerprint": "95a826941c29",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[]}",
+      "cusTimeMs": 5,
+      "request": {
+        "areaIds": [
+          244815532464276641
+        ],
+        "commandContext": {
+          "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+          "ip": "172.16.1.159",
+          "name": "王总",
+          "pin": "b_32b328e001816b3",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "ba465ad1-b2a7-4b7f-a759-2649841ec213"
+        },
+        "pageNum": 1,
+        "pageSize": 1,
+        "searchCount": true,
+        "serviceId": 244068824482587140
+      },
+      "source": "0.log:15767"
+    },
+    {
+      "fingerprint": "61855d069d6a",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[ParkingStationStatisticalCO(serviceId=227596718664324575, parkingId=227596969919908199, canRent=1, idle=1, siteOut=0, ddMissOrder=0, booking=0, operation=0, alarm=0, fault=0, idle13=0, idle36=0, idle612=0, idle1224=0, idle2448=0, idle48=0)]}",
+      "cusTimeMs": 11,
+      "request": {
+        "areaIds": [
+          366156214086666337,
+          227596969919908199,
+          365824859507267002
+        ],
+        "commandContext": {
+          "deviceId": "7fc4d3f2-5edc-38bb-b0b1-f9dfd31dc083",
+          "ip": "172.16.1.159",
+          "name": "桐乡公共自行车测试2",
+          "pin": "b_52613a003b00c5d",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "2",
+          "traceId": "d93ab8ac-3d59-4769-8d05-d4e7991e201c"
+        },
+        "pageNum": 1,
+        "pageSize": 3,
+        "searchCount": true,
+        "serviceId": 227596718664324575
+      },
+      "source": "0.log.20260626-160520:26143"
+    },
+    {
+      "fingerprint": "7aa5bf570f9b",
+      "success": true,
+      "code": "0",
+      "dataRaw": "[]}",
+      "cusTimeMs": 66,
+      "request": {
+        "areaIds": [
+          274866299795412104,
+          274866299795412106,
+          274866299795413564,
+          274866299795413568,
+          308868439201549414,
+          274866299795414003,
+          327814063930741481,
+          327811927183989441,
+          274866299795412468,
+          274866299795413462
+        ],
+        "commandContext": {
+          "deviceId": "b4a561f8-c87f-3dd9-b894-32d1d39eceee",
+          "ip": "172.16.3.208",
+          "name": "郑文政",
+          "pin": "b_3cfe10e8048187f",
+          "platform": "android",
+          "source": "ebike-service-business",
+          "stressTesting": false,
+          "tenantId": "1000",
+          "traceId": "756de176-00b6-447d-9bd4-9987c7df9d48"
+        },
+        "pageNum": 1,
+        "pageSize": 10,
+        "searchCount": true,
+        "serviceId": 274684702135689202
+      },
+      "source": "0.log.20260626-160520:11020"
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+# K8s Shadow / Kafka 写库对拍 bootstrap（仅对拍实例使用，生产切流见 application-k8s.yaml）
+#
+# HTTP 对拍：DRY_RUN=true，客户端收 Java 响应，日志 [SHADOW MATCH/DIFF]
+# Kafka 写库对拍：独立 consumer group，库名 DATABASE_NAME=anvelink_shadow（连接其余项走 Nacos）
+# 环境变量：
+#   KAFKA_ENABLED=true|false          开关 Kafka 消费（默认 true）
+#   KAFKA_PUSH_ENABLED=false          不向 to-saas 重复投递（默认 false）
+#   KAFKA_CONSUMERS_GROUP_*           固定 verify 组名，防 Nacos 覆盖
+#   KAFKA_TOPICS_DATA_TOPIC 等        覆盖下方 topics（Nacos 未配 spring.kafka.topic 时生效）
+#   DATABASE_NAME=anvelink_shadow     仅改库名，host/用户/密码与 Nacos 一致
+#   DRY_RUN=true                      HTTP 双跑对拍
+
+server:
+  port: "8080"
+
+proxy:
+  # 固定指向 Java 后端 Service（切主流量到 Go 后仍走 Java，避免回环）
+  target_url: "http://ebike-device-worker-java.prod.svc.cluster.local:8080"
+  # live_list:
+  #   - /ebike/gps/getBatchOrderTrajectory
+  #   - /ebike/gps/getOrderTrajectory
+  #   - /ebike/gps/getTrajectory
+  # record_list:
+  #   - /ebike/gps/saveOrderTrajectory
+  #   - /ebike/gps/saveMovingEBikeTrajectory
+  #   - /cmd/saveEbikeCmd
+
+nacos:
+  serverAddr: 192.168.2.20
+  port: 8848
+  namespace: prod
+  group: xyy
+  registerEnabled: true  # 注册 Nacos；HTTP 流量可由网关转发至原 Java 服务
+
+database:
+  dsn: ""  # 由 Nacos spring.datasource 合并；库名用 DATABASE_NAME 覆盖（如 anvelink_shadow）
+
+redis:
+  addr: ""
+  password: ""
+  prefix: ""
+  db: 0
+
+spring:
+  application:
+    name: ebike-device-worker
+  xyy:
+    fastid:
+      enabled: true
+      server-addr: fastid.luopingtech.com
+      namespace: prod
+      groupId: xyy
+      app-name: ebike-device-worker
+
+kafka:
+  enabled: true
+  push_enabled: false  # 对拍实例勿向 to-saas 重复投递
+  brokers:
+    - "localhost:9092"  # 由 Nacos kafka.yaml 覆盖
+  topics:
+    # 与 openapi 生产 + anvelink_worker_* 消费对齐（连字符 topic，非 device-data / dataTopic）
+    # Nacos ebike-device-worker.yml 的 spring.kafka.topic 加载后会覆盖此处
+    data_topic: "data-topic"
+    event_topic: "event-topic"
+    alarm_topic: "alarm-topic"
+    to_saas_topic: "to-saas"
+    gray_to_saas_topic: "gray-to-saas"
+  consumers:
+    # 与 Java ebike-device-worker-{data,event,alarm} 不同组 → 各消费全量消息
+    group_data: "ebike-device-worker-go-verify-data"
+    group_event: "ebike-device-worker-go-verify-event"
+    group_alarm: "ebike-device-worker-go-verify-alarm"
+    data_concurrency: 1
+    event_concurrency: 1
+    alarm_concurrency: 1
+    batch_size: 500
+    batch_wait_ms: 100
+    # 对拍组首次加入时从最早可读 offset 消费（已有 committed offset 时仍从上次位置续跑）
+    start_offset: earliest
+
+persist_config:
+  persist_batch_size: 20
+  persist_limit_size: 50
+  persist_interval_ms: 1000
+  table_suffix: "_new"
+
+caffeine:
+  device_tenant_mapping_cache_size: 100000
+  tenant_cache_size: 2000
+  timeout_sec: 120
+
+xyy:
+  gray_tenant_ids: []  # 为空时不使用 gray_to_saas_topic
+
+paas:
+  enabled: false
+  base_url: ""

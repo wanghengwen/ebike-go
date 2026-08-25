@@ -1,0 +1,18 @@
+# Binaries and executables
+ebike-gateway.exe
+build/ebike-gateway-go
+build/
+
+# Logs
+*.log
+logs/
+
+# IDE configurations
+.idea/
+.vscode/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

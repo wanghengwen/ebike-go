@@ -1,0 +1,156 @@
+[
+  {
+    "path": "/car-statistics/queryByCarList",
+    "method": "POST",
+    "body": {
+      "carIds": [
+        "100600000",
+        "100600004",
+        "100603516",
+        "100603523",
+        "100603525"
+      ],
+      "commandContext": {
+        "ip": "172.16.1.159",
+        "name": "戈想想",
+        "pin": "b_36f27ad80480c14",
+        "platform": "pc",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "2",
+        "traceId": "178270129948493077361295"
+      },
+      "endTime": "2026-06-29T23:59:59",
+      "serviceId": 227596718664324575,
+      "startTime": "2026-06-29T00:00:00"
+    }
+  },
+  {
+    "path": "/orderQuery/selectOrderAnalyze",
+    "method": "POST",
+    "body": {
+      "commandContext": {
+        "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+        "ip": "172.16.1.159",
+        "name": "王总",
+        "pin": "b_32b328e001816b3",
+        "platform": "android",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "2",
+        "traceId": "01985ced-df01-49d7-8555-495a8d88017e"
+      },
+      "pageNum": 1,
+      "pageSize": 10,
+      "searchCount": true,
+      "serviceId": 244068824482587140,
+      "startTime": [
+        1783440000000,
+        1783526399000
+      ]
+    }
+  },
+  {
+    "path": "/parking/getParkingInAndOutflow",
+    "method": "POST",
+    "body": {
+      "commandContext": {
+        "ip": "172.16.1.159",
+        "name": "朱雯兰",
+        "pin": "b_3ba4f5880482053",
+        "platform": "pc",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "178245322602872777685889"
+      },
+      "parkingId": 274866299795413990,
+      "timeDimension": 0
+    }
+  },
+  {
+    "path": "/parking/statistics",
+    "method": "POST",
+    "body": {
+      "areaIds": [
+        244815532464276641
+      ],
+      "commandContext": {
+        "deviceId": "973a3d8e-2335-3141-b66f-88aacbdabc9d",
+        "ip": "172.16.1.159",
+        "name": "王总",
+        "pin": "b_32b328e001816b3",
+        "platform": "android",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "2",
+        "traceId": "ba465ad1-b2a7-4b7f-a759-2649841ec213"
+      },
+      "pageNum": 1,
+      "pageSize": 1,
+      "searchCount": true,
+      "serviceId": 244068824482587140
+    }
+  },
+  {
+    "path": "/riding_card_order/page",
+    "method": "POST",
+    "body": {
+      "commandContext": {
+        "ip": "172.16.1.159",
+        "name": "朱雯兰",
+        "pin": "b_3ba4f5880482053",
+        "platform": "pc",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "2",
+        "traceId": "178273738924662861282043"
+      },
+      "pageNum": 1,
+      "pageSize": 10,
+      "searchCount": true,
+      "serviceId": 227587649840878077,
+      "type": 1
+    }
+  },
+  {
+    "path": "/user/ageStatistic",
+    "method": "POST",
+    "body": {
+      "commandContext": {
+        "deviceId": "18d660b8-bd27-49f4-9b46-3b0933ac82c4",
+        "ip": "172.16.1.159",
+        "name": "戈想想",
+        "pin": "b_36f27ad80480c14",
+        "platform": "android",
+        "source": "ebike-service-business",
+        "stressTesting": false,
+        "tenantId": "2",
+        "traceId": "178332434026071212355185"
+      },
+      "serviceIds": [
+        227596718664324575
+      ]
+    }
+  },
+  {
+    "path": "/userQuery/selectUserCount",
+    "method": "POST",
+    "body": {
+      "commandContext": {
+        "ip": "172.16.3.208",
+        "name": "戈想想",
+        "pin": "b_36f27ad80480c14",
+        "platform": "pc",
+        "source": "ebike-user",
+        "stressTesting": false,
+        "tenantId": "1",
+        "traceId": "178090967118299112519265"
+      },
+      "qualificationType": [],
+      "serviceId": [
+        365612202791543129
+      ]
+    }
+  }
+]

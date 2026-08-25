@@ -1,0 +1,212 @@
+[
+    {
+        "cmd":  2,
+        "imei":  "862551059812817",
+        "hexBody":  "1f30",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":31,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":48}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "862551059878925",
+        "hexBody":  "1f31",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":31,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":49}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "866940074286279",
+        "hexBody":  "1d32",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":29,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":50}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "866940070099387",
+        "hexBody":  "1a2f",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":26,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":47}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "866940074347451",
+        "hexBody":  "1c33",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":28,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":51}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "866940070124961",
+        "hexBody":  "1931",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":25,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":49}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "862551059803154",
+        "hexBody":  "1a31",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":26,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":49}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "862551055683873",
+        "hexBody":  "1d32",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":29,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":50}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "866940070097167",
+        "hexBody":  "1a33",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":26,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":51}"
+    },
+    {
+        "cmd":  2,
+        "imei":  "862551059806512",
+        "hexBody":  "1f31",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":2,\"gsmSignal\":31,\"msgType\":\"data\",\"timestamp\":0,\"voltage\":49}"
+    },
+    {
+        "cmd":  5,
+        "imei":  "862551059847953",
+        "hexBody":  "3b",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":5,\"msgType\":\"alarm\",\"timestamp\":0,\"type\":59}"
+    },
+    {
+        "cmd":  5,
+        "imei":  "862551059836022",
+        "hexBody":  "3b",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":5,\"msgType\":\"alarm\",\"timestamp\":0,\"type\":59}"
+    },
+    {
+        "cmd":  5,
+        "imei":  "866940074296815",
+        "hexBody":  "0b",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":5,\"msgType\":\"alarm\",\"timestamp\":0,\"type\":11}"
+    },
+    {
+        "cmd":  5,
+        "imei":  "862551059836022",
+        "hexBody":  "2d",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":5,\"msgType\":\"alarm\",\"timestamp\":0,\"type\":45}"
+    },
+    {
+        "cmd":  5,
+        "imei":  "862551059847953",
+        "hexBody":  "3b",
+        "expected":  "{\"bussinessType\":\"ebike\",\"cmd\":5,\"msgType\":\"alarm\",\"timestamp\":0,\"type\":59}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059860378",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000620000c24600006a3ca530",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":98,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359344,\"voltage\":49734}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059877380",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000420000c04700006a3ca54c",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":66,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359372,\"voltage\":49223}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059860212",
+        "hexBody":  "0000000000000000000000000000000000000000000000000000000000640000000000004b0000c04700006a3ca53f",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":75,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359359,\"voltage\":49223}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551055683956",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000590000c3e800006a3ca570",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":89,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359408,\"voltage\":50152}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551055683832",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000620000c3e800006a3ca552",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":98,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359378,\"voltage\":50152}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059873850",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000620000c1e900006a3ca547",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":98,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359367,\"voltage\":49641}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551055606841",
+        "hexBody":  "0000000000000000000000000000000000000000000000000000000000640000000000003f0000bb6100006a3ca553",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":63,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359379,\"voltage\":47969}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059805399",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000560000c2d200006a3ca549",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":86,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359369,\"voltage\":49874}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059864404",
+        "hexBody":  "000000000000000000000000000000000000000000000000000000000064000000000000530000bf0200006a3ca55a",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":83,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359386,\"voltage\":48898}"
+    },
+    {
+        "cmd":  66,
+        "imei":  "862551059812411",
+        "hexBody":  "0000000000000000000000000000000000000000000000000000000000640000000000005c0000c1e900006a3ca560",
+        "expected":  "{\"bussinessType\":\"ebike\",\"capacity\":0,\"cmd\":66,\"current\":0,\"cycleLifeCounter\":0,\"hardVersion\":0,\"isChargeLowTemperature\":0,\"isChargeOverCurrent\":0,\"isChargeShortCircuit\":0,\"isChargeTemperatureHigh\":0,\"isDischargeHighTemperature\":0,\"isDischargeLowTemperature\":0,\"isDischargeOverCurrent\":0,\"isErrorCollect\":0,\"isNodeOverVoltage\":0,\"isNodeUnderVoltage\":0,\"isOverVoltage\":0,\"isUnderVoltage\":0,\"maxVoltage\":0,\"minVoltage\":0,\"mosState\":0,\"mosTemperature\":0,\"msgType\":\"data\",\"remainCapacity\":0,\"sn\":\"\",\"soc\":92,\"softVersion\":0,\"soh\":100,\"timestamp\":1782359392,\"voltage\":49641}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059836022",
+        "hexBody":  "000224fa1e0000c0766a3ca52a070e58fc020359cd0000000000001d00000000000000000101550202133f0510303030303030303030303030303030300b01170c020000",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":85,\"bmsVoltage\":4927,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":30,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":0,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":1,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":1,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.7728038293774,\"lng\":118.38644050464053,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":29,\"speed\":0,\"spikeRssi\":\"0000000000000000\",\"sw\":140538,\"timestamp\":1782359338,\"totalMiles\":0,\"voltage\":49270,\"wgs84Lat\":33.774029,\"wgs84Lng\":118.38079599999999}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "866940074296815",
+        "hexBody":  "000285221f000000006a3ca55706df8656015e42f40000000000001a00000000000000000b0103190b0008000000d8e72fb516fa",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":0,\"batteryLock\":0,\"bmsVoltage\":0,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":1,\"helmetCapacitance\":\"AAAAAA==\",\"helmetFault\":2048,\"helmetLock\":0,\"helmetReact\":0,\"helmetSn\":\"d8e72fb516fa\",\"helmetState\":0,\"helmetType\":1,\"helmetVoltage\":0,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":0,\"isHelmetUnlock\":1,\"isMoveAlarmOn\":1,\"isMoving\":0,\"isOutofServAera\":1,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":0,\"lastHelmetLockState\":0,\"lat\":22.9520653477537,\"lng\":115.31705012218278,\"msgType\":\"data\",\"returnHelmet\":0,\"satellite\":26,\"speed\":0,\"sw\":165154,\"timestamp\":1782359383,\"totalMiles\":0,\"voltage\":0,\"wgs84Lat\":22.954739999999997,\"wgs84Lng\":115.312214}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "866940074296815",
+        "hexBody":  "000285221f000000006a3ca55706df8656015e42f40000000000001a00000000000000000b0103190b0008000000d8e72fb516fa",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":0,\"batteryLock\":0,\"bmsVoltage\":0,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":1,\"helmetCapacitance\":\"AAAAAA==\",\"helmetFault\":2048,\"helmetLock\":0,\"helmetReact\":0,\"helmetSn\":\"d8e72fb516fa\",\"helmetState\":0,\"helmetType\":1,\"helmetVoltage\":0,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":0,\"isHelmetUnlock\":1,\"isMoveAlarmOn\":1,\"isMoving\":0,\"isOutofServAera\":1,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":0,\"lastHelmetLockState\":0,\"lat\":22.9520653477537,\"lng\":115.31705012218278,\"msgType\":\"data\",\"returnHelmet\":0,\"satellite\":26,\"speed\":0,\"sw\":165154,\"timestamp\":1782359383,\"totalMiles\":0,\"voltage\":0,\"wgs84Lat\":22.954739999999997,\"wgs84Lng\":115.312214}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551055685225",
+        "hexBody":  "000224fa160000c1e96a3ca56c070de4b202039751000d000000001d0000064300000000010160020213640510303030303030303030303030303030300b011f0c020000",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":96,\"bmsVoltage\":4964,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":22,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":1,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":1,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":1,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.78851586129184,\"lng\":118.35663467564731,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":29,\"speed\":13,\"spikeRssi\":\"0000000000000000\",\"sw\":140538,\"timestamp\":1782359404,\"totalMiles\":1603,\"voltage\":49641,\"wgs84Lat\":33.789777,\"wgs84Lng\":118.35102599999999}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "864423069936119",
+        "hexBody":  "0002a53a160000c3ae6a3ca55906e10028015ec3da000000000000190000004c000000000b0103190b0008000000f88fc80f3d46",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsVoltage\":0,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":22,\"hdop\":0,\"helmetBind\":1,\"helmetCapacitance\":\"AAAAAA==\",\"helmetFault\":2048,\"helmetLock\":0,\"helmetReact\":0,\"helmetSn\":\"f88fc80f3d46\",\"helmetState\":0,\"helmetType\":1,\"helmetVoltage\":0,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":1,\"isMoveAlarmOn\":1,\"isMoving\":0,\"isOutofServAera\":1,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":0,\"lastHelmetLockState\":0,\"lat\":22.985197977532405,\"lng\":115.41390493797321,\"msgType\":\"data\",\"returnHelmet\":0,\"satellite\":25,\"speed\":0,\"sw\":173370,\"timestamp\":1782359385,\"totalMiles\":76,\"voltage\":50094,\"wgs84Lat\":22.987738,\"wgs84Lng\":115.408936}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059810100",
+        "hexBody":  "000224191d0000c7e66a3ca541070e3d1102033dee0000000000001c0000000000000000010163020213fd0510303030303030303030303030303030300b011f0c020000",
+        "expected":  "{\"acc\":0,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":99,\"bmsVoltage\":5117,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":1,\"fenceVersion\":0,\"gsm\":29,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":1,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":0,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":0,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":0,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.76565976696028,\"lng\":118.37928657948663,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":28,\"speed\":0,\"spikeRssi\":\"0000000000000000\",\"sw\":140313,\"timestamp\":1782359361,\"totalMiles\":0,\"voltage\":51174,\"wgs84Lat\":33.766894,\"wgs84Lng\":118.373649}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059805340",
+        "hexBody":  "000224191f0000c1e96a3ca548070e2c6702035fcc0000000000001c0000000000000000010150020213640510303030303030303030303030303030300b011f0c020000",
+        "expected":  "{\"acc\":0,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":80,\"bmsVoltage\":4964,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":1,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":1,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":0,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":0,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":0,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.77432690707301,\"lng\":118.37501681179896,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":28,\"speed\":0,\"spikeRssi\":\"0000000000000000\",\"sw\":140313,\"timestamp\":1782359368,\"totalMiles\":0,\"voltage\":49641,\"wgs84Lat\":33.775563999999996,\"wgs84Lng\":118.369383}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059864263",
+        "hexBody":  "000224fa1f0000bbec6a3ca555070e0898020385120019000000001d0000061600000000010146020212ca0510303030303030303030303030303030300b011f0c020000",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":70,\"bmsVoltage\":4810,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":1,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":1,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":1,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.783858555678805,\"lng\":118.36583869405366,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":29,\"speed\":25,\"spikeRssi\":\"0000000000000000\",\"sw\":140538,\"timestamp\":1782359381,\"totalMiles\":1558,\"voltage\":48108,\"wgs84Lat\":33.785106,\"wgs84Lng\":118.360216}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059836022",
+        "hexBody":  "000224fa1f0000c0766a3ca52d070e58fc020359cd0001000000001d00000001000000000101550202133f0510303030303030303030303030303030300b01170c020000",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":85,\"bmsVoltage\":4927,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":0,\"helmetReact\":1,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":0,\"isMoveAlarmOn\":1,\"isMoving\":1,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":1,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.7728038293774,\"lng\":118.38644050464053,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":29,\"speed\":1,\"spikeRssi\":\"0000000000000000\",\"sw\":140538,\"timestamp\":1782359341,\"totalMiles\":1,\"voltage\":49270,\"wgs84Lat\":33.774029,\"wgs84Lng\":118.38079599999999}"
+    },
+    {
+        "cmd":  68,
+        "imei":  "862551059879436",
+        "hexBody":  "000225fa1f0000c0196a3ca55a070e558f020380570012000000001e000014250000000001015f020213350510303030303030303030303030303030300b01030c020000",
+        "expected":  "{\"acc\":1,\"backWheelLock\":0,\"batteryConnect\":1,\"batteryLock\":1,\"bmsSoc\":95,\"bmsVoltage\":4917,\"bussinessType\":\"ebike\",\"cmd\":3,\"controllerSpeed\":0,\"course\":0,\"defend\":0,\"fenceVersion\":0,\"gsm\":31,\"hdop\":0,\"helmetBind\":0,\"helmetCapacitance\":\"AAAAAA==\",\"helmetLock\":0,\"helmetReact\":0,\"helmetType\":1,\"isFenceEnable\":0,\"isGPSFastMode\":1,\"isGPSUnfixed\":0,\"isGyroFixed\":1,\"isHelmetUnlock\":1,\"isMoveAlarmOn\":1,\"isMoving\":1,\"isOutofServAera\":0,\"isOverSpeedOn\":0,\"isPowerCut\":0,\"isSleepMode\":0,\"isSupportHelmetLock\":1,\"isWheelSpan\":1,\"kickStandMagneticState\":0,\"kickStandType\":0,\"lat\":33.7826715675902,\"lng\":118.38556385952351,\"msgType\":\"data\",\"rfidAck\":0,\"satellite\":30,\"speed\":18,\"spikeRssi\":\"0000000000000000\",\"sw\":140794,\"timestamp\":1782359386,\"totalMiles\":5157,\"voltage\":49177,\"wgs84Lat\":33.783895,\"wgs84Lng\":118.379919}"
+    }
+]

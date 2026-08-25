@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+xyy:
+  gateway:
+    mode: "client" # Default mode, overridden by GATEWAY_MODE or XYY_GATEWAY_MODE env
+  nacos:
+    serverAddr: "127.0.0.1:8848"
+    namespace: "prod"
+    group: "xyy"
+    registerEnabled: true

@@ -1,0 +1,66 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ebike-device-openapi-go 本地/开发配置（参考 ebike-device-paas-go/conf 布局）
+#
+# 配置加载分层（config.Init，优先级从低到高）：
+#   1) 内置默认值 defaultConfig()
+#   2) 本地文件：CONFIG_PATH（默认 conf/application.yaml），本文件即此层
+#   3) Nacos 覆盖：data-id ebike-device-openapi.yml(group xyy)；
+#                  redis/kafka 另由 xyy_ops 组的 redis.yaml / kafka.yaml 提供
+#   4) 环境变量（最高）：CLOUD / REDIS_* / KAFKA_BOOTSTRAP_SERVERS /
+#                        MQTT_BROKER / MQTT_USERNAME / MQTT_PASSWORD / MQTT_ENABLED
+# 设置 NACOS_DISABLED=true 时跳过第 3 步，仅用 本地文件 + 环境变量 启动。
+# 字段名与 AppConfig 的 yaml tag 一一对应。
+# ─────────────────────────────────────────────────────────────────────────────
+
+xyy:
+  bin2UpdateHost: true
+  cloud: aliyun            # 仅用于转发时的 cloud 请求头防环，会话 key 固定 ecu_login_
+  router:
+    routerSwitch: true
+    anvelinkOpenapiUrl: "http://127.0.0.1:8081"
+    excludeUrls: []
+
+timeout-config:
+  connectTimeoutMs: 2000
+  readTimeoutMs: 15000
+
+spring:
+  kafka:
+    bootstrap-servers: "127.0.0.1:9092"
+    switch: true
+    producer:
+      data-topic: dataTopic
+      alarm-topic: alarmTopic
+      event-topic: eventTopic
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: ""
+    database: 0
+    # consume/paas：device_info_*/imei_car_* 所在 DB。-1=与 database 相同。
+    # 现网：ecu_login 多在 db0，device_info 在 db4 → 设 device-database: 4
+    device-database: -1
+
+# 泺平 MQTT（EMQX）接入：内置 MQTT 客户端 + 共享订阅收发
+mqtt:
+  enabled: false                       # 本地默认关闭；接入泺平设备时置 true
+  broker: "tcp://127.0.0.1:1883"       # 支持逗号分隔多地址；可被 MQTT_BROKER 覆盖
+  username: ""                         # 可被 MQTT_USERNAME 覆盖
+  password: ""                         # 可被 MQTT_PASSWORD 覆盖
+  clientIdPrefix: "ebike-device-openapi-"  # clientId = 前缀 + 机器名(K8s Pod 名)
+  sharedGroup: "openapi"               # 共享订阅组：$share/openapi/ecu/brpt/...
+  publishQos: 0
+  subscribeQos: 0
+  keepAliveSeconds: 30
+  cleanSession: true
+  rptTopic: "ecu/brpt/ebike/#"          # V8 二进制上报+应答（自动加 $share/{group}/ 前缀）
+  rspTopic: ""                         # 已废弃：应答并入 brpt
+  # connected 已废弃（不订阅/不处理）。可选 disconnected（需 EMQX ACL 放开 $SYS）。
+  connectedTopic: ""                   # deprecated / ignored
+  disconnectedTopic: ""                # 如 "$SYS/brokers/+/clients/+/disconnected"
+  onlineTtlSeconds: 1800               # lastSeen 过期阈值(秒)；空闲心跳约 10m → 默认 30m
+  syncWaitMs: 0                        # 同步命令等应答超时(ms)，0 → 用 readTimeout
+  # 上行消息处理背压：有界 worker 池 + 单条处理超时
+  workerPoolSize: 32                   # 并发处理上行消息的 worker 数
+  workerQueueSize: 256                 # 有界队列长度，满则接收侧阻塞形成背压
+  messageTimeoutMs: 3000               # 单条上行消息处理超时(ms)

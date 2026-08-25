@@ -1,0 +1,32 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+/build/
+
+# Test binary
+*.test
+
+# Go workspace file
+go.work
+go.work.sum
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Logs
+/logs/
+*.log
+
+# Scratch files
+*.pyc
+__pycache__/

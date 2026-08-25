@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  name: push-notification
+
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod
+  group: xyy
+
+mysql:
+  dsn: ""
+  maxOpenConns: 20
+  maxIdleConns: 5
+
+xyy:
+  secrets: []
+  messagePool:
+    maxWorkers: 20
+    queueSize: 200
+  voicePool:
+    maxWorkers: 10
+    queueSize: 100
+  chuanglan:
+    apiUrl: "https://smssh1.253.com/msg/v1/send/json"
+
+dryRun: false

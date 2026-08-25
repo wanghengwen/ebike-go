@@ -1,0 +1,3746 @@
+[
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "17173b32-0a27-4dec-a095-061c6bc20463"
+      },
+      "imei": "866940070121306",
+      "lat": 22.976174,
+      "lng": 115.400619
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "19679fe6-4262-4b0d-91e6-b377cf9dfb44"
+      },
+      "imei": "866940070080411",
+      "lat": 22.976191,
+      "lng": 115.400587
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "1df31926-f3a3-474b-96b2-0c95be6d9672"
+      },
+      "imei": "866940070048616",
+      "lat": 22.982905,
+      "lng": 115.336815
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795413082, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "2c01cffe-acc0-4e4b-be3c-13602f932555"
+      },
+      "imei": "864423069936119",
+      "lat": 22.954707,
+      "lng": 115.316964
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412032, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "38921dc0-bf8a-4031-a1b1-7d4bf8182b2b"
+      },
+      "imei": "866940070067335",
+      "lat": 22.997167,
+      "lng": 115.328136
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "40e8669a-6273-41c2-aa58-27bf51f75ce6"
+      },
+      "imei": "866940070014972",
+      "lat": 22.952393,
+      "lng": 115.305111
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412044, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "4b94d8ba-97d2-4ee4-be29-0c9ab65a09d5"
+      },
+      "imei": "866940070115795",
+      "lat": 22.976123,
+      "lng": 115.400615
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "5120ce87-16f4-45b3-bb2d-1b9120bb369f"
+      },
+      "imei": "866940070099379",
+      "lat": 22.973857,
+      "lng": 115.330514
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "55eeedb3-192b-425d-976b-bb7e14d4169d"
+      },
+      "imei": "866940070101258",
+      "lat": 22.948488,
+      "lng": 115.325345
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413979, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "5ee95eb7-f614-48b6-82ae-f9ddc247fa48"
+      },
+      "imei": "866940070048616",
+      "lat": 22.982905,
+      "lng": 115.336815
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795413082, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "5f555cc7-f92b-4a77-b3eb-0500312090ba"
+      },
+      "imei": "866940070093398",
+      "lat": 22.97619,
+      "lng": 115.400697
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "61c63787-687c-4b0e-b556-bd234be5ba53"
+      },
+      "imei": "866940070071162",
+      "lat": 22.97617,
+      "lng": 115.400605
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "694239e0-623b-45e2-bf24-d06596a9b58c"
+      },
+      "imei": "866940070076468",
+      "lat": 22.976019,
+      "lng": 115.400547
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "6bdb10d7-86b0-4b06-bcf1-f04a9571ea15"
+      },
+      "imei": "866940070048616",
+      "lat": 22.982905,
+      "lng": 115.336815
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795413082, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "6cec5243-89d9-4c04-9c84-a2dada4b7308"
+      },
+      "imei": "866940070072475",
+      "lat": 22.971663,
+      "lng": 115.350112
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=274872774458608356, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "6ed1b0d8-2dc7-4a6b-8cfd-2aa366e8e418"
+      },
+      "imei": "866940070089917",
+      "lat": 22.976357,
+      "lng": 115.400545
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "722e576e-700c-4211-9e78-313b274c2989"
+      },
+      "imei": "866940070116926",
+      "lat": 22.952189,
+      "lng": 115.316916
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "749fc141-0d1c-4560-ac78-3e8602f98189"
+      },
+      "imei": "866940070048616",
+      "lat": 22.982905,
+      "lng": 115.336815
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795413082, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "7c4b41c8-fc33-4359-81e3-930bafecf5c8"
+      },
+      "imei": "866940070127634",
+      "lat": 22.97634,
+      "lng": 115.400556
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "8c623d2b-ff15-4001-8ffe-808b707fdb63"
+      },
+      "imei": "866940070121868",
+      "lat": 22.995941,
+      "lng": 115.328035
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "907e2958-3ef1-486d-b16d-82b976cd3664"
+      },
+      "imei": "866940070078407",
+      "lat": 22.961461,
+      "lng": 115.321304
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412130, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "97c74693-d503-483b-a5c2-db2059d69630"
+      },
+      "imei": "866940074367822",
+      "lat": 22.976243,
+      "lng": 115.400569
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "ad66c2c8-7144-4d71-aef4-51675f86c71a"
+      },
+      "imei": "866940070093000",
+      "lat": 22.976188,
+      "lng": 115.400437
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "baabaaf8-0f39-41ce-aa16-0a08dff39b5a"
+      },
+      "imei": "866940070131313",
+      "lat": 22.956289,
+      "lng": 115.317272
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795414007, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "c8e8373e-aa38-454f-96da-dcb7acd88479"
+      },
+      "imei": "866940070011358",
+      "lat": 22.967875,
+      "lng": 115.350535
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413434, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "dd6ac12f-b967-460b-bbd7-362ba90b704b"
+      },
+      "imei": "866940074324526",
+      "lat": 22.976163,
+      "lng": 115.400452
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "df16639b-7bd6-45af-a956-81f9212e3e53"
+      },
+      "imei": "866940074362450",
+      "lat": 22.97621,
+      "lng": 115.400609
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "e3c59760-674b-407e-b4ec-18985461aaa9"
+      },
+      "imei": "866940070077151",
+      "lat": 22.97621,
+      "lng": 115.400586
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "fda8d0d9-3e8f-4499-ab97-27448f06163f"
+      },
+      "imei": "866940070072053",
+      "lat": 22.989992,
+      "lng": 115.350539
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413513, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "ffa4fa49-d5cb-4960-910a-45c30fabb83d"
+      },
+      "imei": "866940070069521",
+      "lat": 22.952144,
+      "lng": 115.316926
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "008d3ebc-9b62-45fc-a30e-dc7e0a334978"
+      },
+      "imei": "862551059807379",
+      "lat": 33.779912,
+      "lng": 118.384032
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269934380845274, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "014685e4-e50c-4026-ac36-1a6c8d2046d4"
+      },
+      "imei": "862551055683840",
+      "lat": 33.77259,
+      "lng": 118.367377
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "07bdf280-0b86-43fa-ad8f-cca74e061388"
+      },
+      "imei": "862551055691462",
+      "lat": 33.780229,
+      "lng": 118.409562
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "08b9b2b2-8cbd-4aff-807d-44ea2f2e3bed"
+      },
+      "imei": "862551059863117",
+      "lat": 33.768619,
+      "lng": 118.376136
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "0a83e174-2f09-490e-a4a8-ada4409c95ec"
+      },
+      "imei": "862551059848183",
+      "lat": 33.765655,
+      "lng": 118.379243
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185448984826348689, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "0cbc8597-9930-4b18-bded-e74add9e4229"
+      },
+      "imei": "862551059835156",
+      "lat": 33.803147,
+      "lng": 118.344346
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "12713e7a-ef5f-4ff9-8358-bea3590f447a"
+      },
+      "imei": "862551059876887",
+      "lat": 33.789392,
+      "lng": 118.373486
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "140c2701-fa93-4579-aaf4-a650bfaf9b06"
+      },
+      "imei": "862551055683915",
+      "lat": 33.767394,
+      "lng": 118.383633
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1579dca3-e27b-4af5-b4b6-3afdf1b6d163"
+      },
+      "imei": "862551055683782",
+      "lat": 33.790177,
+      "lng": 118.344954
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=185465013644824051, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1e47b200-f3d9-4c9f-a1c4-3981b72cbee9"
+      },
+      "imei": "862551059810928",
+      "lat": 33.772852,
+      "lng": 118.389858
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445843057774018, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2502692e-e93e-4680-a5f6-828fb4e707b3"
+      },
+      "imei": "862551059848019",
+      "lat": 33.761238,
+      "lng": 118.395561
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193259906843280523, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2d6a3ec3-f5e8-42e0-882c-54430bdb0cc7"
+      },
+      "imei": "862551055606999",
+      "lat": 33.7776,
+      "lng": 118.362547
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=255568015335626721, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2f0fd3a2-64a7-4095-992d-0d173012c9c4"
+      },
+      "imei": "862551059802883",
+      "lat": 33.789361,
+      "lng": 118.373552
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "3215b54b-a55d-4254-9426-75215fd047d5"
+      },
+      "imei": "862551059878271",
+      "lat": 33.785528,
+      "lng": 118.374299
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190670393749016991, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "3bde0892-8183-45fc-9b23-08b0fcb0f31e"
+      },
+      "imei": "862551059848233",
+      "lat": 33.766452,
+      "lng": 118.386138
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "3be69f73-3f61-407a-be0d-677ceaaf109a"
+      },
+      "imei": "862551059864149",
+      "lat": 33.768009,
+      "lng": 118.399564
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185442561702239423, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "3dcb04e3-4835-4e09-bec1-58222f706257"
+      },
+      "imei": "862551059858703",
+      "lat": 33.774936,
+      "lng": 118.377639
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446637626724840, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "405ef57b-a88a-477a-bc16-922ce210e025"
+      },
+      "imei": "862551059863265",
+      "lat": 33.780228,
+      "lng": 118.409567
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4102a21b-bb50-476d-b42d-8b59de947e18"
+      },
+      "imei": "862551055691231",
+      "lat": 33.77406,
+      "lng": 118.380123
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446253227148552, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4145de67-da9e-4272-ae63-a7fb8582e596"
+      },
+      "imei": "862551059858703",
+      "lat": 33.774936,
+      "lng": 118.377639
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446637626724840, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4a3e1533-3422-496d-9cc9-337117aef346"
+      },
+      "imei": "862551059862994",
+      "lat": 33.762564,
+      "lng": 118.387096
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190431578535496425, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4ba1b6a9-da2a-4b5c-80f6-92c32a0ca528"
+      },
+      "imei": "862551059904374",
+      "lat": 33.766482,
+      "lng": 118.386107
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4dbbc845-4fb9-44ac-b625-b2bb4a96c0f8"
+      },
+      "imei": "862551059863117",
+      "lat": 33.768619,
+      "lng": 118.376136
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "5d512f22-062a-4fea-aa6a-ed94319d84c0"
+      },
+      "imei": "862551059809920",
+      "lat": 33.761388,
+      "lng": 118.395569
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193259906843280523, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "6010f990-3f74-4716-9591-e8db7ba029cb"
+      },
+      "imei": "862551059864230",
+      "lat": 33.765615,
+      "lng": 118.379237
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185448984826348689, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "61a8cf81-f456-44ca-86d8-f1269a2b5b7c"
+      },
+      "imei": "862551059807379",
+      "lat": 33.779912,
+      "lng": 118.384034
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269934380845274, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "6bd4e5f8-03e4-4a11-b1fd-ee3b9c84c706"
+      },
+      "imei": "862551059811199",
+      "lat": 33.766423,
+      "lng": 118.386161
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "733ad356-0d9e-480f-be9e-2d246710f728"
+      },
+      "imei": "862551059863182",
+      "lat": 33.77171,
+      "lng": 118.384892
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185268280519296182, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "805ed122-d7f4-42dc-8a07-24a68495f164"
+      },
+      "imei": "862551059861319",
+      "lat": 33.791252,
+      "lng": 118.346272
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185464856877468909, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "852d88e7-7954-4cfb-9acc-f1a364f540d7"
+      },
+      "imei": "862551055683949",
+      "lat": 33.789974,
+      "lng": 118.344894
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465013644824051, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "88726922-461c-4d94-ad6f-dd0ec3b0e7ee"
+      },
+      "imei": "862551059878016",
+      "lat": 33.772855,
+      "lng": 118.389896
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445843057774018, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "8b8977f4-0b58-4af9-83a8-37e4ae3eee36"
+      },
+      "imei": "862551055606874",
+      "lat": 33.783729,
+      "lng": 118.35283
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450202449060761, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "8b9ca8bc-3cec-4005-8d3f-fbe025938a7a"
+      },
+      "imei": "862551059811314",
+      "lat": 33.783792,
+      "lng": 118.352798
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450202449060761, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "8e6bea2d-b859-4d42-99e1-70802fa0a1af"
+      },
+      "imei": "862551059864263",
+      "lat": 33.765586,
+      "lng": 118.379222
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185448984826348689, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "968c14d1-4860-479b-bc7a-c80854685663"
+      },
+      "imei": "862551059812635",
+      "lat": 33.772348,
+      "lng": 118.381226
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446141558000711, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "96ab492c-96e3-45ab-8bd4-457ae5cc3e3a"
+      },
+      "imei": "862551059877109",
+      "lat": 33.777446,
+      "lng": 118.387639
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190622421111808215, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "9c78d153-b41b-40b7-8eec-ae3200470248"
+      },
+      "imei": "862551055683949",
+      "lat": 33.789978,
+      "lng": 118.344893
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465013644824051, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a0b5d76a-024c-42fc-a4dc-4b057058ea50"
+      },
+      "imei": "862551059863257",
+      "lat": 33.777402,
+      "lng": 118.38764
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190622421111808215, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a16932b0-1c9d-412a-bce7-486f44abc5d0"
+      },
+      "imei": "862551059811314",
+      "lat": 33.783792,
+      "lng": 118.352798
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450202449060761, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a738da16-4657-4b29-9bc0-7a78cbcf780f"
+      },
+      "imei": "862551059836790",
+      "lat": 33.79125,
+      "lng": 118.346279
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185464856877468909, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a8e3d613-16b9-4f98-94df-18f949ecf61a"
+      },
+      "imei": "862551055683774",
+      "lat": 33.767957,
+      "lng": 118.399646
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185442561702239423, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "aa1d456b-6e35-48a1-bba4-94821a8ffd6e"
+      },
+      "imei": "862551055683832",
+      "lat": 33.764613,
+      "lng": 118.397094
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190435562118193064, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "ab1bec62-1ff9-4fd8-80c6-ef4532521dd2"
+      },
+      "imei": "862551059858521",
+      "lat": 33.790233,
+      "lng": 118.412407
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=262433318696390908, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b122f98c-dc5b-495f-a367-28f92ae7070f"
+      },
+      "imei": "862551059863919",
+      "lat": 33.782129,
+      "lng": 118.385032
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192856922945231241, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b190bdb2-596d-419d-9b48-1e98d20bab63"
+      },
+      "imei": "862551059863893",
+      "lat": 33.769897,
+      "lng": 118.397822
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445499460389964, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b1d4429d-62c9-4159-aeb1-189fcb11b81d"
+      },
+      "imei": "862551059835156",
+      "lat": 33.803147,
+      "lng": 118.344346
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b9400ae0-90c1-40bb-b84c-052a5e8b4780"
+      },
+      "imei": "862551059876887",
+      "lat": 33.789392,
+      "lng": 118.373486
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "bf4bf91f-372b-4b63-91c6-f84fef16e621"
+      },
+      "imei": "862551059863117",
+      "lat": 33.768619,
+      "lng": 118.376136
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "bf69b126-3bbf-4269-acb0-e53a4abf6be0"
+      },
+      "imei": "862551059863117",
+      "lat": 33.768619,
+      "lng": 118.376136
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c264a4d2-a9e2-4610-89d7-91776c468dcc"
+      },
+      "imei": "862551059858703",
+      "lat": 33.774936,
+      "lng": 118.377639
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446637626724840, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c896401c-b367-4a82-9fee-ea21e4428f64"
+      },
+      "imei": "862551059835156",
+      "lat": 33.803147,
+      "lng": 118.344346
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "cd332ceb-d4be-48c3-9b5b-f318dd5171ba"
+      },
+      "imei": "862551059802883",
+      "lat": 33.789361,
+      "lng": 118.373551
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d29c70aa-e197-4ad9-80f8-afa1fc92f723"
+      },
+      "imei": "862551059863265",
+      "lat": 33.780229,
+      "lng": 118.40957
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d3b08f32-a5bc-41ef-b7ed-151ec8241ef4"
+      },
+      "imei": "862551055606866",
+      "lat": 33.796155,
+      "lng": 118.347913
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465329324401402, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d4f34f85-e9a6-4ae6-b665-3ec30447667b"
+      },
+      "imei": "862551059817808",
+      "lat": 33.791253,
+      "lng": 118.346265
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185464856877468909, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d7380417-6c90-49d8-baba-018624eef0e5"
+      },
+      "imei": "862551055683949",
+      "lat": 33.789977,
+      "lng": 118.344893
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465013644824051, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "e67a7197-6f87-47fe-817f-56c50e8f5c3f"
+      },
+      "imei": "862551059836741",
+      "lat": 33.762262,
+      "lng": 118.398282
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193258618353093799, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "eb438a11-40cd-4895-aae8-f981a713e371"
+      },
+      "imei": "862551059843440",
+      "lat": 33.771716,
+      "lng": 118.38494
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185268280519296182, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f1da24fd-38a2-404e-b8b7-a86115084b72"
+      },
+      "imei": "862551059864198",
+      "lat": 33.774151,
+      "lng": 118.374891
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862366818373076, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f52e9282-c478-4b29-ba62-b8cd9e2df7e1"
+      },
+      "imei": "862551059835941",
+      "lat": 33.766462,
+      "lng": 118.386096
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f59c1674-eeff-402f-a6f0-0ffda5040ecc"
+      },
+      "imei": "862551059806447",
+      "lat": 33.78379,
+      "lng": 118.352805
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450202449060761, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f79cbec3-b0fd-4917-add9-e629a5853a94"
+      },
+      "imei": "862551059847995",
+      "lat": 33.796169,
+      "lng": 118.347934
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465329324401402, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "fd9d2999-b267-4df3-b14d-d64396194162"
+      },
+      "imei": "862551059848233",
+      "lat": 33.76645,
+      "lng": 118.386135
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "fe9ef92c-976f-4147-850b-21cb5b50ef3a"
+      },
+      "imei": "862551059848233",
+      "lat": 33.766452,
+      "lng": 118.386138
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "ff5f2858-23c9-451e-af41-78ee50333dbc"
+      },
+      "imei": "862551059836014",
+      "lat": 33.773993,
+      "lng": 118.380153
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446253227148552, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "6ed9326e-b81e-4cab-96eb-6643554627fd"
+      },
+      "imei": "864423068478576",
+      "lat": 31.391634,
+      "lng": 119.081219
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=240045103698678175, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "d8e5bb3c-34d2-4d7b-bd58-6e17c7f59860"
+      },
+      "imei": "866940070018015",
+      "lat": 31.28307,
+      "lng": 118.896072
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=293835366455576312, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "df756e1b-53f8-4023-96ee-f22a3938b526"
+      },
+      "imei": "864423068455681",
+      "lat": 31.283428,
+      "lng": 118.895561
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=364133005317380437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "e33364d4-08f0-460b-bc7e-c7de43009072"
+      },
+      "imei": "864423068478576",
+      "lat": 31.391634,
+      "lng": 119.081219
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=240045103698678175, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "f1eef65c-8752-4ee6-abdb-67436135944f"
+      },
+      "imei": "864423069940970",
+      "lat": 31.391647,
+      "lng": 119.081238
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=240045103698678175, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "f53d278b-58eb-4220-b327-f3b542eea691"
+      },
+      "imei": "869396064482823",
+      "lat": 31.283381,
+      "lng": 118.89566
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=364133005317380437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1007",
+        "traceId": "2290e527-076a-4984-a6da-492af6e58e18"
+      },
+      "imei": "862149063955944",
+      "lat": 30.189183,
+      "lng": 120.187093
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=364848525394054923, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-1.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "0af2cde1-1859-407e-a599-43b6545468b8"
+      },
+      "imei": "866940070061346",
+      "lat": 22.966122,
+      "lng": 115.334631
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412739, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "0e66c13d-d86d-43d3-bdc6-eaa63e3e8aef"
+      },
+      "imei": "866940074363458",
+      "lat": 22.958475,
+      "lng": 115.355594
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413257, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "14f5f6fc-21fc-469b-a2cd-e9eceed86d26"
+      },
+      "imei": "866940070077359",
+      "lat": 22.976172,
+      "lng": 115.400672
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "1815ca94-da76-4e41-94f6-6c569a051341"
+      },
+      "imei": "866940070105572",
+      "lat": 22.976173,
+      "lng": 115.400602
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "2de6913a-f9c4-446f-b3d0-a2117d656cfa"
+      },
+      "imei": "866940070131313",
+      "lat": 22.956266,
+      "lng": 115.317278
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795414007, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "2ff148ef-3ce8-4aa8-8bd7-58f36f9301c8"
+      },
+      "imei": "866940070071162",
+      "lat": 22.976163,
+      "lng": 115.400592
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "3089a40e-4c9c-4be8-98a7-bba98e9b2d31"
+      },
+      "imei": "864423069956208",
+      "lat": 22.955994,
+      "lng": 115.322197
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412157, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "44796128-9cfa-4dde-aacd-b68c710acf99"
+      },
+      "imei": "866940070106109",
+      "lat": 22.976453,
+      "lng": 115.400372
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "4f0fa435-7542-431f-96a4-f1872c9771bf"
+      },
+      "imei": "866940070106455",
+      "lat": 22.952239,
+      "lng": 115.316891
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "51212457-02a2-487e-9541-0f4074de145b"
+      },
+      "imei": "866940070080411",
+      "lat": 22.97618,
+      "lng": 115.400585
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "5aa98c10-a108-4c8f-adf0-aeb701951d82"
+      },
+      "imei": "866940070076468",
+      "lat": 22.976001,
+      "lng": 115.400523
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "5f842c2c-ba0a-4e63-99e0-54f6a44fd6b8"
+      },
+      "imei": "866940070014972",
+      "lat": 22.952422,
+      "lng": 115.305092
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412044, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "7d63ad3b-8aa5-4661-9c1e-beffbde81892"
+      },
+      "imei": "866940070114699",
+      "lat": 22.976155,
+      "lng": 115.400419
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "868bfac7-fe1f-4f5f-b515-f92141671d8d"
+      },
+      "imei": "866940070101381",
+      "lat": 22.976191,
+      "lng": 115.400715
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "956b53e9-8592-4e58-a1b2-641e69d60dc8"
+      },
+      "imei": "866940070120936",
+      "lat": 22.955368,
+      "lng": 115.328769
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412276, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "99989d14-48b3-49bd-8db6-2f15872c247a"
+      },
+      "imei": "866940070072368",
+      "lat": 22.969879,
+      "lng": 115.339374
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412762, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "a3ee941a-d489-46c3-8372-661db7a07a1c"
+      },
+      "imei": "866940070099288",
+      "lat": 22.976084,
+      "lng": 115.400626
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "b327f6f4-2fb3-463d-8520-48559d0dbd46"
+      },
+      "imei": "866940074324526",
+      "lat": 22.976162,
+      "lng": 115.400426
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "b6770b24-11ed-4ef8-bda9-529f4f52a54e"
+      },
+      "imei": "866940070096615",
+      "lat": 22.986521,
+      "lng": 115.354794
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413694, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "eabc54b7-6c6b-4241-aec6-860fa25cd9e7"
+      },
+      "imei": "866940070107883",
+      "lat": 22.995914,
+      "lng": 115.35061
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413587, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "ef38a91f-f5a4-4f67-bdb2-2c0bddff5be9"
+      },
+      "imei": "866940070109749",
+      "lat": 22.995514,
+      "lng": 115.355065
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "f2593aab-46ba-48c3-9722-7b8c4b81768f"
+      },
+      "imei": "864423069986783",
+      "lat": 22.959367,
+      "lng": 115.355583
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1bf20d62-6db9-4f1e-8997-6beebba52769"
+      },
+      "imei": "862551055685035",
+      "lat": 33.789168,
+      "lng": 118.372699
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1c51d1ac-2b74-444f-8fbf-b8e2590d423a"
+      },
+      "imei": "862551059864149",
+      "lat": 33.767999,
+      "lng": 118.399558
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185442561702239423, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1d119368-ddb4-4527-951e-e5eb2359d81d"
+      },
+      "imei": "862551059875764",
+      "lat": 33.777423,
+      "lng": 118.387648
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190622421111808215, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1d1abe28-1b15-40d6-ba6f-d81e5c7a6d23"
+      },
+      "imei": "862551059844463",
+      "lat": 33.76798,
+      "lng": 118.399588
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185442561702239423, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "244191ad-0206-4234-b60c-86b096d4cfcf"
+      },
+      "imei": "862551059864305",
+      "lat": 33.791241,
+      "lng": 118.346286
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185464856877468909, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "28776cc0-0f60-4099-9f39-b93cf1a55889"
+      },
+      "imei": "862551059858521",
+      "lat": 33.790238,
+      "lng": 118.412376
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=262433318696390908, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "356fccda-2b95-4830-b353-5041c33c3cc6"
+      },
+      "imei": "862551055691066",
+      "lat": 33.789401,
+      "lng": 118.373469
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "3846f8a4-56e1-4343-b58b-ede160ba0699"
+      },
+      "imei": "862551059863778",
+      "lat": 33.774793,
+      "lng": 118.382222
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446090017871564, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "386a046c-cc13-4a23-8eec-804d80546353"
+      },
+      "imei": "862551055691397",
+      "lat": 33.792737,
+      "lng": 118.365109
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "43d054ea-2a47-4c56-a59a-a5b15c9e45ff"
+      },
+      "imei": "862551059835941",
+      "lat": 33.766477,
+      "lng": 118.386084
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "477aa3ff-5cb3-41fa-b919-a9ac473a627c"
+      },
+      "imei": "862551059858737",
+      "lat": 33.769887,
+      "lng": 118.397801
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445499460389964, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4921eef7-97b3-4bdb-9fe6-d3f4322a1eb7"
+      },
+      "imei": "862551059802818",
+      "lat": 33.765591,
+      "lng": 118.379223
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185448984826348689, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4cc8f4a0-6fb7-4b40-b601-fd1e9dc4566c"
+      },
+      "imei": "862551055691587",
+      "lat": 33.780231,
+      "lng": 118.409681
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4dcfc415-9e46-4ba8-95ca-1c8b35da784c"
+      },
+      "imei": "862551059802883",
+      "lat": 33.79278,
+      "lng": 118.36502
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "4f5f10ba-6575-4a82-822d-4ed910ab4e89"
+      },
+      "imei": "862551059829738",
+      "lat": 33.774078,
+      "lng": 118.380069
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446253227148552, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "5fb31765-ffe4-4d76-9c20-1abae01cb265"
+      },
+      "imei": "862551059878016",
+      "lat": 33.774909,
+      "lng": 118.37773
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446637626724840, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "6e6f56a0-2a1f-4d9f-b6cf-697771bfbecc"
+      },
+      "imei": "862551059861129",
+      "lat": 33.772599,
+      "lng": 118.367375
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "6f532d7b-5dec-4609-92a9-9b67b3aaa696"
+      },
+      "imei": "862551059863026",
+      "lat": 33.793172,
+      "lng": 118.364571
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "755e34bd-9d69-4dc7-8dfc-608de4d14574"
+      },
+      "imei": "862551055683790",
+      "lat": 33.764614,
+      "lng": 118.397062
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190435562118193064, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "7884248d-82ca-473f-94de-f024d5bb9cb0"
+      },
+      "imei": "862551055691298",
+      "lat": 33.769064,
+      "lng": 118.380152
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "78c7a716-bd3f-4a05-875f-86b7b672d046"
+      },
+      "imei": "862551055691314",
+      "lat": 33.792691,
+      "lng": 118.365092
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "7bbc064a-87ee-465e-96ef-a5e9a45a8052"
+      },
+      "imei": "862551059864198",
+      "lat": 33.774153,
+      "lng": 118.374872
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862366818373076, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "7f8adfa9-7d64-4fcb-be58-ae13a775786e"
+      },
+      "imei": "862551059864222",
+      "lat": 33.776426,
+      "lng": 118.382858
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269395361401482, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "866e46e6-452f-4713-a358-cd5b434dbdbe"
+      },
+      "imei": "862551059803162",
+      "lat": 33.793062,
+      "lng": 118.364731
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "88d79375-f29e-4211-a01d-2f811a000438"
+      },
+      "imei": "862551059806389",
+      "lat": 33.766459,
+      "lng": 118.3861
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192864406927318619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "9b792bca-2ba9-439d-bf20-0d9767d18a9e"
+      },
+      "imei": "862551059843440",
+      "lat": 33.771713,
+      "lng": 118.384919
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185268280519296182, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a572652a-fa74-453f-94e4-1822ce563710"
+      },
+      "imei": "862551059876887",
+      "lat": 33.7894,
+      "lng": 118.373484
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "af81912a-b8c5-4fc5-92e3-5048457f115c"
+      },
+      "imei": "862551059863125",
+      "lat": 33.767459,
+      "lng": 118.38154
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185449072873706972, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b4d99438-7bac-40a6-8969-3ae6735dcc68"
+      },
+      "imei": "862551059848332",
+      "lat": 33.768764,
+      "lng": 118.383853
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=187660710447161283, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b832dd87-5037-4c91-8f73-4a80ae339e08"
+      },
+      "imei": "862551059836253",
+      "lat": 33.79318,
+      "lng": 118.406823
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190820827126040179, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "bd7b2615-f882-43b5-9ed6-c01079805069"
+      },
+      "imei": "862551059865385",
+      "lat": 33.772603,
+      "lng": 118.367368
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "bf1a4324-0955-4ee8-a824-7d0e9d2f74a8"
+      },
+      "imei": "862551059835974",
+      "lat": 33.761387,
+      "lng": 118.395547
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193259906843280523, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c42765a9-4d16-4ffa-9325-bb8e6081bed3"
+      },
+      "imei": "862551059817808",
+      "lat": 33.791248,
+      "lng": 118.346249
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185464856877468909, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c83eb5a4-1971-4a07-9e09-a2845cf41cf7"
+      },
+      "imei": "862551059862879",
+      "lat": 33.790231,
+      "lng": 118.412299
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=262433318696390908, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "e1428c2a-758f-4cff-9a50-841f0e9f042e"
+      },
+      "imei": "862551059849983",
+      "lat": 33.774632,
+      "lng": 118.390795
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "ee637d20-0a93-4999-b4eb-8b88fc125f44"
+      },
+      "imei": "862551059877109",
+      "lat": 33.777426,
+      "lng": 118.387648
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190622421111808215, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "ef65f1c3-bd83-4094-b5b4-95d7cdb25a50"
+      },
+      "imei": "862551055691413",
+      "lat": 33.774839,
+      "lng": 118.382297
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446090017871564, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f3ac564f-e458-4e30-9548-3b5f1422b45f"
+      },
+      "imei": "862551055684806",
+      "lat": 33.792713,
+      "lng": 118.36512
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f52078c6-c238-4c72-a7ec-25150b3bc005"
+      },
+      "imei": "862551059811256",
+      "lat": 33.801459,
+      "lng": 118.366525
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185466171137989922, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "f960e882-8b4b-4fe2-8b97-2e22a2c0d634"
+      },
+      "imei": "862551055683899",
+      "lat": 33.764628,
+      "lng": 118.396976
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190435562118193064, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "fec979b4-897f-401e-9ed5-079ab5176df1"
+      },
+      "imei": "862551059863604",
+      "lat": 33.761393,
+      "lng": 118.395538
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193259906843280523, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "fef4cf07-cff9-4957-aefa-3c2a7a1a301f"
+      },
+      "imei": "862551055683782",
+      "lat": 33.790176,
+      "lng": 118.344943
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465013644824051, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "2e400164-bf80-45e0-a1d0-781747ef8e88"
+      },
+      "imei": "866940070102819",
+      "lat": 31.283068,
+      "lng": 118.896149
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=293835366455576312, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "4b3b6cfc-c14b-4889-bb19-ea93ab7cdb79"
+      },
+      "imei": "866940070018015",
+      "lat": 31.283074,
+      "lng": 118.896041
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=293835366455576312, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "82ea7c7c-7ff5-413b-bf3e-837b10a6e65e"
+      },
+      "imei": "866940070124490",
+      "lat": 31.283071,
+      "lng": 118.896119
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=293835366455576312, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "b046fb50-d579-4bc5-8287-895050562045"
+      },
+      "imei": "866940070015573",
+      "lat": 31.283088,
+      "lng": 118.896022
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=293835366455576312, fenceCustomId=null)}",
+    "source": "ebike-fence-2.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "118e3dd1-0c22-4d88-b00f-e6a3b0ba516e"
+      },
+      "imei": "866940070120936",
+      "lat": 22.954597,
+      "lng": 115.338039
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412659, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "1a4a9879-4842-4b9d-b353-0ee1d679d4b8"
+      },
+      "imei": "866940070121470",
+      "lat": 22.976139,
+      "lng": 115.400393
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "225c43cf-e09a-48de-b1f6-def7b17eb1ae"
+      },
+      "imei": "866940070096573",
+      "lat": 22.996383,
+      "lng": 115.344348
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "30213854-2828-4ef9-939a-74da4424e8cb"
+      },
+      "imei": "866940074338393",
+      "lat": 22.954261,
+      "lng": 115.325271
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795412169, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "3c40c539-db5c-4732-ade8-b907cc565802"
+      },
+      "imei": "866940070106083",
+      "lat": 22.991608,
+      "lng": 115.343821
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "4e8fb137-0e52-4695-8d6c-05add9ce82d5"
+      },
+      "imei": "866940070101936",
+      "lat": 22.976454,
+      "lng": 115.400338
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "6d336103-8acd-4dea-abac-6f995541478e"
+      },
+      "imei": "866940070068242",
+      "lat": 22.976308,
+      "lng": 115.400587
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "7bc875dd-9eb3-479b-91cb-b0f444475033"
+      },
+      "imei": "866940070106679",
+      "lat": 22.965245,
+      "lng": 115.336106
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "853d9d97-6a94-4bd0-8b6d-70d4d24c0651"
+      },
+      "imei": "866940070068598",
+      "lat": 22.985071,
+      "lng": 115.348498
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413667, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "877b1884-5c9c-499f-8ba5-8b70b3e0e3b8"
+      },
+      "imei": "866940070009816",
+      "lat": 22.976416,
+      "lng": 115.400423
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "a424b86d-8671-462e-ac7e-3475ae78545b"
+      },
+      "imei": "866940070078514",
+      "lat": 22.985536,
+      "lng": 115.413936
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "b0975733-772e-4a29-b6a8-41f2c770641e"
+      },
+      "imei": "866940070067954",
+      "lat": 22.994822,
+      "lng": 115.319496
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413044, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "b2e631dc-607a-47d1-8652-34e8310399e5"
+      },
+      "imei": "866940070067715",
+      "lat": 22.976052,
+      "lng": 115.400626
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "c20b5a15-82ad-4c25-8945-945b4afa29b8"
+      },
+      "imei": "866940070097209",
+      "lat": 22.987419,
+      "lng": 115.347881
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "c557338b-d7db-4200-91e8-d987e067903e"
+      },
+      "imei": "866940070121249",
+      "lat": 22.976444,
+      "lng": 115.40041
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "cca15780-fe27-4d3f-b6fb-497653e0caf4"
+      },
+      "imei": "866940070055520",
+      "lat": 22.95007,
+      "lng": 115.324063
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=299439351736572634, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "d10ea8f1-64db-48a4-b625-3b3461118a5a"
+      },
+      "imei": "866940070067582",
+      "lat": 22.985362,
+      "lng": 115.342775
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=274866299795413963, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "deb3cdeb-f3f3-4a0e-8a28-9b9dfa839a10"
+      },
+      "imei": "866940070076492",
+      "lat": 22.962014,
+      "lng": 115.344537
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=274866299795412712, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1000",
+        "traceId": "f1781648-a71c-485e-a5e5-5c4e10bc411b"
+      },
+      "imei": "866940070077540",
+      "lat": 22.966388,
+      "lng": 115.322114
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "05cc88cf-a76c-432e-a85b-db02a17beca0"
+      },
+      "imei": "862551059810720",
+      "lat": 33.768607,
+      "lng": 118.376117
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "1b0d885f-8b18-44e9-a941-2e2101ae45df"
+      },
+      "imei": "862551059855832",
+      "lat": 33.776421,
+      "lng": 118.382873
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269395361401482, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "218c751e-e313-4240-aeae-88cb0b88ef2e"
+      },
+      "imei": "862551055684640",
+      "lat": 33.793568,
+      "lng": 118.345643
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450773679705369, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "294b8467-9664-4803-b616-4805d6712583"
+      },
+      "imei": "862551059863653",
+      "lat": 33.779727,
+      "lng": 118.383956
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269934380845274, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2953cb24-3fc3-4b29-b2fe-a3ea4874575c"
+      },
+      "imei": "862551059812627",
+      "lat": 33.78938,
+      "lng": 118.373539
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447395688450398, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2a97d708-1a65-4087-83af-021f18a36873"
+      },
+      "imei": "862551055685126",
+      "lat": 33.776456,
+      "lng": 118.382881
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269395361401482, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2b11b3dd-f45a-418a-a3de-b82068bd8439"
+      },
+      "imei": "862551055684020",
+      "lat": 33.772852,
+      "lng": 118.389934
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445843057774018, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "2da51797-1d31-4311-96ab-1623e4a542cc"
+      },
+      "imei": "862551055691355",
+      "lat": 33.774063,
+      "lng": 118.380109
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185446253227148552, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "34d474ae-3207-4bec-8b99-fc81820713f5"
+      },
+      "imei": "862551059803030",
+      "lat": 33.774171,
+      "lng": 118.374893
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862366818373076, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "403a954d-257d-4fb1-99c7-bb76fbb14c58"
+      },
+      "imei": "862551059862812",
+      "lat": 33.781113,
+      "lng": 118.388416
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185447037059208608, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "42b821af-3b42-41e2-ba6c-78be3c18097e"
+      },
+      "imei": "862551059838473",
+      "lat": 33.779868,
+      "lng": 118.384
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188269934380845274, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "5545d996-a82a-45fd-9232-84cd8badc9d3"
+      },
+      "imei": "862551059864149",
+      "lat": 33.801472,
+      "lng": 118.36655
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185466171137989922, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "58adaa15-323e-43bc-846b-d4de2f178e16"
+      },
+      "imei": "862551059864156",
+      "lat": 33.778441,
+      "lng": 118.394149
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "675eef91-e0dc-4ae6-a6b0-86625650f87b"
+      },
+      "imei": "862551059810720",
+      "lat": 33.768606,
+      "lng": 118.376117
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "685110ce-0ddb-447d-a1a2-fb645169f13e"
+      },
+      "imei": "862551059858455",
+      "lat": 33.764738,
+      "lng": 118.422238
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=188575684512712619, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "6e39295c-b45a-4343-9027-c0fe42a640f2"
+      },
+      "imei": "862551059876846",
+      "lat": 33.793485,
+      "lng": 118.345693
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450773679705369, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "70c3108f-db6a-4638-bb73-7ee886f16f3d"
+      },
+      "imei": "862551059810720",
+      "lat": 33.768606,
+      "lng": 118.376121
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "75ba4737-a26a-43d6-a0ad-5f314c112161"
+      },
+      "imei": "862551059864719",
+      "lat": 33.793392,
+      "lng": 118.364293
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "7813fb48-2522-40da-8d71-417c3242d9ef"
+      },
+      "imei": "862551059879394",
+      "lat": 33.780209,
+      "lng": 118.409553
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "947e8f8a-bdb3-4f4f-b837-83038f33f56c"
+      },
+      "imei": "862551055606841",
+      "lat": 33.767279,
+      "lng": 118.404646
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=205523185236448512, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "9b8e7500-b2cb-4ce6-8939-069c3d96ef19"
+      },
+      "imei": "862551059836030",
+      "lat": 33.767973,
+      "lng": 118.3996
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185442561702239423, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "a8b80a0f-e015-4747-9f86-ff83a12e8133"
+      },
+      "imei": "862551055683824",
+      "lat": 33.782741,
+      "lng": 118.384258
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "aec91284-40e3-4a9e-a41f-8b72b35655d7"
+      },
+      "imei": "862551059810720",
+      "lat": 33.768606,
+      "lng": 118.376115
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "aeeca6e2-446d-4a24-aa02-ecbb62e5d6ad"
+      },
+      "imei": "862551059865385",
+      "lat": 33.772568,
+      "lng": 118.367377
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b3ce0fb1-8a57-4d14-8fda-87e81aa54a6b"
+      },
+      "imei": "862551059848035",
+      "lat": 33.759479,
+      "lng": 118.398852
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185449667725631879, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "b9d7c822-5e5c-4cb7-94e1-26e1092be512"
+      },
+      "imei": "862551055691215",
+      "lat": 33.793472,
+      "lng": 118.345697
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185450773679705369, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "beca4557-8e6a-4a51-b73e-b2612462663d"
+      },
+      "imei": "862551059812700",
+      "lat": 33.78021,
+      "lng": 118.40957
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185467092408994437, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c22ce8a4-48cf-4276-9128-2eeb2b6794c3"
+      },
+      "imei": "862551059848027",
+      "lat": 33.772576,
+      "lng": 118.367386
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "c3797587-b9bd-415d-9825-1e2381afdda1"
+      },
+      "imei": "862551059812635",
+      "lat": 33.76748,
+      "lng": 118.381461
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185449072873706972, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d647b241-c8a2-4600-8734-f14ade7eb03a"
+      },
+      "imei": "862551059836022",
+      "lat": 33.797039,
+      "lng": 118.35926
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185465748083180741, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d6b227f3-b02d-4ed1-b5a8-a584864f078c"
+      },
+      "imei": "862551059839356",
+      "lat": 33.801468,
+      "lng": 118.366552
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185466171137989922, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "d6b3f409-fcb0-4368-b243-5e5825f5d671"
+      },
+      "imei": "862551055684863",
+      "lat": 33.773664,
+      "lng": 118.381282
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "dadf10e9-1fec-4a93-8361-e5d99a7e9d01"
+      },
+      "imei": "862551059811157",
+      "lat": 33.773228,
+      "lng": 118.385328
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192537972231899230, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "daffaa35-0618-4974-b1b7-f49de2d4b3b2"
+      },
+      "imei": "862551059872787",
+      "lat": 33.768629,
+      "lng": 118.376104
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=192862497814355033, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "dc0bb2e3-1a04-4368-beb9-928949ab9b82"
+      },
+      "imei": "862551059863109",
+      "lat": 33.772572,
+      "lng": 118.367362
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=190674104601285547, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "df9d529c-c8db-430e-9d65-60578633a438"
+      },
+      "imei": "862551055685290",
+      "lat": 33.793383,
+      "lng": 118.364369
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "dfc558b8-1db5-4ae6-bd41-a19f7b503ff5"
+      },
+      "imei": "862551055691603",
+      "lat": 33.792714,
+      "lng": 118.365143
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "e43b7afd-6bd2-44df-9bb9-bbdb54dab168"
+      },
+      "imei": "862551059863125",
+      "lat": 33.772825,
+      "lng": 118.38997
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185445843057774018, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "ec71281e-af03-457c-ab66-caaeeaf51b2c"
+      },
+      "imei": "862551059837996",
+      "lat": 33.771708,
+      "lng": 118.38489
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=185268280519296182, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1003",
+        "traceId": "fd255037-1568-469b-97e1-a1febffaee35"
+      },
+      "imei": "862551059806280",
+      "lat": 33.792955,
+      "lng": 118.364817
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=193607079787240822, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "3350de5e-fec0-4316-b6c9-efdded693b18"
+      },
+      "imei": "864423068490381",
+      "lat": 31.283076,
+      "lng": 118.896359
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=293835366455576312, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "4e5b45af-89ee-47d1-a505-62e9e983d5fd"
+      },
+      "imei": "864423069933975",
+      "lat": 31.393651,
+      "lng": 119.081913
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=239850114330921695, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "58710800-c17b-4096-945b-ed649d440752"
+      },
+      "imei": "866940070128871",
+      "lat": 31.283063,
+      "lng": 118.896242
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=293835366455576312, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "77ec1bb6-2f84-43c4-b995-67dc36edfcb1"
+      },
+      "imei": "864423068516177",
+      "lat": 31.393648,
+      "lng": 119.081894
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=239850114330921695, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  },
+  {
+    "url": "/parking/bindParking",
+    "request": {
+      "commandContext": {
+        "pin": "ebike-device-consume",
+        "stressTesting": false,
+        "tenantId": "1004",
+        "traceId": "c35bff76-eab2-4269-a0fa-da22ac37b174"
+      },
+      "imei": "866940070038013",
+      "lat": 31.288277,
+      "lng": 118.898709
+    },
+    "reply": "{\"success\":true,\"code\":\"0\",\"msg\":\"成功\",\"data\":BindParkingCO(parkingId=null, noParkingId=null, banRidingId=null, maintainAreaId=null, nearParkingId=null, fenceCustomId=null)}",
+    "source": "ebike-fence-3.log"
+  }
+]

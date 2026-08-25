@@ -1,0 +1,70 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Nacos 应用配置默认模板
+#
+# DataId : ebike-open-paas.yml
+# Group  : xyy
+# Namespace: prod（与部署一致）
+#
+# 用法：将本文件内容粘贴到 Nacos 控制台，或用 API/脚本发布。
+# 热更新：open.agents / rateLimit / callback / notify / voiceIndexMap / aes-key
+# 会经 ListenConfig 合并进进程，无需重启。
+#
+# 勿把真实 token / aes-key 提交进 git；仓库内为占位示例。
+# ─────────────────────────────────────────────────────────────────────────────
+
+anvelink:
+  openapi:
+    # 与 openapi 网关共用的 AES 根密钥；实际加签只用 [16:] 子串作 key+iv
+    aes-key: "13dade85494f4b2ca4f49b21cd058625"
+
+feign:
+  client:
+    # 命中则给上游请求加 authKey/authSecret/appId
+    auth-url-regex:
+      - "/ebike/.*"
+
+open:
+  commandPin: open_paas
+  # /internal/* 的共享 token。留空则这些路由一律拒绝（失败即关闭），
+  # 生产由 Deployment 的 INTERNAL_TOKEN 环境变量注入，不写在 Nacos 里。
+  internalToken: ""
+  rateLimit:
+    windowSeconds: 300
+    maxRequests: 30000
+  callback:
+    queueSize: 20000
+    # 每个回调 URL 按 hash 固定落到某条投递通道，慢的客户只会填满自己那条
+    workers: 16
+    timeoutSeconds: 5
+    maxAttempts: 3
+    retryBackoffMs: 500
+    # 通道满时的有界等待。0 表示立即丢弃；调大能吸收突发，
+    # 但会让 Kafka 消费在最慢的那个客户后面排队
+    enqueueWaitMs: 200
+    subscriptionTtlSeconds: 10
+    # 连续投递失败后临时屏蔽该 URL（不删 Redis 订阅）；重新注册可立即复位
+    circuitEnabled: true
+    circuitFailThreshold: 20
+    circuitCooldownSeconds: 600
+  # saas_0 不直接上报、由本服务状态机派生的 notify
+  notify:
+    fenceEnabled: true
+    socStepsEnabled: true
+    socSteps:
+      - percent: 50
+        notify: 21
+      - percent: 30
+        notify: 22
+    stateTtlSeconds: 86400
+  # 小安铃声槽位 → 内部 idx，按固件调整
+  voiceIndexMap:
+    1: 6   # 设防提示 → 还车设防
+    2: 1   # 撤防 → 撤防欢迎
+    6: 5   # 找车 → 找车 Hi
+  agents:
+    # 生产请替换 token / tenantId；enabled=false 可临时停用而不删条目
+    - agentId: "87"
+      token: "CHANGE_ME_XC_ACCESS_TOKEN"
+      tenantId: "1"
+      name: "poc"
+      enabled: false

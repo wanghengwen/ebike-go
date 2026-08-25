@@ -1,0 +1,28 @@
+# Binaries and Executables
+build/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (only needed if we don't want to vendor)
+# vendor/
+
+# Temporary files
+java_sources_dump.txt
+
+# IDE/Editor config
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

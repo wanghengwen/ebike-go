@@ -1,0 +1,204 @@
+server:
+  port: 8080
+  name: ebike-fence
+
+spring:
+  application:
+    name: ebike-fence
+  xyy:
+    fastid:
+      enabled: true
+      server-addr: fastid.luopingtech.com
+      namespace: prod
+      groupId: xyy
+      drift-time: 10
+
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod
+  group: xyy
+  # Go-specific overrides (optional). Java shared config lives in Nacos as ebike-fence.yml.
+  dataId: ebike-fence.yaml
+
+# Redis is loaded from Nacos redis.yaml (group: {nacos.group}_ops, key: redis.ebike_fence).
+# Optional local override for dev when Nacos is unavailable:
+redis:
+  addr: 127.0.0.1:6379
+  password: ""
+  db: 6
+
+# MySQL DSN is loaded from Nacos mysql.yaml (group: {nacos.group}_ops, key: mysql.ebike_fence).
+# Optional local override for dev when Nacos is unavailable:
+mysql:
+  maxOpenConns: 20
+  maxIdleConns: 10
+
+# Mirrors Java ApplicationProperties (prefix "xyy")
+xyy:
+  remoteLockDistance: 100
+  helmetAuditWhite: []
+  cancelAuthTenantIds:
+    - "1007"
+  proxy:
+    targetUrl: "http://127.0.0.1:8081"
+    # fence-21: 45 readonly endpoints shadow-verified (1608/1608 MATCH, 0 DIFF)
+    liveList:
+    # synced toward application-k8s.yml liveList (shadow-verified + prod cutover)
+      - "/SiteApplication/pageSiteApplication"
+      - "/ad_config/detail"
+      - "/banRiding/getListByServiceId"
+      - "/banRiding/getNearestBanRiding"
+      - "/config/backcar/getConfigById"
+      - "/config/backcar/getConfigByServiceId"
+      - "/config/base/getConfigByServiceId"
+      - "/config/bigSceen/getConfigByServiceId"
+      - "/config/creditScore/getConfigByServiceId"
+      - "/config/getAd"
+      - "/config/getRidingCarConfig"
+      - "/config/parkApply/getByServiceId"
+      - "/config/pay/getConfigByServiceId"
+      - "/config/protocol/byType"
+      - "/config/protocol/default"
+      - "/config/protocol/list"
+      - "/config/pushRidingCard/getByServiceId"
+      - "/config/usecar/getConfigByServiceId"
+      - "/fence/tags/getAll"
+      - "/helpConfig/getCustomerServiceByServiceId"
+      - "/helpConfig/getFaqByServiceId"
+      - "/helpConfig/getGuidePageConfigByServiceId"
+      - "/helpConfig/getGuidePageConfigIzOn"
+      - "/helpConfig/getHomeActivityEntranceByServiceId"
+      - "/helpConfig/getHomeNav"
+      - "/helpConfig/getHomeScrollerMsgById"
+      - "/helpConfig/getHomeScrollerMsgByServiceId"
+      - "/helpConfig/getHomeScrollerMsgByServiceId/v2"
+      - "/helpConfig/getSpecialTipsById"
+      - "/helpConfig/getSpecialTipsByServiceId"
+      - "/noParking/getListByServiceId"
+      - "/noParking/getNearNoParking"
+      - "/parking/getListByServiceId"
+      - "/parking/getNearParking"
+      - "/parking/getNearParkingNum"
+      - "/resource/management/appList"
+      - "/ridingPermission/get"
+      - "/serviceArea/computeOutServiceDistance"
+      - "/serviceArea/getById"
+      - "/serviceArea/getFenceRelation"
+      - "/serviceArea/getList"
+      - "/serviceArea/getNearServiceByLocation"
+      - "/serviceArea/getServiceAreaByIds"
+      - "/serviceArea/getServiceByLocation"
+      - "/alarmContact/selectAlarmContact"
+      - "/checkPartByApp"
+      - "/helmet/del"
+      - "/helmet/helmetStateChange"
+      - "/helmet/lock"
+      - "/helmet/unlock"
+      - "/maintain/area/getByUserPin"
+      - "/parking/bindParking"
+      - "/parking/filterParkingList"
+      - "/parking/getByCarId"
+      - "/parking/getById"
+      - "/parking/unBindParking"
+      - "/part/checkHelmetByTempParking"
+      - "/resource/management/addClick"
+      - "/resource/management/addExposure"
+      - "/serviceArea/returnCar"
+      - "/serviceArea/ridingCar"
+    recordList:
+      - "/SiteApplication/dealSiteApplication"
+      - "/ad_config/saveOrUpdate"
+      - "/alarmContact/addAlarmContact"
+      - "/alarmContact/delAlarmContact"
+      - "/alarmContact/editAlarmContact"
+      - "/banRiding/createBanRiding"
+      - "/banRiding/deleteBanRiding"
+      - "/banRiding/deleteBanRidingBatch"
+      - "/banRiding/updateBanRiding"
+      - "/config/backcar/createConfig"
+      - "/config/backcar/updateConfig"
+      - "/config/base/insertSwapBatteryThreshold"
+      - "/config/base/insertUserTicketPhotoWays"
+      - "/config/base/updateConfig"
+      - "/config/bigSceen/updateConfig"
+      - "/config/creditScore/updateConfig"
+      - "/config/insAd"
+      - "/config/parkApply/update"
+      - "/config/pay/updateConfig"
+      - "/config/protocol/setDefault"
+      - "/config/protocol/update"
+      - "/config/pushRidingCard/update"
+      - "/config/updAd"
+      - "/config/usecar/recharge"
+      - "/config/usecar/updateConfig"
+      - "/fence/custom/create"
+      - "/fence/custom/delete"
+      - "/fence/custom/type/create"
+      - "/fence/custom/type/delete"
+      - "/fence/custom/type/update"
+      - "/fence/custom/update"
+      - "/helpConfig/addDefinedSpecialTips"
+      - "/helpConfig/addFaq"
+      - "/helpConfig/addGuidePageConfig"
+      - "/helpConfig/addHomeActivityEntrance"
+      - "/helpConfig/addHomeNav"
+      - "/helpConfig/addHomeScrollerMsg"
+      - "/helpConfig/delFaq"
+      - "/helpConfig/delGuidePage"
+      - "/helpConfig/delHomeActivityEntrance"
+      - "/helpConfig/delHomeNav"
+      - "/helpConfig/delHomeScrollerMsg"
+      - "/helpConfig/delSpecialTips"
+      - "/helpConfig/editCustomerService"
+      - "/helpConfig/editCustomerServiceBatch"
+      - "/helpConfig/editFaq"
+      - "/helpConfig/editGuidePage"
+      - "/helpConfig/editHomeActivityEntrance"
+      - "/helpConfig/editHomeNav"
+      - "/helpConfig/editHomeScrollerMsg"
+      - "/helpConfig/editSpecialTips"
+      - "/helpConfig/sortGuidePage"
+      - "/maintain/area/create"
+      - "/maintain/area/delete"
+      - "/maintain/area/deleteBatch"
+      - "/maintain/area/personnelDelete"
+      - "/maintain/area/personnelEdit"
+      - "/maintain/area/update"
+      - "/noParking/createNoParking"
+      - "/noParking/deleteNoParking"
+      - "/noParking/deleteNoParkingBatch"
+      - "/noParking/updateNoParking"
+      - "/parking/copy"
+      - "/parking/copyByService"
+      - "/parking/createParking"
+      - "/parking/createParkingBatch"
+      - "/parking/createRadPacketParking"
+      - "/parking/deleteParking"
+      - "/parking/deleteParkingBatch"
+      - "/parking/disable"
+      - "/parking/disableBatch"
+      - "/parking/enable"
+      - "/parking/enableBatch"
+      - "/parking/updateParking"
+      - "/parking/updateParkingBatch"
+      - "/part/setCameraAudit"
+      - "/part/setDirectionAudit"
+      - "/part/setHelmetAudit"
+      - "/part/setKickstandAudit"
+      - "/part/setLocationAudit"
+      - "/part/setPointAudit"
+      - "/part/setTBeaconAudit"
+      - "/resource/management/batchOffline"
+      - "/resource/management/batchOnline"
+      - "/resource/management/create"
+      - "/resource/management/delete"
+      - "/resource/management/sort"
+      - "/resource/management/update"
+      - "/rfid/bind/batchSaveOrUpdate"
+      - "/rfid/bind/change"
+      - "/rfid/bind/saveOrUpdate"
+      - "/ridingPermission/edit"
+      - "/serviceArea/createServiceArea"
+      - "/serviceArea/deleteServiceArea"
+      - "/serviceArea/updateServiceArea"

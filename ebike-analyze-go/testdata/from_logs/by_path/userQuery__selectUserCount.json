@@ -1,0 +1,87 @@
+{
+  "path": "/userQuery/selectUserCount",
+  "method": "POST",
+  "sampleCount": 3,
+  "totalSeen": 130,
+  "samples": [
+    {
+      "fingerprint": "ae580ef1b981",
+      "success": true,
+      "code": "0",
+      "dataRaw": "0}",
+      "cusTimeMs": 2,
+      "request": {
+        "commandContext": {
+          "ip": "172.16.3.208",
+          "name": "戈想想",
+          "pin": "b_36f27ad80480c14",
+          "platform": "pc",
+          "source": "ebike-user",
+          "stressTesting": false,
+          "tenantId": "1",
+          "traceId": "178090967118299112519265"
+        },
+        "qualificationType": [],
+        "serviceId": [
+          365612202791543129
+        ]
+      },
+      "source": "0.log.20260615-130107:11846"
+    },
+    {
+      "fingerprint": "c97071a6b32d",
+      "success": true,
+      "code": "0",
+      "dataRaw": "0}",
+      "cusTimeMs": 2,
+      "request": {
+        "commandContext": {
+          "ip": "172.16.3.208",
+          "name": "赵坤鹏",
+          "pin": "b_3289379801817ad",
+          "platform": "pc",
+          "source": "ebike-user",
+          "stressTesting": false,
+          "tenantId": "1007",
+          "traceId": "178108411798992563171344"
+        },
+        "phone": "+86-18606531721",
+        "qualificationType": [],
+        "serviceId": [
+          364848372922716182,
+          364881328207300695,
+          364925074596169896,
+          365612202791543129,
+          367693526772226419
+        ]
+      },
+      "source": "0.log.20260615-130107:18517"
+    },
+    {
+      "fingerprint": "308ca3d85e07",
+      "success": true,
+      "code": "0",
+      "dataRaw": "0}",
+      "cusTimeMs": 2,
+      "request": {
+        "authName": "",
+        "commandContext": {
+          "ip": "172.16.3.208",
+          "name": "武士勇",
+          "pin": "b_4b360bb024811db",
+          "platform": "pc",
+          "source": "ebike-user",
+          "stressTesting": false,
+          "tenantId": "1003",
+          "traceId": "178152304607682808470068"
+        },
+        "phone": "+86-199629088538",
+        "qualificationType": [],
+        "serviceId": [
+          338362359727786125
+        ]
+      },
+      "source": "0.log.20260626-160520:1059"
+    }
+  ]
+}

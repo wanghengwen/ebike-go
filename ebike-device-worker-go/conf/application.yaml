@@ -1,0 +1,86 @@
+server:
+  port: "9080"
+
+proxy:
+  # Java ebike-device-worker upstream (paths not in live_list are proxied here).
+  target_url: "http://127.0.0.1:10080"
+  # live_list: Go native execution (no proxy). Empty = all business APIs go to Java.
+  live_list: []
+
+  # record_list: proxy to Java and log req/res during write-path validation.
+  record_list:
+    - /ebike/gps/saveOrderTrajectory
+    - /ebike/gps/saveMovingEBikeTrajectory
+    - /cmd/saveEbikeCmd
+
+# Local dev: go run . -skip-nacos
+# Secret: set SPRING_XYY_FASTID_SECRET env var when skip-nacos or Nacos unavailable.
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod
+  group: xyy
+  registerEnabled: false  # set true in prod; skipped when DRY_RUN=true or -skip-nacos
+
+database:
+  dsn: ""
+
+redis:
+  addr: ""
+  password: ""
+  prefix: ""
+  db: 0
+
+spring:
+  application:
+    name: ebike-device-worker
+  xyy:
+    fastid:
+      enabled: true
+      server-addr: fastid.luopingtech.com
+      namespace: prod
+      groupId: xyy
+      app-name: ebike-device-worker
+
+kafka:
+  enabled: false
+  # 消费后是否转发 to-saas / gray-to-saas（Kafka 写库对拍实例应设为 false）
+  push_enabled: true
+  brokers:
+    - "localhost:9092"
+  topics:
+    data_topic: "device-data"
+    event_topic: "device-event"
+    alarm_topic: "device-alarm"
+    to_saas_topic: "saas_0"
+    gray_to_saas_topic: "gray-to-saas"
+  consumers:
+    # Go 默认使用独立 group，避免与 Java ebike-device-worker-* 抢分区。
+    # Nacos kafka.yaml 会覆盖为 Java 同名 group；K8s 对拍见 application-k8s-shadow.yaml
+    # 或环境变量 KAFKA_CONSUMERS_GROUP_DATA 等固定 verify 组名。
+    group_data: "ebike-device-worker-go-data"
+    group_event: "ebike-device-worker-go-event"
+    group_alarm: "ebike-device-worker-go-alarm"
+    data_concurrency: 1
+    event_concurrency: 1
+    alarm_concurrency: 1
+    batch_size: 500
+    batch_wait_ms: 100
+
+persist_config:
+  persist_batch_size: 20
+  persist_limit_size: 50
+  persist_interval_ms: 1000
+  # table_suffix: "_new"   # 新 TimescaleDB 库填 "_new"；旧库留空或注释
+
+caffeine:
+  device_tenant_mapping_cache_size: 100000
+  tenant_cache_size: 2000
+  timeout_sec: 120
+
+xyy:
+  gray_tenant_ids: []
+
+paas:
+  enabled: false
+  base_url: "http://localhost:8082"

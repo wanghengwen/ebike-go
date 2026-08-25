@@ -1,0 +1,104 @@
+server:
+  port: 8080
+  name: ebike-open-paas
+
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod
+  group: xyy
+  registerEnabled: false
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  database: 0
+  # device_ebike_* 所在库；与 database 相同可省略或设 -1。现网：影子 db4、登记 db12。
+  registry-database: -1
+
+xyy:
+  paasUrl: ""
+  openapiUrl: ""
+  workerUrl: ""
+  consoleUrl: ""
+  consoleAuth:
+    phone: ""
+    password: ""
+    username: ""
+  consoleAuthToken: ""
+  managementUrl: ""
+  mapServiceConfig:
+    url: ""
+    api: aMap
+    secret: ""
+
+anvelink:
+  openapi:
+    aes-key: ""
+
+feign:
+  client:
+    auth-url-regex:
+      - "/ebike/.*"
+
+# Brokers and topics are normally supplied by kafka.yaml @ {group}_ops so this
+# service follows whatever ebike-device-worker produces to. groupId is ours alone
+# and must never be copied from kafka.yaml's group-id-* keys.
+kafka:
+  enabled: false
+  brokers: []
+  topics:
+    - saas_0
+  groupId: ebike-open-paas-go-saas
+  concurrency: 1
+  batchSize: 500
+  batchWaitMs: 100
+  startOffset: latest
+
+open:
+  commandPin: open_paas
+  # Empty denies /internal/* rather than opening it; set INTERNAL_TOKEN to enable.
+  internalToken: ""
+  rateLimit:
+    windowSeconds: 300
+    maxRequests: 30000
+  callback:
+    queueSize: 20000
+    # Each callback URL is pinned to one delivery lane, so a customer whose
+    # endpoint has stalled fills only its own queue.
+    workers: 16
+    timeoutSeconds: 5
+    maxAttempts: 3
+    retryBackoffMs: 500
+    # How long a full lane is given to drain before the event is dropped. 0 drops
+    # immediately; a larger value absorbs bursts at the cost of holding the Kafka
+    # consumer behind the slowest customer.
+    enqueueWaitMs: 200
+    subscriptionTtlSeconds: 10
+    # 连续投递失败后临时屏蔽该 URL（不删 Redis 订阅）；重新注册可立即复位
+    circuitEnabled: true
+    circuitFailThreshold: 20
+    circuitCooldownSeconds: 600
+  # Notify codes saas_0 never reports; derived from state transitions instead.
+  notify:
+    fenceEnabled: true
+    socStepsEnabled: true
+    socSteps:
+      - percent: 50
+        notify: 21
+      - percent: 30
+        notify: 22
+    stateTtlSeconds: 86400
+  # Xiaoan ringtone slot → internal idx. Adjust per device firmware.
+  voiceIndexMap:
+    1: 6   # 设防提示 → 还车设防
+    2: 1   # 撤防 → 撤防欢迎
+    6: 5   # 找车 → 找车 Hi
+  agents:
+    # Example POC agent — replace token/tenantId in Nacos for production.
+    - agentId: "87"
+      token: "CHANGE_ME"
+      tenantId: "1"
+      name: "poc"
+      enabled: true

@@ -1,0 +1,63 @@
+server:
+  port: 8080
+  name: ebike-analyze
+
+spring:
+  application:
+    name: ebike-analyze
+
+nacos:
+  serverAddr: 192.168.2.20
+  port: 8848
+  namespace: prod
+  group: xyy
+  dataId: ebike-analyze-go.yaml
+
+redis:
+  addr: ""
+  password: ""
+  db: 0
+
+mysql:
+  analyzeDSN: ""
+  visualDSN: ""
+  maxOpenConns: 20
+  maxIdleConns: 10
+
+es:
+  hostname: 192.168.2.20
+  username: elastic
+  password: ""
+  connectTimeout: 5000
+  socketTimeout: 20000
+  trackTotalHitsUpTo: 65535
+
+xyy:
+  tableSplit:
+    enable: true
+    tableNames:
+      - t_car_statistics
+      - t_parking_site_statistics
+      - t_user_user
+      - t_user_riding_qualification
+      - t_user_riding_info
+      - t_user_third_login
+      - t_ebike_visual_wallet_detail
+      - t_ebike_visual_riding_card_detail
+      - t_ebike_visual_deposit_card_detail
+  proxy:
+    targetUrl: "http://ebike-analyze.prod.svc.cluster.local:8080"
+    liveList:
+      - /analyze/member
+      - /carServiceStatistics/getList
+      - /car-statistics/queryByCarList
+      - /orderQuery/selectOrderCount
+      - /parking/orderStatistics/list
+      - /user/ageStatistic
+      - /user/ageStatistic/v2
+      - /user/allUserStatistic
+      - /user/userStatisticHour
+      - /userQuery/selectUserCount
+      - /log/page
+    recordList: 
+    - /orderDelete/deleteByQuery

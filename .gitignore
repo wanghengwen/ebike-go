@@ -1,0 +1,28 @@
+# Compiled binaries and build output
+build/
+bin/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Logs
+logs/
+*.log
+
+# Go / coverage
+coverage.out
+coverage.html
+*.coverprofile
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

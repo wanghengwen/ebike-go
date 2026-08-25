@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ebike-gateway-business
+  name: ebike-gateway-business
+  namespace: prod
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-gateway-business
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ebike-gateway-business
+        lang: go # 语言标记更新为 go
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: ebike-gateway-business
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-gateway-go:v1.0.22 # 使用相同的 Go 二进制镜像，启动时通过 GATEWAY_MODE 环境变量隔离
+          imagePullPolicy: Always
+          env:
+            - name: GATEWAY_MODE
+              value: business # 切换为 business 模式，将拉取 ebike-gateway-business-route.yml 路由表并挂载权限中间件
+            - name: PORT
+              value: "8080"
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: NACOS_REGISTER_ENABLED
+              value: 'false' # Go 网关作为流量入口，无需在 Nacos 中注册自身实例供其他服务发现
+            - name: NACOS_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
+            - name: ENABLE_API_VERIFY
+              value: 'false' # 与 Java xyy.enableApiVerify 默认一致，不开启 RBAC
+            # 流量镜像配置：将只读请求异步镜像到 Go 版 ebike-service-business-go 进行影子对比
+            - name: MIRROR_ENABLED
+              value: 'true'
+            - name: MIRROR_TARGET
+              value: 'http://192.168.2.20:31881'
+            - name: MIRROR_ROUTE_PATTERN
+              value: '/business/**'
+            - name: MIRROR_CONNECT_TIMEOUT_MS
+              value: '500'  # TCP 连接超时 500ms，目标不可达时快速失败，不影响网关
+            - name: MIRROR_READ_TIMEOUT_MS
+              value: '500'  # 读取超时 500ms，目标响应慢时快速放弃，不影响网关
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - sleep 15 # 优雅停机：在接收到 Terminate 信号后，等待 15s 确保上游 Nginx Ingress 流量切换完成
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health # Go 网关底层已兼容该存活检查接口，返回 {"status":"UP"}
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10 # Go 语言秒级启动，健康检查延迟可大幅缩减（原为 100s）
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5 # Go 语言秒级就绪，可大幅缩短就绪检查（原为 30s）
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: '500m' # Go 极其轻量，资源占用极小，大幅缩减 CPU 和内存上限（原为 1C 4G）
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 32Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /logs
+              name: volume-localtime
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - emptyDir: {}
+          name: volume-localtime
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ebike-gateway-business
+  name: ebike-gateway-business
+  namespace: prod
+spec:
+  clusterIP: 10.104.162.171
+  clusterIPs:
+    - 10.104.162.171
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-gateway-business
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/server-snippet: underscores_in_headers on;
+    nginx.ingress.kubernetes.io/service-weight: ''
+  labels:
+    app: ebike-gateway-business
+  name: ebike-gateway-business
+  namespace: prod
+spec:
+  rules:
+    - host: business.luopingtech.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: ebike-gateway-business
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific

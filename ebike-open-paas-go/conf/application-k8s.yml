@@ -1,0 +1,60 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# ebike-open-paas-go K8s 启动引导配置
+#
+# 公网入口：paas.luopingtech.com（见 deployment.yaml Ingress）
+#
+# 本文件只保留启动与集群内上游地址；业务凭证与可热更新项见
+# conf/ebike-open-paas.yml（同步到 Nacos data-id=ebike-open-paas.yml, group=xyy）。
+# redis / kafka brokers·topics 由 Nacos xyy_ops 的 redis.yaml / kafka.yaml 加载。
+#
+# 配置优先级：环境变量(最高) > Nacos > 本地文件 > 内置默认。
+# ─────────────────────────────────────────────────────────────────────────────
+
+server:
+  port: 8080
+  # Nacos 注册名；K8s Deployment/Service/Ingress 名为 ebike-open-paas-go
+  name: ebike-open-paas
+
+nacos:
+  serverAddr: 192.168.2.20
+  port: 8848
+  namespace: prod
+  group: xyy
+  # 实际是否注册由环境变量 NACOS_REGISTER_ENABLED 覆盖（见 deployment.yaml）
+  registerEnabled: false
+
+# Redis 由 Nacos ({group}_ops) 的 redis.yaml 加载（通常指向 device-paas 影子库，常为 db4）。
+# registry-database：anvelink 写入的 device_ebike_* 所在 DB（现网为 12，与 openapi 主库一致）。
+# 可用环境变量 REDIS_REGISTRY_DATABASE 覆盖。
+redis:
+  host: ""
+  port: 6379
+  password: ""
+  database: 0
+  registry-database: 12
+
+# Go 版无 Feign 服务发现，需显式配置上游 ClusterIP。
+# console / management / map 由 deployment.yaml 环境变量注入。
+# management 仅供 IoT AES 凭证；allDevices 只走 anvelink-console。
+xyy:
+  paasUrl: "http://ebike-device-paas.prod.svc.cluster.local:8080"
+  openapiUrl: "http://ebike-device-openapi.prod.svc.cluster.local:8080"
+  workerUrl: "http://ebike-device-worker-go.prod.svc.cluster.local:8080"
+  consoleUrl: "http://anvelink-console.prod.svc.cluster.local:8080"
+  consoleAuth:
+    phone: "13958125559"
+    password: "Wanghw@Luoping411"
+    username: "open-paas"
+
+# Brokers / topics 来自 kafka.yaml @ xyy_ops。groupId 为本服务独占，
+# 校验要求必须包含 open-paas，禁止与 worker / consume 撞组。
+kafka:
+  enabled: true
+  brokers: []
+  topics:
+    - saas_0
+  groupId: ebike-open-paas-go-saas
+  concurrency: 1
+  batchSize: 500
+  batchWaitMs: 100
+  startOffset: latest

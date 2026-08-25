@@ -1,0 +1,212 @@
+# ebike-open-paas-go — third-party Xiaoan-compatible open platform adapter
+#
+# Nacos service name: ebike-open-paas (server.name)
+# K8s Deployment/Service: ebike-open-paas-go
+#
+# 部署前：
+#   1. GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/ebike-open-paas-go .
+#   2. 构建并推送镜像后更新下方 image tag
+#   3. 在 Nacos 配置 ebike-open-paas.yml（open.agents / aes-key）
+#   4. kubectl apply -f deployment.yaml（含 Ingress paas.luopingtech.com）
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ebike-open-paas-go
+  namespace: prod
+  labels:
+    app: ebike-open-paas-go
+    lang: go
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-open-paas-go
+      lang: go
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: ebike-open-paas-go
+        lang: go
+    spec:
+      terminationGracePeriodSeconds: 75
+      containers:
+        - name: ebike-open-paas-go
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-open-paas-go:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: LOG_LEVEL
+              value: info
+            - name: GOMEMLIMIT
+              value: 900MiB
+            - name: NACOS_REGISTER_ENABLED
+              value: "true"
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.2.20:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
+            - name: PAAS_URL
+              value: "http://ebike-device-paas.prod.svc.cluster.local:8080"
+            - name: OPENAPI_URL
+              value: "http://ebike-device-openapi.prod.svc.cluster.local:8080"
+            - name: WORKER_URL
+              value: "http://ebike-device-worker-go.prod.svc.cluster.local:8080"
+            # IOT 设备注册源（allDevices）；与 spring.application.name 一致
+            - name: CONSOLE_URL
+              value: "http://anvelink-console.prod.svc.cluster.local:8080"
+            - name: CONSOLE_AUTH_PHONE
+              value: "13958125559"
+            - name: CONSOLE_AUTH_USERNAME
+              value: "open-paas"
+            - name: CONSOLE_AUTH_PASSWORD
+              value: "Wanghw@Luoping411"
+            - name: MANAGEMENT_URL
+              value: "http://ebike-management.prod.svc.cluster.local:8080"
+            - name: MAP_SERVICE_URL
+              value: "http://map-service.prod.svc.cluster.local:8080"
+            # anvelink device_ebike_* 在 IOT Redis db12；影子库由 Nacos redis.yaml 注入常为 db4
+            - name: REDIS_REGISTRY_DATABASE
+              value: "12"
+            # Event callbacks. Brokers and topics come from kafka.yaml @ xyy_ops;
+            # KAFKA_GROUP_ID must stay distinct from every ebike-device-worker /
+            # ebike-device-consume group or we take over their partitions.
+            - name: KAFKA_ENABLED
+              value: "true"
+            - name: KAFKA_GROUP_ID
+              value: "ebike-open-paas-go-saas"
+            - name: KAFKA_START_OFFSET
+              value: "latest"
+            # Guards /internal/*. Unset means the routes deny everything, so this
+            # secret must exist before the callback counters can be read:
+            #   kubectl -n prod create secret generic ebike-open-paas-go \
+            #     --from-literal=internal-token="$(openssl rand -hex 24)"
+            - name: INTERNAL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: ebike-open-paas-go
+                  key: internal-token
+                  optional: true
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    curl -sf -X POST http://127.0.0.1:8080/actuator/deregisterService || true;
+                    sleep 15
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 256Mi
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebike-open-paas-go
+  namespace: prod
+  labels:
+    app: ebike-open-paas-go
+    lang: go
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-open-paas-go
+    lang: go
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # TLS is terminated in front of this Ingress (Aliyun LB / edge nginx presents
+    # *.luopingtech.com). The controller then sees plain HTTP upstream, so any
+    # ssl-redirect/force-ssl-redirect 308s back to https://paas… forever.
+    # Enforce HTTPS at the edge only; keep this annotation false here.
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    # /internal/* and /actuator/* are operator surfaces; they have no business
+    # being reachable from the internet even with a token in front of them.
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      location ~* ^/(internal|actuator)/ {
+        deny all;
+        return 404;
+      }
+  labels:
+    app: ebike-open-paas-go
+    lang: go
+  name: ebike-open-paas-go
+  namespace: prod
+spec:
+  tls:
+    - hosts:
+        - paas.luopingtech.com
+      # Certificate for paas.luopingtech.com. Create it alongside the ingress:
+      #   kubectl -n prod create secret tls paas-luopingtech-com-tls \
+      #     --cert=fullchain.pem --key=privkey.pem
+      secretName: paas-luopingtech-com-tls
+  rules:
+    - host: paas.luopingtech.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: ebike-open-paas-go
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific
