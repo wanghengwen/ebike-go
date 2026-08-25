@@ -1,0 +1,36 @@
+server:
+  port: 8080
+  name: ebike-service-client
+
+# Java ebike-service-client upstream for proxy/record/shadow modes.
+# Override with PROXY_TARGET_URL. Lists live in conf/proxy_lists.yml.
+proxy:
+  target_url: ""
+
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod          # 正式环境 namespace；可用 NACOS_NAMESPACE 覆盖
+  group: xyy               # 与 Java bootstrap 一致；可用 NACOS_GROUP 覆盖
+  dataId: ebike-service-client-go.yaml
+  # MSE Nacos 需设置 contextPath: /nacos 或环境变量 NACOS_CONTEXT_PATH=/nacos
+  # contextPath: /nacos
+  # 可选：显式指定额外 dataId/group（默认已含 ebike-service-client.yml/.yaml、map-service.yaml、xyy_ops）
+  # extensionDataIds:
+  #   - ebike-service-client.yaml
+  # extensionGroups:
+  #   - xyy_ops
+
+# mapServiceConfig 实际在 Nacos prod/xyy_ops/map-service.yaml 的 xyy.mapServiceConfig 下
+# （Java bootstrap extension-config；ebike-service-client.yml 里没有此项）
+# 启动后期望日志:
+#   Merged Nacos config dataId=map-service.yaml group=xyy_ops
+#   -> mapServiceConfig.url from dataId=map-service.yaml group=xyy_ops: http://...
+# 兜底: Nacos 发现 map-service（prod/xyy 已有实例），或 XYY_MAP_SERVICE_URL / XYY_MAP_SERVICE_SECRET
+xyy:
+  mapServiceConfig:
+    url: ""
+    secret: ""
+  gatewayfilter:
+    # Mirrors Nacos ebike-service-client.yml xyy.gatewayfilter.exclude (prod).
+    exclude: "/client/ad_config/detail,/client/fence/config/protocol/default,/callback/zhima/payafteruse/notify,/client/gray/userData,/ebike_marketing/activity/client/app/invite_rule,/ebike_marketing/activity/client/app/invite_detail,/client/helpConfig/getCustomerServiceByServiceId,/client/code/send,/client/fence/serviceArea/getByLocation,/client/fence/serviceArea/getNearFence,/client/paas/device/eBikeLocation,/client/order/config/get,/callback/pay/score,/client/gray/queryOrder,/client/helpConfig/getHomeNavByServiceId,/client/helpConfig/getGuidePageConfigByServiceId,/client/helpConfig/getSpecialTipsByServiceId,/client/helpConfig/getHomeActivityEntranceByServiceId,/client/helpConfig/getHomeScrollerMsgByServiceId,/client/fence/resource/management/appList,/client/ebike-marketing/redPaketCar/getRule,/client/helpConfig/getIzMainPush,/client/helpConfig/getHomeScrollerMsgByServiceId/v2,/actuator/health,/actuator/deregisterService"

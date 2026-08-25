@@ -1,0 +1,120 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ebike-service-client
+    lang: go
+  name: ebike-service-client-go
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ebike-service-client
+      lang: go
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ebike-service-client
+        lang: go
+    spec:
+      containers:
+        - env:
+            - name: GIN_MODE
+              value: release
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_REGISTER_ENABLED
+              value: 'true'
+            - name: NACOS_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          image: >-
+            registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-service-client-go:v1.0.0
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - >-
+                    curl -X POST
+                    "http://localhost:8080/actuator/deregisterService"; sleep
+                    15;
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: ebike-service-client-go
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: 200m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /logs
+              name: volume-localtime
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 45
+      volumes:
+        - emptyDir: {}
+          name: volume-localtime
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ebike-service-client
+  name: ebike-service-client
+  namespace: prod
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-service-client
+  sessionAffinity: None
+  type: ClusterIP
