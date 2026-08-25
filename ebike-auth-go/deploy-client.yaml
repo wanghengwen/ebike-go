@@ -1,0 +1,131 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ebike-auth-client
+  name: ebike-auth-client
+  namespace: prod
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-auth-client
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ebike-auth-client
+        lang: go
+    spec:
+      containers:
+        - env:
+            # 指定 Auth 服务运行模式为 Client (C端小程序/App)
+            - name: AUTH_SERVICE_MODE
+              value: "client"
+            # 指定运行端口
+            - name: PORT
+              value: "8080"
+            # 玉环公共电单车客户定制（玉岛行登录扩展，对应 ebike-auth-client ydx 分支）
+            # 也可在编译时开启：go build -tags=yuhuan_yudaoxing
+            # - name: YUHUAN_YUDAOXING_CUSTOM
+            #   value: "true"
+            # Nacos 注册中心与配置中心相关环境变量 (兼容原SpringCloud变量名)
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_REGISTER_ENABLED
+              value: 'true'
+            - name: SPRING_CLOUD_NACOS_CONFIG_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: SPRING_CLOUD_NACOS_CONFIG_NAMESPACE
+              value: prod
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_NAMESPACE
+              value: prod
+            - name: SPRING_CLOUD_NACOS_CONFIG_GROUP
+              value: xyy
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_GROUP
+              value: xyy
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          # 统一使用打包好的 Go 镜像版本
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-auth-go:v1.0.8
+          imagePullPolicy: IfNotPresent
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-c'
+                  - sleep 5;
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: ebike-auth-client
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            # Go版本极大节省了资源，Limits/Requests可大幅下调
+            limits:
+              cpu: 500m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 32Mi
+          volumeMounts:
+            - mountPath: /logs
+              name: volume-localtime
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - emptyDir: {}
+          name: volume-localtime
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ebike-auth-client
+  name: ebike-auth-client
+  namespace: prod
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-auth-client
+  sessionAffinity: None
+  type: ClusterIP

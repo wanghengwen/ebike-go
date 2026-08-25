@@ -1,0 +1,11 @@
+server:
+  port: 8080
+
+xyy:
+  auth:
+    mode: "business" # overridden by AUTH_SERVICE_MODE environment variable
+  nacos:
+    serverAddr: "127.0.0.1:8848"
+    namespace: "prod"
+    group: "xyy"
+    registerEnabled: true
