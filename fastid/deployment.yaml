@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xyy-fastid
+  namespace: prod
+  labels:
+    app: xyy-fastid
+    lang: go
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: xyy-fastid
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: xyy-fastid
+        lang: go
+    spec:
+      containers:
+        - name: xyy-fastid
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/luopingtech-fastid:v1.0.0
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_REGISTER_ENABLED
+              value: 'true'
+            - name: SPRING_CLOUD_NACOS_CONFIG_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_SERVER_ADDR
+              value: '192.168.2.20:8848'
+            - name: SPRING_CLOUD_NACOS_CONFIG_NAMESPACE
+              value: prod
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_NAMESPACE
+              value: prod
+            - name: SPRING_CLOUD_NACOS_CONFIG_GROUP
+              value: xyy
+            - name: SPRING_CLOUD_NACOS_DISCOVERY_GROUP
+              value: xyy
+            - name: SPRING_APPLICATION_NAME
+              value: xyy-fastid
+            - name: SERVER_PORT
+              value: '8080'
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          # Go 启动速度非常快，大幅调低 initialDelaySeconds 提升滚动更新效率
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          # Go 的资源消耗极低，优化资源占用
+          resources:
+            limits:
+              cpu: '1'
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 16Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /logs
+              name: volume-localtime
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - emptyDir: {}
+          name: volume-localtime
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: xyy-fastid
+  namespace: prod
+  labels:
+    app: xyy-fastid
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  # 精准选择 lang: go 的后端，实现平滑替代
+  selector:
+    app: xyy-fastid
+    lang: go
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: xyy-fastid
+  namespace: prod
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: fastid.luopingtech.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: xyy-fastid
+                port:
+                  number: 8080
+            path: /
+            pathType: ImplementationSpecific

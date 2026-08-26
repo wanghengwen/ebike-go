@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+nacos:
+  server-addr: "127.0.0.1:8848"
+  namespace: "prod"
+  group: "xyy"
+  app-name: "xyy-fastid"
+  discovery:
+    enabled: false
+  config:
+    enabled: true
+
+# Database config (local fallback, overridden by Nacos when nacos.config.enabled=true)
+database:
+  host: "127.0.0.1"
+  port: 3306
+  name: "fastid_db"
+  username: "fastid"
+  password: "testfastid321#"
+  params: "charset=utf8mb4&parseTime=True&loc=Local"
+
+fastid:
+  secrets:
+    - "8v1i656gulgw0vdhxtt6pkvx3r25mbkfm4j6kd63lxgymhsymiwi007y1hjud5oh"
