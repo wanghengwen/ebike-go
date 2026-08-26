@@ -1,0 +1,33 @@
+{
+  "url": "/device/paas/setInnerParam",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.setInnerParam(InnerParamCmd)",
+  "cusTime": 3,
+  "req": {
+    "async": true,
+    "commandContext": {
+      "deviceId": "560C01D0-179A-4F3A-886F-08271CD5C73D",
+      "ip": "172.16.1.159",
+      "name": "田可君",
+      "pin": "b_4b6b1ec8248177d",
+      "platform": "ios",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "BBF23120-3A15-41F3-A388-A1B1AD46725F"
+    },
+    "imei": "862551059839992",
+    "isFenceEnable": 0
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": true,
+      "ecuCode": null,
+      "jobId": "20d554d1b9a94c17ac1b4aec378b887f",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

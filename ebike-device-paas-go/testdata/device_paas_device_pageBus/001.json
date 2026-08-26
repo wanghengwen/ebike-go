@@ -1,0 +1,30 @@
+{
+  "url": "/device/paas/device/pageBus",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.getDevicePageBus(DevicePageBusQry)",
+  "cusTime": 1,
+  "req": {
+    "commandContext": {
+      "deviceId": "4a8ac46b-f5cf-30a0-8193-5cc1e8d28702",
+      "ip": "172.16.1.159",
+      "name": "武士勇",
+      "pin": "b_4b360bb024811db",
+      "platform": "android",
+      "source": "ebike-service-business",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "cd0c6754-968e-486f-b6ad-202cd49af3e9"
+    },
+    "filterHash": "050100d84fcd9b5e640399d39811ca7a",
+    "izStateAnd": false,
+    "pageNum": 2,
+    "pageSize": 10,
+    "searchCount": true,
+    "serviceId": 338362359727786100
+  },
+  "rep": {
+    "code": "0",
+    "data": "{\"count\":455",
+    "msg": "成功",
+    "success": true
+  }
+}

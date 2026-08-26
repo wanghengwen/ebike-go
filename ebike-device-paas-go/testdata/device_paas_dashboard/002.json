@@ -1,0 +1,28 @@
+{
+  "url": "/device/paas/dashboard",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.dashboard(DeviceDashboardCmd)",
+  "cusTime": 3,
+  "req": {
+    "async": true,
+    "commandContext": {
+      "pin": "ebike-device-consume",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "57bc7d85-fa36-4e2e-94b5-5c9dd8718cca"
+    },
+    "dashboardLight": 2,
+    "imei": "866940070101092"
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": true,
+      "ecuCode": null,
+      "jobId": "5524a93b271a44488a4b96e09139562e",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

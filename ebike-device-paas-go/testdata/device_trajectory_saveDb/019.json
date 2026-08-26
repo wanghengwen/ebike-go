@@ -1,0 +1,28 @@
+{
+  "url": "/device/trajectory/saveDb",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "8ea1a3f9-3e29-4dc1-8fb0-eb66e3df9b24",
+      "pin": "a_342e5f48098052f",
+      "ip": "172.16.2.92",
+      "platform": "wechat",
+      "deviceId": "deviceId_178358021058133846013878",
+      "source": "ebike-rent",
+      "name": "房学瑞",
+      "stressTesting": false
+    },
+    "orderId": 374178171470218242,
+    "imei": "862551059876424",
+    "startTime": 1783670689000,
+    "endTime": 1783672937000
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": true
+  }
+}

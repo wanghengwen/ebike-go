@@ -1,0 +1,48 @@
+{
+  "url": "/device/paas/device/carStatisticsByService",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.carStatisticsByService(CarStatisticsByServiceQry)",
+  "cusTime": 2,
+  "req": {
+    "commandContext": {
+      "pin": "ebike-analyze-worker",
+      "source": "ebike-analyze-worker",
+      "stressTesting": false,
+      "tenantId": "1006",
+      "traceId": "881f6948-00e6-4b69-a8df-c2ec162da4d1"
+    },
+    "serviceIdList": [
+      252822148220458460,
+      257878243850847650
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "parkingStatistics": [],
+      "serviceStatistics": [
+        {
+          "booking": 0,
+          "canRent": 1,
+          "freeTimeHalfOrOneDay": 0,
+          "freeTimeOneOrTowDay": 0,
+          "freeTimeOneToThree": 0,
+          "freeTimeSixToTwelve": 0,
+          "freeTimeThreeToSix": 0,
+          "freeTimeTowDayMore": 1,
+          "lowBattery": 0,
+          "operation": 0,
+          "parking": 0,
+          "riding": 0,
+          "serviceId": 252822148220458461,
+          "tenantId": 1006,
+          "voltageThirtyFiveMore": 1,
+          "voltageTwentyToThirtyFive": 0,
+          "voltageZero": 0,
+          "voltageZeroToTwenty": 0
+        }
+      ]
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

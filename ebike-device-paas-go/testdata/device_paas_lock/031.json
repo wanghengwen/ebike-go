@@ -1,0 +1,37 @@
+{
+  "url": "/device/paas/lock",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366842924970312036060",
+      "pin": "a_4ed373201080f8a",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_177414085755635146469770",
+      "source": "ebike-rent",
+      "name": null,
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600167",
+    "imei": "862551055685282",
+    "payload": null,
+    "acc": 0,
+    "izRiskControl": true,
+    "dt": null,
+    "idx": 1,
+    "volume": null,
+    "isIgnoreFence": null,
+    "isTBeacon": null,
+    "isKickstand": null,
+    "singleSpeedLimit": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

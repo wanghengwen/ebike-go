@@ -1,0 +1,43 @@
+{
+  "url": "/device/paas/defend",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "8ea1a3f9-3e29-4dc1-8fb0-eb66e3df9b24",
+      "pin": "a_342e5f48098052f",
+      "ip": "172.16.2.92",
+      "platform": "wechat",
+      "deviceId": "deviceId_178358021058133846013878",
+      "source": "ebike-rent",
+      "name": "房学瑞",
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600393",
+    "imei": "862551059876424",
+    "payload": null,
+    "defend": 1,
+    "idx": 4,
+    "volume": 0,
+    "isTBeacon": null,
+    "isSlopeStake": null,
+    "isRFID": null,
+    "isKickstand": null,
+    "isCamera": null,
+    "tbeaconRange": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "93aa8a3391bd4c02a56db949bbc90767",
+      "async": true,
+      "ecuCode": null,
+      "payload": null,
+      "result": null
+    }
+  }
+}

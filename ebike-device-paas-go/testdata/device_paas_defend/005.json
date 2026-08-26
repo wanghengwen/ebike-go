@@ -1,0 +1,35 @@
+{
+  "url": "/device/paas/defend",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.defendCommand(DefendCmd)",
+  "cusTime": 1553,
+  "req": {
+    "async": false,
+    "carId": "100600021",
+    "commandContext": {
+      "deviceId": "deviceId_178046433882594330682407",
+      "ip": "172.16.1.12",
+      "name": "王恒文",
+      "pin": "a_50fc3a00108109a",
+      "platform": "wechat",
+      "source": "ebike-rent",
+      "stressTesting": false,
+      "tenantId": "1007",
+      "traceId": "178330511543690580174212"
+    },
+    "defend": 1,
+    "idx": 7,
+    "imei": "862149063955944"
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "583404d55cd3466abcc469eb6e3f917a",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

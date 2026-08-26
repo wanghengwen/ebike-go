@@ -1,0 +1,33 @@
+{
+  "url": "/device/paas/getDeviceRealGpsList",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuQueryController.getDeviceRealGpsList(ImeiListQry)",
+  "cusTime": 1,
+  "req": {
+    "commandContext": {
+      "deviceId": "560C01D0-179A-4F3A-886F-08271CD5C73D",
+      "ip": "172.16.1.159",
+      "name": "田可君",
+      "pin": "b_4b6b1ec8248177d",
+      "platform": "ios",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "116CFACF-8F0B-4206-AF3F-8F27CB4419A4"
+    },
+    "imeiList": [
+      "862551055691371"
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "imei": 862551055691371,
+        "lat": 33.770531,
+        "lng": 118.372455
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "url": "/device/trajectory/saveDb",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366897222767286049963",
+      "pin": "a_2d103f80058237a",
+      "ip": "172.16.2.92",
+      "platform": "wechat",
+      "deviceId": "deviceId_178366863336561870644024",
+      "source": "ebike-rent",
+      "name": "司一鸣",
+      "stressTesting": false
+    },
+    "orderId": 374173846438677328,
+    "imei": "862551059836394",
+    "startTime": 1783668676000,
+    "endTime": 1783668972000
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

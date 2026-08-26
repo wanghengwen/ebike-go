@@ -1,0 +1,69 @@
+{
+  "url": "/device/paas/deviceInfo",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178367272741767338758960",
+      "pin": "a_39db66880c0103d",
+      "ip": "172.16.2.92",
+      "platform": "wechat",
+      "deviceId": "deviceId_178358264807652123525296",
+      "source": "ebike-fence",
+      "name": "李江南",
+      "stressTesting": false
+    },
+    "imei": "862551059840230"
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "04202cf501dc4ab88e189d005ae3f8b1",
+      "async": false,
+      "ecuCode": "0",
+      "payload": "{\"type\":\"c34\"}",
+      "result": {
+        "defend": 0,
+        "acc": 1,
+        "voltage": 48,
+        "voltageMv": 48294,
+        "gsm": 31,
+        "wheelLock": null,
+        "seatLock": 1,
+        "helmetLock": 1,
+        "helmetReact": 1,
+        "helmetConnect": null,
+        "bleHelmetState": null,
+        "helmet6Lock": 1,
+        "helmet6React": 1,
+        "isWheelSpan": 1,
+        "powerState": 1,
+        "audioType": null,
+        "totalMiles": null,
+        "bmsSoc": 82,
+        "bmsVoltage": 48294,
+        "etcSpeed": 3,
+        "gps": {
+          "timestamp": 1783672694,
+          "lat": 33.78937286215598,
+          "lng": 118.37356560858444,
+          "wgs84Lat": 33.790608,
+          "wgs84Lng": 118.367932,
+          "speed": 3,
+          "course": 357
+        },
+        "cell": null,
+        "rfid": null,
+        "bmsComm": 1,
+        "etcComm": 1,
+        "kickStand": null,
+        "isHeadingProduct": null,
+        "heading": null,
+        "camera": null
+      }
+    }
+  }
+}

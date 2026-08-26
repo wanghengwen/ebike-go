@@ -1,0 +1,29 @@
+{
+  "url": "/device/trajectory/distance",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceTrajectoryController.getTrajectoryDistance(TrajectoryRealTimeQry)",
+  "cusTime": 4,
+  "req": {
+    "commandContext": {
+      "deviceId": "560C01D0-179A-4F3A-886F-08271CD5C73D",
+      "ip": "172.16.1.159",
+      "name": "田可君",
+      "pin": "b_4b6b1ec8248177d",
+      "platform": "ios",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "4650F719-F366-4B5E-9CC0-6EC0D81E8C86"
+    },
+    "endTime": 1783305210810,
+    "imei": "862551055691074",
+    "startTime": 1783305136000
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "distance": 3.906070028295728
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "url": "/device/paas/bluetooth",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1000",
+      "traceId": "408107ab-cd2b-48d3-9771-29a65a3bb17a",
+      "pin": "ebike-device-consume",
+      "ip": null,
+      "platform": null,
+      "deviceId": null,
+      "source": null,
+      "name": null,
+      "stressTesting": false
+    },
+    "async": false,
+    "carId": null,
+    "imei": "866940070106679",
+    "payload": null,
+    "token": 667976158,
+    "name": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "2a52fae970e24cf6a26e323f5bad45ed",
+      "async": false,
+      "ecuCode": "0",
+      "payload": null,
+      "result": {
+        "token": 667976158,
+        "name": "ECU-2406436570"
+      }
+    }
+  }
+}

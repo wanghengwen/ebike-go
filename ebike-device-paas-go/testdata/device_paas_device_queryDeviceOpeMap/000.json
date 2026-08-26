@@ -1,0 +1,6158 @@
+{
+  "url": "/device/paas/device/queryDeviceOpeMap",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.queryDeviceOpeMap(DeviceOpeMapQry)",
+  "cusTime": 18,
+  "req": {
+    "commandContext": {
+      "ip": "172.16.1.159",
+      "name": "朱雯兰",
+      "pin": "b_3ba4f5880482053",
+      "platform": "pc",
+      "source": "ebike-service-business",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "178252806719468171063994"
+    },
+    "serviceIdList": [
+      274684702135689200
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "batteryId": "{229440582483712659=373}",
+      "booking": 0,
+      "canRent": 282,
+      "changeBattery": 0,
+      "dragBack": 0,
+      "fixing": 20,
+      "gps": [
+        {
+          "alarmState": [
+            6,
+            7,
+            13
+          ],
+          "carId": 100600408,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100623,
+          "lat": 22.964899,
+          "lng": 115.336096,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            7,
+            11,
+            13
+          ],
+          "carId": 100600656,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070118690,
+          "lat": 22.969853,
+          "lng": 115.345787,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600457,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070070040,
+          "lat": 22.976362,
+          "lng": 115.400447,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601161,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070034160,
+          "lat": 22.976427,
+          "lng": 115.400368,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600073,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067319,
+          "lat": 22.976338,
+          "lng": 115.400478,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600598,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070119110,
+          "lat": 22.976145,
+          "lng": 115.400361,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            11
+          ],
+          "carId": 100601160,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069299,
+          "lat": 22.984969,
+          "lng": 115.413606,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600898,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069956406,
+          "lat": 22.976457,
+          "lng": 115.4004,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600976,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071766,
+          "lat": 22.976343,
+          "lng": 115.40055,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600736,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074324799,
+          "lat": 22.97639,
+          "lng": 115.400329,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600095,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070132063,
+          "lat": 22.977209,
+          "lng": 115.398958,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            11,
+            13
+          ],
+          "carId": 100600599,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066626,
+          "lat": 22.976435,
+          "lng": 115.400422,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601228,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107040,
+          "lat": 22.976213,
+          "lng": 115.400467,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600479,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100250,
+          "lat": 22.97611,
+          "lng": 115.400913,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600569,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100763,
+          "lat": 22.976413,
+          "lng": 115.400395,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601194,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106109,
+          "lat": 22.976405,
+          "lng": 115.400409,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601215,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070103833,
+          "lat": 22.984707,
+          "lng": 115.414501,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            6,
+            7,
+            13
+          ],
+          "carId": 100600031,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080833,
+          "lat": 22.975503,
+          "lng": 115.33594,
+          "operationState": [
+            4,
+            5
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601124,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071980,
+          "lat": 22.976186,
+          "lng": 115.400398,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600434,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070095476,
+          "lat": 22.976217,
+          "lng": 115.400493,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600505,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074338526,
+          "lat": 22.984994,
+          "lng": 115.413541,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600770,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113196,
+          "lat": 22.976187,
+          "lng": 115.400539,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601250,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070055389,
+          "lat": 22.949655,
+          "lng": 115.323577,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600021,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076856,
+          "lat": 22.976335,
+          "lng": 115.40052,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100600857,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070108360,
+          "lat": 22.976396,
+          "lng": 115.400331,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600693,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070000120,
+          "lat": 22.98508,
+          "lng": 115.413531,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600197,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077359,
+          "lat": 22.976155,
+          "lng": 115.400684,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600735,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070123880,
+          "lat": 22.985083,
+          "lng": 115.414103,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600081,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067160,
+          "lat": 22.985081,
+          "lng": 115.413608,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100600437,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070111976,
+          "lat": 22.976271,
+          "lng": 115.400066,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601126,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070094453,
+          "lat": 22.985024,
+          "lng": 115.41368,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600943,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070120936,
+          "lat": 22.985029,
+          "lng": 115.413688,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600424,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070055736,
+          "lat": 22.952105,
+          "lng": 115.31701,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100603442,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069936119,
+          "lat": 22.985168,
+          "lng": 115.413987,
+          "operationState": [],
+          "restBattery": 56,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600221,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070089883,
+          "lat": 22.976102,
+          "lng": 115.400558,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600346,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107420,
+          "lat": 22.961583,
+          "lng": 115.312917,
+          "operationState": [],
+          "restBattery": 36,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601192,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100326,
+          "lat": 22.980254,
+          "lng": 115.345742,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100603448,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070110283,
+          "lat": 22.952036,
+          "lng": 115.316915,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600351,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076526,
+          "lat": 22.985101,
+          "lng": 115.413955,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            4,
+            5,
+            13
+          ],
+          "carId": 100600130,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070103593,
+          "lat": 22.984069,
+          "lng": 115.336299,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600121,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074285826,
+          "lat": 22.961539,
+          "lng": 115.338065,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600719,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071360,
+          "lat": 23.013528,
+          "lng": 115.356887,
+          "operationState": [],
+          "restBattery": 31,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            10,
+            13
+          ],
+          "carId": 100600175,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076906,
+          "lat": 22.976449,
+          "lng": 115.400426,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600219,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080320,
+          "lat": 22.976079,
+          "lng": 115.400846,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600482,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070119920,
+          "lat": 22.970676,
+          "lng": 115.317163,
+          "operationState": [
+            5
+          ],
+          "restBattery": 64,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600554,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070027263,
+          "lat": 22.985125,
+          "lng": 115.413635,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601239,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074338740,
+          "lat": 22.985109,
+          "lng": 115.414111,
+          "operationState": [],
+          "restBattery": 73,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600078,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069986783,
+          "lat": 22.959342,
+          "lng": 115.35559,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600328,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053376,
+          "lat": 22.985044,
+          "lng": 115.413646,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601140,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101639,
+          "lat": 22.976102,
+          "lng": 115.400777,
+          "operationState": [],
+          "restBattery": 45,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600843,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070081260,
+          "lat": 22.973594,
+          "lng": 115.335099,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600143,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070096680,
+          "lat": 22.953838,
+          "lng": 115.317307,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600902,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070116066,
+          "lat": 22.976391,
+          "lng": 115.400425,
+          "operationState": [],
+          "restBattery": 31,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600676,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070098413,
+          "lat": 22.985111,
+          "lng": 115.414075,
+          "operationState": [],
+          "restBattery": 43,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600791,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097456,
+          "lat": 22.984947,
+          "lng": 115.41372,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6
+          ],
+          "carId": 100601157,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072483,
+          "lat": 22.974497,
+          "lng": 115.322453,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600368,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070093166,
+          "lat": 22.985012,
+          "lng": 115.413604,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600671,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100466,
+          "lat": 22.976097,
+          "lng": 115.400688,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600915,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070121603,
+          "lat": 22.976211,
+          "lng": 115.400481,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            11,
+            13
+          ],
+          "carId": 100600136,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097209,
+          "lat": 22.987404,
+          "lng": 115.347931,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600651,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066543,
+          "lat": 22.966234,
+          "lng": 115.35515,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600664,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070078779,
+          "lat": 22.976177,
+          "lng": 115.400474,
+          "operationState": [],
+          "restBattery": 46,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600007,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106679,
+          "lat": 22.985081,
+          "lng": 115.413669,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600589,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077540,
+          "lat": 22.951957,
+          "lng": 115.317,
+          "operationState": [
+            5
+          ],
+          "restBattery": 88,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600874,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070078290,
+          "lat": 22.976229,
+          "lng": 115.400347,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600381,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067749,
+          "lat": 22.952152,
+          "lng": 115.31691,
+          "operationState": [
+            5
+          ],
+          "restBattery": 58,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600793,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070093430,
+          "lat": 22.977198,
+          "lng": 115.326489,
+          "operationState": [],
+          "restBattery": 86,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600018,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072749,
+          "lat": 22.985091,
+          "lng": 115.413952,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600348,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070048343,
+          "lat": 22.97404,
+          "lng": 115.333035,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600864,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074338393,
+          "lat": 22.984379,
+          "lng": 115.355283,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100603445,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074324526,
+          "lat": 22.976156,
+          "lng": 115.400431,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600966,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074305376,
+          "lat": 22.976451,
+          "lng": 115.400405,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601103,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099809,
+          "lat": 22.968468,
+          "lng": 115.344006,
+          "operationState": [],
+          "restBattery": 64,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601200,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070096573,
+          "lat": 22.99641,
+          "lng": 115.344372,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600537,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070117619,
+          "lat": 22.976165,
+          "lng": 115.400613,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600688,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070052519,
+          "lat": 22.985089,
+          "lng": 115.413572,
+          "operationState": [],
+          "restBattery": 76,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600930,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070109616,
+          "lat": 22.952138,
+          "lng": 115.316901,
+          "operationState": [
+            5
+          ],
+          "restBattery": 68,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600949,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074362450,
+          "lat": 22.976184,
+          "lng": 115.400605,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600680,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076773,
+          "lat": 22.985203,
+          "lng": 115.4137,
+          "operationState": [],
+          "restBattery": 54,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600958,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070131719,
+          "lat": 22.985031,
+          "lng": 115.413938,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600363,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101993,
+          "lat": 22.976468,
+          "lng": 115.400386,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600856,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128483,
+          "lat": 22.976422,
+          "lng": 115.400391,
+          "operationState": [],
+          "restBattery": 53,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600452,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070123476,
+          "lat": 22.987222,
+          "lng": 115.362909,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            11,
+            13
+          ],
+          "carId": 100600584,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070125166,
+          "lat": 22.97392,
+          "lng": 115.357,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600792,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070111943,
+          "lat": 22.9655,
+          "lng": 115.320892,
+          "operationState": [],
+          "restBattery": 40,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601110,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070121470,
+          "lat": 22.976135,
+          "lng": 115.400405,
+          "operationState": [],
+          "restBattery": 53,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600692,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070061346,
+          "lat": 22.958144,
+          "lng": 115.315399,
+          "operationState": [],
+          "restBattery": 64,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600922,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128343,
+          "lat": 22.98509,
+          "lng": 115.413596,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            11
+          ],
+          "carId": 100600019,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072053,
+          "lat": 22.979218,
+          "lng": 115.338427,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600865,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102389,
+          "lat": 22.985026,
+          "lng": 115.413594,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601195,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070131883,
+          "lat": 22.956053,
+          "lng": 115.331477,
+          "operationState": [],
+          "restBattery": 89,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600754,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106083,
+          "lat": 22.985031,
+          "lng": 115.414025,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600952,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070121306,
+          "lat": 22.976161,
+          "lng": 115.400622,
+          "operationState": [],
+          "restBattery": 44,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            11,
+            13
+          ],
+          "carId": 100600816,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070013396,
+          "lat": 22.979301,
+          "lng": 115.35016,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600011,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074312943,
+          "lat": 22.958264,
+          "lng": 115.330156,
+          "operationState": [],
+          "restBattery": 89,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600965,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128913,
+          "lat": 22.985096,
+          "lng": 115.413945,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600917,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074378803,
+          "lat": 22.985116,
+          "lng": 115.413975,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600715,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070116496,
+          "lat": 22.964435,
+          "lng": 115.358638,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600088,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099783,
+          "lat": 22.976163,
+          "lng": 115.400688,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600259,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053053,
+          "lat": 22.98494,
+          "lng": 115.4139,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600613,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072566,
+          "lat": 22.984972,
+          "lng": 115.414182,
+          "operationState": [],
+          "restBattery": 90,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601292,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070048749,
+          "lat": 22.984985,
+          "lng": 115.414176,
+          "operationState": [],
+          "restBattery": 79,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600834,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070109749,
+          "lat": 22.960638,
+          "lng": 115.317657,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601277,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068093,
+          "lat": 22.985082,
+          "lng": 115.413922,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601245,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128699,
+          "lat": 22.984855,
+          "lng": 115.413895,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600995,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070009816,
+          "lat": 22.976416,
+          "lng": 115.400433,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600132,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070084736,
+          "lat": 22.952138,
+          "lng": 115.316905,
+          "operationState": [
+            5
+          ],
+          "restBattery": 65,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600333,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070095609,
+          "lat": 22.976386,
+          "lng": 115.40039,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            11,
+            13
+          ],
+          "carId": 100600237,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102009,
+          "lat": 22.956392,
+          "lng": 115.321616,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600327,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072756,
+          "lat": 22.991441,
+          "lng": 115.352525,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600029,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070054390,
+          "lat": 22.978972,
+          "lng": 115.332252,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600617,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070055520,
+          "lat": 22.984936,
+          "lng": 115.413729,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            11
+          ],
+          "carId": 100603464,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070095773,
+          "lat": 23.000964,
+          "lng": 115.358006,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600780,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070094933,
+          "lat": 22.964185,
+          "lng": 115.314113,
+          "operationState": [],
+          "restBattery": 54,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            11
+          ],
+          "carId": 100603451,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070090600,
+          "lat": 22.984988,
+          "lng": 115.413532,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601205,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072350,
+          "lat": 22.976087,
+          "lng": 115.400604,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600252,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101936,
+          "lat": 22.976454,
+          "lng": 115.40036,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600518,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070115399,
+          "lat": 22.962872,
+          "lng": 115.353921,
+          "operationState": [],
+          "restBattery": 54,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600814,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070121249,
+          "lat": 22.976446,
+          "lng": 115.40041,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100603468,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070052600,
+          "lat": 22.985103,
+          "lng": 115.413646,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600436,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068119,
+          "lat": 22.984961,
+          "lng": 115.413539,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600795,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107883,
+          "lat": 22.977746,
+          "lng": 115.324207,
+          "operationState": [],
+          "restBattery": 41,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600155,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080700,
+          "lat": 22.976464,
+          "lng": 115.400364,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601144,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076369,
+          "lat": 22.996889,
+          "lng": 115.356534,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600354,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101449,
+          "lat": 22.985029,
+          "lng": 115.413579,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600869,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069986809,
+          "lat": 22.976416,
+          "lng": 115.400386,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600881,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070040696,
+          "lat": 22.984666,
+          "lng": 115.330986,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600099,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070047956,
+          "lat": 22.985071,
+          "lng": 115.41366,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600044,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070070313,
+          "lat": 22.976117,
+          "lng": 115.400576,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600388,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074288713,
+          "lat": 22.985029,
+          "lng": 115.414008,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600359,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070131313,
+          "lat": 22.985019,
+          "lng": 115.413623,
+          "operationState": [],
+          "restBattery": 46,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600211,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100839,
+          "lat": 22.97644,
+          "lng": 115.400353,
+          "operationState": [],
+          "restBattery": 52,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600683,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070093000,
+          "lat": 22.97617,
+          "lng": 115.400425,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600971,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069946019,
+          "lat": 22.97723,
+          "lng": 115.367493,
+          "operationState": [],
+          "restBattery": 62,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601131,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070048616,
+          "lat": 22.98498,
+          "lng": 115.413918,
+          "operationState": [],
+          "restBattery": 99,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600404,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053343,
+          "lat": 22.952159,
+          "lng": 115.316891,
+          "operationState": [
+            5
+          ],
+          "restBattery": 60,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600196,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072509,
+          "lat": 22.985118,
+          "lng": 115.413929,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600620,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099866,
+          "lat": 22.947513,
+          "lng": 115.300211,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600809,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070114699,
+          "lat": 22.976157,
+          "lng": 115.400417,
+          "operationState": [],
+          "restBattery": 31,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601159,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070104260,
+          "lat": 22.984961,
+          "lng": 115.413586,
+          "operationState": [],
+          "restBattery": 41,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600799,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102793,
+          "lat": 22.988298,
+          "lng": 115.335136,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100603474,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072806,
+          "lat": 22.985026,
+          "lng": 115.414225,
+          "operationState": [],
+          "restBattery": 52,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            11,
+            13
+          ],
+          "carId": 100600115,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069998176,
+          "lat": 22.974379,
+          "lng": 115.322317,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600570,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107339,
+          "lat": 22.976137,
+          "lng": 115.400655,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601104,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070124946,
+          "lat": 22.984821,
+          "lng": 115.413813,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600912,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113576,
+          "lat": 22.984826,
+          "lng": 115.413895,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600997,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070116926,
+          "lat": 22.952188,
+          "lng": 115.316907,
+          "operationState": [
+            5
+          ],
+          "restBattery": 82,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600158,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067350,
+          "lat": 22.956408,
+          "lng": 115.339314,
+          "operationState": [],
+          "restBattery": 57,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600992,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070125059,
+          "lat": 22.98248,
+          "lng": 115.333188,
+          "operationState": [
+            5
+          ],
+          "restBattery": 71,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601290,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070075726,
+          "lat": 22.984983,
+          "lng": 115.414191,
+          "operationState": [],
+          "restBattery": 97,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [],
+          "carId": 100601273,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066683,
+          "lat": 22.98255,
+          "lng": 115.355476,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600596,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099486,
+          "lat": 22.984715,
+          "lng": 115.330965,
+          "operationState": [],
+          "restBattery": 43,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100603444,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066519,
+          "lat": 22.985095,
+          "lng": 115.413948,
+          "operationState": [],
+          "restBattery": 30,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600512,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070110929,
+          "lat": 22.939779,
+          "lng": 115.332415,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600842,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069954393,
+          "lat": 22.976144,
+          "lng": 115.400409,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            11
+          ],
+          "carId": 100601298,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099379,
+          "lat": 22.98498,
+          "lng": 115.413642,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600248,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113451,
+          "lat": 22.97636,
+          "lng": 115.399445,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600630,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070098157,
+          "lat": 22.976323,
+          "lng": 115.400461,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600364,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074321134,
+          "lat": 22.976406,
+          "lng": 115.400358,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600646,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070105994,
+          "lat": 22.976481,
+          "lng": 115.400363,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            11,
+            13
+          ],
+          "carId": 100600618,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070054804,
+          "lat": 22.976402,
+          "lng": 115.400487,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600603,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069174,
+          "lat": 22.976425,
+          "lng": 115.400479,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601216,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070092424,
+          "lat": 22.985096,
+          "lng": 115.413854,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601272,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070078514,
+          "lat": 22.984536,
+          "lng": 115.413835,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600937,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070123534,
+          "lat": 22.976252,
+          "lng": 115.400449,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601275,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077151,
+          "lat": 22.976212,
+          "lng": 115.40059,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100603447,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099437,
+          "lat": 22.976464,
+          "lng": 115.400409,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600901,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068614,
+          "lat": 22.976136,
+          "lng": 115.400596,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            6,
+            7,
+            11,
+            13
+          ],
+          "carId": 100600400,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077524,
+          "lat": 22.966002,
+          "lng": 115.332141,
+          "operationState": [
+            4,
+            5
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600491,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071634,
+          "lat": 22.975884,
+          "lng": 115.400765,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600489,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099551,
+          "lat": 22.985347,
+          "lng": 115.412963,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600039,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071964,
+          "lat": 22.98503,
+          "lng": 115.413645,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601109,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070123914,
+          "lat": 22.985114,
+          "lng": 115.413619,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600080,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070098421,
+          "lat": 22.952043,
+          "lng": 115.316925,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601220,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066584,
+          "lat": 22.976419,
+          "lng": 115.400368,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600764,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069985587,
+          "lat": 22.984933,
+          "lng": 115.413586,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600877,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069981214,
+          "lat": 22.976177,
+          "lng": 115.400446,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            11
+          ],
+          "carId": 100601288,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069711,
+          "lat": 22.978404,
+          "lng": 115.334939,
+          "operationState": [
+            5
+          ],
+          "restBattery": 75,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600131,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070109111,
+          "lat": 22.990751,
+          "lng": 115.351481,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            11,
+            13
+          ],
+          "carId": 100600837,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076757,
+          "lat": 22.984971,
+          "lng": 115.413634,
+          "operationState": [],
+          "restBattery": 89,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600829,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074323197,
+          "lat": 22.984832,
+          "lng": 115.413891,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            11
+          ],
+          "carId": 100601210,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067954,
+          "lat": 22.985078,
+          "lng": 115.414081,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600271,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070054481,
+          "lat": 22.990361,
+          "lng": 115.356515,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600497,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068754,
+          "lat": 22.985012,
+          "lng": 115.413636,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600639,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076484,
+          "lat": 22.973237,
+          "lng": 115.346718,
+          "operationState": [],
+          "restBattery": 98,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600899,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076567,
+          "lat": 22.976389,
+          "lng": 115.40043,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600704,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071477,
+          "lat": 22.985023,
+          "lng": 115.413629,
+          "operationState": [],
+          "restBattery": 57,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600063,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053467,
+          "lat": 22.988465,
+          "lng": 115.34999,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600695,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070082797,
+          "lat": 22.960092,
+          "lng": 115.313294,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600524,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070108394,
+          "lat": 22.98509,
+          "lng": 115.414079,
+          "operationState": [],
+          "restBattery": 63,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600398,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071824,
+          "lat": 22.985657,
+          "lng": 115.339287,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601201,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070094701,
+          "lat": 22.97862,
+          "lng": 115.348469,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600376,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070111141,
+          "lat": 22.985025,
+          "lng": 115.413638,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600335,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099577,
+          "lat": 22.985463,
+          "lng": 115.346583,
+          "operationState": [],
+          "restBattery": 56,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600581,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070070347,
+          "lat": 22.985098,
+          "lng": 115.41409,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600026,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080411,
+          "lat": 22.976167,
+          "lng": 115.400593,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100603423,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113667,
+          "lat": 22.98464,
+          "lng": 115.331027,
+          "operationState": [],
+          "restBattery": 86,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600225,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070052477,
+          "lat": 22.984861,
+          "lng": 115.413748,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600171,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070092044,
+          "lat": 22.976376,
+          "lng": 115.400371,
+          "operationState": [],
+          "restBattery": 46,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600165,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076914,
+          "lat": 22.999339,
+          "lng": 115.357944,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600989,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070048707,
+          "lat": 22.984986,
+          "lng": 115.413579,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600962,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074325341,
+          "lat": 22.985098,
+          "lng": 115.413577,
+          "operationState": [],
+          "restBattery": 50,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600341,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070112297,
+          "lat": 22.984934,
+          "lng": 115.413766,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600157,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066741,
+          "lat": 22.976422,
+          "lng": 115.400424,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600127,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070127634,
+          "lat": 22.976317,
+          "lng": 115.400545,
+          "operationState": [],
+          "restBattery": 59,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600379,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070089701,
+          "lat": 22.985087,
+          "lng": 115.413626,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600802,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070114871,
+          "lat": 22.976399,
+          "lng": 115.400406,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600160,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072251,
+          "lat": 22.9851,
+          "lng": 115.414065,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600579,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070089347,
+          "lat": 22.976141,
+          "lng": 115.400442,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600352,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070127477,
+          "lat": 22.976396,
+          "lng": 115.400411,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600647,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074354291,
+          "lat": 22.985117,
+          "lng": 115.413593,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600972,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070015227,
+          "lat": 22.985027,
+          "lng": 115.413615,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600614,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099544,
+          "lat": 22.976084,
+          "lng": 115.400683,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601251,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101381,
+          "lat": 22.97617,
+          "lng": 115.400729,
+          "operationState": [],
+          "restBattery": 44,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600093,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076534,
+          "lat": 22.97677,
+          "lng": 115.332753,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600441,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070074091,
+          "lat": 22.985103,
+          "lng": 115.413572,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600751,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074347071,
+          "lat": 22.976407,
+          "lng": 115.320244,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600313,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077441,
+          "lat": 22.976207,
+          "lng": 115.400566,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600094,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070092937,
+          "lat": 22.976394,
+          "lng": 115.40052,
+          "operationState": [],
+          "restBattery": 42,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601274,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070092234,
+          "lat": 22.985065,
+          "lng": 115.413916,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600588,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077847,
+          "lat": 22.985126,
+          "lng": 115.413894,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600786,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069945854,
+          "lat": 22.976466,
+          "lng": 115.40035,
+          "operationState": [],
+          "restBattery": 42,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601238,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070052741,
+          "lat": 22.976089,
+          "lng": 115.40086,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600756,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070089917,
+          "lat": 22.976338,
+          "lng": 115.40054,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600055,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066527,
+          "lat": 22.960833,
+          "lng": 115.317676,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600148,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077177,
+          "lat": 22.984999,
+          "lng": 115.414182,
+          "operationState": [],
+          "restBattery": 45,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601182,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070114541,
+          "lat": 22.984966,
+          "lng": 115.413601,
+          "operationState": [],
+          "restBattery": 76,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600267,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113907,
+          "lat": 22.95741,
+          "lng": 115.309078,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600247,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069521,
+          "lat": 22.952145,
+          "lng": 115.316899,
+          "operationState": [],
+          "restBattery": 62,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600112,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097977,
+          "lat": 22.981482,
+          "lng": 115.354731,
+          "operationState": [],
+          "restBattery": 38,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601240,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070110051,
+          "lat": 22.985115,
+          "lng": 115.414093,
+          "operationState": [],
+          "restBattery": 87,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600164,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076377,
+          "lat": 22.9851,
+          "lng": 115.413581,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600027,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069471,
+          "lat": 22.995393,
+          "lng": 115.353398,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600241,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071691,
+          "lat": 22.985065,
+          "lng": 115.413918,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600344,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070098561,
+          "lat": 22.97607,
+          "lng": 115.400681,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600526,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074338344,
+          "lat": 22.985198,
+          "lng": 115.41409,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600998,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070078407,
+          "lat": 22.985112,
+          "lng": 115.414104,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600957,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070094974,
+          "lat": 22.970385,
+          "lng": 115.358067,
+          "operationState": [],
+          "restBattery": 86,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600169,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070056841,
+          "lat": 22.976335,
+          "lng": 115.400549,
+          "operationState": [],
+          "restBattery": 62,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            11,
+            13
+          ],
+          "carId": 100600201,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069117,
+          "lat": 22.977132,
+          "lng": 115.348555,
+          "operationState": [
+            5
+          ],
+          "restBattery": 75,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600655,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070027024,
+          "lat": 22.984966,
+          "lng": 115.413584,
+          "operationState": [],
+          "restBattery": 38,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [],
+          "carId": 100601183,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070112834,
+          "lat": 22.962525,
+          "lng": 115.318248,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600177,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070095237,
+          "lat": 22.964406,
+          "lng": 115.316577,
+          "operationState": [],
+          "restBattery": 100,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601225,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077664,
+          "lat": 22.97099,
+          "lng": 115.35636,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [],
+          "carId": 100600978,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070113527,
+          "lat": 22.989697,
+          "lng": 115.329349,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600766,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106414,
+          "lat": 22.981206,
+          "lng": 115.335304,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600033,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097597,
+          "lat": 22.976065,
+          "lng": 115.400623,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600654,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072517,
+          "lat": 22.976419,
+          "lng": 115.400442,
+          "operationState": [],
+          "restBattery": 49,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600282,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074347451,
+          "lat": 22.976209,
+          "lng": 115.400488,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600542,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070124961,
+          "lat": 22.976085,
+          "lng": 115.400774,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601168,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097167,
+          "lat": 22.976178,
+          "lng": 115.400657,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600761,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106281,
+          "lat": 22.952069,
+          "lng": 115.31694,
+          "operationState": [
+            5
+          ],
+          "restBattery": 67,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600892,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070048681,
+          "lat": 22.976108,
+          "lng": 115.400618,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600070,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076054,
+          "lat": 22.950896,
+          "lng": 115.333143,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 2
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600990,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070105697,
+          "lat": 22.985106,
+          "lng": 115.413915,
+          "operationState": [],
+          "restBattery": 46,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601214,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072004,
+          "lat": 22.976754,
+          "lng": 115.349116,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601189,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072434,
+          "lat": 22.985093,
+          "lng": 115.413935,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            11
+          ],
+          "carId": 100601153,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070081021,
+          "lat": 22.976218,
+          "lng": 115.400395,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            11
+          ],
+          "carId": 100601123,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066477,
+          "lat": 22.988234,
+          "lng": 115.334948,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600326,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101654,
+          "lat": 22.97641,
+          "lng": 115.400417,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601208,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070056122,
+          "lat": 22.976612,
+          "lng": 115.400393,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600207,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070035035,
+          "lat": 22.976258,
+          "lng": 115.400574,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600822,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070092002,
+          "lat": 22.97604,
+          "lng": 115.400645,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600374,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074325325,
+          "lat": 22.976415,
+          "lng": 115.40029,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601181,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076468,
+          "lat": 22.975988,
+          "lng": 115.400543,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600669,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102835,
+          "lat": 22.985028,
+          "lng": 115.413901,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601236,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070104575,
+          "lat": 22.98504,
+          "lng": 115.414007,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600979,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070116942,
+          "lat": 22.984978,
+          "lng": 115.413763,
+          "operationState": [
+            4,
+            5
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            7
+          ],
+          "carId": 100601171,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067525,
+          "lat": 22.952108,
+          "lng": 115.31693,
+          "operationState": [
+            4,
+            5
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600849,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074363458,
+          "lat": 22.985056,
+          "lng": 115.413928,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600020,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068598,
+          "lat": 22.985239,
+          "lng": 115.413818,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7
+          ],
+          "carId": 100601270,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069778,
+          "lat": 22.976372,
+          "lng": 115.400423,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            7,
+            13
+          ],
+          "carId": 100600738,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070131982,
+          "lat": 22.976243,
+          "lng": 115.400364,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            6,
+            11,
+            13
+          ],
+          "carId": 100600768,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074352048,
+          "lat": 22.956537,
+          "lng": 115.318115,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            7,
+            13
+          ],
+          "carId": 100600515,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070084835,
+          "lat": 22.952451,
+          "lng": 115.316682,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600689,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071642,
+          "lat": 22.976262,
+          "lng": 115.400483,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            10
+          ],
+          "carId": 100601177,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071972,
+          "lat": 22.956144,
+          "lng": 115.314145,
+          "operationState": [],
+          "restBattery": 54,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600661,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070131545,
+          "lat": 22.984974,
+          "lng": 115.41393,
+          "operationState": [],
+          "restBattery": 74,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600895,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071212,
+          "lat": 22.976079,
+          "lng": 115.400617,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601258,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070100862,
+          "lat": 22.976143,
+          "lng": 115.40064,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601217,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099668,
+          "lat": 22.965933,
+          "lng": 115.358352,
+          "operationState": [],
+          "restBattery": 91,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600142,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077938,
+          "lat": 22.984633,
+          "lng": 115.330964,
+          "operationState": [],
+          "restBattery": 75,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600213,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080668,
+          "lat": 22.952137,
+          "lng": 115.316903,
+          "operationState": [
+            5
+          ],
+          "restBattery": 65,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600066,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070096615,
+          "lat": 22.98503,
+          "lng": 115.414215,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600071,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076518,
+          "lat": 22.975814,
+          "lng": 115.355397,
+          "operationState": [],
+          "restBattery": 77,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601132,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077078,
+          "lat": 22.984991,
+          "lng": 115.414231,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600675,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101258,
+          "lat": 22.951576,
+          "lng": 115.309837,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600953,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128558,
+          "lat": 22.976371,
+          "lng": 115.400522,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600659,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070121868,
+          "lat": 22.966486,
+          "lng": 115.335982,
+          "operationState": [],
+          "restBattery": 45,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600722,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070128632,
+          "lat": 22.976088,
+          "lng": 115.400704,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600789,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070119532,
+          "lat": 22.97432,
+          "lng": 115.326105,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600778,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070108972,
+          "lat": 22.97174,
+          "lng": 115.353352,
+          "operationState": [],
+          "restBattery": 86,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600397,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077755,
+          "lat": 22.982734,
+          "lng": 115.325745,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600246,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070054622,
+          "lat": 22.97609,
+          "lng": 115.400682,
+          "operationState": [],
+          "restBattery": 91,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601203,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074296815,
+          "lat": 22.952098,
+          "lng": 115.316928,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            11,
+            13
+          ],
+          "carId": 100600545,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070030952,
+          "lat": 22.984832,
+          "lng": 115.413881,
+          "operationState": [],
+          "restBattery": 81,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100601282,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070106455,
+          "lat": 22.952225,
+          "lng": 115.316892,
+          "operationState": [],
+          "restBattery": 58,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601212,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070099288,
+          "lat": 22.97607,
+          "lng": 115.400637,
+          "operationState": [],
+          "restBattery": 49,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600312,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070070008,
+          "lat": 22.976358,
+          "lng": 115.400509,
+          "operationState": [],
+          "restBattery": 64,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600759,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070115068,
+          "lat": 22.98494,
+          "lng": 115.413634,
+          "operationState": [],
+          "restBattery": 44,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600909,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069999935,
+          "lat": 22.98502,
+          "lng": 115.413645,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601118,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067178,
+          "lat": 22.985087,
+          "lng": 115.41407,
+          "operationState": [],
+          "restBattery": 43,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600170,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071998,
+          "lat": 22.976798,
+          "lng": 115.371303,
+          "operationState": [],
+          "restBattery": 63,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601145,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070094305,
+          "lat": 22.976161,
+          "lng": 115.400631,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600907,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070119805,
+          "lat": 22.976337,
+          "lng": 115.40054,
+          "operationState": [],
+          "restBattery": 47,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601278,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053285,
+          "lat": 22.996708,
+          "lng": 115.368037,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600316,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070014972,
+          "lat": 22.985025,
+          "lng": 115.414214,
+          "operationState": [],
+          "restBattery": 51,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601151,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070080312,
+          "lat": 22.985032,
+          "lng": 115.413675,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600086,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071485,
+          "lat": 22.972018,
+          "lng": 115.327999,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601230,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070084165,
+          "lat": 22.976194,
+          "lng": 115.400626,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600985,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070105622,
+          "lat": 22.976306,
+          "lng": 115.400612,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600238,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070053228,
+          "lat": 22.952182,
+          "lng": 115.316897,
+          "operationState": [
+            5
+          ],
+          "restBattery": 73,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600862,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107818,
+          "lat": 22.952152,
+          "lng": 115.316925,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600495,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072368,
+          "lat": 22.951972,
+          "lng": 115.317009,
+          "operationState": [
+            5
+          ],
+          "restBattery": 66,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            11,
+            13
+          ],
+          "carId": 100600706,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067855,
+          "lat": 22.984988,
+          "lng": 115.413582,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601147,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074354218,
+          "lat": 22.985116,
+          "lng": 115.414096,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601167,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069695,
+          "lat": 22.984962,
+          "lng": 115.413523,
+          "operationState": [],
+          "restBattery": 47,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600528,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070107792,
+          "lat": 22.971125,
+          "lng": 115.328425,
+          "operationState": [],
+          "restBattery": 28,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600591,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070097522,
+          "lat": 22.976295,
+          "lng": 115.400553,
+          "operationState": [],
+          "restBattery": 79,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600757,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070086772,
+          "lat": 22.952151,
+          "lng": 115.316899,
+          "operationState": [
+            5
+          ],
+          "restBattery": 66,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600916,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070059332,
+          "lat": 22.985066,
+          "lng": 115.414073,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600590,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071162,
+          "lat": 22.976154,
+          "lng": 115.400596,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600056,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076492,
+          "lat": 22.98508,
+          "lng": 115.413952,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            4,
+            5
+          ],
+          "carId": 100601130,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070031968,
+          "lat": 22.974,
+          "lng": 115.360578,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600732,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070031885,
+          "lat": 22.985123,
+          "lng": 115.414073,
+          "operationState": [
+            4
+          ],
+          "restBattery": 6,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600906,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074325622,
+          "lat": 22.985087,
+          "lng": 115.413637,
+          "operationState": [],
+          "restBattery": 71,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601253,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070126552,
+          "lat": 22.985063,
+          "lng": 115.414172,
+          "operationState": [],
+          "restBattery": 79,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600887,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070120092,
+          "lat": 22.958012,
+          "lng": 115.341637,
+          "operationState": [],
+          "restBattery": 63,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600414,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070091178,
+          "lat": 22.985097,
+          "lng": 115.413647,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600331,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070082912,
+          "lat": 23.005349,
+          "lng": 115.342704,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100603503,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070105432,
+          "lat": 22.983316,
+          "lng": 115.370757,
+          "operationState": [],
+          "restBattery": 82,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            11,
+            13
+          ],
+          "carId": 100600272,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102298,
+          "lat": 22.985115,
+          "lng": 115.413931,
+          "operationState": [],
+          "restBattery": 83,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601263,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077458,
+          "lat": 22.976454,
+          "lng": 115.400354,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601268,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070127725,
+          "lat": 22.985074,
+          "lng": 115.413586,
+          "operationState": [],
+          "restBattery": 56,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600585,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069956208,
+          "lat": 22.985002,
+          "lng": 115.413635,
+          "operationState": [],
+          "restBattery": 43,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600050,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069968,
+          "lat": 22.958184,
+          "lng": 115.334583,
+          "operationState": [],
+          "restBattery": 77,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600305,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072012,
+          "lat": 22.985111,
+          "lng": 115.413623,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601105,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070066618,
+          "lat": 22.97642,
+          "lng": 115.400336,
+          "operationState": [],
+          "restBattery": 84,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601149,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074338575,
+          "lat": 22.984957,
+          "lng": 115.413649,
+          "operationState": [],
+          "restBattery": 78,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600266,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070078472,
+          "lat": 22.976068,
+          "lng": 115.400802,
+          "operationState": [],
+          "restBattery": 42,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600124,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070102868,
+          "lat": 22.976434,
+          "lng": 115.400438,
+          "operationState": [],
+          "restBattery": 63,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5
+          ],
+          "carId": 100601141,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070108378,
+          "lat": 22.976362,
+          "lng": 115.400345,
+          "operationState": [],
+          "restBattery": 63,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600111,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074321225,
+          "lat": 22.985028,
+          "lng": 115.414191,
+          "operationState": [],
+          "restBattery": 77,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600781,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070027172,
+          "lat": 22.976187,
+          "lng": 115.400364,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6
+          ],
+          "carId": 100601191,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070076302,
+          "lat": 22.985098,
+          "lng": 115.413656,
+          "operationState": [],
+          "restBattery": 57,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600373,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070124185,
+          "lat": 22.956424,
+          "lng": 115.321646,
+          "operationState": [],
+          "restBattery": 44,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600800,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070011358,
+          "lat": 22.980378,
+          "lng": 115.361571,
+          "operationState": [],
+          "restBattery": 66,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600549,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074367822,
+          "lat": 22.97624,
+          "lng": 115.400564,
+          "operationState": [],
+          "restBattery": 65,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            13
+          ],
+          "carId": 100600325,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067582,
+          "lat": 22.971176,
+          "lng": 115.348547,
+          "operationState": [],
+          "restBattery": 96,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5
+          ],
+          "carId": 100600032,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077045,
+          "lat": 22.995659,
+          "lng": 115.35025,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600673,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070071675,
+          "lat": 22.962271,
+          "lng": 115.325148,
+          "operationState": [],
+          "restBattery": 57,
+          "ridingState": 3
+        },
+        {
+          "alarmState": [
+            5,
+            11,
+            13
+          ],
+          "carId": 100600612,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077425,
+          "lat": 22.977396,
+          "lng": 115.334756,
+          "operationState": [],
+          "restBattery": 72,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600076,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070093398,
+          "lat": 22.97616,
+          "lng": 115.400694,
+          "operationState": [],
+          "restBattery": 77,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600631,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070069612,
+          "lat": 22.985098,
+          "lng": 115.413578,
+          "operationState": [],
+          "restBattery": 73,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600929,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940074324682,
+          "lat": 22.952032,
+          "lng": 115.316927,
+          "operationState": [
+            5
+          ],
+          "restBattery": 68,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100603443,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070115092,
+          "lat": 22.965175,
+          "lng": 115.35643,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600753,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070024278,
+          "lat": 22.986007,
+          "lng": 115.35848,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600776,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070077342,
+          "lat": 22.976084,
+          "lng": 115.400781,
+          "operationState": [],
+          "restBattery": 44,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            6,
+            13
+          ],
+          "carId": 100600232,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070101555,
+          "lat": 22.974018,
+          "lng": 115.346398,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600939,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070119748,
+          "lat": 22.985019,
+          "lng": 115.413646,
+          "operationState": [],
+          "restBattery": 48,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6
+          ],
+          "carId": 100601154,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070096698,
+          "lat": 22.990378,
+          "lng": 115.356525,
+          "operationState": [],
+          "restBattery": 68,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600999,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070105572,
+          "lat": 22.976159,
+          "lng": 115.400605,
+          "operationState": [],
+          "restBattery": 67,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600187,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070095682,
+          "lat": 22.984929,
+          "lng": 115.413767,
+          "operationState": [],
+          "restBattery": 62,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600575,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067285,
+          "lat": 22.985009,
+          "lng": 115.414209,
+          "operationState": [
+            4
+          ],
+          "restBattery": 0,
+          "ridingState": 5
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600301,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070098868,
+          "lat": 22.976166,
+          "lng": 115.400592,
+          "operationState": [],
+          "restBattery": 61,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            13
+          ],
+          "carId": 100600642,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070072475,
+          "lat": 22.969724,
+          "lng": 115.361883,
+          "operationState": [],
+          "restBattery": 86,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600945,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070130448,
+          "lat": 22.985037,
+          "lng": 115.414202,
+          "operationState": [],
+          "restBattery": 85,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            6,
+            13
+          ],
+          "carId": 100600525,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069965852,
+          "lat": 22.984958,
+          "lng": 115.413531,
+          "operationState": [],
+          "restBattery": 80,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600701,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067335,
+          "lat": 22.985043,
+          "lng": 115.413596,
+          "operationState": [],
+          "restBattery": 69,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600109,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070115795,
+          "lat": 22.976106,
+          "lng": 115.400601,
+          "operationState": [],
+          "restBattery": 60,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600463,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070067715,
+          "lat": 22.976051,
+          "lng": 115.400653,
+          "operationState": [],
+          "restBattery": 64,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            3,
+            5,
+            13
+          ],
+          "carId": 100600338,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 866940070068242,
+          "lat": 22.9763,
+          "lng": 115.400598,
+          "operationState": [],
+          "restBattery": 55,
+          "ridingState": 1
+        },
+        {
+          "alarmState": [
+            5,
+            6,
+            13
+          ],
+          "carId": 100600788,
+          "carTagNames": null,
+          "carTagTypeIds": [],
+          "imei": 864423069940582,
+          "lat": 22.992744,
+          "lng": 115.345482,
+          "operationState": [],
+          "restBattery": 54,
+          "ridingState": 1
+        }
+      ],
+      "helmetFault": 0,
+      "helmetLost": 281,
+      "lost": 0,
+      "lowBattery": 73,
+      "moveAlarm": 0,
+      "moveCar": 0,
+      "noParkingZone": 3,
+      "offline": 65,
+      "operating": 373,
+      "operation": 89,
+      "orderWithoutGps": 0,
+      "outGfence": 205,
+      "outParkingZone": 326,
+      "parking": 1,
+      "powerCut": 162,
+      "restBatteryLess10": 73,
+      "restBatteryLess20": 73,
+      "restBatteryLess30": 75,
+      "restBatteryLess35": 78,
+      "restBatteryLess40": 82,
+      "restBatteryLessCustom": 0,
+      "riding": 1,
+      "tooLongOrder": 2,
+      "tooShortOrder": 25,
+      "unSheleves": 612,
+      "unlockAbnormal": 0
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

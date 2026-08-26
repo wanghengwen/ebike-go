@@ -1,0 +1,74 @@
+{
+  "url": "/device/paas/deviceInfo",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuQueryController.getDeviceInfo(DeviceInfoQry)",
+  "cusTime": 357,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_177341104373455274780825",
+      "ip": "172.16.2.92",
+      "name": "赵龙",
+      "pin": "a_2beb94700500fa5",
+      "platform": "wechat",
+      "source": "ebike-fence",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252786992371031163900"
+    },
+    "imei": "862551059810969",
+    "isCameraEnable": 0
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "6dd93f8b337d45798cd306f318a1cdd7",
+      "payload": "{\"type\":\"c34\"}",
+      "result": {
+        "acc": 1,
+        "audioType": null,
+        "bleHelmetState": null,
+        "bmsComm": 1,
+        "bmsSoc": 77,
+        "bmsVoltage": 48480,
+        "camera": null,
+        "cell": null,
+        "defend": 0,
+        "etcComm": 1,
+        "etcSpeed": 13,
+        "gps": {
+          "course": 19,
+          "lat": 33.76664732111389,
+          "lng": 118.38333544368909,
+          "speed": 11,
+          "timestamp": 1782527846,
+          "wgs84Lat": 33.767877,
+          "wgs84Lng": 118.377694
+        },
+        "gsm": 31,
+        "heading": null,
+        "helmet6Lock": 1,
+        "helmet6React": 1,
+        "helmetConnect": null,
+        "helmetLock": 1,
+        "helmetReact": 1,
+        "isHeadingProduct": null,
+        "isWheelSpan": 1,
+        "kickStand": null,
+        "powerState": 1,
+        "rfid": {
+          "cardID": null,
+          "event": 0,
+          "version": 100
+        },
+        "seatLock": 1,
+        "totalMiles": null,
+        "voltage": 48,
+        "voltageMv": 48480,
+        "wheelLock": null
+      }
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

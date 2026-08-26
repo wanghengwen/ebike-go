@@ -1,0 +1,31 @@
+{
+  "url": "/device/paas/device/page",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.getDevicePage(DevicePageQry)",
+  "cusTime": 47,
+  "req": {
+    "carTagTypeIds": [],
+    "commandContext": {
+      "ip": "172.16.1.159",
+      "name": "朱雯兰",
+      "pin": "b_3ba4f5880482053",
+      "platform": "pc",
+      "source": "ebike-service-business",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "178244274038257950564902"
+    },
+    "filterHash": "3dfa3e65131eb132a0a9e50b7a2c7c06",
+    "helmetSOC": 100,
+    "pageNum": 1,
+    "pageSize": 10,
+    "restBattery": 100,
+    "searchCount": true,
+    "serviceId": 274684702135689200
+  },
+  "rep": {
+    "code": "0",
+    "data": "{\"count\":373",
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "url": "/device/paas/voice",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "2",
+      "traceId": "ccc194d9-2f0b-48fb-b628-b9d98f94bcc3",
+      "pin": "b_52613a003b00c5d",
+      "ip": "172.16.1.159",
+      "platform": "android",
+      "deviceId": "7fc4d3f2-5edc-38bb-b0b1-f9dfd31dc083",
+      "source": "ebike-operation",
+      "name": "桐乡公共自行车测试2",
+      "stressTesting": false
+    },
+    "async": null,
+    "carId": "100603523",
+    "imei": "864423069955192",
+    "payload": null,
+    "idx": 9,
+    "volume": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

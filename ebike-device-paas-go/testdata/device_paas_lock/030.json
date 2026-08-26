@@ -1,0 +1,37 @@
+{
+  "url": "/device/paas/lock",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "61915413-9793-4538-8271-c8c85172423f",
+      "pin": "ebike-device-consume",
+      "ip": null,
+      "platform": null,
+      "deviceId": null,
+      "source": null,
+      "name": null,
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600222",
+    "imei": "862551059850064",
+    "payload": null,
+    "acc": 1,
+    "izRiskControl": true,
+    "dt": null,
+    "idx": null,
+    "volume": null,
+    "isIgnoreFence": null,
+    "isTBeacon": null,
+    "isKickstand": null,
+    "singleSpeedLimit": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

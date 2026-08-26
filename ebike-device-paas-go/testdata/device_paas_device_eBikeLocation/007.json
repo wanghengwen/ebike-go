@@ -1,0 +1,70 @@
+{
+  "url": "/device/paas/device/eBikeLocation",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.getUseableEbikeLocation(DeviceLocationQry)",
+  "cusTime": 3,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_178074425439729026902788",
+      "platform": "wechat",
+      "source": "ebike-service-client",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178330520588970881924980"
+    },
+    "lat": 33.776836480034724,
+    "lng": 118.359169921875,
+    "serviceId": 338362359727786100
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "carId": 100600130,
+        "distance": 9.1656,
+        "imei": 862551059818137,
+        "lat": 33.776853,
+        "lng": 118.359269,
+        "restBattery": 81,
+        "restMileage": 64
+      },
+      {
+        "carId": 100600253,
+        "distance": 9.9552,
+        "imei": 862551055691504,
+        "lat": 33.776833,
+        "lng": 118.35928,
+        "restBattery": 80,
+        "restMileage": 64
+      },
+      {
+        "carId": 100600596,
+        "distance": 10.6245,
+        "imei": 862551055691348,
+        "lat": 33.776853,
+        "lng": 118.359282,
+        "restBattery": 96,
+        "restMileage": 76
+      },
+      {
+        "carId": 100600312,
+        "distance": 10.9548,
+        "imei": 862551059812239,
+        "lat": 33.776841,
+        "lng": 118.359279,
+        "restBattery": 100,
+        "restMileage": 80
+      },
+      {
+        "carId": 100600129,
+        "distance": 11.5289,
+        "imei": 862551055691462,
+        "lat": 33.776823,
+        "lng": 118.359292,
+        "restBattery": 92,
+        "restMileage": 73
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

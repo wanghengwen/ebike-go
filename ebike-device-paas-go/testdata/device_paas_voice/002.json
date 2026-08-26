@@ -1,0 +1,33 @@
+{
+  "url": "/device/paas/voice",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.voiceCommand(VoiceCmd)",
+  "cusTime": 391,
+  "req": {
+    "carId": "100600131",
+    "commandContext": {
+      "deviceId": "4a8ac46b-f5cf-30a0-8193-5cc1e8d28702",
+      "ip": "172.16.1.159",
+      "name": "武士勇",
+      "pin": "b_4b360bb024811db",
+      "platform": "android",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "9baab445-5d70-4129-b38e-92ad18fbe1c5"
+    },
+    "idx": 9,
+    "imei": "862551059872746"
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "5002d07e8df246209fa9d56d4908f776",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

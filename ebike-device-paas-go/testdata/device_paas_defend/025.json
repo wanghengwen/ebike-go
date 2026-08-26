@@ -1,0 +1,37 @@
+{
+  "url": "/device/paas/defend",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366842924970312036060",
+      "pin": "a_4ed373201080f8a",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_177414085755635146469770",
+      "source": "ebike-rent",
+      "name": null,
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600167",
+    "imei": "862551055685282",
+    "payload": null,
+    "defend": 1,
+    "idx": 4,
+    "volume": 0,
+    "isTBeacon": null,
+    "isSlopeStake": null,
+    "isRFID": null,
+    "isKickstand": null,
+    "isCamera": null,
+    "tbeaconRange": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

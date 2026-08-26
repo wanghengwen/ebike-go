@@ -1,0 +1,50 @@
+{
+  "url": "/device/paas/device/car_count",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.carCount(DeviceScreenQry)",
+  "cusTime": 10,
+  "req": {
+    "commandContext": {
+      "ip": "172.16.1.159",
+      "name": "测试机器人",
+      "pin": "b_4e2442e02481461",
+      "platform": "pc",
+      "source": "ebike-service-business",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178330503225088956663090"
+    },
+    "serviceIdList": [
+      338362359727786100
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "booking": 0,
+        "canRent": 0,
+        "freeTimeHalfOrOneDay": 0,
+        "freeTimeOneOrTowDay": 0,
+        "freeTimeSixToTwelve": 0,
+        "freeTimeThreeDayMore": 0,
+        "freeTimeThreeToSix": 0,
+        "freeTimeTowDayOrThreeDay": 0,
+        "freeTimeZeroToThree": 0,
+        "gps": null,
+        "offline": 0,
+        "operation": 0,
+        "parking": 0,
+        "riding": 0,
+        "serviceId": 338362359727786125,
+        "total": 455,
+        "voltageEightyMore": 0,
+        "voltageFortyToSixty": 0,
+        "voltageSixtyToEighty": 0,
+        "voltageTwentyToForty": 0,
+        "voltageZeroToTwenty": 0
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

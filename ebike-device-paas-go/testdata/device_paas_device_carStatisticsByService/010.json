@@ -1,0 +1,106 @@
+{
+  "url": "/device/paas/device/carStatisticsByService",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.carStatisticsByService(CarStatisticsByServiceQry)",
+  "cusTime": 4,
+  "req": {
+    "commandContext": {
+      "pin": "ebike-analyze-worker",
+      "source": "ebike-analyze-worker",
+      "stressTesting": false,
+      "tenantId": "1007",
+      "traceId": "e62ceeac-b8aa-4684-bce4-b6be7d944aab"
+    },
+    "serviceIdList": [
+      364848372922716160,
+      364881328207300700,
+      364925074596169900,
+      365612202791543100,
+      367693526772226400
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "parkingStatistics": [
+        {
+          "alarm": 3,
+          "booking": 0,
+          "canRent": 3,
+          "fault": 0,
+          "freeTimeHalfOrOneDay": 0,
+          "freeTimeOneOrTowDay": 0,
+          "freeTimeOneToThree": 0,
+          "freeTimeSixToTwelve": 0,
+          "freeTimeThreeToSix": 0,
+          "freeTimeTowDayMore": 3,
+          "idle": 3,
+          "operation": 0,
+          "parkingId": 364848525394054923,
+          "serviceId": 364881328207300695,
+          "tenantId": 1007
+        },
+        {
+          "alarm": 17,
+          "booking": 0,
+          "canRent": 0,
+          "fault": 0,
+          "freeTimeHalfOrOneDay": 0,
+          "freeTimeOneOrTowDay": 0,
+          "freeTimeOneToThree": 0,
+          "freeTimeSixToTwelve": 0,
+          "freeTimeThreeToSix": 0,
+          "freeTimeTowDayMore": 17,
+          "idle": 17,
+          "operation": 17,
+          "parkingId": 365801690306189115,
+          "serviceId": 365612202791543129,
+          "tenantId": 1007
+        }
+      ],
+      "serviceStatistics": [
+        {
+          "booking": 0,
+          "canRent": 0,
+          "freeTimeHalfOrOneDay": 0,
+          "freeTimeOneOrTowDay": 0,
+          "freeTimeOneToThree": 0,
+          "freeTimeSixToTwelve": 0,
+          "freeTimeThreeToSix": 0,
+          "freeTimeTowDayMore": 20,
+          "lowBattery": 20,
+          "operation": 20,
+          "parking": 0,
+          "riding": 0,
+          "serviceId": 365612202791543129,
+          "tenantId": 1007,
+          "voltageThirtyFiveMore": 0,
+          "voltageTwentyToThirtyFive": 0,
+          "voltageZero": 20,
+          "voltageZeroToTwenty": 0
+        },
+        {
+          "booking": 0,
+          "canRent": 3,
+          "freeTimeHalfOrOneDay": 0,
+          "freeTimeOneOrTowDay": 0,
+          "freeTimeOneToThree": 0,
+          "freeTimeSixToTwelve": 0,
+          "freeTimeThreeToSix": 0,
+          "freeTimeTowDayMore": 3,
+          "lowBattery": 0,
+          "operation": 0,
+          "parking": 0,
+          "riding": 0,
+          "serviceId": 364881328207300695,
+          "tenantId": 1007,
+          "voltageThirtyFiveMore": 2,
+          "voltageTwentyToThirtyFive": 0,
+          "voltageZero": 0,
+          "voltageZeroToTwenty": 1
+        }
+      ]
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

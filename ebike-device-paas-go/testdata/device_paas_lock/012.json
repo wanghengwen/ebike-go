@@ -1,0 +1,30 @@
+{
+  "url": "/device/paas/lock",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.lockCommand(LockCmd)",
+  "cusTime": 3,
+  "req": {
+    "acc": 1,
+    "async": true,
+    "carId": "100600129",
+    "commandContext": {
+      "pin": "ebike-device-consume",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "80e239f1-b8df-48c6-983b-1c463ce6a2b8"
+    },
+    "imei": "862551055691462",
+    "izRiskControl": true
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": true,
+      "ecuCode": null,
+      "jobId": "351414863c654dc4a47d68d4f1023967",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

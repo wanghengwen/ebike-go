@@ -1,0 +1,113 @@
+server:
+  port: 8080
+  name: ebike-device-paas
+
+nacos:
+  serverAddr: 127.0.0.1
+  port: 8848
+  namespace: prod
+  group: xyy
+  registerEnabled: false
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  database: 0
+
+xyy:
+  # 旧 Java ebike-device-paas 基地址，用于 shadow 比对（DryRun 模式）
+  javaServiceUrl: ""
+  # ebike-device-openapi 网关基地址，用于转发在线设备命令查询
+  # (innerParam / deviceInfo / blueTBeacon / queryBleHelmetInfo)
+  openapiUrl: ""
+  # ebike-management 基地址，用于 queryRealRestBattery 回退算电量 / device/list 角色过滤(user/carInfos)
+  managementUrl: ""
+  # ebike-fence 基地址，用于 eBikeLocation 的跨服务区配置(backcar/usecar/serviceArea)
+  # 留空时降级为单服务区 GEO 查询(canRideOther=false, 无 hideCar)
+  fenceUrl: ""
+  # 灰度路由（与 ebike-fence-go 一致的三态）：
+  #   liveList   → 只跑 Go
+  #   recordList → 只转 Java + [RECORD]
+  #   都不在 + dryRun=true  → Go+Java 双跑，客户端收 Java，打 [SHADOW MATCH/DIFF]
+  #   都不在 + dryRun=false → 只转 Java
+  proxy:
+    targetUrl: ""
+    liveList:
+      - /device/paas/device/detail
+    recordList:
+      # EcuCommand — IOT 指令下发
+      - /device/paas/lock
+      - /device/paas/helmetLock
+      - /device/paas/rearWheelLock
+      - /device/paas/defend
+      - /device/paas/setInnerParam
+      - /device/paas/updateInnerFence
+      - /device/paas/deviceUpgrade
+      - /device/paas/voiceUpgrade
+      - /device/paas/voice
+      - /device/paas/batteryCompartment
+      - /device/paas/bluetooth
+      - /device/paas/scanBleHelmet
+      - /device/paas/restart
+      - /device/paas/transmission
+      - /device/paas/tempUnLock
+      - /device/paas/dashboard
+      - /device/paas/replyStopMove
+      - /device/paas/triggerTempState
+      # EcuQuery 在线设备命令查询（openapi 下发，有副作用）
+      - /device/paas/innerParam
+      - /device/paas/deviceInfo
+      - /device/paas/blueTBeacon
+      - /device/paas/queryBleHelmetInfo
+      # StateChange — Redis 设备状态写入
+      - /device/ridingState/change
+      - /device/alarmState/change
+      - /device/location/change
+      - /device/scanLocation/change
+      # BLE 控制结果上报 — Redis / Kafka 写入
+      - /device/paas/ble/lock/report
+      - /device/paas/ble/defend/report
+      - /device/paas/ble/helmetLock/report
+      - /device/paas/ble/rearWheelLock/report
+      - /device/paas/ble/batteryCompartment/report
+      - /device/paas/ble/deviceInfo/report
+      - /device/paas/ble/rfid/report
+      # DeviceInfo 写操作
+      - /device/paas/device/removeDeviceTotalMiles
+      - /device/paas/device/genDeviceMapFake
+      # Trajectory 写库
+      - /device/trajectory/saveDb
+
+# DryRun=true：非 live/record 路径由中间件做 shadow 双跑（客户端收 Java）
+dryRun: true
+
+shadow:
+  # 浮点容差（GCJ-02 坐标转换 / 浮点格式漂移）
+  floatTolerance: 0.000001
+  # 易变字段忽略名单：设备持续上报，Go 与 Java 先后读取必然不同
+  ignoreFields:
+    - reportTime
+    - timestamp
+    - bmsTimeStamp
+    - rfidTimestamp
+    - lockTime
+    - unlockTime
+    - lat
+    - lng
+    - wgs84Lat
+    - wgs84Lng
+    - scanLat
+    - scanLng
+    - speed
+    - course
+    - soc
+    - restBattery
+    - restMileage
+    - voltage
+    - cusTime
+  # 顺序无关数组比对名单：Java 用 HashMap.values() 输出、顺序不确定的列表
+  # （顶层 data 列表按端点 per-call 传入，不在此处全局放开，以免误放过有序列表）
+  unorderedFields:
+    - serviceStatistics
+    - parkingStatistics

@@ -1,0 +1,90 @@
+{
+  "url": "/device/paas/replyStopMove",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "2",
+      "traceId": "d10489e8-ae22-42b7-a0fa-fa197053efba",
+      "pin": "ebike-device-consume",
+      "ip": null,
+      "platform": null,
+      "deviceId": null,
+      "source": null,
+      "name": null,
+      "stressTesting": false
+    },
+    "async": false,
+    "carId": null,
+    "imei": "868480084770887",
+    "payload": null,
+    "parkSiteType": 1,
+    "parkLedMode": 1,
+    "parkLedTime": 59,
+    "parkAngleStd": null,
+    "parkAngleThs": null,
+    "parkTbeaconThs": null,
+    "parkSiteGps": [
+      [
+        120.18027292861414,
+        30.187500076933567
+      ],
+      [
+        120.17838353009807,
+        30.188014592544224
+      ],
+      [
+        120.17728087997618,
+        30.18962766840386
+      ],
+      [
+        120.17658159521896,
+        30.19241225493596
+      ],
+      [
+        120.17698699077442,
+        30.19468990983186
+      ],
+      [
+        120.17896036605879,
+        30.195908576530115
+      ],
+      [
+        120.1817414002985,
+        30.196282604013202
+      ],
+      [
+        120.18377273854738,
+        30.195778641711335
+      ],
+      [
+        120.18490208847604,
+        30.194022213259096
+      ],
+      [
+        120.18547294659135,
+        30.191091349114362
+      ],
+      [
+        120.18495067524165,
+        30.188844341032446
+      ],
+      [
+        120.18292555944417,
+        30.18772784475793
+      ]
+    ]
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "5a6afb7f3bce4a0ba8804ba49baa3b35",
+      "async": false,
+      "ecuCode": "0",
+      "payload": null,
+      "result": null
+    }
+  }
+}

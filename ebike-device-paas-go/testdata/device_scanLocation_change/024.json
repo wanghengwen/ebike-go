@@ -1,0 +1,27 @@
+{
+  "url": "/device/scanLocation/change",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366831676986207899351",
+      "pin": "a_531546c01c80ba0",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_178366829246366168525239",
+      "source": "ebike-rent",
+      "name": "WeChat User",
+      "stressTesting": false
+    },
+    "carId": "100600354",
+    "lng": 118.38291232638889,
+    "lat": 33.77647894965278
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

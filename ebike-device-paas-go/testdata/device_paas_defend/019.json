@@ -1,0 +1,33 @@
+{
+  "url": "/device/paas/defend",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.defendCommand(DefendCmd)",
+  "cusTime": 1521,
+  "req": {
+    "carId": "100600734",
+    "commandContext": {
+      "deviceId": "b4a561f8-c87f-3dd9-b894-32d1d39eceee",
+      "ip": "172.16.1.159",
+      "name": "郑文政",
+      "pin": "b_3cfe10e8048187f",
+      "platform": "android",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "2f6e1869-0f38-4f53-9efe-8dfde09ce91a"
+    },
+    "defend": 1,
+    "imei": "866940070083050"
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "ae411dc7d9d543b69077bc50bdaf516c",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "url": "/device/paas/device/eBikeLocation",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.getUseableEbikeLocation(DeviceLocationQry)",
+  "cusTime": 3,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_178330507974828975401726",
+      "platform": "wechat",
+      "source": "ebike-service-client",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "178330511079851007567959"
+    },
+    "lat": 22.980096842447917,
+    "lng": 115.33453694661458,
+    "serviceId": 274684702135689200
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "carId": 100600271,
+        "distance": 11.4773,
+        "imei": 866940070054481,
+        "lat": 22.979998,
+        "lng": 115.334501,
+        "restBattery": 68,
+        "restMileage": 41
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

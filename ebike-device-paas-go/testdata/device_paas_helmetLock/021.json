@@ -1,0 +1,23 @@
+{
+  "url": "/device/paas/helmetLock",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.helmetCommand(HelmetLockCmd)",
+  "cusTime": 143,
+  "req": {
+    "carId": "100600431",
+    "commandContext": {
+      "deviceId": "deviceId_178142977853033862997613",
+      "ip": "172.16.1.12",
+      "name": "云凤",
+      "pin": "a_466321c811813ae",
+      "platform": "wechat",
+      "source": "ebike-fence",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252897906056888087799"
+    },
+    "imei": "862551059810100",
+    "sw": 1
+  },
+  "rep": null,
+  "errorMsg": "JSONException:illegal number format : - com.alibaba.fastjson.parser.JSONLexerBase.integerValue(JSONLexerBase.java:488)"
+}

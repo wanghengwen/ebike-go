@@ -1,0 +1,26 @@
+{
+  "url": "/device/scanLocation/change",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.StateChangeController.scanLocationChange(ScanLocationChangeCmd)",
+  "cusTime": 1,
+  "req": {
+    "carId": "100600189",
+    "commandContext": {
+      "deviceId": "deviceId_178252886342181316621684",
+      "ip": "172.16.1.12",
+      "pin": "a_3e1ddda00f807df",
+      "platform": "wechat",
+      "source": "ebike-rent",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "17825288789238915079462"
+    },
+    "lat": 33.788837348090276,
+    "lng": 118.35697048611111
+  },
+  "rep": {
+    "code": "0",
+    "data": 1,
+    "msg": "成功",
+    "success": true
+  }
+}

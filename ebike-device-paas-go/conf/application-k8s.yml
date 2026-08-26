@@ -1,0 +1,124 @@
+server:
+  port: 8080
+  # Nacos 注册名与 Java 版一致；K8s Deployment/Service 名为 ebike-device-paas-go
+  name: ebike-device-paas
+
+nacos:
+  serverAddr: 192.168.2.20
+  port: 8848
+  namespace: prod
+  group: xyy
+  # 实际是否注册由环境变量 NACOS_REGISTER_ENABLED 覆盖（见 deployment.yaml）
+  registerEnabled: false
+
+# Redis / Kafka 由 Nacos ({group}_ops) 的 redis.yaml、kafka.yaml 加载
+redis:
+  host: ""
+  port: 6379
+  password: ""
+  database: 0
+
+xyy:
+  # Java ebike-device-paas ClusterIP Service（影子比对 + recordList 转发目标）
+  javaServiceUrl: "http://ebike-device-paas.prod.svc.cluster.local:8080"
+  # Go 版无 Feign 服务发现，需显式配置上游 ClusterIP（Java 通过 Nacos 解析服务名）
+  openapiUrl: "http://ebike-device-openapi.prod.svc.cluster.local:8080"
+  managementUrl: "http://ebike-management.prod.svc.cluster.local:8080"
+  fenceUrl: "http://ebike-fence.prod.svc.cluster.local:8080"
+  workerUrl: "http://ebike-device-worker-go.prod.svc.cluster.local:8080"
+
+  # 三态（同 fence-go）：liveList=只Go；recordList=只Java+[RECORD]；其余+dryRun=SHADOW双跑(客户端收Java)
+  proxy:
+    targetUrl: "http://ebike-device-paas.prod.svc.cluster.local:8080"
+    liveList:
+      # 已灰度：prod shadow 验证 MATCH（detail/eBikeLocation 先行上线）
+      - /device/paas/device/detail
+      - /device/paas/device/eBikeLocation
+      # prod shadow MATCH（dfdbf8cbd-j444z 日志）
+      - /device/paas/device/carStatisticsByService
+      - /device/paas/device/getBlueToothToken
+      - /device/paas/device/list
+      - /device/paas/device/listByImeiList
+      - /device/paas/device/page
+      - /device/paas/device/pageBus
+      - /device/paas/device/queryDeviceCacheGps
+      - /device/paas/device/queryDeviceOpeMap
+      - /device/paas/device/queryDeviceScreen
+      - /device/paas/device/queryDeviceScreen/v2
+      - /device/paas/device/car_count
+      - /device/trajectory/distance
+      - /device/trajectory/history
+      - /device/trajectory/history/batch      
+      - /device/trajectory/saveDb
+      - /device/trajectory/realTime
+      - /device/paas/getDeviceRealGpsList
+    recordList:
+    # 可能头盔的处理有问题，暂时放到这里
+      - /device/paas/deviceInfo
+      - /device/paas/lock
+      - /device/paas/helmetLock
+      - /device/paas/rearWheelLock
+      - /device/paas/defend
+      - /device/paas/setInnerParam
+      - /device/paas/updateInnerFence
+      - /device/paas/deviceUpgrade
+      - /device/paas/voiceUpgrade
+      - /device/paas/voice
+      - /device/paas/batteryCompartment
+      - /device/paas/bluetooth
+      - /device/paas/scanBleHelmet
+      - /device/paas/restart
+      - /device/paas/transmission
+      - /device/paas/tempUnLock
+      - /device/paas/dashboard
+      - /device/paas/replyStopMove
+      - /device/paas/triggerTempState
+      - /device/paas/innerParam
+      - /device/paas/blueTBeacon
+      - /device/paas/queryBleHelmetInfo
+      - /device/ridingState/change
+      - /device/alarmState/change
+      - /device/location/change
+      - /device/scanLocation/change
+      - /device/paas/ble/lock/report
+      - /device/paas/ble/defend/report
+      - /device/paas/ble/helmetLock/report
+      - /device/paas/ble/rearWheelLock/report
+      - /device/paas/ble/batteryCompartment/report
+      - /device/paas/ble/deviceInfo/report
+      - /device/paas/ble/rfid/report
+      - /device/paas/device/removeDeviceTotalMiles
+      - /device/paas/device/genDeviceMapFake
+
+# 影子模式（与 fence-go 一致）：非 live/record 路径双跑比对；recordList 写类/指令类直接转发 Java
+dryRun: true
+
+shadow:
+  floatTolerance: 0.000001
+  ignoreFields:
+    - reportTime
+    - timestamp
+    - bmsTimeStamp
+    - rfidTimestamp
+    - lockTime
+    - unlockTime
+    - lat
+    - lng
+    - wgs84Lat
+    - wgs84Lng
+    - scanLat
+    - scanLng
+    - speed
+    - course
+    - soc
+    - restBattery
+    - restMileage
+    - voltage
+    - cusTime
+    - noOrderTime
+    - staticTime
+    - address
+    - scanAddress
+  unorderedFields:
+    - serviceStatistics
+    - parkingStatistics

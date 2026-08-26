@@ -1,0 +1,43 @@
+{
+  "url": "/device/paas/lock",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1000",
+      "traceId": "178367268822770444708824",
+      "pin": "a_3d8120400200d6e",
+      "ip": "172.16.2.92",
+      "platform": "wechat",
+      "deviceId": "deviceId_177156953066551524664855",
+      "source": "ebike-rent",
+      "name": null,
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600651",
+    "imei": "866940070066543",
+    "payload": null,
+    "acc": 0,
+    "izRiskControl": true,
+    "dt": null,
+    "idx": 1,
+    "volume": null,
+    "isIgnoreFence": null,
+    "isTBeacon": null,
+    "isKickstand": null,
+    "singleSpeedLimit": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "927d1f6032304a1ebb53a95ef0ae6dd6",
+      "async": true,
+      "ecuCode": null,
+      "payload": null,
+      "result": null
+    }
+  }
+}

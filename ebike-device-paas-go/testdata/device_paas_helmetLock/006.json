@@ -1,0 +1,38 @@
+{
+  "url": "/device/paas/helmetLock",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.helmetCommand(HelmetLockCmd)",
+  "cusTime": 266,
+  "req": {
+    "carId": "100600171",
+    "commandContext": {
+      "deviceId": "deviceId_178247880440019165333611",
+      "ip": "172.16.2.92",
+      "name": "WeChat User",
+      "pin": "a_528413e81c822b7",
+      "platform": "wechat",
+      "source": "ebike-fence",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252789770838037723566"
+    },
+    "imei": "862551055606973",
+    "sw": 0
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "0c4d564d78fa40989634d7b1d1b11414",
+      "payload": null,
+      "result": {
+        "helmet6Lock": 0,
+        "helmet6React": 1,
+        "helmetLock": 1,
+        "helmetReact": null
+      }
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

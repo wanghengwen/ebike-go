@@ -1,0 +1,28 @@
+{
+  "url": "/device/trajectory/saveDb",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceTrajectoryController.trajectorySaveDb(TrajectoryDbCmd)",
+  "cusTime": 2,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_178046433882594330682407",
+      "ip": "172.16.2.92",
+      "name": "王恒文",
+      "pin": "a_50fc3a00108109a",
+      "platform": "wechat",
+      "source": "ebike-rent",
+      "stressTesting": false,
+      "tenantId": "1007",
+      "traceId": "178330512139762727201877"
+    },
+    "endTime": 1783305122000,
+    "imei": "862149063955944",
+    "orderId": 373393094398713200,
+    "startTime": 1783305109000
+  },
+  "rep": {
+    "code": "0",
+    "data": true,
+    "msg": "成功",
+    "success": true
+  }
+}

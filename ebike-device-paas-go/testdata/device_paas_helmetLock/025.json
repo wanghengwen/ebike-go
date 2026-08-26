@@ -1,0 +1,27 @@
+{
+  "url": "/device/paas/helmetLock",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366845033137613473805",
+      "pin": "a_531546c01c80ba0",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_178366829246366168525239",
+      "source": "ebike-fence",
+      "name": "WeChat User",
+      "stressTesting": false
+    },
+    "imei": "862551059858638",
+    "carId": "100600354",
+    "sw": 0
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

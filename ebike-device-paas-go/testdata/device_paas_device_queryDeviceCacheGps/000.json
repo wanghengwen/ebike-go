@@ -1,0 +1,24 @@
+{
+  "url": "/device/paas/device/queryDeviceCacheGps",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.queryDeviceCacheGps(ImeiListQry)",
+  "req": {
+    "commandContext": {
+      "deviceId": "4a8ac46b-f5cf-30a0-8193-5cc1e8d28702",
+      "ip": "172.16.1.159",
+      "name": "武士勇",
+      "pin": "b_4b360bb024811db",
+      "platform": "android",
+      "source": "ebike-operation",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "edcee8ed-c52b-46dc-96a3-ef5e3d80fe63"
+    },
+    "imeiList": []
+  },
+  "rep": {
+    "code": "0",
+    "data": [],
+    "msg": "成功",
+    "success": true
+  }
+}

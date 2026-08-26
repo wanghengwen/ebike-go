@@ -1,0 +1,47 @@
+{
+  "url": "/device/paas/dashboard",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178367418500799696284255",
+      "pin": "b_4e2442e02481461",
+      "ip": "172.16.1.159",
+      "platform": "pc",
+      "deviceId": null,
+      "source": "ebike-operation",
+      "name": "测试机器人",
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": "100600414",
+    "imei": "862551059829860",
+    "payload": null,
+    "bikeState": 4,
+    "parkState": null,
+    "remainMiles": null,
+    "rideTime": null,
+    "rideCharge": null,
+    "dashboardLed": null,
+    "dashboardLight": null,
+    "remainSOC": null,
+    "timestamp": null,
+    "socLedType": null,
+    "socLedState": null,
+    "socLedCfg": null,
+    "navInfo": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "3ef53b6f925847d9adeafe1ef7fb4d81",
+      "async": true,
+      "ecuCode": null,
+      "payload": null,
+      "result": null
+    }
+  }
+}

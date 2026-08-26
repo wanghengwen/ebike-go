@@ -1,0 +1,31 @@
+{
+  "url": "/device/paas/bluetooth",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.bluetooth(BluetoothCmd)",
+  "cusTime": 1368,
+  "req": {
+    "async": false,
+    "commandContext": {
+      "pin": "ebike-device-consume",
+      "stressTesting": false,
+      "tenantId": "1000",
+      "traceId": "a4af8d7d-749f-4c48-b31f-70ec780a1ee3"
+    },
+    "imei": "866940070131982",
+    "token": 198219468
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": false,
+      "ecuCode": 0,
+      "jobId": "77850057afb2476c82edce31d2f8b0d4",
+      "payload": null,
+      "result": {
+        "name": "ECU-2406073115",
+        "token": 198219468
+      }
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

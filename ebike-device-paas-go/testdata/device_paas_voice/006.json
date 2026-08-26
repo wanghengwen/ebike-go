@@ -1,0 +1,30 @@
+{
+  "url": "/device/paas/voice",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "async": false,
+    "carId": null,
+    "commandContext": {
+      "tenantId": "2",
+      "traceId": "178366928554964891358764",
+      "pin": "a_527eb0081c818f4",
+      "ip": "172.16.3.22",
+      "platform": "wechat",
+      "deviceId": "deviceId_178243467693520440639609",
+      "source": "ebike-service-client",
+      "name": "WeChat User",
+      "stressTesting": false
+    },
+    "idx": 9,
+    "imei": "864423069955192",
+    "payload": null,
+    "volume": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

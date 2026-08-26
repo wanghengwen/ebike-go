@@ -1,0 +1,24 @@
+{
+  "url": "/device/paas/deviceInfo",
+  "clazz": "prod RECORD sample (dfdbf8cbd-j444z)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178366806075553752652480",
+      "pin": "a_2fb92d500680c33",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_174460457002689502293982",
+      "source": "ebike-fence",
+      "stressTesting": false
+    },
+    "imei": "862551059864305"
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": null
+  }
+}

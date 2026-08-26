@@ -1,0 +1,31 @@
+{
+  "url": "/device/trajectory/history/batch",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceTrajectoryController.trajectoryHistoryBatch(TrajectoryHistoryBatchQry)",
+  "cusTime": 2,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_17825257342696863590960",
+      "ip": "172.16.3.237",
+      "name": "WeChat User",
+      "pin": "a_5289cd801c81b07",
+      "platform": "wechat",
+      "source": "ebike-service-client",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252907659245759764716"
+    },
+    "orderBatch": [
+      {
+        "endTime": 1782526030000,
+        "orderId": 371719491671820400,
+        "startTime": 1782525777000
+      }
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": "{371719491671820386=[DeviceTrajectoryCo(lng=118.3742790763408",
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "url": "/device/scanLocation/change",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178367342534287946965029",
+      "pin": "a_51faf1c81b0094c",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_178135541301851568543665",
+      "source": "ebike-rent",
+      "name": null,
+      "stressTesting": false
+    },
+    "carId": "100600533",
+    "lng": 118.36740071614584,
+    "lat": 33.77270046657986
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": 1
+  }
+}

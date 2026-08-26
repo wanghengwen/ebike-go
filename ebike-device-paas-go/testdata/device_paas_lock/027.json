@@ -1,0 +1,36 @@
+{
+  "url": "/device/paas/lock",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.EcuCommandController.lockCommand(LockCmd)",
+  "cusTime": 3,
+  "req": {
+    "acc": 0,
+    "async": true,
+    "carId": "100600474",
+    "commandContext": {
+      "deviceId": "deviceId_178252860821574333107967",
+      "ip": "172.16.2.92",
+      "name": "WeChat User",
+      "pin": "a_528a27501c81321",
+      "platform": "wechat",
+      "source": "ebike-rent",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252869971624167385539"
+    },
+    "idx": 1,
+    "imei": "862551059858521",
+    "izRiskControl": true
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "async": true,
+      "ecuCode": null,
+      "jobId": "32e2d4bdfe14427c93cee7b36c268865",
+      "payload": null,
+      "result": null
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

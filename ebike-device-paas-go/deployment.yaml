@@ -1,0 +1,161 @@
+# ebike-device-paas-go 灰度 / 影子对拍部署
+#
+# K8s 资源命名与 Java 版对齐规则：
+#   Java: Deployment/Service 名 ebike-device-paas，label app=ebike-device-paas, lang=java
+#   Go:   Deployment/Service 名 ebike-device-paas-go，label app=ebike-device-paas-go, lang=go
+#   Nacos 注册名仍为 ebike-device-paas（见 conf/application-k8s.yml server.name，与 K8s label 无关）
+#
+# 影子模式（DRY_RUN=true，与 ebike-fence-go 一致）：
+#   liveList   → Go 原生处理
+#   recordList → 转发 Java 并打 [RECORD]，Go 本地不执行
+#   都不在     → Go+Java 双跑，客户端收 Java，日志 [SHADOW MATCH/DIFF]
+#
+# DRY_RUN 与 Nacos 注册已解耦：
+#   DRY_RUN=true                → 影子比对
+#   NACOS_REGISTER_ENABLED=true → 注册到 Nacos（可与 DRY_RUN 同时为 true）
+#
+# 若 Java ebike-device-paas 仍在 Nacos，流量会在 Java/Go 间随机分配；影子阶段建议 Java 降权或注销。
+# Go 比对 Java 使用 ClusterIP：http://ebike-device-paas.prod.svc.cluster.local:8080
+#
+# 注意：openapi 下发类接口（如 deviceInfo）若从 recordList 移出进入 shadow，会双倍打设备；
+# 请按需放回 recordList 或验证后放入 liveList。
+#
+# 部署前：
+#   1. 编译: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/ebike-device-paas-go .
+#   2. 构建并推送镜像后更新下方 image tag
+#   3. kubectl apply -f deployment.yaml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ebike-device-paas-go
+  namespace: prod
+  labels:
+    app: ebike-device-paas-go
+    lang: go
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-device-paas-go
+      lang: go
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: ebike-device-paas-go
+        lang: go
+    spec:
+      terminationGracePeriodSeconds: 75
+      containers:
+        - name: ebike-device-paas-go
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-device-paas-go:v1.0.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GIN_MODE
+              value: release
+            - name: LOG_LEVEL
+              value: info
+            - name: GOMEMLIMIT
+              value: 900MiB
+            - name: DRY_RUN
+              value: "true"
+            - name: NACOS_REGISTER_ENABLED
+              value: "true"
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.2.20:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
+            - name: JAVA_SERVICE_URL
+              value: "http://ebike-device-paas.prod.svc.cluster.local:8080"
+            - name: MANAGEMENT_URL
+              value: "http://ebike-management.prod.svc.cluster.local:8080"
+            - name: OPENAPI_URL
+              value: "http://ebike-device-openapi.prod.svc.cluster.local:8080"
+            - name: FENCE_URL
+              value: "http://ebike-fence.prod.svc.cluster.local:8080"
+            - name: WORKER_URL
+              value: "http://ebike-device-worker-go.prod.svc.cluster.local:8080"
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    curl -sf -X POST http://127.0.0.1:8080/actuator/deregisterService || true;
+                    sleep 15
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: logs
+              mountPath: /logs
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+        - name: logs
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebike-device-paas-go
+  namespace: prod
+  labels:
+    app: ebike-device-paas-go
+    lang: go
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-device-paas-go
+    lang: go

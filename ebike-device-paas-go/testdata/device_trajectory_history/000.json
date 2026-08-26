@@ -1,0 +1,49 @@
+{
+  "url": "/device/trajectory/history",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceTrajectoryController.trajectoryHistory(TrajectoryHistoryQry)",
+  "cusTime": 8,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_178046433882594330682407",
+      "ip": "172.16.3.237",
+      "name": "王恒文",
+      "pin": "a_50fc3a00108109a",
+      "platform": "wechat",
+      "source": "ebike-service-client",
+      "stressTesting": false,
+      "tenantId": "1007",
+      "traceId": "178330512278347026489982"
+    },
+    "endTime": 1783305122000,
+    "orderId": 373393094398713200,
+    "startTime": 1783305109000
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "course": 0,
+        "lat": 30.188473501900777,
+        "lng": 120.1860393834919,
+        "speed": 0,
+        "timestamp": 1783305117
+      },
+      {
+        "course": 0,
+        "lat": 30.188473501900777,
+        "lng": 120.1860393834919,
+        "speed": 0,
+        "timestamp": 1783305118
+      },
+      {
+        "course": 0,
+        "lat": 30.188473501900777,
+        "lng": 120.1860393834919,
+        "speed": 0,
+        "timestamp": 1783305118
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

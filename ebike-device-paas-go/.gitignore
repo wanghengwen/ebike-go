@@ -1,0 +1,17 @@
+# Build artifacts
+/build/
+*.exe
+*.out
+
+# Logs
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Go test/coverage
+*.test
+*.prof
+coverage.out

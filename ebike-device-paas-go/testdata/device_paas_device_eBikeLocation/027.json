@@ -1,0 +1,115 @@
+{
+  "url": "/device/paas/device/eBikeLocation",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.getUseableEbikeLocation(DeviceLocationQry)",
+  "cusTime": 5,
+  "req": {
+    "commandContext": {
+      "deviceId": "deviceId_178252860821574333107967",
+      "platform": "wechat",
+      "source": "ebike-service-client",
+      "stressTesting": false,
+      "tenantId": "1003",
+      "traceId": "178252875720160926041950"
+    },
+    "lat": 33.777613389756944,
+    "lng": 118.3833056640625,
+    "serviceId": 338362359727786100
+  },
+  "rep": {
+    "code": "0",
+    "data": [
+      {
+        "carId": 100600474,
+        "distance": 9.8533,
+        "imei": 862551059858521,
+        "lat": 33.777555,
+        "lng": 118.383229,
+        "restBattery": 90,
+        "restMileage": 72
+      },
+      {
+        "carId": 100600169,
+        "distance": 131.1916,
+        "imei": 862551055685308,
+        "lat": 33.776484,
+        "lng": 118.382896,
+        "restBattery": 75,
+        "restMileage": 60
+      },
+      {
+        "carId": 100600263,
+        "distance": 131.8747,
+        "imei": 862551059847987,
+        "lat": 33.776478,
+        "lng": 118.382893,
+        "restBattery": 64,
+        "restMileage": 51
+      },
+      {
+        "carId": 100600464,
+        "distance": 132.8521,
+        "imei": 862551059810951,
+        "lat": 33.776473,
+        "lng": 118.382874,
+        "restBattery": 84,
+        "restMileage": 67
+      },
+      {
+        "carId": 100600204,
+        "distance": 133.3531,
+        "imei": 862551059804368,
+        "lat": 33.776464,
+        "lng": 118.382895,
+        "restBattery": 100,
+        "restMileage": 80
+      },
+      {
+        "carId": 100600215,
+        "distance": 134.0517,
+        "imei": 862551059809326,
+        "lat": 33.776454,
+        "lng": 118.382872,
+        "restBattery": 87,
+        "restMileage": 69
+      },
+      {
+        "carId": 100600130,
+        "distance": 134.1978,
+        "imei": 862551059818137,
+        "lat": 33.776462,
+        "lng": 118.382875,
+        "restBattery": 62,
+        "restMileage": 49
+      },
+      {
+        "carId": 100600107,
+        "distance": 134.7364,
+        "imei": 862551059876507,
+        "lat": 33.776461,
+        "lng": 118.382874,
+        "restBattery": 72,
+        "restMileage": 57
+      },
+      {
+        "carId": 100600408,
+        "distance": 136.499,
+        "imei": 862551059855832,
+        "lat": 33.776437,
+        "lng": 118.382875,
+        "restBattery": 98,
+        "restMileage": 78
+      },
+      {
+        "carId": 100600511,
+        "distance": 137.7026,
+        "imei": 862551059846559,
+        "lat": 33.776427,
+        "lng": 118.382876,
+        "restBattery": 58,
+        "restMileage": 46
+      }
+    ],
+    "msg": "成功",
+    "success": true
+  }
+}

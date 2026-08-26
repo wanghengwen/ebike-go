@@ -1,0 +1,26 @@
+{
+  "url": "/device/paas/device/carStatisticsByService",
+  "clazz": "Result com.xyy.ebike.device.paas.controller.DeviceInfoController.carStatisticsByService(CarStatisticsByServiceQry)",
+  "cusTime": 1,
+  "req": {
+    "commandContext": {
+      "pin": "ebike-analyze-worker",
+      "source": "ebike-analyze-worker",
+      "stressTesting": false,
+      "tenantId": "1002",
+      "traceId": "5d08b8bf-9841-41b7-aedb-00be6b15b931"
+    },
+    "serviceIdList": [
+      234817857916508740
+    ]
+  },
+  "rep": {
+    "code": "0",
+    "data": {
+      "parkingStatistics": [],
+      "serviceStatistics": []
+    },
+    "msg": "成功",
+    "success": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "url": "/device/paas/setInnerParam",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1000",
+      "traceId": "08db5d04-4c71-4589-a770-a56e68927729",
+      "pin": "b_3f964bf80481e8b",
+      "ip": "172.16.1.159",
+      "platform": "android",
+      "deviceId": "b00a5bd7-55f2-33cb-ab9c-4229362a58ec",
+      "source": "ebike-operation",
+      "name": "苏",
+      "stressTesting": false
+    },
+    "async": true,
+    "carId": null,
+    "imei": "866940070131883",
+    "payload": null,
+    "mode": null,
+    "freqNorm": null,
+    "freqMove": null,
+    "isOverSpeedOn": null,
+    "isAutoLockOn": null,
+    "isMoveAlarmOn": null,
+    "autoLockPeriod": null,
+    "audioRatio": null,
+    "isNightVoiceOn": null,
+    "isFenceEnable": 0,
+    "fenceVersion": null,
+    "isTBeaconEnable": null,
+    "isTurnOverEnable": null,
+    "turnOverAngle": null,
+    "turnOverAudioPeriod": null,
+    "audioRatioOverSpeed": null,
+    "lowVoltageThreshold": null,
+    "slopeMinAngle": null,
+    "slopeMaxAngle": null,
+    "isEtcSOC": null,
+    "bmsType": null,
+    "ccuType": null,
+    "isBleKeyEnable": null,
+    "is433KeyEnable": null,
+    "beaconRssi": null,
+    "isHelmetWearCheckEnable": null,
+    "tbeaconthresholdCompensate": null
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "ca4b298761a34543bb7586b916258973",
+      "async": true,
+      "ecuCode": null,
+      "payload": null,
+      "result": null
+    }
+  }
+}

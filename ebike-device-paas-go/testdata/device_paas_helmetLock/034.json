@@ -1,0 +1,37 @@
+{
+  "url": "/device/paas/helmetLock",
+  "clazz": "prod RECORD sample (prod_ebike-device-paas-go-55b8dcf94c-52nf9_ebike-device-paas-go)",
+  "cusTime": 0,
+  "req": {
+    "commandContext": {
+      "tenantId": "1003",
+      "traceId": "178367373015220875563061",
+      "pin": "a_2a753c60038066f",
+      "ip": "172.16.1.12",
+      "platform": "wechat",
+      "deviceId": "deviceId_17461065410609822557740",
+      "source": "ebike-fence",
+      "stressTesting": false
+    },
+    "imei": "862551059862960",
+    "carId": "100600542",
+    "sw": 1
+  },
+  "rep": {
+    "success": true,
+    "code": "0",
+    "msg": "成功",
+    "data": {
+      "jobId": "784f459260374f4185f44cdf4626333b",
+      "async": false,
+      "ecuCode": "0",
+      "payload": null,
+      "result": {
+        "helmetReact": null,
+        "helmetLock": 1,
+        "helmet6Lock": 1,
+        "helmet6React": 1
+      }
+    }
+  }
+}
