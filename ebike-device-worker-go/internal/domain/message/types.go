@@ -7,13 +7,13 @@ import (
 
 // DeviceMessageDTO mirrors Java infrastructure.dto.DeviceMessageDTO.
 type DeviceMessageDTO struct {
-	Imei            string          `json:"imei"`
-	MsgType         string          `json:"msgType"`
-	Identifier      string          `json:"identifier"`
-	BussinessType   string          `json:"bussinessType"`
-	MsgID           string          `json:"msgId"`
-	Data            json.RawMessage `json:"data"`
-	Payload         json.RawMessage `json:"payload"`
+	Imei            string             `json:"imei"`
+	MsgType         string             `json:"msgType"`
+	Identifier      string             `json:"identifier"`
+	BussinessType   string             `json:"bussinessType"`
+	MsgID           string             `json:"msgId"`
+	Data            json.RawMessage    `json:"data"`
+	Payload         json.RawMessage    `json:"payload"`
 	ReceiveDataTime *ReceiveMillisTime `json:"receiveDataTime"`
 }
 

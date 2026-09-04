@@ -16,8 +16,8 @@ import (
 )
 
 var (
-	namingClient naming_client.INamingClient
-	registeredIP string
+	namingClient   naming_client.INamingClient
+	registeredIP   string
 	deregisterOnce sync.Once
 )
 

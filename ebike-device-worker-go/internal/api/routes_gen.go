@@ -10,17 +10,17 @@ type GeneratedRoute struct {
 
 func GeneratedRoutes() []GeneratedRoute {
 	return []GeneratedRoute{
-		{Method:"POST", Path:"/cmd/getEbikeCmd", HandlerName:"HandleCmdGetEbikeCmd", ApiModule:"EbikeCmdApi"},
-		{Method:"POST", Path:"/cmd/saveEbikeCmd", HandlerName:"HandleCmdSaveEbikeCmd", ApiModule:"EbikeCmdApi"},
-		{Method:"POST", Path:"/ebike/gps/getBatchOrderTrajectory", HandlerName:"HandleEbikeGpsGetBatchOrderTrajectory", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getBatchOrderTrajectoryDistance", HandlerName:"HandleEbikeGpsGetBatchOrderTrajectoryDistance", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getMetric", HandlerName:"HandleEbikeGpsGetMetric", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getMovingEBikeTrajectory", HandlerName:"HandleEbikeGpsGetMovingEBikeTrajectory", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getOrderTrajectory", HandlerName:"HandleEbikeGpsGetOrderTrajectory", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getOrderTrajectoryDistance", HandlerName:"HandleEbikeGpsGetOrderTrajectoryDistance", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getTrajectory", HandlerName:"HandleEbikeGpsGetTrajectory", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/getTrajectoryDistance", HandlerName:"HandleEbikeGpsGetTrajectoryDistance", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/saveMovingEBikeTrajectory", HandlerName:"HandleEbikeGpsSaveMovingEBikeTrajectory", ApiModule:"ItineraryApi"},
-		{Method:"POST", Path:"/ebike/gps/saveOrderTrajectory", HandlerName:"HandleEbikeGpsSaveOrderTrajectory", ApiModule:"ItineraryApi"},
+		{Method: "POST", Path: "/cmd/getEbikeCmd", HandlerName: "HandleCmdGetEbikeCmd", ApiModule: "EbikeCmdApi"},
+		{Method: "POST", Path: "/cmd/saveEbikeCmd", HandlerName: "HandleCmdSaveEbikeCmd", ApiModule: "EbikeCmdApi"},
+		{Method: "POST", Path: "/ebike/gps/getBatchOrderTrajectory", HandlerName: "HandleEbikeGpsGetBatchOrderTrajectory", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getBatchOrderTrajectoryDistance", HandlerName: "HandleEbikeGpsGetBatchOrderTrajectoryDistance", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getMetric", HandlerName: "HandleEbikeGpsGetMetric", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getMovingEBikeTrajectory", HandlerName: "HandleEbikeGpsGetMovingEBikeTrajectory", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getOrderTrajectory", HandlerName: "HandleEbikeGpsGetOrderTrajectory", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getOrderTrajectoryDistance", HandlerName: "HandleEbikeGpsGetOrderTrajectoryDistance", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getTrajectory", HandlerName: "HandleEbikeGpsGetTrajectory", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/getTrajectoryDistance", HandlerName: "HandleEbikeGpsGetTrajectoryDistance", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/saveMovingEBikeTrajectory", HandlerName: "HandleEbikeGpsSaveMovingEBikeTrajectory", ApiModule: "ItineraryApi"},
+		{Method: "POST", Path: "/ebike/gps/saveOrderTrajectory", HandlerName: "HandleEbikeGpsSaveOrderTrajectory", ApiModule: "ItineraryApi"},
 	}
 }

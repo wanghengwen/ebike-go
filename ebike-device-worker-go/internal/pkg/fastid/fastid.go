@@ -53,10 +53,10 @@ func Ready() bool {
 func New(cfg Config) (*Generator, error) {
 	cfg.applyDefaults()
 	g := &Generator{
-		cfg:             cfg,
-		timestampShift:  cfg.InstanceNoBits + cfg.SequenceBits,
-		instanceNoShift: cfg.SequenceBits,
-		timeSeq:         &from2021TimeSequence{},
+		cfg:              cfg,
+		timestampShift:   cfg.InstanceNoBits + cfg.SequenceBits,
+		instanceNoShift:  cfg.SequenceBits,
+		timeSeq:          &from2021TimeSequence{},
 		autoIncrementSeq: &defaultAutoIncrementSequence{},
 	}
 	instanceNo, err := resolveInstanceNo(cfg)

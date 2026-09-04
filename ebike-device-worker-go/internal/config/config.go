@@ -40,22 +40,22 @@ type Config struct {
 		Brokers     []string `mapstructure:"brokers"`
 		TopicPrefix string   `mapstructure:"topic_prefix"`
 		Topics      struct {
-			DataTopic    string `mapstructure:"data_topic"`
-			EventTopic   string `mapstructure:"event_topic"`
-			AlarmTopic   string `mapstructure:"alarm_topic"`
-			ToSaasTopic  string `mapstructure:"to_saas_topic"`
-			GrayToSaas   string `mapstructure:"gray_to_saas_topic"`
+			DataTopic   string `mapstructure:"data_topic"`
+			EventTopic  string `mapstructure:"event_topic"`
+			AlarmTopic  string `mapstructure:"alarm_topic"`
+			ToSaasTopic string `mapstructure:"to_saas_topic"`
+			GrayToSaas  string `mapstructure:"gray_to_saas_topic"`
 		} `mapstructure:"topics"`
 		Consumers struct {
-			GroupData         string `mapstructure:"group_data"`
-			GroupEvent        string `mapstructure:"group_event"`
-			GroupAlarm        string `mapstructure:"group_alarm"`
-			DataConcurrency   int    `mapstructure:"data_concurrency"`
-			EventConcurrency  int    `mapstructure:"event_concurrency"`
-			AlarmConcurrency  int    `mapstructure:"alarm_concurrency"`
-			BatchSize         int    `mapstructure:"batch_size"`
-			BatchWaitMs       int    `mapstructure:"batch_wait_ms"`
-			StartOffset       string `mapstructure:"start_offset"` // earliest|latest, only when group has no committed offset
+			GroupData        string `mapstructure:"group_data"`
+			GroupEvent       string `mapstructure:"group_event"`
+			GroupAlarm       string `mapstructure:"group_alarm"`
+			DataConcurrency  int    `mapstructure:"data_concurrency"`
+			EventConcurrency int    `mapstructure:"event_concurrency"`
+			AlarmConcurrency int    `mapstructure:"alarm_concurrency"`
+			BatchSize        int    `mapstructure:"batch_size"`
+			BatchWaitMs      int    `mapstructure:"batch_wait_ms"`
+			StartOffset      string `mapstructure:"start_offset"` // earliest|latest, only when group has no committed offset
 		} `mapstructure:"consumers"`
 		Enabled     bool `mapstructure:"enabled"`
 		PushEnabled bool `mapstructure:"push_enabled"` // forward to to-saas / gray-to-saas; disable on verify consumer
@@ -76,7 +76,7 @@ type Config struct {
 		} `mapstructure:"xyy"`
 	} `mapstructure:"spring"`
 	// FastID is deprecated; use spring.xyy.fastid. Kept for backward-compatible flat config.
-	FastID FastIDSettings `mapstructure:"fastid"`
+	FastID        FastIDSettings `mapstructure:"fastid"`
 	PersistConfig struct {
 		PersistBatchSize  int    `mapstructure:"persist_batch_size"`
 		PersistLimitSize  int    `mapstructure:"persist_limit_size"`

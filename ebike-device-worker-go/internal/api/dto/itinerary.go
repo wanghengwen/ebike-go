@@ -71,7 +71,7 @@ type TrajectoryPoint struct {
 	Lat       float64 `json:"lat"`
 	Timestamp int64   `json:"timestamp"`
 	Speed     float32 `json:"speed"`
-	Course     float32 `json:"course"`
+	Course    float32 `json:"course"`
 }
 
 type SaveOrderTrajectoryCmd struct {

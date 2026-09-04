@@ -15,8 +15,8 @@ import (
 )
 
 var (
-	rePostMapping     = regexp.MustCompile(`@PostMapping\s*\(\s*"(/[^"]+)"\s*\)`)
-	reRequestMapping  = regexp.MustCompile(`@RequestMapping\s*\(\s*"(/[^"]+)"\s*\)`)
+	rePostMapping    = regexp.MustCompile(`@PostMapping\s*\(\s*"(/[^"]+)"\s*\)`)
+	reRequestMapping = regexp.MustCompile(`@RequestMapping\s*\(\s*"(/[^"]+)"\s*\)`)
 )
 
 type route struct {

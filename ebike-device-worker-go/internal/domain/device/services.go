@@ -29,13 +29,13 @@ func NewCmd(repo *pg.Repo) Service     { return &cmdService{repo: repo} }
 func NewOnline(repo *pg.Repo) Service  { return &onlineService{repo: repo} }
 func NewOffline(repo *pg.Repo) Service { return &offlineService{repo: repo} }
 
-func (s *gpsService) Key() string { return "ebike_" + utils.Itoa(constants.CmdGPS1) }
-func (s *pingService) Key() string { return "ebike_" + utils.Itoa(constants.CmdPing) }
-func (s *bmsService) Key() string { return "ebike_" + utils.Itoa(constants.CmdBMSInfo) }
-func (s *alarmService) Key() string { return "ebike_" + utils.Itoa(constants.CmdAlarm) }
-func (s *faultService) Key() string { return "ebike_" + utils.Itoa(constants.CmdFault) }
-func (s *cmdService) Key() string { return "ebike_" + utils.Itoa(constants.CmdWild) }
-func (s *onlineService) Key() string { return "ebike_" + utils.Itoa(constants.CmdLogin) }
+func (s *gpsService) Key() string     { return "ebike_" + utils.Itoa(constants.CmdGPS1) }
+func (s *pingService) Key() string    { return "ebike_" + utils.Itoa(constants.CmdPing) }
+func (s *bmsService) Key() string     { return "ebike_" + utils.Itoa(constants.CmdBMSInfo) }
+func (s *alarmService) Key() string   { return "ebike_" + utils.Itoa(constants.CmdAlarm) }
+func (s *faultService) Key() string   { return "ebike_" + utils.Itoa(constants.CmdFault) }
+func (s *cmdService) Key() string     { return "ebike_" + utils.Itoa(constants.CmdWild) }
+func (s *onlineService) Key() string  { return "ebike_" + utils.Itoa(constants.CmdLogin) }
 func (s *offlineService) Key() string { return "ebike_" + utils.Itoa(constants.CmdLogout) }
 
 func (s *gpsService) SaveBatch(list []message.MessageInfoDTO, batchSize int) error {

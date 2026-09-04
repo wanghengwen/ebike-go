@@ -15,18 +15,18 @@ func InitNativeHandlers() {
 
 func registerNativeHandlers() {
 	api.RegisterHandlers(map[string]gin.HandlerFunc{
-		"/ebike/gps/getTrajectory":                  getTrajectory,
-		"/ebike/gps/getTrajectoryDistance":            getTrajectoryDistance,
-		"/ebike/gps/getMetric":                        getMetric,
-		"/ebike/gps/getOrderTrajectory":               getOrderTrajectory,
-		"/ebike/gps/getOrderTrajectoryDistance":       getOrderTrajectoryDistance,
-		"/ebike/gps/getMovingEBikeTrajectory":         getMovingEBikeTrajectory,
-		"/ebike/gps/getBatchOrderTrajectory":          getBatchOrderTrajectory,
-		"/ebike/gps/getBatchOrderTrajectoryDistance":  getBatchOrderTrajectoryDistance,
-		"/cmd/getEbikeCmd":                            getEbikeCmd,
-		"/cmd/saveEbikeCmd":                           saveEbikeCmd,
-		"/ebike/gps/saveOrderTrajectory":              saveOrderTrajectory,
-		"/ebike/gps/saveMovingEBikeTrajectory":        saveMovingEBikeTrajectory,
+		"/ebike/gps/getTrajectory":                   getTrajectory,
+		"/ebike/gps/getTrajectoryDistance":           getTrajectoryDistance,
+		"/ebike/gps/getMetric":                       getMetric,
+		"/ebike/gps/getOrderTrajectory":              getOrderTrajectory,
+		"/ebike/gps/getOrderTrajectoryDistance":      getOrderTrajectoryDistance,
+		"/ebike/gps/getMovingEBikeTrajectory":        getMovingEBikeTrajectory,
+		"/ebike/gps/getBatchOrderTrajectory":         getBatchOrderTrajectory,
+		"/ebike/gps/getBatchOrderTrajectoryDistance": getBatchOrderTrajectoryDistance,
+		"/cmd/getEbikeCmd":                           getEbikeCmd,
+		"/cmd/saveEbikeCmd":                          saveEbikeCmd,
+		"/ebike/gps/saveOrderTrajectory":             saveOrderTrajectory,
+		"/ebike/gps/saveMovingEBikeTrajectory":       saveMovingEBikeTrajectory,
 	})
 }
 

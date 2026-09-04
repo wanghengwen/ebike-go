@@ -18,8 +18,8 @@ import (
 )
 
 const (
-	defaultBatchSize      = 500
-	progressLogInterval   = 10 * time.Minute
+	defaultBatchSize    = 500
+	progressLogInterval = 10 * time.Minute
 )
 
 type MessageHandler interface {

@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"ebike-device-worker-go/internal/api/dto"
-	nacosreg "ebike-device-worker-go/internal/infrastructure/nacos"
 	"ebike-device-worker-go/internal/config"
+	nacosreg "ebike-device-worker-go/internal/infrastructure/nacos"
 	"ebike-device-worker-go/internal/pkg/db"
 	"ebike-device-worker-go/internal/pkg/fastid"
 	redispkg "ebike-device-worker-go/internal/pkg/redis"

@@ -4,11 +4,11 @@ package fastid
 func NewForTest(cfg Config, instanceNo int64) (*Generator, error) {
 	cfg.applyDefaults()
 	g := &Generator{
-		cfg:             cfg,
-		instanceNo:      instanceNo,
-		timestampShift:  cfg.InstanceNoBits + cfg.SequenceBits,
-		instanceNoShift: cfg.SequenceBits,
-		timeSeq:         &from2021TimeSequence{},
+		cfg:              cfg,
+		instanceNo:       instanceNo,
+		timestampShift:   cfg.InstanceNoBits + cfg.SequenceBits,
+		instanceNoShift:  cfg.SequenceBits,
+		timeSeq:          &from2021TimeSequence{},
 		autoIncrementSeq: &defaultAutoIncrementSequence{},
 	}
 	g.timeSeq.init()

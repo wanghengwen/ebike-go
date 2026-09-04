@@ -29,7 +29,7 @@ func TestHealthEndpoint(t *testing.T) {
 		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
 	}
 	var body struct {
-		Status string `json:"status"`
+		Status     string `json:"status"`
 		Components map[string]struct {
 			Status string `json:"status"`
 		} `json:"components"`

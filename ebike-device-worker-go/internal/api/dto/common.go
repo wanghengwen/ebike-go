@@ -4,11 +4,11 @@ import "encoding/json"
 
 // Error codes matching Java EbikeMsgCode / com.xyy.dto.Result
 const (
-	CodeSuccess                      = "0"
-	CodeException                    = "10001"
-	CodeParamException               = "10002"
-	CodeIllegalArgument              = "10004"
-	CodeOrderTrajectoryNotExist      = "10014"
+	CodeSuccess                       = "0"
+	CodeException                     = "10001"
+	CodeParamException                = "10002"
+	CodeIllegalArgument               = "10004"
+	CodeOrderTrajectoryNotExist       = "10014"
 	CodeTrajectoryQueryDateOutOfRange = "10015"
 )
 

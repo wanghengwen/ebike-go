@@ -1,0 +1,123 @@
+# ebike-device-worker-go 部署清单
+#
+# 部署前：
+#   1. 编译: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o build/ebike-device-worker-go .
+#   2. 构建并推送镜像后更新下方 image tag
+#   3. kubectl apply -f deployment.yaml
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ebike-device-worker-go
+  namespace: prod
+  labels:
+    app: ebike-device-worker-go
+    lang: go
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: ebike-device-worker-go
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: ebike-device-worker-go
+        lang: go
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: ebike-device-worker-go
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-device-worker-go:v1.0.32
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: DRY_RUN
+              value: "true"
+            - name: NACOS_REGISTER_ENABLED
+              value: "true"
+            - name: KAFKA_ENABLED
+              value: "true"
+            - name: KAFKA_PUSH_ENABLED
+              value: "true"
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    curl -sf -X POST
+                    "http://127.0.0.1:8080/actuator/deregisterService" || true;
+                    sleep 15;
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: volume-logs
+              mountPath: /logs
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+        - name: volume-logs
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ebike-device-worker-go
+  namespace: prod
+  labels:
+    app: ebike-device-worker-go
+spec:
+  type: ClusterIP
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+    - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: ebike-device-worker-go

@@ -167,4 +167,3 @@ func vincentyDistance(lat1, lng1, lat2, lng2, a, b float64) float64 {
 		bCoeff/6*cos2SigmaM*(-3+4*sinSigma*sinSigma)*(-3+4*cos2SigmaM*cos2SigmaM)))
 	return b * aCoeff * (sigma - deltaSigma)
 }
-
