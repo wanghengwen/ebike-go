@@ -44,6 +44,12 @@ spec:
               value: xyy
             - name: SPRING_CLOUD_NACOS_DISCOVERY_GROUP
               value: xyy
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.2.20:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
             - name: SPRING_APPLICATION_NAME
               value: xyy-fastid
             - name: SERVER_PORT
