@@ -34,20 +34,20 @@ type navigateCmd struct {
 // navigationDO / routeDO / pathDO / stepDO match the map-service response DTOs
 // (parsed leniently like fastjson does).
 type navigationDO struct {
-	Count *int `json:"count"`
+	Count *int     `json:"count"`
 	Route *routeDO `json:"route"`
 }
 
 type routeDO struct {
-	Origin      *string `json:"origin"`
-	Destination *string `json:"destination"`
-	Paths       []*pathDO   `json:"paths"`
+	Origin      *string   `json:"origin"`
+	Destination *string   `json:"destination"`
+	Paths       []*pathDO `json:"paths"`
 }
 
 type pathDO struct {
-	Distance *string `json:"distance"`
-	Duration *string `json:"duration"`
-	Steps    []*stepDO   `json:"steps"`
+	Distance *string   `json:"distance"`
+	Duration *string   `json:"duration"`
+	Steps    []*stepDO `json:"steps"`
 }
 
 type stepDO struct {

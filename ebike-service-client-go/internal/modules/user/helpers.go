@@ -46,10 +46,10 @@ func javaDoubleString(d *float64) string {
 }
 
 var (
-	isNullJSON   = javacompat.IsNullJSON
-	callData     = javacompat.CallData
+	isNullJSON    = javacompat.IsNullJSON
+	callData      = javacompat.CallData
 	callDataQuiet = javacompat.CallDataQuiet
-	writeNPE     = javacompat.WriteNPE
+	writeNPE      = javacompat.WriteNPE
 )
 
 // notBlankMsg enforces Java @NotBlank semantics with a custom message

@@ -66,15 +66,15 @@ func getUserAccount(c *gin.Context) {
 }
 
 type walletCO struct {
-	Id             *javacompat.LongStr  `json:"id"`
-	Pin            *string `json:"pin"`
-	Balance        *int    `json:"balance"`
-	Recharge       *int    `json:"recharge"`
-	Present        *int    `json:"present"`
-	DepositedMount *int    `json:"depositedMount"`
-	DepositedStats *int    `json:"depositedStats"`
-	FreezeRecharge *int    `json:"freezeRecharge"`
-	FreezePresent  *int    `json:"freezePresent"`
+	Id             *javacompat.LongStr `json:"id"`
+	Pin            *string             `json:"pin"`
+	Balance        *int                `json:"balance"`
+	Recharge       *int                `json:"recharge"`
+	Present        *int                `json:"present"`
+	DepositedMount *int                `json:"depositedMount"`
+	DepositedStats *int                `json:"depositedStats"`
+	FreezeRecharge *int                `json:"freezeRecharge"`
+	FreezePresent  *int                `json:"freezePresent"`
 }
 
 type ridingCardInfo struct {
@@ -126,17 +126,17 @@ type favorableCardCO struct {
 }
 
 type freeOrderCO struct {
-	Id         *javacompat.LongStr  `json:"id"`
-	Pin        *string `json:"pin"`
-	FreeSecond *int    `json:"freeSecond"`
-	FreeNum    *int    `json:"freeNum"`
+	Id         *javacompat.LongStr `json:"id"`
+	Pin        *string             `json:"pin"`
+	FreeSecond *int                `json:"freeSecond"`
+	FreeNum    *int                `json:"freeNum"`
 }
 
 type discountCO struct {
-	Id           *javacompat.LongStr  `json:"id"`
-	Pin          *string `json:"pin"`
-	DiscountRate *int    `json:"discountRate"`
-	DiscountType *int    `json:"discountType"`
+	Id           *javacompat.LongStr `json:"id"`
+	Pin          *string             `json:"pin"`
+	DiscountRate *int                `json:"discountRate"`
+	DiscountType *int                `json:"discountType"`
 }
 
 type userAccountCO struct {

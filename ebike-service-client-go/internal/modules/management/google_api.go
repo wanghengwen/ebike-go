@@ -24,56 +24,56 @@ import (
 // @Validated enforces only ClientDTO's traceId/tenantId).
 type googleMapDTO struct {
 	dto.ClientDTO
-	Id                *javacompat.LongStr          `json:"id"`
-	AddressComponents *string        `json:"addressComponents"`
-	FormattedAddress  *string        `json:"formattedAddress"`
-	Geometry          *string        `json:"geometry"`
-	PlaceId           *string        `json:"placeId"`
-	Types             *string        `json:"types"`
-	Remarks           *string        `json:"remarks"`
+	Id                *javacompat.LongStr  `json:"id"`
+	AddressComponents *string              `json:"addressComponents"`
+	FormattedAddress  *string              `json:"formattedAddress"`
+	Geometry          *string              `json:"geometry"`
+	PlaceId           *string              `json:"placeId"`
+	Types             *string              `json:"types"`
+	Remarks           *string              `json:"remarks"`
 	UpdateTime        *javacompat.DateTime `json:"updateTime"`
 }
 
 // googleMapCmd matches the downstream GoogleMapCmd; commandContext is injected
 // by rpc.ForwardCommand. All fields emitted (Java serializes nulls).
 type googleMapCmd struct {
-	Id                *javacompat.LongStr          `json:"id"`
-	Longitude         *string        `json:"longitude"`
-	Dimension         *string        `json:"dimension"`
-	AddressComponents *string        `json:"addressComponents"`
-	FormattedAddress  *string        `json:"formattedAddress"`
-	Geometry          *string        `json:"geometry"`
-	PlaceId           *string        `json:"placeId"`
-	Types             *string        `json:"types"`
-	Remarks           *string        `json:"remarks"`
+	Id                *javacompat.LongStr  `json:"id"`
+	Longitude         *string              `json:"longitude"`
+	Dimension         *string              `json:"dimension"`
+	AddressComponents *string              `json:"addressComponents"`
+	FormattedAddress  *string              `json:"formattedAddress"`
+	Geometry          *string              `json:"geometry"`
+	PlaceId           *string              `json:"placeId"`
+	Types             *string              `json:"types"`
+	Remarks           *string              `json:"remarks"`
 	UpdateTime        *javacompat.DateTime `json:"updateTime"`
 }
 
 // googleMapEntity is the lenient decode target for the downstream Result data.
 type googleMapEntity struct {
-	Id                *javacompat.LongStr          `json:"id"`
-	Longitude         *string    `json:"longitude"`
-	Dimension         *string    `json:"dimension"`
-	AddressComponents *string    `json:"addressComponents"`
-	FormattedAddress  *string    `json:"formattedAddress"`
-	Geometry          *string    `json:"geometry"`
-	PlaceId           *string    `json:"placeId"`
-	Types             *string    `json:"types"`
-	Remarks           *string    `json:"remarks"`
+	Id                *javacompat.LongStr  `json:"id"`
+	Longitude         *string              `json:"longitude"`
+	Dimension         *string              `json:"dimension"`
+	AddressComponents *string              `json:"addressComponents"`
+	FormattedAddress  *string              `json:"formattedAddress"`
+	Geometry          *string              `json:"geometry"`
+	PlaceId           *string              `json:"placeId"`
+	Types             *string              `json:"types"`
+	Remarks           *string              `json:"remarks"`
 	UpdateTime        *javacompat.DateTime `json:"updateTime"`
 }
 
 // googleMapCO matches clientobject.GoogleMapCo (declaration order, nulls kept).
 type googleMapCO struct {
-	Id                *javacompat.LongStr          `json:"id"`
-	Longitude         *float64       `json:"longitude"`
-	Latitude          *float64       `json:"latitude"`
-	AddressComponents *string    `json:"addressComponents"`
-	FormattedAddress  *string    `json:"formattedAddress"`
-	Geometry          *string    `json:"geometry"`
-	PlaceId           *string    `json:"placeId"`
-	Types             *string    `json:"types"`
-	Remarks           *string    `json:"remarks"`
+	Id                *javacompat.LongStr  `json:"id"`
+	Longitude         *float64             `json:"longitude"`
+	Latitude          *float64             `json:"latitude"`
+	AddressComponents *string              `json:"addressComponents"`
+	FormattedAddress  *string              `json:"formattedAddress"`
+	Geometry          *string              `json:"geometry"`
+	PlaceId           *string              `json:"placeId"`
+	Types             *string              `json:"types"`
+	Remarks           *string              `json:"remarks"`
 	UpdateTime        *javacompat.DateTime `json:"updateTime"`
 }
 

@@ -15,14 +15,14 @@ type AppConfig struct {
 	} `yaml:"server"`
 
 	Nacos struct {
-		ServerAddr        string   `yaml:"serverAddr"`
-		Namespace         string   `yaml:"namespace"`
-		Group             string   `yaml:"group"`
-		DataId            string   `yaml:"dataId"`
-		Port              uint64   `yaml:"port"`
-		ContextPath       string   `yaml:"contextPath"` // MSE Nacos: /nacos
-		ExtensionDataIds  []string `yaml:"extensionDataIds"`
-		ExtensionGroups   []string `yaml:"extensionGroups"`
+		ServerAddr       string   `yaml:"serverAddr"`
+		Namespace        string   `yaml:"namespace"`
+		Group            string   `yaml:"group"`
+		DataId           string   `yaml:"dataId"`
+		Port             uint64   `yaml:"port"`
+		ContextPath      string   `yaml:"contextPath"` // MSE Nacos: /nacos
+		ExtensionDataIds []string `yaml:"extensionDataIds"`
+		ExtensionGroups  []string `yaml:"extensionGroups"`
 	} `yaml:"nacos"`
 
 	// Xyy mirrors the Java ApplicationProperties (prefix "xyy").

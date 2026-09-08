@@ -267,9 +267,9 @@ func convertCreatePayCO(raw json.RawMessage) json.RawMessage {
 }
 
 type permissionRecordCO struct {
-	Openid                   *string `json:"openid"`
-	Authorization_code       *string `json:"authorization_code"`
-	Authorization_state      *string `json:"authorization_state"`
+	Openid                     *string `json:"openid"`
+	Authorization_code         *string `json:"authorization_code"`
+	Authorization_state        *string `json:"authorization_state"`
 	Cancel_authorization_time  *string `json:"cancel_authorization_time"`
 	Authorization_success_time *string `json:"authorization_success_time"`
 }

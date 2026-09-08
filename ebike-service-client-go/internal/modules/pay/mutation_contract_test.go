@@ -11,8 +11,8 @@ func TestPlatformCodeMatchesJavaPlatformEnum(t *testing.T) {
 		"wechat": 0, "WECHAT": 0,
 		"ios": 1, "IOS": 1,
 		"android": 2,
-		"pc": 3,
-		"": 9, "unknown": 9,
+		"pc":      3,
+		"":        9, "unknown": 9,
 	}
 	for platform, want := range cases {
 		if got := platformCode(platform); got != want {

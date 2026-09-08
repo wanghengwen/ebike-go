@@ -108,8 +108,8 @@ type helmetCmd struct {
 // adsConfigDTO mirrors AdsConfigDTO (@Validated serviceId).
 type adsConfigDTO struct {
 	dto.ServiceDTO
-	Ads                 json.RawMessage `json:"ads"`
-	HalfMiniProgramAds  json.RawMessage `json:"halfMiniProgramAds"`
+	Ads                json.RawMessage `json:"ads"`
+	HalfMiniProgramAds json.RawMessage `json:"halfMiniProgramAds"`
 }
 
 func convertBoolean(raw json.RawMessage) json.RawMessage {
@@ -237,4 +237,3 @@ func convertConfigParkApplyCO(raw json.RawMessage) json.RawMessage {
 	out, _ := json.Marshal(co)
 	return out
 }
-

@@ -66,10 +66,10 @@ var billConfigMsgs = map[string]string{
 var returnBikeAuditMsgs = map[string]string{
 	"traceId":    "must not be empty",
 	"tenantId":   "must not be empty",
-	"orderId":    "must not be null",               // @NotNull
-	"applyType":  "must not be null",               // @NotNull
-	"photoUrl":   "must not be blank",              // @NotBlank
-	"userReason": "size must be between 0 and 50",  // @Size(max = 50)
+	"orderId":    "must not be null",              // @NotNull
+	"applyType":  "must not be null",              // @NotNull
+	"photoUrl":   "must not be blank",             // @NotBlank
+	"userReason": "size must be between 0 and 50", // @Size(max = 50)
 }
 
 // cameraAuditMsgs covers CameraAuditDTO.

@@ -112,14 +112,14 @@ func inviteRule(c *gin.Context) {
 }
 
 type clientInviteDetailCO struct {
-	InviteNum     *int             `json:"inviteNum"`
-	RewardNum     *int             `json:"rewardNum"`
-	InviteeRecord json.RawMessage  `json:"inviteeRecord"`
-	RewardPool    *int             `json:"rewardPool"`
-	ValidDay      *int             `json:"validDay"`
-	Unit          *string          `json:"unit"`
-	RewardType    *int             `json:"rewardType"`
-	RewardInfo    *string          `json:"rewardInfo"`
+	InviteNum     *int            `json:"inviteNum"`
+	RewardNum     *int            `json:"rewardNum"`
+	InviteeRecord json.RawMessage `json:"inviteeRecord"`
+	RewardPool    *int            `json:"rewardPool"`
+	ValidDay      *int            `json:"validDay"`
+	Unit          *string         `json:"unit"`
+	RewardType    *int            `json:"rewardType"`
+	RewardInfo    *string         `json:"rewardInfo"`
 }
 
 type userInviteCO struct {

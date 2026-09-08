@@ -1,8 +1,8 @@
 package clientconfig
 
 import (
-	"encoding/json"
 	"ebike-service-client-go/internal/pkg/javacompat"
+	"encoding/json"
 )
 
 // guidePageConfigCO mirrors fence GuidePageConfigCO (null fields emitted).
@@ -10,14 +10,14 @@ type guidePageConfigCO struct {
 	Id            *javacompat.LongStr `json:"id"`
 	ServiceId     *javacompat.LongStr `json:"serviceId"`
 	GuidePages    json.RawMessage     `json:"guidePages"`
-	AllowSuperEsc *bool           `json:"allowSuperEsc"`
-	PageNumEsc    *int            `json:"pageNumEsc"`
-	VisibleRange  *int            `json:"visibleRange"`
-	Frequency     *int            `json:"frequency"`
-	IzOn          *bool           `json:"izOn"`
-	ByRegister    *bool           `json:"byRegister"`
-	ByTags        *bool           `json:"byTags"`
-	TagIds        *string         `json:"tagIds"`
+	AllowSuperEsc *bool               `json:"allowSuperEsc"`
+	PageNumEsc    *int                `json:"pageNumEsc"`
+	VisibleRange  *int                `json:"visibleRange"`
+	Frequency     *int                `json:"frequency"`
+	IzOn          *bool               `json:"izOn"`
+	ByRegister    *bool               `json:"byRegister"`
+	ByTags        *bool               `json:"byTags"`
+	TagIds        *string             `json:"tagIds"`
 }
 
 func emptyGuidePageConfig() guidePageConfigCO {
@@ -66,31 +66,31 @@ func convertGuidePageConfigCO(raw json.RawMessage) json.RawMessage {
 
 // bSpecialTipsCO mirrors client BSpecialTipsCO (Long fields as strings).
 type bSpecialTipsCO struct {
-	Id                *javacompat.LongStr `json:"id"`
-	ServiceId         *javacompat.LongStr `json:"serviceId"`
-	PopUpType         *int            `json:"popUpType"`
-	BgUrl             json.RawMessage `json:"bgUrl"`
-	BgColor           *string         `json:"bgColor"`
-	Title             *string         `json:"title"`
-	TitleColor        *string         `json:"titleColor"`
-	IzSubtitle        *bool           `json:"izSubtitle"`
-	Subtitle          *string         `json:"subtitle"`
-	SubtitleColor     *string         `json:"subtitleColor"`
-	Body              *string         `json:"body"`
-	BodyColor         *string         `json:"bodyColor"`
-	PopUpTime         *int            `json:"popUpTime"`
-	IzButton          *bool           `json:"izButton"`
-	ButtonText        *string         `json:"buttonText"`
-	ButtonColor       *string         `json:"buttonColor"`
-	ButtonTextColor   *string         `json:"buttonTextColor"`
-	ClickEvent        *int            `json:"clickEvent"`
-	JumpPage          json.RawMessage `json:"jumpPage"`
-	IzCheckRead       *bool           `json:"izCheckRead"`
-	CheckReadContent  *string         `json:"checkReadContent"`
-	VisibleRange      *int            `json:"visibleRange"`
-	Frequency         *int            `json:"frequency"`
-	ClosePosition     *int            `json:"closePosition"`
-	IzOn              *bool           `json:"izOn"`
+	Id               *javacompat.LongStr `json:"id"`
+	ServiceId        *javacompat.LongStr `json:"serviceId"`
+	PopUpType        *int                `json:"popUpType"`
+	BgUrl            json.RawMessage     `json:"bgUrl"`
+	BgColor          *string             `json:"bgColor"`
+	Title            *string             `json:"title"`
+	TitleColor       *string             `json:"titleColor"`
+	IzSubtitle       *bool               `json:"izSubtitle"`
+	Subtitle         *string             `json:"subtitle"`
+	SubtitleColor    *string             `json:"subtitleColor"`
+	Body             *string             `json:"body"`
+	BodyColor        *string             `json:"bodyColor"`
+	PopUpTime        *int                `json:"popUpTime"`
+	IzButton         *bool               `json:"izButton"`
+	ButtonText       *string             `json:"buttonText"`
+	ButtonColor      *string             `json:"buttonColor"`
+	ButtonTextColor  *string             `json:"buttonTextColor"`
+	ClickEvent       *int                `json:"clickEvent"`
+	JumpPage         json.RawMessage     `json:"jumpPage"`
+	IzCheckRead      *bool               `json:"izCheckRead"`
+	CheckReadContent *string             `json:"checkReadContent"`
+	VisibleRange     *int                `json:"visibleRange"`
+	Frequency        *int                `json:"frequency"`
+	ClosePosition    *int                `json:"closePosition"`
+	IzOn             *bool               `json:"izOn"`
 }
 
 // bHomeNavCO mirrors client BHomeNavCO (Long fields as strings via LongStr).
@@ -105,24 +105,24 @@ type bHomeNavCO struct {
 }
 
 type mainPushRidingConfigCO struct {
-	CardId          *javacompat.LongStr `json:"cardId"`
-	RidingCardName  *string             `json:"ridingCardName"`
-	DeductionType   *int                `json:"deductionType"`
-	CurCost         *int                `json:"curCost"`
-	OriginCost      *int                `json:"originCost"`
-	ExpiryDate      *int                `json:"expiryDate"`
-	TotalTimes      *int                `json:"totalTimes"`
-	FreeMoney       *int                `json:"freeMoney"`
-	OpenStartTime   *javacompat.LongStr `json:"openStartTime"`
-	OpenEndTime     *javacompat.LongStr `json:"openEndTime"`
-	State           *int                `json:"state"`
-	CreatedAt       *javacompat.LongStr `json:"createdAt"`
-	DeductionRules  *int                `json:"deductionRules"`
-	DescriptionTag  *string             `json:"descriptionTag"`
-	PromotionTag    *string             `json:"promotionTag"`
-	BackOfCardUrl   *string             `json:"backOfCardUrl"`
-	IzMainPush      *bool               `json:"izMainPush"`
-	DetailInfo      *string             `json:"detailInfo"`
+	CardId         *javacompat.LongStr `json:"cardId"`
+	RidingCardName *string             `json:"ridingCardName"`
+	DeductionType  *int                `json:"deductionType"`
+	CurCost        *int                `json:"curCost"`
+	OriginCost     *int                `json:"originCost"`
+	ExpiryDate     *int                `json:"expiryDate"`
+	TotalTimes     *int                `json:"totalTimes"`
+	FreeMoney      *int                `json:"freeMoney"`
+	OpenStartTime  *javacompat.LongStr `json:"openStartTime"`
+	OpenEndTime    *javacompat.LongStr `json:"openEndTime"`
+	State          *int                `json:"state"`
+	CreatedAt      *javacompat.LongStr `json:"createdAt"`
+	DeductionRules *int                `json:"deductionRules"`
+	DescriptionTag *string             `json:"descriptionTag"`
+	PromotionTag   *string             `json:"promotionTag"`
+	BackOfCardUrl  *string             `json:"backOfCardUrl"`
+	IzMainPush     *bool               `json:"izMainPush"`
+	DetailInfo     *string             `json:"detailInfo"`
 }
 
 // parseCOJSONField mirrors BSpecialTipsCO setBgUrl/setJumpPage: fence stores JSON
@@ -392,4 +392,3 @@ func convertHomeActivityEntrance(raw json.RawMessage) json.RawMessage {
 	b, _ := json.Marshal(co)
 	return b
 }
-

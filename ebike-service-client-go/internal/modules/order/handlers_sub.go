@@ -181,7 +181,10 @@ func invoiceCreate(c *gin.Context) {
 
 func validateInvoiceCreate(c *gin.Context, req *invoiceDTO) bool {
 	// @NotNull allows empty string; only null is rejected (Java Bean Validation).
-	checks := []struct{ field string; ok bool }{
+	checks := []struct {
+		field string
+		ok    bool
+	}{
 		{"serviceId", req.ServiceId != nil}, {"type", req.Type != nil}, {"title", req.Title != nil},
 		{"companyEin", req.CompanyEin != nil}, {"email", req.Email != nil},
 		{"content", req.Content != nil},

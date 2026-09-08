@@ -612,7 +612,6 @@ func convertBlueToothTokenCo(raw json.RawMessage) json.RawMessage {
 	return b
 }
 
-
 func convertBoolean(raw json.RawMessage) json.RawMessage {
 	if javacompat.IsNullJSON(raw) {
 		return raw

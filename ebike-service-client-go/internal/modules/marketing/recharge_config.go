@@ -110,7 +110,6 @@ func getRechargeConfig(c *gin.Context) {
 	web.RespondResult(c, result, err)
 }
 
-
 type rechargeScopeCO struct {
 	Scope []int `json:"scope"`
 }

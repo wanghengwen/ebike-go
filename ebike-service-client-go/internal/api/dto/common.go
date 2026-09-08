@@ -58,7 +58,7 @@ type ClientDTO struct {
 	Version       string   `json:"version,omitempty" form:"version"`
 	Ip            string   `json:"ip,omitempty" form:"ip"`
 	Longitude     *float64 `json:"longitude,omitempty" form:"longitude"` // Java Double (boxed) -> Go *float64
-	Latitude      *float64 `json:"latitude,omitempty" form:"latitude"`  // Java Double (boxed) -> Go *float64
+	Latitude      *float64 `json:"latitude,omitempty" form:"latitude"`   // Java Double (boxed) -> Go *float64
 	Source        string   `json:"source,omitempty" form:"source"`
 	StressTesting bool     `json:"stressTesting" form:"stressTesting"`
 }

@@ -19,15 +19,15 @@ type ClientDTOResponse struct {
 // response objects when unset (stressTesting defaults to false).
 func ClientDTONullMap() map[string]interface{} {
 	return map[string]interface{}{
-		"traceId":        nil,
-		"tenantId":       nil,
-		"platform":       nil,
-		"deviceId":       nil,
-		"version":        nil,
-		"ip":             nil,
-		"longitude":      nil,
-		"latitude":       nil,
-		"source":         nil,
-		"stressTesting":  false,
+		"traceId":       nil,
+		"tenantId":      nil,
+		"platform":      nil,
+		"deviceId":      nil,
+		"version":       nil,
+		"ip":            nil,
+		"longitude":     nil,
+		"latitude":      nil,
+		"source":        nil,
+		"stressTesting": false,
 	}
 }

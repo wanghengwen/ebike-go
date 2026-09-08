@@ -184,18 +184,18 @@ var writeNPE = javacompat.WriteNPE
 
 // cCreditScoreConfigCO mirrors client CCreditScoreConfigCO (null fields emitted).
 type cCreditScoreConfigCO struct {
-	Id                   *string  `json:"id"`
-	IzCreditScore        *bool    `json:"izCreditScore"`
-	Score                *float64 `json:"score"`
-	WarnScore            *float64 `json:"warnScore"`
-	NoRiddingScore       *float64 `json:"noRiddingScore"`
-	FirstNoRiddingDays   *int     `json:"firstNoRiddingDays"`
-	SecondNoRiddingDays  *int     `json:"secondNoRiddingDays"`
-	MoreNoRiddingDays    *int     `json:"moreNoRiddingDays"`
-	AddScore             *float64 `json:"addScore"`
-	AddScoreUpperLimit   *float64 `json:"addScoreUpperLimit"`
-	RemindWay            *string  `json:"remindWay"`
-	IzLowScoreOn         *int     `json:"izLowScoreOn"`
+	Id                  *string  `json:"id"`
+	IzCreditScore       *bool    `json:"izCreditScore"`
+	Score               *float64 `json:"score"`
+	WarnScore           *float64 `json:"warnScore"`
+	NoRiddingScore      *float64 `json:"noRiddingScore"`
+	FirstNoRiddingDays  *int     `json:"firstNoRiddingDays"`
+	SecondNoRiddingDays *int     `json:"secondNoRiddingDays"`
+	MoreNoRiddingDays   *int     `json:"moreNoRiddingDays"`
+	AddScore            *float64 `json:"addScore"`
+	AddScoreUpperLimit  *float64 `json:"addScoreUpperLimit"`
+	RemindWay           *string  `json:"remindWay"`
+	IzLowScoreOn        *int     `json:"izLowScoreOn"`
 }
 
 // isJSONNull reports whether a downstream data payload is JSON null/absent.

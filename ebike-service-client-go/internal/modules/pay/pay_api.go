@@ -268,12 +268,12 @@ type withdrawalWaterCO struct {
 }
 
 type withdrawalPageCO struct {
-	Count       *javacompat.LongStr   `json:"count"`
-	PageNum     *int                  `json:"pageNum"`
-	PageSize    *int                  `json:"pageSize"`
-	Orders      json.RawMessage       `json:"orders"`
-	SearchCount *bool                 `json:"searchCount"`
-	List        []withdrawalWaterCO   `json:"list"`
+	Count       *javacompat.LongStr `json:"count"`
+	PageNum     *int                `json:"pageNum"`
+	PageSize    *int                `json:"pageSize"`
+	Orders      json.RawMessage     `json:"orders"`
+	SearchCount *bool               `json:"searchCount"`
+	List        []withdrawalWaterCO `json:"list"`
 }
 
 func convertWithdrawalWaterPage(raw json.RawMessage) json.RawMessage {

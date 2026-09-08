@@ -9,7 +9,7 @@ type UserRepairDTO struct {
 	Imei        string   `json:"imei" binding:"required"`
 	ServiceId   *int64   `json:"serviceId" binding:"required"` // Java Long (boxed) -> Go *int64
 	Address     string   `json:"address,omitempty"`
-	RepairPart  []int64  `json:"repairPart,omitempty"`  // Java List<Long>
+	RepairPart  []int64  `json:"repairPart,omitempty"` // Java List<Long>
 	ReportDesc  string   `json:"reportDesc,omitempty"`
 	ReportPhoto []string `json:"reportPhoto,omitempty"` // Java List<String>
 }

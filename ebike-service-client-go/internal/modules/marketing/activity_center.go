@@ -82,13 +82,13 @@ type inviteCO struct {
 }
 
 type activityCenterCO struct {
-	Name           *string               `json:"name"`
-	Type           *int                  `json:"type"`
-	Enabled        *int                  `json:"enabled"`
-	ServiceId      *javacompat.LongStr   `json:"serviceId"`
-	RegularList    []userRegularCO       `json:"regularList"`
-	RidingCardList []ridingConfigListCO  `json:"ridingCardList"`
-	InviteDetail   *inviteCO             `json:"inviteDetail"`
+	Name           *string              `json:"name"`
+	Type           *int                 `json:"type"`
+	Enabled        *int                 `json:"enabled"`
+	ServiceId      *javacompat.LongStr  `json:"serviceId"`
+	RegularList    []userRegularCO      `json:"regularList"`
+	RidingCardList []ridingConfigListCO `json:"ridingCardList"`
+	InviteDetail   *inviteCO            `json:"inviteDetail"`
 }
 
 func convertActivityCenterCOList(raw json.RawMessage) json.RawMessage {

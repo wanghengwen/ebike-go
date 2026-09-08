@@ -296,10 +296,10 @@ func filterTimeWindow(data json.RawMessage) json.RawMessage {
 }
 
 type activityItem struct {
-	ByRegister    bool    `json:"byRegister"`
-	ByTags        bool    `json:"byTags"`
-	VisibleRange  *int    `json:"visibleRange"`
-	TagIds        *string `json:"tagIds"`
+	ByRegister   bool    `json:"byRegister"`
+	ByTags       bool    `json:"byTags"`
+	VisibleRange *int    `json:"visibleRange"`
+	TagIds       *string `json:"tagIds"`
 }
 
 func filterActivityItemsStrict(c *gin.Context, data json.RawMessage, pin string, client *dto.ClientDTO) (json.RawMessage, bool) {
@@ -412,7 +412,7 @@ func getHomeNavById(c *gin.Context) {
 
 func filterHomeNav(data json.RawMessage) json.RawMessage {
 	type navFilterRow struct {
-		IzOn      *bool               `json:"izOn"`
+		IzOn      *bool                `json:"izOn"`
 		UpdatedAt *javacompat.DateTime `json:"updatedAt"`
 	}
 	var rows []navFilterRow

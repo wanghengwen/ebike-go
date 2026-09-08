@@ -8,58 +8,58 @@ import (
 
 // configBackCarCCO mirrors client ConfigBackCarCCO (Long id/serviceId as strings).
 type configBackCarCCO struct {
-	Id                          *string  `json:"id"`
-	ServiceId                   *string  `json:"serviceId"`
-	AllowOutofService           *bool    `json:"allowOutofService"`
-	AllowInNostop               *bool    `json:"allowInNostop"`
-	AllowOutofParking           *bool    `json:"allowOutofParking"`
-	AllowInBanRiding            *bool    `json:"allowInBanRiding"`
-	DispatchCost                *int     `json:"dispatchCost"`
-	PenaltyInNostop             *int     `json:"penaltyInNostop"`
-	PenaltyOutofService         *int     `json:"penaltyOutofService"`
-	PenaltyInBanRiding          *int     `json:"penaltyInBanRiding"`
-	IzCivilizationRemind        *bool    `json:"izCivilizationRemind"`
-	CoefficientOfDifficult      *float64 `json:"coefficientOfDifficult"`
-	BufferDistance              *float64 `json:"bufferDistance"`
-	ParkingBackcar              *int     `json:"parkingBackcar"`
-	NoParkingBackcar            *int     `json:"noParkingBackcar"`
-	BanRidingBackcar            *int     `json:"banRidingBackcar"`
-	IzHelmetLock                *bool    `json:"izHelmetLock"`
-	IzHelmetPhoto               *bool    `json:"izHelmetPhoto"`
-	IzBeacon                    *bool    `json:"izBeacon"`
-	IzHelmetRemovalDetection    *bool    `json:"izHelmetRemovalDetection"`
-	IzHelmetWearDetection       *bool    `json:"izHelmetWearDetection"`
-	PowerOff                    *int     `json:"powerOff"`
-	HelmetPenalty               *int     `json:"helmetPenalty"`
-	DispatchFee                 *bool    `json:"dispatchFee"`
-	RfidBeacon                  *bool    `json:"rfidBeacon"`
-	Direction                   *bool    `json:"direction"`
-	Helmet                      *bool    `json:"helmet"`
-	Kickstand                   *bool    `json:"kickstand"`
-	Camera                      *bool    `json:"camera"`
+	Id                       *string  `json:"id"`
+	ServiceId                *string  `json:"serviceId"`
+	AllowOutofService        *bool    `json:"allowOutofService"`
+	AllowInNostop            *bool    `json:"allowInNostop"`
+	AllowOutofParking        *bool    `json:"allowOutofParking"`
+	AllowInBanRiding         *bool    `json:"allowInBanRiding"`
+	DispatchCost             *int     `json:"dispatchCost"`
+	PenaltyInNostop          *int     `json:"penaltyInNostop"`
+	PenaltyOutofService      *int     `json:"penaltyOutofService"`
+	PenaltyInBanRiding       *int     `json:"penaltyInBanRiding"`
+	IzCivilizationRemind     *bool    `json:"izCivilizationRemind"`
+	CoefficientOfDifficult   *float64 `json:"coefficientOfDifficult"`
+	BufferDistance           *float64 `json:"bufferDistance"`
+	ParkingBackcar           *int     `json:"parkingBackcar"`
+	NoParkingBackcar         *int     `json:"noParkingBackcar"`
+	BanRidingBackcar         *int     `json:"banRidingBackcar"`
+	IzHelmetLock             *bool    `json:"izHelmetLock"`
+	IzHelmetPhoto            *bool    `json:"izHelmetPhoto"`
+	IzBeacon                 *bool    `json:"izBeacon"`
+	IzHelmetRemovalDetection *bool    `json:"izHelmetRemovalDetection"`
+	IzHelmetWearDetection    *bool    `json:"izHelmetWearDetection"`
+	PowerOff                 *int     `json:"powerOff"`
+	HelmetPenalty            *int     `json:"helmetPenalty"`
+	DispatchFee              *bool    `json:"dispatchFee"`
+	RfidBeacon               *bool    `json:"rfidBeacon"`
+	Direction                *bool    `json:"direction"`
+	Helmet                   *bool    `json:"helmet"`
+	Kickstand                *bool    `json:"kickstand"`
+	Camera                   *bool    `json:"camera"`
 }
 
 // configBaseItemCCO mirrors client ConfigBaseItemCCO.
 type configBaseItemCCO struct {
-	ServiceId                 *string `json:"serviceId"`
-	OfflineTicketJudgeTime    *int    `json:"offlineTicketJudgeTime"`
-	IzEnableLocalFence        *bool   `json:"izEnableLocalFence"`
-	IzPeriodicalUpdates       *bool   `json:"izPeriodicalUpdates"`
-	MsgSign                   *string `json:"msgSign"`
-	MsgCode                   *string `json:"msgCode"`
-	IzOnAbnormalMovement      *bool   `json:"izOnAbnormalMovement"`
-	IzOnBatteryRemoval        *bool   `json:"izOnBatteryRemoval"`
-	IzOfflineTicket           *bool   `json:"izOfflineTicket"`
-	IzAutoRepairTicket        *bool   `json:"izAutoRepairTicket"`
-	SwapBatteryThreshold      *int    `json:"swapBatteryThreshold"`
-	IzOpenInvoice             *bool   `json:"izOpenInvoice"`
-	IzTempUnlock              *bool   `json:"izTempUnlock"`
-	TempUnlockTime            *int    `json:"tempUnlockTime"`
-	IzCanInitiativeRepair     *bool   `json:"izCanInitiativeRepair"`
-	IzCanAfterRidingRepair    *bool   `json:"izCanAfterRidingRepair"`
-	CanRepairCon              *int    `json:"canRepairCon"`
-	UserTicketPhotoWays       []int   `json:"userTicketPhotoWays"`
-	IzWithdraw                *bool   `json:"izWithdraw"`
+	ServiceId              *string `json:"serviceId"`
+	OfflineTicketJudgeTime *int    `json:"offlineTicketJudgeTime"`
+	IzEnableLocalFence     *bool   `json:"izEnableLocalFence"`
+	IzPeriodicalUpdates    *bool   `json:"izPeriodicalUpdates"`
+	MsgSign                *string `json:"msgSign"`
+	MsgCode                *string `json:"msgCode"`
+	IzOnAbnormalMovement   *bool   `json:"izOnAbnormalMovement"`
+	IzOnBatteryRemoval     *bool   `json:"izOnBatteryRemoval"`
+	IzOfflineTicket        *bool   `json:"izOfflineTicket"`
+	IzAutoRepairTicket     *bool   `json:"izAutoRepairTicket"`
+	SwapBatteryThreshold   *int    `json:"swapBatteryThreshold"`
+	IzOpenInvoice          *bool   `json:"izOpenInvoice"`
+	IzTempUnlock           *bool   `json:"izTempUnlock"`
+	TempUnlockTime         *int    `json:"tempUnlockTime"`
+	IzCanInitiativeRepair  *bool   `json:"izCanInitiativeRepair"`
+	IzCanAfterRidingRepair *bool   `json:"izCanAfterRidingRepair"`
+	CanRepairCon           *int    `json:"canRepairCon"`
+	UserTicketPhotoWays    []int   `json:"userTicketPhotoWays"`
+	IzWithdraw             *bool   `json:"izWithdraw"`
 }
 
 func convertConfigBackCarCCO(backCar, audit json.RawMessage) (json.RawMessage, bool) {
@@ -148,14 +148,14 @@ func convertConfigBaseItemCCO(raw json.RawMessage) json.RawMessage {
 }
 
 type configPayCO struct {
-	Id                      *javacompat.LongStr  `json:"id"`
-	ServiceId               *javacompat.LongStr  `json:"serviceId"`
-	IzBalanceEnoughReturnBike *bool   `json:"izBalanceEnoughReturnBike"`
-	IzMakeupBalancePay      *bool   `json:"izMakeupBalancePay"`
-	IzNotifyUnpaidOrder     *bool   `json:"izNotifyUnpaidOrder"`
-	NotifyInterval          *int    `json:"notifyInterval"`
-	TimesUpperBound         *int    `json:"timesUpperBound"`
-	RemindWay               *string `json:"remindWay"`
+	Id                        *javacompat.LongStr `json:"id"`
+	ServiceId                 *javacompat.LongStr `json:"serviceId"`
+	IzBalanceEnoughReturnBike *bool               `json:"izBalanceEnoughReturnBike"`
+	IzMakeupBalancePay        *bool               `json:"izMakeupBalancePay"`
+	IzNotifyUnpaidOrder       *bool               `json:"izNotifyUnpaidOrder"`
+	NotifyInterval            *int                `json:"notifyInterval"`
+	TimesUpperBound           *int                `json:"timesUpperBound"`
+	RemindWay                 *string             `json:"remindWay"`
 }
 
 func convertConfigPayCO(raw json.RawMessage) json.RawMessage {
@@ -168,46 +168,46 @@ func convertConfigPayCO(raw json.RawMessage) json.RawMessage {
 }
 
 type configUseCarCO struct {
-	Id                             *javacompat.LongStr  `json:"id"`
-	ServiceId                      *javacompat.LongStr  `json:"serviceId"`
-	RechargeBeforeUse              *bool                `json:"rechargeBeforeUse"`
-	RechargeVisibleRange           *int                 `json:"rechargeVisibleRange"`
-	RechargeByRegister             *bool                `json:"rechargeByRegister"`
-	RechargeByTags                 *bool                `json:"rechargeByTags"`
-	RechargeTagIds                 *string              `json:"rechargeTagIds"`
-	RechargeCost                   *int                 `json:"rechargeCost"`
-	IzStopService                  *bool                `json:"izStopService"`
-	StopTimeStart                  *string              `json:"stopTimeStart"`
-	StopTimeEnd                    *string              `json:"stopTimeEnd"`
-	IzAutoRecovery                 *bool                `json:"izAutoRecovery"`
-	RecoveryData                   *javacompat.DateTime `json:"recoveryData"`
-	StopServiceNotice              *string              `json:"stopServiceNotice"`
-	IzOnCertification              *bool                `json:"izOnCertification"`
-	IzOnUseCar                     *bool                `json:"izOnUseCar"`
-	RecognitionDegree              *int                 `json:"recognitionDegree"`
-	EffectiveTime                  *int                 `json:"effectiveTime"`
-	IzRidingStopTrigger            *bool                `json:"izRidingStopTrigger"`
-	IzParkingTriggerReturnBike     *bool                `json:"izParkingTriggerReturnBike"`
-	RidingStopTime                 *int                 `json:"ridingStopTime"`
-	RidingStopEvent                *int                 `json:"ridingStopEvent"`
-	ParkingTime                    *int                 `json:"parkingTime"`
-	RemindWay                      *string              `json:"remindWay"`
-	IzBeacon                       *bool                `json:"izBeacon"`
-	OutServiceAreaAutoLock         *int                 `json:"outServiceAreaAutoLock"`
-	IzRemoteUnlock                 *bool                `json:"izRemoteUnlock"`
-	OutServiceAreaAutoLockRemindWay *string             `json:"outServiceAreaAutoLockRemindWay"`
-	NearLine                       *int                 `json:"nearLine"`
-	IzOpenSaddleOverloadMonitor    *bool                `json:"izOpenSaddleOverloadMonitor"`
-	OverloadRemind                 *int                 `json:"overloadRemind"`
-	HelmetConfig                   *string              `json:"helmetConfig"`
-	IzOrderNotice                  *bool                `json:"izOrderNotice"`
-	NoticeRidingTime               *int                 `json:"noticeRidingTime"`
-	OrderRemindWay                 *string              `json:"orderRemindWay"`
-	MinAge                         *int                 `json:"minAge"`
-	MaxAge                         *int                 `json:"maxAge"`
-	HideCarConfig                  *string              `json:"hideCarConfig"`
-	IzAuth                         *bool                `json:"izAuth"`
-	IzNeedAuth                     *bool                `json:"izNeedAuth"`
+	Id                              *javacompat.LongStr  `json:"id"`
+	ServiceId                       *javacompat.LongStr  `json:"serviceId"`
+	RechargeBeforeUse               *bool                `json:"rechargeBeforeUse"`
+	RechargeVisibleRange            *int                 `json:"rechargeVisibleRange"`
+	RechargeByRegister              *bool                `json:"rechargeByRegister"`
+	RechargeByTags                  *bool                `json:"rechargeByTags"`
+	RechargeTagIds                  *string              `json:"rechargeTagIds"`
+	RechargeCost                    *int                 `json:"rechargeCost"`
+	IzStopService                   *bool                `json:"izStopService"`
+	StopTimeStart                   *string              `json:"stopTimeStart"`
+	StopTimeEnd                     *string              `json:"stopTimeEnd"`
+	IzAutoRecovery                  *bool                `json:"izAutoRecovery"`
+	RecoveryData                    *javacompat.DateTime `json:"recoveryData"`
+	StopServiceNotice               *string              `json:"stopServiceNotice"`
+	IzOnCertification               *bool                `json:"izOnCertification"`
+	IzOnUseCar                      *bool                `json:"izOnUseCar"`
+	RecognitionDegree               *int                 `json:"recognitionDegree"`
+	EffectiveTime                   *int                 `json:"effectiveTime"`
+	IzRidingStopTrigger             *bool                `json:"izRidingStopTrigger"`
+	IzParkingTriggerReturnBike      *bool                `json:"izParkingTriggerReturnBike"`
+	RidingStopTime                  *int                 `json:"ridingStopTime"`
+	RidingStopEvent                 *int                 `json:"ridingStopEvent"`
+	ParkingTime                     *int                 `json:"parkingTime"`
+	RemindWay                       *string              `json:"remindWay"`
+	IzBeacon                        *bool                `json:"izBeacon"`
+	OutServiceAreaAutoLock          *int                 `json:"outServiceAreaAutoLock"`
+	IzRemoteUnlock                  *bool                `json:"izRemoteUnlock"`
+	OutServiceAreaAutoLockRemindWay *string              `json:"outServiceAreaAutoLockRemindWay"`
+	NearLine                        *int                 `json:"nearLine"`
+	IzOpenSaddleOverloadMonitor     *bool                `json:"izOpenSaddleOverloadMonitor"`
+	OverloadRemind                  *int                 `json:"overloadRemind"`
+	HelmetConfig                    *string              `json:"helmetConfig"`
+	IzOrderNotice                   *bool                `json:"izOrderNotice"`
+	NoticeRidingTime                *int                 `json:"noticeRidingTime"`
+	OrderRemindWay                  *string              `json:"orderRemindWay"`
+	MinAge                          *int                 `json:"minAge"`
+	MaxAge                          *int                 `json:"maxAge"`
+	HideCarConfig                   *string              `json:"hideCarConfig"`
+	IzAuth                          *bool                `json:"izAuth"`
+	IzNeedAuth                      *bool                `json:"izNeedAuth"`
 }
 
 func convertConfigUseCarCO(raw json.RawMessage) json.RawMessage {
