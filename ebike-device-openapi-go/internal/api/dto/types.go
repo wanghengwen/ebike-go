@@ -91,7 +91,7 @@ func ExtractParams(req interface{}) map[string]interface{} {
 	b, _ := json.Marshal(req)
 	var m map[string]interface{}
 	json.Unmarshal(b, &m)
-	
+
 	// Exclude common fields as defined in Java excludeField()
 	delete(m, "imei")
 	delete(m, "async")
@@ -103,7 +103,7 @@ func ExtractParams(req interface{}) map[string]interface{} {
 	// Feign DTO fields not present on openapi Request types — Jackson ignores them.
 	delete(m, "carId")
 	delete(m, "izRiskControl")
-	
+
 	// Strip nil values from params to align with Java's NON_NULL serialization
 	stripNilValuesFromMap(m)
 
@@ -224,7 +224,6 @@ type DeviceReplyMessage struct {
 	Payload         string `json:"payload,omitempty"`
 }
 
-
 // Result struct wrapper for downstream ECU response
 // Gateway returns {"code":"200","message":"success","data":{...}} — no "success" field.
 // Java's Result class defaults success=true on deserialization, so it works.
@@ -250,9 +249,9 @@ type EcuLogin struct {
 	ChannelId     string `json:"channelId,omitempty"`
 	Timestamp     *int64 `json:"timestamp,omitempty"`
 	// Luoping MQTT fields (deviceId != IMEI; topic uses deviceId).
-	DeviceId  string `json:"deviceId,omitempty"`
-	GroupName string `json:"groupName,omitempty"`
-	ClientId  string `json:"clientId,omitempty"`
+	DeviceId   string `json:"deviceId,omitempty"`
+	GroupName  string `json:"groupName,omitempty"`
+	ClientId   string `json:"clientId,omitempty"`
 	LastSeenAt *int64 `json:"lastSeenAt,omitempty"`
 }
 

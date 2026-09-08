@@ -1,4 +1,4 @@
-﻿package xiaoan
+package xiaoan
 
 import (
 	"encoding/binary"

@@ -21,25 +21,25 @@ type Bin41GpsMessage struct {
 	Hdop          float32 `json:"hdop"`
 	Satellite     uint16  `json:"satellite"`
 
-	Defend             uint8 `json:"defend"`
-	Acc                uint8 `json:"acc"`
-	BackWheelLock      uint8 `json:"backWheelLock"`
-	BatteryLock        uint8 `json:"batteryLock"`
-	BatteryConnect     uint8 `json:"batteryConnect"`
-	IsGPSFastMode      uint8 `json:"isGPSFastMode"`
-	IsMoving           uint8 `json:"isMoving"`
-	IsWheelSpan        uint8 `json:"isWheelSpan"`
-	IsHelmetUnlock     uint8 `json:"isHelmetUnlock"`
-	IsSleepMode        uint8 `json:"isSleepMode"`
-	IsMoveAlarmOn      uint8 `json:"isMoveAlarmOn"`
-	IsOverSpeedOn      uint8 `json:"isOverSpeedOn"`
-	IsGPSUnfixed       uint8 `json:"isGPSUnfixed"`
-	IsGyroFixed        uint8 `json:"isGyroFixed"`
-	IsFenceEnable      uint8 `json:"isFenceEnable"`
-	IsOutofServAera    uint8 `json:"isOutofServAera"`
-	Wgs84Lng           float32 `json:"wgs84Lng"`
-	Wgs84Lat           float32 `json:"wgs84Lat"`
-	FenceVersion       uint64  `json:"fenceVersion"`
+	Defend          uint8   `json:"defend"`
+	Acc             uint8   `json:"acc"`
+	BackWheelLock   uint8   `json:"backWheelLock"`
+	BatteryLock     uint8   `json:"batteryLock"`
+	BatteryConnect  uint8   `json:"batteryConnect"`
+	IsGPSFastMode   uint8   `json:"isGPSFastMode"`
+	IsMoving        uint8   `json:"isMoving"`
+	IsWheelSpan     uint8   `json:"isWheelSpan"`
+	IsHelmetUnlock  uint8   `json:"isHelmetUnlock"`
+	IsSleepMode     uint8   `json:"isSleepMode"`
+	IsMoveAlarmOn   uint8   `json:"isMoveAlarmOn"`
+	IsOverSpeedOn   uint8   `json:"isOverSpeedOn"`
+	IsGPSUnfixed    uint8   `json:"isGPSUnfixed"`
+	IsGyroFixed     uint8   `json:"isGyroFixed"`
+	IsFenceEnable   uint8   `json:"isFenceEnable"`
+	IsOutofServAera uint8   `json:"isOutofServAera"`
+	Wgs84Lng        float32 `json:"wgs84Lng"`
+	Wgs84Lat        float32 `json:"wgs84Lat"`
+	FenceVersion    uint64  `json:"fenceVersion"`
 }
 
 type Bin41Decode struct{}
@@ -82,7 +82,7 @@ func (d *Bin41Decode) Decode(header *dto.MessageHeader, data *ByteBuf) (interfac
 
 	msg.Wgs84Lng = wgs84Lng
 	msg.Wgs84Lat = wgs84Lat
-	
+
 	lng, lat := utils.TransformWGS84ToGCJ02(float64(wgs84Lng), float64(wgs84Lat))
 	msg.Lng = lng
 	msg.Lat = lat

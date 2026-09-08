@@ -213,7 +213,7 @@ func sendLuopingMsg(wildCmd *dto.WildCmd, ecuLogin *dto.EcuLogin) (interface{}, 
 
 func SendMsg(wildCmd *dto.WildCmd, host string, port int) (*dto.WildResult, error) {
 	url := fmt.Sprintf("http://%s:%d/ecu/wild", host, port)
-	
+
 	bodyBytes, err := json.Marshal(wildCmd)
 	if err != nil {
 		return nil, err
@@ -248,7 +248,7 @@ func SendMsg(wildCmd *dto.WildCmd, host string, port int) (*dto.WildResult, erro
 	if err != nil {
 		return nil, err
 	}
-	
+
 	if wildCmd.Cmd == 33 {
 		logger.Log.Info("lock_command_ecu_response",
 			zap.Int("status", resp.StatusCode),
@@ -269,7 +269,7 @@ func SendMsg(wildCmd *dto.WildCmd, host string, port int) (*dto.WildResult, erro
 	if err := json.Unmarshal(respBody, &dsResult); err != nil {
 		return nil, err
 	}
-	
+
 	if dsResult.Code != "200" {
 		return nil, fmt.Errorf("gateway returned error: code=%s message=%s", dsResult.Code, dsResult.Message)
 	}

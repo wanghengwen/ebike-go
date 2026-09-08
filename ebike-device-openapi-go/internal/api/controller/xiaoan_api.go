@@ -130,14 +130,14 @@ func handleDecode(c *gin.Context) {
 	}
 
 	importJson, _ := json.Marshal(decodedMsg)
-	
+
 	// Create DeviceReportMessage
 	reportMsg := &dto.DeviceReportMessage{
 		Imei:          cmd.Imei,
 		BussinessType: "ebike",
 		Data:          string(importJson),
 	}
-	
+
 	// Determine msgType dynamically or use interface
 	if typMsg, ok := decodedMsg.(interface{ GetMsgType() string }); ok {
 		reportMsg.MsgType = typMsg.GetMsgType()
@@ -155,14 +155,14 @@ func handleDecode(c *gin.Context) {
 	// Send to Kafka
 	regService.Pusher.PushMessage(cmd.Imei, reportMsg, isShadowMode)
 
-	// NOTE(Architecture-Mirror): In Java's DeviceGatewayXiaoanController, `replayHex` 
-	// is obtained via `replayEncodeMap.get("Replay" + cmd + "Encode")`. Since only 
+	// NOTE(Architecture-Mirror): In Java's DeviceGatewayXiaoanController, `replayHex`
+	// is obtained via `replayEncodeMap.get("Replay" + cmd + "Encode")`. Since only
 	// `DefaultReplayHexEncode` exists in the Spring context (and its bean name doesn't match),
-	// it always returns null, resulting in `NeedReplay: false`. 
+	// it always returns null, resulting in `NeedReplay: false`.
 	// We statically mirror this runtime behavior here to avoid unnecessary reflection and memory allocation.
 	replayData := &dto.ReplayData{
 		Imei:       cmd.Imei,
-		NeedReplay: false, 
+		NeedReplay: false,
 		DecodeBody: string(importJson),
 	}
 

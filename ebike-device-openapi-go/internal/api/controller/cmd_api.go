@@ -84,7 +84,7 @@ func handleGenericCommand(cmdID int16) gin.HandlerFunc {
 
 		// Extract base EBikeRequest fields
 		async := requestAsync(bodyMap)
-		
+
 		var tm *int
 		if val, ok := bodyMap["tm"]; ok && val != nil {
 			if fval, ok := val.(float64); ok {
@@ -104,15 +104,15 @@ func handleGenericCommand(cmdID int16) gin.HandlerFunc {
 		if ctxVal, ok := bodyMap["commandContext"]; ok && ctxVal != nil {
 			if ctxMap, ok := ctxVal.(map[string]interface{}); ok {
 				cmdCtx = &dto.CommandContext{
-					TraceId:        getString(ctxMap, "traceId"),
-					TenantId:       getString(ctxMap, "tenantId"),
-					Pin:            getString(ctxMap, "pin"),
-					Ip:             getString(ctxMap, "ip"),
-					Platform:       getString(ctxMap, "platform"),
-					DeviceId:       getString(ctxMap, "deviceId"),
-					Source:         getString(ctxMap, "source"),
-					Name:           getString(ctxMap, "name"),
-					StressTesting:  getBool(ctxMap, "stressTesting"),
+					TraceId:       getString(ctxMap, "traceId"),
+					TenantId:      getString(ctxMap, "tenantId"),
+					Pin:           getString(ctxMap, "pin"),
+					Ip:            getString(ctxMap, "ip"),
+					Platform:      getString(ctxMap, "platform"),
+					DeviceId:      getString(ctxMap, "deviceId"),
+					Source:        getString(ctxMap, "source"),
+					Name:          getString(ctxMap, "name"),
+					StressTesting: getBool(ctxMap, "stressTesting"),
 				}
 			}
 		}

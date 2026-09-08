@@ -18,8 +18,8 @@ import (
 	"ebike-device-openapi-go/internal/pkg/logger"
 	"ebike-device-openapi-go/internal/pkg/metrics"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 )
 
 // RouteConfig represents the dynamic configuration snapshot needed by RoutFilter.
@@ -47,7 +47,7 @@ func (w responseBodyWriter) Write(b []byte) (int, error) {
 func RoutFilter(rdb *redis.Client, configProvider ConfigProvider) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqURL := c.Request.URL.Path
-		
+
 		// Shadow Mode Setup
 		javaResultBase64 := c.Request.Header.Get("X-Shadow-Java-Result")
 		hasJavaResult := javaResultBase64 != ""
@@ -73,7 +73,7 @@ func RoutFilter(rdb *redis.Client, configProvider ConfigProvider) gin.HandlerFun
 		// 1. Check if the URL is excluded from routing
 		if isExcludeUrl(reqURL, cfg.ExcludeUrls) {
 			c.Next()
-			
+
 			// Shadow Compare Logic for excluded URLs (e.g. Uplink)
 			if hasJavaResult {
 				performShadowCompare(reqURL, c, shadowWriter, javaResultBase64)
@@ -251,7 +251,7 @@ func getFullRouteUrl(req *http.Request, domain string) string {
 	if !strings.HasPrefix(targetDomain, "http://") && !strings.HasPrefix(targetDomain, "https://") {
 		targetDomain = "http://" + targetDomain
 	}
-	
+
 	reqURI := req.URL.Path
 	if req.URL.RawQuery != "" {
 		return targetDomain + reqURI + "?" + req.URL.RawQuery

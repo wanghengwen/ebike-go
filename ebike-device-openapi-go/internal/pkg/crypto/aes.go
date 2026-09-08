@@ -25,8 +25,8 @@ func Encrypt(data string, key []byte, iv []byte) (string, error) {
 
 	dataBytes := []byte(data)
 	blockSize := block.BlockSize()
-	
-	// Manual zero padding as in Java: 
+
+	// Manual zero padding as in Java:
 	// if plaintextLength % blockSize != 0 { plaintextLength += blockSize - plaintextLength % blockSize }
 	// The new byte array defaults to 0 in Java, so it's zero padded.
 	padLen := blockSize - (len(dataBytes) % blockSize)

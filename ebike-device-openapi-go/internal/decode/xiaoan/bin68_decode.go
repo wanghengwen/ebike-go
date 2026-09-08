@@ -51,19 +51,19 @@ type Bin68GpsMessage struct {
 	CourseY *int32 `json:"courseY,omitempty"`
 	CourseZ *int32 `json:"courseZ,omitempty"`
 
-	BmsSoc       *uint8   `json:"bmsSoc,omitempty"`
+	BmsSoc       *uint8  `json:"bmsSoc,omitempty"`
 	BmsVoltage   int32   `json:"bmsVoltage"`
-	BmsSN        *string  `json:"bmsSN,omitempty"`
-	SpikeRssi    *string  `json:"spikeRssi,omitempty"`
-	RfidAck      *int16   `json:"rfidAck,omitempty"`
-	VoltageState *uint8   `json:"voltageState,omitempty"`
+	BmsSN        *string `json:"bmsSN,omitempty"`
+	SpikeRssi    *string `json:"spikeRssi,omitempty"`
+	RfidAck      *int16  `json:"rfidAck,omitempty"`
+	VoltageState *uint8  `json:"voltageState,omitempty"`
 
 	HeadingAngle        *int16 `json:"headingAngle,omitempty"`
-	ControllerSpeed     int32 `json:"controllerSpeed"`
+	ControllerSpeed     int32  `json:"controllerSpeed"`
 	IsSupportHelmetLock *uint8 `json:"isSupportHelmetLock,omitempty"`
 	HelmetType          *int32 `json:"helmetType,omitempty"`
-	HelmetLock          int32 `json:"helmetLock"`
-	HelmetReact         int32 `json:"helmetReact"`
+	HelmetLock          int32  `json:"helmetLock"`
+	HelmetReact         int32  `json:"helmetReact"`
 
 	KickStandType          *uint8  `json:"kickStandType,omitempty"`
 	KickStandRFIDState     *uint8  `json:"kickStandRFIDState,omitempty"`
@@ -74,25 +74,25 @@ type Bin68GpsMessage struct {
 	ParkState              *int16  `json:"parkState,omitempty"`
 	RemainMiles            *uint64 `json:"remainMiles,omitempty"`
 
-	Overload               *int16   `json:"overload,omitempty"`
-	OverloadThreshold      *int16   `json:"overloadThreshold,omitempty"`
-	IsSupportOverload      *uint8   `json:"isSupportOverload,omitempty"`
-	HelmetSOC              *int16   `json:"helmetSOC,omitempty"`
-	HelmetState            *int16   `json:"helmetState,omitempty"`
-	HelmetHasAngle         *int16   `json:"helmetHasAngle,omitempty"`
-	HelmetHasCapacitance   *int16   `json:"helmetHasCapacitance,omitempty"`
-	HelmetHasTinfrared     *int16   `json:"helmetHasTinfrared,omitempty"`
-	HelmetHasPressure      *int16   `json:"helmetHasPressure,omitempty"`
-	HelmetAngle            *int16   `json:"helmetAngle,omitempty"`
+	Overload             *int16 `json:"overload,omitempty"`
+	OverloadThreshold    *int16 `json:"overloadThreshold,omitempty"`
+	IsSupportOverload    *uint8 `json:"isSupportOverload,omitempty"`
+	HelmetSOC            *int16 `json:"helmetSOC,omitempty"`
+	HelmetState          *int16 `json:"helmetState,omitempty"`
+	HelmetHasAngle       *int16 `json:"helmetHasAngle,omitempty"`
+	HelmetHasCapacitance *int16 `json:"helmetHasCapacitance,omitempty"`
+	HelmetHasTinfrared   *int16 `json:"helmetHasTinfrared,omitempty"`
+	HelmetHasPressure    *int16 `json:"helmetHasPressure,omitempty"`
+	HelmetAngle          *int16 `json:"helmetAngle,omitempty"`
 	// CRITICAL: Must be []byte, NOT []int. Java's original type is byte[], which Fastjson/Jackson
 	// serialize as a Base64 string by default. Go's encoding/json base64-encodes []byte naturally.
 	HelmetCapacitance      []byte `json:"helmetCapacitance"`
-	HelmeTinfrared         *int16   `json:"helmeTinfrared,omitempty"`
-	HelmePressure          *int16   `json:"helmePressure,omitempty"`
-	HelmetAngleFault       *int16   `json:"helmetAngleFault,omitempty"`
-	HelmetCapacitanceFault *int16   `json:"helmetCapacitanceFault,omitempty"`
-	HelmetTinfraredFault   *int16   `json:"helmetTinfraredFault,omitempty"`
-	HelmetPressureFault    *int16   `json:"helmetPressureFault,omitempty"`
+	HelmeTinfrared         *int16 `json:"helmeTinfrared,omitempty"`
+	HelmePressure          *int16 `json:"helmePressure,omitempty"`
+	HelmetAngleFault       *int16 `json:"helmetAngleFault,omitempty"`
+	HelmetCapacitanceFault *int16 `json:"helmetCapacitanceFault,omitempty"`
+	HelmetTinfraredFault   *int16 `json:"helmetTinfraredFault,omitempty"`
+	HelmetPressureFault    *int16 `json:"helmetPressureFault,omitempty"`
 
 	HelmetBind *uint8 `json:"helmetBind,omitempty"`
 
@@ -109,26 +109,25 @@ type Bin68GpsMessage struct {
 	AssetType *string `json:"assetType,omitempty"`
 }
 
-
-func ptrString(v string) *string { return &v }
-func ptrUint8(v uint8) *uint8 { return &v }
-func ptrUint16(v uint16) *uint16 { return &v }
-func ptrUint32(v uint32) *uint32 { return &v }
-func ptrUint64(v uint64) *uint64 { return &v }
-func ptrInt16(v int16) *int16 { return &v }
-func ptrInt32(v int32) *int32 { return &v }
-func ptrInt64(v int64) *int64 { return &v }
+func ptrString(v string) *string    { return &v }
+func ptrUint8(v uint8) *uint8       { return &v }
+func ptrUint16(v uint16) *uint16    { return &v }
+func ptrUint32(v uint32) *uint32    { return &v }
+func ptrUint64(v uint64) *uint64    { return &v }
+func ptrInt16(v int16) *int16       { return &v }
+func ptrInt32(v int32) *int32       { return &v }
+func ptrInt64(v int64) *int64       { return &v }
 func ptrFloat64(v float64) *float64 { return &v }
 
 type Bin68Decode struct{}
 
 func (d *Bin68Decode) Decode(header *dto.MessageHeader, data *ByteBuf) (interface{}, error) {
 	msg := &Bin68GpsMessage{
-		MsgType:       "data",
-		Cmd:           3, // CmdConstant.CMD_GPS_1 = 3
-		BussinessType: "ebike",
+		MsgType:           "data",
+		Cmd:               3, // CmdConstant.CMD_GPS_1 = 3
+		BussinessType:     "ebike",
 		HelmetCapacitance: []byte{0, 0, 0, 0},
-		HelmetBind: ptrUint8(0),
+		HelmetBind:        ptrUint8(0),
 	}
 
 	sw := uint64(data.ReadUnsignedInt())
@@ -143,7 +142,7 @@ func (d *Bin68Decode) Decode(header *dto.MessageHeader, data *ByteBuf) (interfac
 
 	wgs84Lng := float64(_wgs84Lng) * 0.000001
 	wgs84Lat := float64(_wgs84Lat) * 0.000001
-	
+
 	msg.Wgs84Lng = wgs84Lng
 	msg.Wgs84Lat = wgs84Lat
 

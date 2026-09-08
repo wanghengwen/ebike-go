@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"time"
 	"sync/atomic"
+	"time"
 	"unsafe"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
@@ -42,8 +42,8 @@ type AppConfig struct {
 	Spring struct {
 		Kafka struct {
 			BootstrapServers string `yaml:"bootstrap-servers"`
-			Switch   bool `yaml:"switch"`
-			Producer struct {
+			Switch           bool   `yaml:"switch"`
+			Producer         struct {
 				DataTopic  string `yaml:"data-topic"`
 				AlarmTopic string `yaml:"alarm-topic"`
 				EventTopic string `yaml:"event-topic"`
@@ -81,7 +81,7 @@ type AppConfig struct {
 
 		// clientId = ClientIdPrefix + 机器名（K8s Pod 名）。
 		ClientIdPrefix   string `yaml:"clientIdPrefix"`
-		SharedGroup      string `yaml:"sharedGroup"`      // 共享订阅组名，$share/{group}/...
+		SharedGroup      string `yaml:"sharedGroup"` // 共享订阅组名，$share/{group}/...
 		KeepAliveSeconds int    `yaml:"keepAliveSeconds"`
 		CleanSession     bool   `yaml:"cleanSession"`
 

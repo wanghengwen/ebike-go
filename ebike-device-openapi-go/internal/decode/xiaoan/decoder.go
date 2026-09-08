@@ -1,4 +1,4 @@
-﻿package xiaoan
+package xiaoan
 
 import (
 	"ebike-device-openapi-go/internal/api/dto"
@@ -35,4 +35,3 @@ func DecodeHex(header *dto.MessageHeader, data *ByteBuf) (interface{}, error) {
 	}
 	return msg, nil
 }
-

@@ -21,9 +21,9 @@ import (
 )
 
 const (
-	luopingProductGroup = "ebike"
-	luopingPendingTTL   = 2 * time.Minute
-	luopingSeqKeyPrefix = "mqtt:seq:"
+	luopingProductGroup  = "ebike"
+	luopingPendingTTL    = 2 * time.Minute
+	luopingSeqKeyPrefix  = "mqtt:seq:"
 	luopingPendingPrefix = "mqtt:pending:"
 )
 

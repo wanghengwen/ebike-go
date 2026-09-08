@@ -81,9 +81,9 @@ func TestDecodeBin66(t *testing.T) {
 	binary.BigEndian.PutUint16(body[22:24], 2)
 	binary.BigEndian.PutUint16(body[24:26], 0xFF00) // mos temp
 	body[26] = 1
-	body[29] = 80 // soh
+	body[29] = 80                                   // soh
 	binary.BigEndian.PutUint16(body[30:32], 0x0008) // bmsFault bit3 set
-	body[37] = 65 // soc
+	body[37] = 65                                   // soc
 	binary.BigEndian.PutUint32(body[43:47], 1700000000)
 
 	msg, err := DecodeHex(headerFor(66), NewByteBuf(body))
