@@ -247,11 +247,11 @@ func TestBindParkingJavaResponseOmitsBanRidingId(t *testing.T) {
 func TestBindParkingGoldenCasesFromJavaLog(t *testing.T) {
 	cases := loadBindParkingFixtures(t)
 	type golden struct {
-		imei      string
-		lat       float64
-		lng       float64
-		field     string
-		wantID    int64
+		imei   string
+		lat    float64
+		lng    float64
+		field  string
+		wantID int64
 	}
 	goldens := []golden{
 		{imei: "", lat: 33.768009, lng: 118.399564, field: "parkingId", wantID: 185442561702239423},

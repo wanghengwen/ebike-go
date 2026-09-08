@@ -95,24 +95,24 @@ func (g *TConfigGuidePage) UnmarshalJSON(data []byte) error {
 // TConfigHomeActivityEntrance maps t_config_home_activity_entrance.
 type TConfigHomeActivityEntrance struct {
 	ConfigBaseDO
-	ID            int64      `gorm:"column:id;primaryKey" json:"id,omitempty"`
-	ServiceID     int64      `gorm:"column:service_id" json:"serviceId,omitempty"`
-	ChainType     int        `gorm:"column:chain_type" json:"chainType,omitempty"`
-	LinkUrl       string     `gorm:"column:link_url" json:"linkUrl,omitempty"`
-	PicUrl        string     `gorm:"column:pic_url" json:"picUrl,omitempty"`
-	LinkTitle     string     `gorm:"column:link_title" json:"linkTitle,omitempty"`
-	AppId         string     `gorm:"column:app_id" json:"appId,omitempty"`
-	Param         string     `gorm:"column:param" json:"param,omitempty"`
-	IzOn          *bool      `gorm:"column:iz_on" json:"izOn,omitempty"`
-	Position      int        `gorm:"column:position" json:"position,omitempty"`
-	OpDownOffset  int        `gorm:"column:op_down_offset" json:"opDownOffset,omitempty"`
-	VisibleRange  int        `gorm:"column:visible_range" json:"visibleRange,omitempty"`
-	StartTime     *time.Time `gorm:"column:start_time" json:"startTime,omitempty"`
-	EndTime       *time.Time `gorm:"column:end_time" json:"endTime,omitempty"`
-	Unlimited     *bool      `gorm:"column:unlimited" json:"unlimited,omitempty"`
-	ByRegister    *bool      `gorm:"column:by_register" json:"byRegister,omitempty"`
-	ByTags        *bool      `gorm:"column:by_tags" json:"byTags,omitempty"`
-	TagIds        string     `gorm:"column:tag_ids" json:"tagIds,omitempty"`
+	ID           int64      `gorm:"column:id;primaryKey" json:"id,omitempty"`
+	ServiceID    int64      `gorm:"column:service_id" json:"serviceId,omitempty"`
+	ChainType    int        `gorm:"column:chain_type" json:"chainType,omitempty"`
+	LinkUrl      string     `gorm:"column:link_url" json:"linkUrl,omitempty"`
+	PicUrl       string     `gorm:"column:pic_url" json:"picUrl,omitempty"`
+	LinkTitle    string     `gorm:"column:link_title" json:"linkTitle,omitempty"`
+	AppId        string     `gorm:"column:app_id" json:"appId,omitempty"`
+	Param        string     `gorm:"column:param" json:"param,omitempty"`
+	IzOn         *bool      `gorm:"column:iz_on" json:"izOn,omitempty"`
+	Position     int        `gorm:"column:position" json:"position,omitempty"`
+	OpDownOffset int        `gorm:"column:op_down_offset" json:"opDownOffset,omitempty"`
+	VisibleRange int        `gorm:"column:visible_range" json:"visibleRange,omitempty"`
+	StartTime    *time.Time `gorm:"column:start_time" json:"startTime,omitempty"`
+	EndTime      *time.Time `gorm:"column:end_time" json:"endTime,omitempty"`
+	Unlimited    *bool      `gorm:"column:unlimited" json:"unlimited,omitempty"`
+	ByRegister   *bool      `gorm:"column:by_register" json:"byRegister,omitempty"`
+	ByTags       *bool      `gorm:"column:by_tags" json:"byTags,omitempty"`
+	TagIds       string     `gorm:"column:tag_ids" json:"tagIds,omitempty"`
 }
 
 func (TConfigHomeActivityEntrance) TableName() string { return "t_config_home_activity_entrance" }

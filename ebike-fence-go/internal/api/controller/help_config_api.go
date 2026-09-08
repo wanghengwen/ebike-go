@@ -507,7 +507,11 @@ func hcGuidePageIzOn(c *gin.Context) {
 		writeSvcErr(c, err)
 		return
 	}
-	respondOK(c, res)
+	if res == nil {
+		respondOK(c, nil)
+		return
+	}
+	respondOK(c, helpconfigsvc.ToGuidePageCO(*res))
 }
 
 func hcAddGuidePage(c *gin.Context) {
@@ -590,7 +594,7 @@ func hcListHomeActivity(c *gin.Context) {
 		writeSvcErr(c, err)
 		return
 	}
-	respondOK(c, res)
+	respondOK(c, helpconfigsvc.ToHomeActivityCOList(res))
 }
 
 func hcGetHomeActivityById(c *gin.Context) {
@@ -606,7 +610,11 @@ func hcGetHomeActivityById(c *gin.Context) {
 		writeSvcErr(c, err)
 		return
 	}
-	respondOK(c, res)
+	if res == nil {
+		respondOK(c, nil)
+		return
+	}
+	respondOK(c, helpconfigsvc.ToHomeActivityCO(*res))
 }
 
 func hcAddHomeActivity(c *gin.Context) {

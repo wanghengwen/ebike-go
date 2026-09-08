@@ -21,9 +21,9 @@ const (
 	mysqlAnalyzeDataSource = "ebike_analyze"
 	mysqlVisualDataSource  = "ebike_visual"
 
-	defaultRedisPort        = 6379
-	defaultRedisDB          = 0
-	defaultAnalyzeRedisDB   = 13 // mirrors Java ebike-analyze.yml spring.redis.database
+	defaultRedisPort      = 6379
+	defaultRedisDB        = 0
+	defaultAnalyzeRedisDB = 13 // mirrors Java ebike-analyze.yml spring.redis.database
 )
 
 var redisAnalyzeDataSourceKeys = []string{"ebike_order", "ebike-analyze", "ebike_analyze"}

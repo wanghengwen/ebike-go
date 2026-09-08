@@ -2,11 +2,11 @@ package config
 
 // HelmetConfig mirrors Java HelmetConfig embedded in use-car config JSON.
 type HelmetConfig struct {
-	IzHelmetUnlock             *bool `json:"izHelmetUnlock"`
-	IzHelmetRemovalDetection   *bool `json:"izHelmetRemovalDetection"`
-	IzHelmetWearDetection      *bool `json:"izHelmetWearDetection"`
-	IzRidingHelmetWear         *bool `json:"izRidingHelmetWear"`
-	IzTempParkingReturnHelmet  *bool `json:"izTempParkingReturnHelmet"`
+	IzHelmetUnlock            *bool `json:"izHelmetUnlock"`
+	IzHelmetRemovalDetection  *bool `json:"izHelmetRemovalDetection"`
+	IzHelmetWearDetection     *bool `json:"izHelmetWearDetection"`
+	IzRidingHelmetWear        *bool `json:"izRidingHelmetWear"`
+	IzTempParkingReturnHelmet *bool `json:"izTempParkingReturnHelmet"`
 }
 
 func (h *HelmetConfig) GetIzTempParkingReturnHelmet() bool {

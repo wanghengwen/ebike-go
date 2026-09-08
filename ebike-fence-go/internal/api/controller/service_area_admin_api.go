@@ -10,20 +10,20 @@ import (
 func serviceAreaAdminHandlers() map[string]gin.HandlerFunc {
 	initFenceAdmin()
 	return map[string]gin.HandlerFunc{
-		"/serviceArea/getById":                                handleServiceAreaGetByID,
-		"/serviceArea/getListByCmd":                           handleServiceAreaGetListByCmd,
-		"/serviceArea/getList":                                handleServiceAreaGetList,
-		"/serviceArea/createServiceArea":                      handleServiceAreaCreate,
-		"/serviceArea/updateServiceArea":                      handleServiceAreaUpdate,
-		"/serviceArea/deleteServiceArea":                      handleServiceAreaDelete,
-		"/serviceArea/getServiceByLocation":                   handleServiceAreaGetByLocation,
-		"/serviceArea/getNearServiceByLocation":               handleServiceAreaGetNearByLocation,
-		"/serviceArea/computeOutServiceDistance":              handleServiceAreaComputeDistance,
-		"/serviceArea/getServiceAreaByIds":                    handleServiceAreaGetByIDs,
-		"/serviceArea/getServiceAreaByRoleIds":                handleServiceAreaGetByRoleIDs,
-		"/serviceArea/getServiceAreaByRoleIdsAndSubTenantId":  handleServiceAreaGetByRoleIDsSubTenant,
-		"/serviceArea/getAllService":                          handleServiceAreaGetAllService,
-		"/serviceArea/getParkingPartStatistic":                handleServiceAreaParkingPartStat,
+		"/serviceArea/getById":                               handleServiceAreaGetByID,
+		"/serviceArea/getListByCmd":                          handleServiceAreaGetListByCmd,
+		"/serviceArea/getList":                               handleServiceAreaGetList,
+		"/serviceArea/createServiceArea":                     handleServiceAreaCreate,
+		"/serviceArea/updateServiceArea":                     handleServiceAreaUpdate,
+		"/serviceArea/deleteServiceArea":                     handleServiceAreaDelete,
+		"/serviceArea/getServiceByLocation":                  handleServiceAreaGetByLocation,
+		"/serviceArea/getNearServiceByLocation":              handleServiceAreaGetNearByLocation,
+		"/serviceArea/computeOutServiceDistance":             handleServiceAreaComputeDistance,
+		"/serviceArea/getServiceAreaByIds":                   handleServiceAreaGetByIDs,
+		"/serviceArea/getServiceAreaByRoleIds":               handleServiceAreaGetByRoleIDs,
+		"/serviceArea/getServiceAreaByRoleIdsAndSubTenantId": handleServiceAreaGetByRoleIDsSubTenant,
+		"/serviceArea/getAllService":                         handleServiceAreaGetAllService,
+		"/serviceArea/getParkingPartStatistic":               handleServiceAreaParkingPartStat,
 	}
 }
 

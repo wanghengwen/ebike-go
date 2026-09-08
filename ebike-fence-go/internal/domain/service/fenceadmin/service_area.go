@@ -6,8 +6,8 @@ import (
 	"ebike-fence-go/internal/api/dto"
 	"ebike-fence-go/internal/domain/fence"
 	"ebike-fence-go/internal/domain/gateway"
-	domainsvc "ebike-fence-go/internal/domain/service"
 	"ebike-fence-go/internal/domain/geo"
+	domainsvc "ebike-fence-go/internal/domain/service"
 	"ebike-fence-go/internal/infrastructure/rpc"
 	"ebike-fence-go/internal/pkg/shadow"
 )

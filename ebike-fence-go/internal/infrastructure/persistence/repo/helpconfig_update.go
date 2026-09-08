@@ -13,7 +13,7 @@ var (
 	homeScrollMsgUpdateFields = []string{
 		"Content", "Type", "Appid", "SkipUrl", "Params", "Title", "DetailTitle", "Detail", "IzOn",
 	}
-	faqUpdateFields = []string{"Title", "DetailTitle", "Detail", "IzOn"}
+	faqUpdateFields       = []string{"Title", "DetailTitle", "Detail", "IzOn"}
 	guidePageUpdateFields = []string{
 		"GuidePages", "AllowSuperEsc", "PageNumEsc", "VisibleRange", "Frequency",
 		"IzOn", "ByRegister", "ByTags", "TagIds",

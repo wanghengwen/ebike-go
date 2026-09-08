@@ -43,20 +43,20 @@ type HomeScrollerMsgCmd struct {
 
 // HomeScrollerMsgCO matches Java HomeScrollerMsgCO.
 type HomeScrollerMsgCO struct {
-	Id          int64     `json:"id"`
-	ServiceId   int64     `json:"serviceId"`
-	Content     string    `json:"content"`
-	Type        int       `json:"type"`
-	Appid       string    `json:"appid"`
-	SkipUrl     string    `json:"skipUrl"`
-	Params      string    `json:"params"`
-	Title       string    `json:"title"`
-	DetailTitle string    `json:"detailTitle"`
-	Detail      string    `json:"detail"`
-	IzOn        *bool     `json:"izOn"`
-	CreatedAt   string    `json:"createdAt"`
-	UpdatedPin  string    `json:"updatedPin"`
-	UpdatedAt   string    `json:"updatedAt"`
+	Id          int64  `json:"id"`
+	ServiceId   int64  `json:"serviceId"`
+	Content     string `json:"content"`
+	Type        int    `json:"type"`
+	Appid       string `json:"appid"`
+	SkipUrl     string `json:"skipUrl"`
+	Params      string `json:"params"`
+	Title       string `json:"title"`
+	DetailTitle string `json:"detailTitle"`
+	Detail      string `json:"detail"`
+	IzOn        *bool  `json:"izOn"`
+	CreatedAt   string `json:"createdAt"`
+	UpdatedPin  string `json:"updatedPin"`
+	UpdatedAt   string `json:"updatedAt"`
 	// updateName is not populated from DO by Java ConvertorHelper → always JSON null.
 	UpdateName *string `json:"updateName"`
 }
@@ -72,15 +72,15 @@ type FaqCmd struct {
 	IzOn        *bool  `json:"izOn,omitempty"`
 }
 
-// FaqCO matches Java FaqCO.
+// FaqCO matches Java FaqCO. createdAt uses @JsonFormat("yyyy-MM-dd HH:mm:ss").
 type FaqCO struct {
-	Id          int64     `json:"id"`
-	ServiceId   int64     `json:"serviceId"`
-	Title       string    `json:"title"`
-	DetailTitle string    `json:"detailTitle"`
-	Detail      string    `json:"detail"`
-	IzOn        *bool     `json:"izOn"`
-	CreatedAt   time.Time `json:"createdAt"`
+	Id          int64   `json:"id"`
+	ServiceId   int64   `json:"serviceId"`
+	Title       string  `json:"title"`
+	DetailTitle string  `json:"detailTitle"`
+	Detail      string  `json:"detail"`
+	IzOn        *bool   `json:"izOn"`
+	CreatedAt   *string `json:"createdAt"`
 }
 
 // GuidePageConfigCmd matches Java GuidePageConfigCmd.
@@ -139,25 +139,26 @@ type HomeActivityEntranceCmd struct {
 }
 
 // HomeActivityEntranceCO matches Java HomeActivityEntranceCO.
+// startTime/endTime use @JsonFormat("yyyy-MM-dd HH:mm:ss"), not RFC3339.
 type HomeActivityEntranceCO struct {
-	Id           int64      `json:"id"`
-	ServiceId    int64      `json:"serviceId"`
-	ChainType    int        `json:"chainType"`
-	LinkUrl      string     `json:"linkUrl"`
-	PicUrl       string     `json:"picUrl"`
-	LinkTitle    string     `json:"linkTitle"`
-	AppId        string     `json:"appId"`
-	Param        string     `json:"param"`
-	IzOn         *bool      `json:"izOn"`
-	Position     int        `json:"position"`
-	OpDownOffset int        `json:"opDownOffset"`
-	VisibleRange int        `json:"visibleRange"`
-	StartTime    *time.Time `json:"startTime"`
-	EndTime      *time.Time `json:"endTime"`
-	Unlimited    *bool      `json:"unlimited"`
-	ByRegister   *bool      `json:"byRegister"`
-	ByTags       *bool      `json:"byTags"`
-	TagIds       string     `json:"tagIds"`
+	Id           int64   `json:"id"`
+	ServiceId    int64   `json:"serviceId"`
+	ChainType    int     `json:"chainType"`
+	LinkUrl      string  `json:"linkUrl"`
+	PicUrl       string  `json:"picUrl"`
+	LinkTitle    string  `json:"linkTitle"`
+	AppId        string  `json:"appId"`
+	Param        string  `json:"param"`
+	IzOn         *bool   `json:"izOn"`
+	Position     int     `json:"position"`
+	OpDownOffset int     `json:"opDownOffset"`
+	VisibleRange int     `json:"visibleRange"`
+	StartTime    *string `json:"startTime"`
+	EndTime      *string `json:"endTime"`
+	Unlimited    *bool   `json:"unlimited"`
+	ByRegister   *bool   `json:"byRegister"`
+	ByTags       *bool   `json:"byTags"`
+	TagIds       string  `json:"tagIds"`
 }
 
 // SpecialTipsCmd matches Java SpecialTipsCmd.
@@ -265,31 +266,31 @@ type SpecialTipsCO struct {
 // CustomerServiceCmd matches Java CustomerServiceCmd.
 type CustomerServiceCmd struct {
 	Command
-	Id                   *int64   `json:"id,omitempty"`
-	ServiceId            *int64   `json:"serviceId,omitempty"`
-	CopyServiceId        []int64  `json:"copyServiceId,omitempty"`
-	Tel                  string   `json:"tel,omitempty"`
-	IzOnlineEntrance     *bool    `json:"izOnlineEntrance,omitempty"`
-	IzArtificialEntrance *bool    `json:"izArtificialEntrance,omitempty"`
-	IzWorkTime           *bool    `json:"izWorkTime,omitempty"`
-	StartTime            string   `json:"startTime,omitempty"`
-	EndTime              string   `json:"endTime,omitempty"`
-	Tips                 string   `json:"tips,omitempty"`
+	Id                   *int64  `json:"id,omitempty"`
+	ServiceId            *int64  `json:"serviceId,omitempty"`
+	CopyServiceId        []int64 `json:"copyServiceId,omitempty"`
+	Tel                  string  `json:"tel,omitempty"`
+	IzOnlineEntrance     *bool   `json:"izOnlineEntrance,omitempty"`
+	IzArtificialEntrance *bool   `json:"izArtificialEntrance,omitempty"`
+	IzWorkTime           *bool   `json:"izWorkTime,omitempty"`
+	StartTime            string  `json:"startTime,omitempty"`
+	EndTime              string  `json:"endTime,omitempty"`
+	Tips                 string  `json:"tips,omitempty"`
 }
 
 // CustomerServiceCO matches Java CustomerServiceCO.
 type CustomerServiceCO struct {
-	ServiceId            int64     `json:"serviceId"`
-	Tel                  string    `json:"tel"`
-	StartTime            string    `json:"startTime"`
-	EndTime              string    `json:"endTime"`
-	IzOnlineEntrance     *bool     `json:"izOnlineEntrance"`
-	IzArtificialEntrance *bool     `json:"izArtificialEntrance"`
-	IzWorkTime           *bool     `json:"izWorkTime"`
-	Tips                 string    `json:"tips"`
-	UpdatedName          string    `json:"updatedName"`
-	UpdatedPin           string `json:"updatedPin"`
-	UpdatedAt            string `json:"updatedAt"`
+	ServiceId            int64   `json:"serviceId"`
+	Tel                  string  `json:"tel"`
+	StartTime            string  `json:"startTime"`
+	EndTime              string  `json:"endTime"`
+	IzOnlineEntrance     *bool   `json:"izOnlineEntrance"`
+	IzArtificialEntrance *bool   `json:"izArtificialEntrance"`
+	IzWorkTime           *bool   `json:"izWorkTime"`
+	Tips                 string  `json:"tips"`
+	UpdatedName          *string `json:"updatedName"`
+	UpdatedPin           string  `json:"updatedPin"`
+	UpdatedAt            string  `json:"updatedAt"`
 }
 
 // HomeNavCmd matches Java HomeNavCmd.
@@ -305,16 +306,18 @@ type HomeNavCmd struct {
 	Ids       []int64 `json:"ids,omitempty"`
 }
 
-// HomeNavCO matches Java HomeNavCO.
+// HomeNavCO matches Java HomeNavCO. ids/updatedName have no source in HomeNavDO,
+// so ConvertorHelper leaves them null.
 type HomeNavCO struct {
-	Id         int64     `json:"id"`
-	ServiceId  int64     `json:"serviceId"`
-	CarType    int       `json:"carType"`
-	Name       string    `json:"name"`
-	Icon       string    `json:"icon"`
-	JumpPage   string    `json:"jumpPage"`
-	IzOn       *bool     `json:"izOn"`
-	UpdatedPin  string `json:"updatedPin"`
-	UpdatedAt   string `json:"updatedAt"`
-	UpdatedName string `json:"updatedName"`
+	Id          int64   `json:"id"`
+	ServiceId   int64   `json:"serviceId"`
+	CarType     int     `json:"carType"`
+	Name        string  `json:"name"`
+	Icon        string  `json:"icon"`
+	JumpPage    string  `json:"jumpPage"`
+	IzOn        *bool   `json:"izOn"`
+	Ids         []int64 `json:"ids"`
+	UpdatedPin  string  `json:"updatedPin"`
+	UpdatedAt   string  `json:"updatedAt"`
+	UpdatedName *string `json:"updatedName"`
 }

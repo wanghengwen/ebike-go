@@ -112,13 +112,13 @@ func writeBindError(c *gin.Context, err error, msgs map[string]string, jsonBody 
 			msg = "must not be null"
 		}
 		log.Printf("[BINDING_ERROR] Path: %s | Validation failed on field '%s': %v", c.Request.URL.Path, field, err)
-		
+
 		// Special alignment for Java's commandContext error
 		if field == "commandContext" {
 			c.JSON(http.StatusOK, dto.NewErrorResult(dto.CodeNotNull, "commandContext 不能为null"))
 			return
 		}
-		
+
 		WriteParamError(c, field+" "+msg)
 		return
 	}

@@ -16,19 +16,19 @@ import (
 )
 
 var (
-	globalHelmetGateway    *gateway.HelmetGateway
-	globalConfigGateway    *gateway.ConfigGateway
-	globalPartGateway      *gateway.PartGateway
+	globalHelmetGateway        *gateway.HelmetGateway
+	globalConfigGateway        *gateway.ConfigGateway
+	globalPartGateway          *gateway.PartGateway
 	globalFenceRfidGateway     *gateway.FenceRfidGateway
 	globalParkingDetailGateway *gateway.ParkingDetailGateway
-	globalDeviceRpc        *rpc.DeviceRPC
-	globalManagementRpc    *rpc.ManagementRPC
-	globalTicketRpc        *rpc.TicketRPC
-	globalPartService      *service.PartService
-	globalHelmetService    *service.HelmetService
-	globalReturnCarService *service.ReturnCarService
-	globalRidingCarService *service.RidingCarService
-	initOnce               sync.Once
+	globalDeviceRpc            *rpc.DeviceRPC
+	globalManagementRpc        *rpc.ManagementRPC
+	globalTicketRpc            *rpc.TicketRPC
+	globalPartService          *service.PartService
+	globalHelmetService        *service.HelmetService
+	globalReturnCarService     *service.ReturnCarService
+	globalRidingCarService     *service.RidingCarService
+	initOnce                   sync.Once
 )
 
 func initGlobals() {

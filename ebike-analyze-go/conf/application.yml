@@ -11,7 +11,7 @@ nacos:
   port: 8848
   namespace: prod
   group: xyy
-  dataId: ebike-analyze-go.yaml
+  dataId: ebike-analyze.yaml
 
 redis:
   addr: 127.0.0.1:6379

@@ -32,7 +32,7 @@ func FenceCustom(tenantID string, id int64) string {
 }
 
 func ServiceAreaGeo(tenantID string) string { return fmt.Sprintf("fence_serviceArea_geo_%s", tenantID) }
-func ParkingGeo(tenantID string) string   { return fmt.Sprintf("fence_parking_geo_%s", tenantID) }
+func ParkingGeo(tenantID string) string     { return fmt.Sprintf("fence_parking_geo_%s", tenantID) }
 func NoParkingGeo(tenantID string) string   { return fmt.Sprintf("fence_noParking_geo_%s", tenantID) }
 func BanRidingGeo(tenantID string) string   { return fmt.Sprintf("fence_banRiding_geo_%s", tenantID) }
 func MaintainAreaGeo(tenantID string) string {

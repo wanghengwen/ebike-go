@@ -7,7 +7,9 @@ import (
 	"ebike-fence-go/internal/api/dto"
 )
 
-func TestBindParkingCOResponseOmitsBanRidingId(t *testing.T) {
+// Java BindParkingCO declares banRidingId but bindParking never sets it, and Jackson keeps
+// null-valued properties, so the key must be present and null.
+func TestBindParkingCOResponseKeepsNullBanRidingId(t *testing.T) {
 	id := int64(42)
 	co := dto.BindParkingCO{
 		ParkingId:   &id,
@@ -21,7 +23,11 @@ func TestBindParkingCOResponseOmitsBanRidingId(t *testing.T) {
 	if err := json.Unmarshal(raw, &m); err != nil {
 		t.Fatal(err)
 	}
-	if _, ok := m["banRidingId"]; ok {
-		t.Fatalf("banRidingId should be omitted from response JSON, got %s", raw)
+	got, ok := m["banRidingId"]
+	if !ok {
+		t.Fatalf("banRidingId must be present to match Java, got %s", raw)
+	}
+	if string(got) != "null" {
+		t.Fatalf("banRidingId should be null, got %s", got)
 	}
 }

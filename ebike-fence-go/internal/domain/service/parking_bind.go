@@ -117,7 +117,7 @@ func BindParking(ctx context.Context, tenantID string, cmd dto.ParkingBindCarCmd
 	// so the HTTP response is not blocked by DB I/O. The detail struct is copied
 	// to avoid data races with the caller.
 	detailCopy := *detail
-	
+
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -139,7 +139,6 @@ func BindParking(ctx context.Context, tenantID string, cmd dto.ParkingBindCarCmd
 		FenceCustomId:  fenceIDPtr(fenceCustom),
 	}, nil
 }
-
 
 // UnBindParking mirrors Java ParkingServiceImpl.unBindParking.
 func UnBindParking(ctx context.Context, tenantID string, cmd dto.ParkingUnBindCarCmd) (bool, error) {

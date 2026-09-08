@@ -26,7 +26,9 @@ import (
 
 type CreditScoreService struct{ repo *repo.ConfigRepository }
 
-func NewCreditScoreService(r *repo.ConfigRepository) *CreditScoreService { return &CreditScoreService{repo: r} }
+func NewCreditScoreService(r *repo.ConfigRepository) *CreditScoreService {
+	return &CreditScoreService{repo: r}
+}
 
 func (s *CreditScoreService) Get(ctx context.Context, tenantID string) (*dto.CreditScoreConfigCO, error) {
 	key := rediskeys.CreditScoreConfig(tenantID)
@@ -81,7 +83,9 @@ func (s *CreditScoreService) Insert(ctx context.Context, tenantID, pin string, c
 
 type BigScreenService struct{ repo *repo.ConfigRepository }
 
-func NewBigScreenService(r *repo.ConfigRepository) *BigScreenService { return &BigScreenService{repo: r} }
+func NewBigScreenService(r *repo.ConfigRepository) *BigScreenService {
+	return &BigScreenService{repo: r}
+}
 
 func (s *BigScreenService) Get(ctx context.Context, tenantID string) (*dto.ConfigBigScreenCO, error) {
 	var row model.BigScreen

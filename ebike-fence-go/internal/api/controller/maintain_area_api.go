@@ -9,17 +9,17 @@ import (
 func maintainAreaHandlers() map[string]gin.HandlerFunc {
 	initFenceAdmin()
 	return map[string]gin.HandlerFunc{
-		"/maintain/area/create":                 handleMaintainAreaCreate,
-		"/maintain/area/update":                 handleMaintainAreaUpdate,
-		"/maintain/area/delete":                 handleMaintainAreaDelete,
-		"/maintain/area/deleteBatch":            handleMaintainAreaDeleteBatch,
-		"/maintain/area/listByServiceId":        handleMaintainAreaListByServiceID,
-		"/maintain/area/pageListByServiceId":    handleMaintainAreaPageList,
+		"/maintain/area/create":                  handleMaintainAreaCreate,
+		"/maintain/area/update":                  handleMaintainAreaUpdate,
+		"/maintain/area/delete":                  handleMaintainAreaDelete,
+		"/maintain/area/deleteBatch":             handleMaintainAreaDeleteBatch,
+		"/maintain/area/listByServiceId":         handleMaintainAreaListByServiceID,
+		"/maintain/area/pageListByServiceId":     handleMaintainAreaPageList,
 		"/maintain/area/personnelManagementList": handleMaintainAreaPersonnelList,
-		"/maintain/area/personnelDetail":        handleMaintainAreaPersonnelDetail,
-		"/maintain/area/personnelEdit":          handleMaintainAreaPersonnelEdit,
-		"/maintain/area/personnelDelete":        handleMaintainAreaPersonnelDelete,
-		"/maintain/area/getByUserPin":           handleMaintainAreaGetByUserPin,
+		"/maintain/area/personnelDetail":         handleMaintainAreaPersonnelDetail,
+		"/maintain/area/personnelEdit":           handleMaintainAreaPersonnelEdit,
+		"/maintain/area/personnelDelete":         handleMaintainAreaPersonnelDelete,
+		"/maintain/area/getByUserPin":            handleMaintainAreaGetByUserPin,
 	}
 }
 

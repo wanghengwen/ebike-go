@@ -91,109 +91,167 @@ type ConfigBackcarCO struct {
 
 type ConfigPayCmd struct {
 	Command
-	Id                      *int64  `json:"id,omitempty"`
-	ServiceId               *int64  `json:"serviceId,omitempty"`
-	IzBalanceEnoughReturnBike *bool `json:"izBalanceEnoughReturnBike,omitempty"`
-	IzMakeupBalancePay      *bool   `json:"izMakeupBalancePay,omitempty"`
-	IzNotifyUnpaidOrder     *bool   `json:"izNotifyUnpaidOrder,omitempty"`
-	NotifyInterval          *int    `json:"notifyInterval,omitempty"`
-	TimesUpperBound         *int    `json:"timesUpperBound,omitempty"`
-	RemindWay               *string `json:"remindWay,omitempty"`
+	Id                        *int64  `json:"id,omitempty"`
+	ServiceId                 *int64  `json:"serviceId,omitempty"`
+	IzBalanceEnoughReturnBike *bool   `json:"izBalanceEnoughReturnBike,omitempty"`
+	IzMakeupBalancePay        *bool   `json:"izMakeupBalancePay,omitempty"`
+	IzNotifyUnpaidOrder       *bool   `json:"izNotifyUnpaidOrder,omitempty"`
+	NotifyInterval            *int    `json:"notifyInterval,omitempty"`
+	TimesUpperBound           *int    `json:"timesUpperBound,omitempty"`
+	RemindWay                 *string `json:"remindWay,omitempty"`
+	IzAutoRefundAfterOrder    *bool   `json:"izAutoRefundAfterOrder,omitempty"`
 }
 
 type ConfigPayCO struct {
-	Id                      *int64  `json:"id"`
-	ServiceId               *int64  `json:"serviceId"`
-	IzBalanceEnoughReturnBike *bool `json:"izBalanceEnoughReturnBike"`
-	IzMakeupBalancePay      *bool   `json:"izMakeupBalancePay"`
-	IzNotifyUnpaidOrder     *bool   `json:"izNotifyUnpaidOrder"`
-	NotifyInterval          *int    `json:"notifyInterval"`
-	TimesUpperBound         *int    `json:"timesUpperBound"`
-	RemindWay               *string `json:"remindWay"`
+	Id                        *int64  `json:"id"`
+	ServiceId                 *int64  `json:"serviceId"`
+	IzBalanceEnoughReturnBike *bool   `json:"izBalanceEnoughReturnBike"`
+	IzMakeupBalancePay        *bool   `json:"izMakeupBalancePay"`
+	IzNotifyUnpaidOrder       *bool   `json:"izNotifyUnpaidOrder"`
+	NotifyInterval            *int    `json:"notifyInterval"`
+	TimesUpperBound           *int    `json:"timesUpperBound"`
+	RemindWay                 *string `json:"remindWay"`
+	IzAutoRefundAfterOrder    *bool   `json:"izAutoRefundAfterOrder"`
 }
 
+// ConfigUseCarCmd mirrors Java ConfigUseCarCmd. All writable columns must be present
+// so insert/update can copy them onto the sql.Null* model fields.
 type ConfigUseCarCmd struct {
 	Command
-	Id                   *int64          `json:"id,omitempty"`
-	ServiceId            *int64          `json:"serviceId,omitempty"`
-	RechargeBeforeUse    *bool           `json:"rechargeBeforeUse,omitempty"`
-	RechargeVisibleRange *int            `json:"rechargeVisibleRange,omitempty"`
-	RechargeByRegister   *bool           `json:"rechargeByRegister,omitempty"`
-	RechargeByTags       *bool           `json:"rechargeByTags,omitempty"`
-	RechargeTagIds       *string         `json:"rechargeTagIds,omitempty"`
-	RechargeCost         *int            `json:"rechargeCost,omitempty"`
-	IzStopService        *bool           `json:"izStopService,omitempty"`
-	IzAutoRecovery       *bool           `json:"izAutoRecovery,omitempty"`
-	IzBeacon             *bool           `json:"izBeacon,omitempty"`
-	IzNeedAuth           *bool           `json:"izNeedAuth,omitempty"`
-	Extra                json.RawMessage `json:"-"`
+	Id                              *int64  `json:"id,omitempty"`
+	ServiceId                       *int64  `json:"serviceId,omitempty"`
+	RechargeBeforeUse               *bool   `json:"rechargeBeforeUse,omitempty"`
+	RechargeVisibleRange            *int    `json:"rechargeVisibleRange,omitempty"`
+	RechargeByRegister              *bool   `json:"rechargeByRegister,omitempty"`
+	RechargeByTags                  *bool   `json:"rechargeByTags,omitempty"`
+	RechargeTagIds                  *string `json:"rechargeTagIds,omitempty"`
+	RechargeCost                    *int    `json:"rechargeCost,omitempty"`
+	IzStopService                   *bool   `json:"izStopService,omitempty"`
+	StopTimeStart                   *string `json:"stopTimeStart,omitempty"`
+	StopTimeEnd                     *string `json:"stopTimeEnd,omitempty"`
+	IzAutoRecovery                  *bool   `json:"izAutoRecovery,omitempty"`
+	RecoveryData                    *string `json:"recoveryData,omitempty"`
+	StopServiceNotice               *string `json:"stopServiceNotice,omitempty"`
+	IzOnCertification               *bool   `json:"izOnCertification,omitempty"`
+	IzOnUseCar                      *bool   `json:"izOnUseCar,omitempty"`
+	RecognitionDegree               *int    `json:"recognitionDegree,omitempty"`
+	EffectiveTime                   *int    `json:"effectiveTime,omitempty"`
+	IzRidingStopTrigger             *bool   `json:"izRidingStopTrigger,omitempty"`
+	IzParkingTriggerReturnBike      *bool   `json:"izParkingTriggerReturnBike,omitempty"`
+	RidingStopTime                  *int    `json:"ridingStopTime,omitempty"`
+	RidingStopEvent                 *int    `json:"ridingStopEvent,omitempty"`
+	ParkingTime                     *int    `json:"parkingTime,omitempty"`
+	RemindWay                       *string `json:"remindWay,omitempty"`
+	IzBeacon                        *bool   `json:"izBeacon,omitempty"`
+	OutServiceAreaAutoLock          *int    `json:"outServiceAreaAutoLock,omitempty"`
+	OutServiceAreaAutoLockRemindWay *string `json:"outServiceAreaAutoLockRemindWay,omitempty"`
+	NearLine                        *int    `json:"nearLine,omitempty"`
+	IzOpenSaddleOverloadMonitor     *bool   `json:"izOpenSaddleOverloadMonitor,omitempty"`
+	OverloadRemind                  *int    `json:"overloadRemind,omitempty"`
+	IzRemoteUnlock                  *bool   `json:"izRemoteUnlock,omitempty"`
+	HelmetConfig                    *string `json:"helmetConfig,omitempty"`
+	IzOrderNotice                   *bool   `json:"izOrderNotice,omitempty"`
+	NoticeRidingTime                *int    `json:"noticeRidingTime,omitempty"`
+	OrderRemindWay                  *string `json:"orderRemindWay,omitempty"`
+	MinAge                          *int    `json:"minAge,omitempty"`
+	MaxAge                          *int    `json:"maxAge,omitempty"`
+	HideCarConfig                   *string `json:"hideCarConfig,omitempty"`
+	IzAuth                          *bool   `json:"izAuth,omitempty"`
 }
 
 type ConfigUseCarCO struct {
-	Id                            *int64  `json:"id"`
-	ServiceId                     *int64  `json:"serviceId"`
-	RechargeBeforeUse             *bool   `json:"rechargeBeforeUse"`
-	RechargeVisibleRange          *int    `json:"rechargeVisibleRange"`
-	RechargeByRegister            *bool   `json:"rechargeByRegister"`
-	RechargeByTags                *bool   `json:"rechargeByTags"`
-	RechargeTagIds                *string `json:"rechargeTagIds"`
-	RechargeCost                  *int    `json:"rechargeCost"`
-	IzStopService                 *bool   `json:"izStopService"`
-	StopTimeStart                 *string `json:"stopTimeStart"`
-	StopTimeEnd                   *string `json:"stopTimeEnd"`
-	IzAutoRecovery                *bool   `json:"izAutoRecovery"`
-	RecoveryData                  *string `json:"recoveryData"`
-	StopServiceNotice             *string `json:"stopServiceNotice"`
-	IzOnCertification             *bool   `json:"izOnCertification"`
-	IzOnUseCar                    *bool   `json:"izOnUseCar"`
-	RecognitionDegree             *int    `json:"recognitionDegree"`
-	EffectiveTime                 *int    `json:"effectiveTime"`
-	IzRidingStopTrigger           *bool   `json:"izRidingStopTrigger"`
-	IzParkingTriggerReturnBike    *bool   `json:"izParkingTriggerReturnBike"`
-	RidingStopTime                *int    `json:"ridingStopTime"`
-	RidingStopEvent               *int    `json:"ridingStopEvent"`
-	ParkingTime                   *int    `json:"parkingTime"`
-	RemindWay                     *string `json:"remindWay"`
-	IzBeacon                      *bool   `json:"izBeacon"`
-	OutServiceAreaAutoLock        *int    `json:"outServiceAreaAutoLock"`
+	Id                              *int64  `json:"id"`
+	ServiceId                       *int64  `json:"serviceId"`
+	RechargeBeforeUse               *bool   `json:"rechargeBeforeUse"`
+	RechargeVisibleRange            *int    `json:"rechargeVisibleRange"`
+	RechargeByRegister              *bool   `json:"rechargeByRegister"`
+	RechargeByTags                  *bool   `json:"rechargeByTags"`
+	RechargeTagIds                  *string `json:"rechargeTagIds"`
+	RechargeCost                    *int    `json:"rechargeCost"`
+	IzStopService                   *bool   `json:"izStopService"`
+	StopTimeStart                   *string `json:"stopTimeStart"`
+	StopTimeEnd                     *string `json:"stopTimeEnd"`
+	IzAutoRecovery                  *bool   `json:"izAutoRecovery"`
+	RecoveryData                    *string `json:"recoveryData"`
+	StopServiceNotice               *string `json:"stopServiceNotice"`
+	IzOnCertification               *bool   `json:"izOnCertification"`
+	IzOnUseCar                      *bool   `json:"izOnUseCar"`
+	RecognitionDegree               *int    `json:"recognitionDegree"`
+	EffectiveTime                   *int    `json:"effectiveTime"`
+	IzRidingStopTrigger             *bool   `json:"izRidingStopTrigger"`
+	IzParkingTriggerReturnBike      *bool   `json:"izParkingTriggerReturnBike"`
+	RidingStopTime                  *int    `json:"ridingStopTime"`
+	RidingStopEvent                 *int    `json:"ridingStopEvent"`
+	ParkingTime                     *int    `json:"parkingTime"`
+	RemindWay                       *string `json:"remindWay"`
+	IzBeacon                        *bool   `json:"izBeacon"`
+	OutServiceAreaAutoLock          *int    `json:"outServiceAreaAutoLock"`
 	OutServiceAreaAutoLockRemindWay *string `json:"outServiceAreaAutoLockRemindWay"`
-	NearLine                      *int    `json:"nearLine"`
-	IzOpenSaddleOverloadMonitor   *bool   `json:"izOpenSaddleOverloadMonitor"`
-	OverloadRemind                *int    `json:"overloadRemind"`
-	IzRemoteUnlock                *bool   `json:"izRemoteUnlock"`
-	HelmetConfig                  *string `json:"helmetConfig"`
-	IzOrderNotice                 *bool   `json:"izOrderNotice"`
-	NoticeRidingTime              *int    `json:"noticeRidingTime"`
-	OrderRemindWay                *string `json:"orderRemindWay"`
-	MinAge                        *int    `json:"minAge"`
-	MaxAge                        *int    `json:"maxAge"`
-	HideCarConfig                 *string `json:"hideCarConfig"`
-	IzAuth                        *bool   `json:"izAuth"`
-	IzNeedAuth                    *bool   `json:"izNeedAuth"`
+	NearLine                        *int    `json:"nearLine"`
+	IzOpenSaddleOverloadMonitor     *bool   `json:"izOpenSaddleOverloadMonitor"`
+	OverloadRemind                  *int    `json:"overloadRemind"`
+	IzRemoteUnlock                  *bool   `json:"izRemoteUnlock"`
+	HelmetConfig                    *string `json:"helmetConfig"`
+	IzOrderNotice                   *bool   `json:"izOrderNotice"`
+	NoticeRidingTime                *int    `json:"noticeRidingTime"`
+	OrderRemindWay                  *string `json:"orderRemindWay"`
+	MinAge                          *int    `json:"minAge"`
+	MaxAge                          *int    `json:"maxAge"`
+	HideCarConfig                   *string `json:"hideCarConfig"`
+	IzAuth                          *bool   `json:"izAuth"`
+	IzNeedAuth                      *bool   `json:"izNeedAuth"`
 }
 
 // --- Config Base Item ---
 
+// ConfigBaseItemCmd mirrors Java ConfigBaseItemCmd (full update payload).
 type ConfigBaseItemCmd struct {
 	Command
-	Id                   *int64  `json:"id,omitempty"`
-	ServiceId            *int64  `json:"serviceId,omitempty"`
-	SwapBatteryThreshold *int    `json:"swapBatteryThreshold,omitempty"`
-	IzAutoSwapBattery    *bool   `json:"izAutoSwapBattery,omitempty"`
-	UserTicketPhotoWays  []int   `json:"userTicketPhotoWays,omitempty"`
-	Extra                json.RawMessage `json:"-"`
+	Id                     *int64  `json:"id,omitempty"`
+	ServiceId              *int64  `json:"serviceId,omitempty"`
+	OfflineTicketJudgeTime *int    `json:"offlineTicketJudgeTime,omitempty"`
+	MsgSign                *string `json:"msgSign,omitempty"`
+	MsgCode                *string `json:"msgCode,omitempty"`
+	IzOnAbnormalMovement   *bool   `json:"izOnAbnormalMovement,omitempty"`
+	IzOnBatteryRemoval     *bool   `json:"izOnBatteryRemoval,omitempty"`
+	IzOfflineTicket        *bool   `json:"izOfflineTicket,omitempty"`
+	IzAutoRepairTicket     *bool   `json:"izAutoRepairTicket,omitempty"`
+	SwapBatteryThreshold   *int    `json:"swapBatteryThreshold,omitempty"`
+	IzAutoSwapBattery      *bool   `json:"izAutoSwapBattery,omitempty"`
+	IzOpenInvoice          *bool   `json:"izOpenInvoice,omitempty"`
+	IzTempUnlock           *bool   `json:"izTempUnlock,omitempty"`
+	TempUnlockTime         *int    `json:"tempUnlockTime,omitempty"`
+	DashboardSwitch        *bool   `json:"dashboardSwitch,omitempty"`
+	DashboardStartTime     *string `json:"dashboardStartTime,omitempty"`
+	DashboardEndTime       *string `json:"dashboardEndTime,omitempty"`
+	IzCanInitiativeRepair  *bool   `json:"izCanInitiativeRepair,omitempty"`
+	IzCanAfterRidingRepair *bool   `json:"izCanAfterRidingRepair,omitempty"`
+	CanRepairCon           *int    `json:"canRepairCon,omitempty"`
+	IzHelmetAbnormalRiding *bool   `json:"izHelmetAbnormalRiding,omitempty"`
+	IzEnableMoveAlarm      *bool   `json:"izEnableMoveAlarm,omitempty"`
+	MoveAlarmTime          *int    `json:"moveAlarmTime,omitempty"`
+	MoveAlarmCount         *int    `json:"moveAlarmCount,omitempty"`
+	MoveAlarmDistance      *int    `json:"moveAlarmDistance,omitempty"`
+	IzCreateShortOrder     *bool   `json:"izCreateShortOrder,omitempty"`
+	ShortOrderDuration     *int    `json:"shortOrderDuration,omitempty"`
+	ShortOrderCon          *int    `json:"shortOrderCon,omitempty"`
+	UserTicketPhotoWays    []int   `json:"userTicketPhotoWays,omitempty"`
+	IzWithdraw             *bool   `json:"izWithdraw,omitempty"`
 }
 
 type ConfigBaseItemCO struct {
-	Id                      *int64  `json:"id"`
-	ServiceId               *int64  `json:"serviceId"`
-	OfflineTicketJudgeTime  *int    `json:"offlineTicketJudgeTime"`
-	MsgSign                 *string `json:"msgSign"`
-	MsgCode                 *string `json:"msgCode"`
-	IzOnAbnormalMovement    *bool   `json:"izOnAbnormalMovement"`
-	IzOnBatteryRemoval      *bool   `json:"izOnBatteryRemoval"`
-	IzOfflineTicket         *bool   `json:"izOfflineTicket"`
-	IzAutoRepairTicket      *bool   `json:"izAutoRepairTicket"`
+	Id                     *int64  `json:"id"`
+	ServiceId              *int64  `json:"serviceId"`
+	OfflineTicketJudgeTime *int    `json:"offlineTicketJudgeTime"`
+	MsgSign                *string `json:"msgSign"`
+	MsgCode                *string `json:"msgCode"`
+	IzOnAbnormalMovement   *bool   `json:"izOnAbnormalMovement"`
+	IzOnBatteryRemoval     *bool   `json:"izOnBatteryRemoval"`
+	IzOfflineTicket        *bool   `json:"izOfflineTicket"`
+	IzAutoRepairTicket     *bool   `json:"izAutoRepairTicket"`
+	// Java ConfigBaseItemCO declares these but ConfigBaseItemDO does not, so they are always null.
+	AbnormalMovementContact *string `json:"abnormalMovementContact"`
+	BatteryRemovalContact   *string `json:"batteryRemovalContact"`
 	SwapBatteryThreshold    *int    `json:"swapBatteryThreshold"`
 	IzAutoSwapBattery       *bool   `json:"izAutoSwapBattery"`
 	IzOpenInvoice           *bool   `json:"izOpenInvoice"`
@@ -252,20 +310,34 @@ type ConfigPushRidingCardCO struct {
 
 type CreditScoreConfigCmd struct {
 	Command
-	Id                 *int64   `json:"id,omitempty"`
-	IzCreditScore      *bool    `json:"izCreditScore,omitempty"`
-	Score              *float64 `json:"score,omitempty"`
-	WarnScore          *float64 `json:"warnScore,omitempty"`
-	NoRiddingScore     *float64 `json:"noRiddingScore,omitempty"`
-	FirstNoRiddingDays *int     `json:"firstNoRiddingDays,omitempty"`
-	SecondNoRiddingDays *int    `json:"secondNoRiddingDays,omitempty"`
-	MoreNoRiddingDays  *int     `json:"moreNoRiddingDays,omitempty"`
-	AddScore           *float64 `json:"addScore,omitempty"`
-	AddScoreUpperLimit *float64 `json:"addScoreUpperLimit,omitempty"`
-	RemindWay          *string  `json:"remindWay,omitempty"`
+	Id                  *int64   `json:"id,omitempty"`
+	IzCreditScore       *bool    `json:"izCreditScore,omitempty"`
+	Score               *float64 `json:"score,omitempty"`
+	WarnScore           *float64 `json:"warnScore,omitempty"`
+	NoRiddingScore      *float64 `json:"noRiddingScore,omitempty"`
+	FirstNoRiddingDays  *int     `json:"firstNoRiddingDays,omitempty"`
+	SecondNoRiddingDays *int     `json:"secondNoRiddingDays,omitempty"`
+	MoreNoRiddingDays   *int     `json:"moreNoRiddingDays,omitempty"`
+	AddScore            *float64 `json:"addScore,omitempty"`
+	AddScoreUpperLimit  *float64 `json:"addScoreUpperLimit,omitempty"`
+	RemindWay           *string  `json:"remindWay,omitempty"`
 }
 
-type CreditScoreConfigCO CreditScoreConfigCmd
+// CreditScoreConfigCO mirrors Java CreditScoreConfigCO, which does not extend Command —
+// it must not carry a commandContext key.
+type CreditScoreConfigCO struct {
+	Id                  *int64   `json:"id"`
+	IzCreditScore       *bool    `json:"izCreditScore"`
+	Score               *float64 `json:"score"`
+	WarnScore           *float64 `json:"warnScore"`
+	NoRiddingScore      *float64 `json:"noRiddingScore"`
+	FirstNoRiddingDays  *int     `json:"firstNoRiddingDays"`
+	SecondNoRiddingDays *int     `json:"secondNoRiddingDays"`
+	MoreNoRiddingDays   *int     `json:"moreNoRiddingDays"`
+	AddScore            *float64 `json:"addScore"`
+	AddScoreUpperLimit  *float64 `json:"addScoreUpperLimit"`
+	RemindWay           *string  `json:"remindWay"`
+}
 
 type ConfigBigScreenCmd struct {
 	Command
@@ -317,7 +389,19 @@ type AlarmContactCmd struct {
 	TriggerArea *int    `json:"triggerArea,omitempty"`
 }
 
-type AlarmContactCO AlarmContactCmd
+// AlarmContactCO mirrors Java AlarmContactCO, which does not extend Command —
+// it must not carry a commandContext key.
+type AlarmContactCO struct {
+	Id          *int64  `json:"id"`
+	ServiceId   *int64  `json:"serviceId"`
+	Type        *int    `json:"type"`
+	Name        *string `json:"name"`
+	Phone       *string `json:"phone"`
+	StartTime   *string `json:"startTime"`
+	EndTime     *string `json:"endTime"`
+	NotifyType  *string `json:"notifyType"`
+	TriggerArea *int    `json:"triggerArea"`
+}
 
 type ContactQuery struct {
 	Command
@@ -410,10 +494,16 @@ type ConfigProtocolCO struct {
 
 // --- Fence Tag ---
 
+// FenceTagCO mirrors Java FenceTagCO. It carries no izEnable, and updatedPin/updatedAt are
+// always null because neither FenceTagE nor queryFenceRefTagsById supplies them.
 type FenceTagCO struct {
-	TagId    *int64  `json:"tagId"`
-	TagName  *string `json:"tagName"`
-	IzEnable *bool   `json:"izEnable"`
+	TagId      *int64  `json:"tagId"`
+	TagName    *string `json:"tagName"`
+	Version    *int    `json:"version"`
+	CreatedPin *string `json:"createdPin"`
+	CreatedAt  *string `json:"createdAt"`
+	UpdatedPin *string `json:"updatedPin"`
+	UpdatedAt  *string `json:"updatedAt"`
 }
 
 // --- Resource Management ---
@@ -439,27 +529,27 @@ type ResourceManagementCmd struct {
 }
 
 type ResourceManagementCO struct {
-	Id             *int64  `json:"id"`
-	ServiceId      *int64  `json:"serviceId"`
-	PageCode       *int    `json:"pageCode"`
-	Type           *int    `json:"type"`
-	Status         *int    `json:"status"`
-	Name           *string `json:"name"`
-	StartTime      *string `json:"startTime"`
-	EndTime        *string `json:"endTime"`
-	IzLimitTime    *bool   `json:"izLimitTime"`
-	AdvId          *string `json:"advId"`
-	Title          *string `json:"title"`
-	Appid          *string `json:"appid"`
-	SkipUrl        *string `json:"skipUrl"`
-	Params         *string `json:"params"`
-	ImgUrl         *string `json:"imgUrl"`
-	Sort           *int    `json:"sort"`
-	ExposureCount  *int64  `json:"exposureCount"`
-	ClickCount     *int64  `json:"clickCount"`
-	ClickPerson    *int64  `json:"clickPerson"`
-	UpdatedPin     *string `json:"updatedPin"`
-	UpdatedAt      *string `json:"updatedAt"`
+	Id            *int64  `json:"id"`
+	ServiceId     *int64  `json:"serviceId"`
+	PageCode      *int    `json:"pageCode"`
+	Type          *int    `json:"type"`
+	Status        *int    `json:"status"`
+	Name          *string `json:"name"`
+	StartTime     *string `json:"startTime"`
+	EndTime       *string `json:"endTime"`
+	IzLimitTime   *bool   `json:"izLimitTime"`
+	AdvId         *string `json:"advId"`
+	Title         *string `json:"title"`
+	Appid         *string `json:"appid"`
+	SkipUrl       *string `json:"skipUrl"`
+	Params        *string `json:"params"`
+	ImgUrl        *string `json:"imgUrl"`
+	Sort          *int    `json:"sort"`
+	ExposureCount *int64  `json:"exposureCount"`
+	ClickCount    *int64  `json:"clickCount"`
+	ClickPerson   *int64  `json:"clickPerson"`
+	UpdatedPin    *string `json:"updatedPin"`
+	UpdatedAt     *string `json:"updatedAt"`
 }
 
 type ResourceManagementPageQuery struct {

@@ -226,5 +226,5 @@ type bizError struct {
 	msg  string
 }
 
-func (e *bizError) Error() string  { return e.msg }
-func (e *bizError) Code() string   { return e.code }
+func (e *bizError) Error() string { return e.msg }
+func (e *bizError) Code() string  { return e.code }

@@ -3,7 +3,6 @@ package configsvc
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"strconv"
 	"strings"
@@ -264,7 +263,9 @@ func (s *BaseItemService) insertFromLatest(ctx context.Context, tenantID, pin st
 
 type ParkApplyService struct{ repo *repo.ConfigRepository }
 
-func NewParkApplyService(r *repo.ConfigRepository) *ParkApplyService { return &ParkApplyService{repo: r} }
+func NewParkApplyService(r *repo.ConfigRepository) *ParkApplyService {
+	return &ParkApplyService{repo: r}
+}
 
 func (s *ParkApplyService) GetByServiceID(ctx context.Context, tenantID string, serviceID int64) (*dto.ConfigParkApplyCO, error) {
 	key := rediskeys.ParkApplyConfig(tenantID, serviceID)
@@ -362,9 +363,4 @@ func (s *PushRidingCardService) Insert(ctx context.Context, tenantID, pin string
 		return s.repo.Create(ctx, &row)
 	})
 	return err == nil, err
-}
-
-func mergeJSON(dst, src interface{}) {
-	b, _ := json.Marshal(src)
-	_ = json.Unmarshal(b, dst)
 }

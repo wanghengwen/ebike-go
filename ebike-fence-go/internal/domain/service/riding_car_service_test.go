@@ -18,10 +18,10 @@ func TestRidingCarRejectsRemoteUnlockDistance(t *testing.T) {
 		Command: dto.Command{
 			CommandContext: &dto.CommandContext{TenantId: "t1", TraceId: "trace-1"},
 		},
-		ServiceAreaId: int64Ptr(1),
-		CarLocation:   &dto.LocationCmd{Lng: 116.40, Lat: 39.90},
-		UserLocation:  &dto.LocationCmd{Lng: 116.50, Lat: 39.90},
-		CarCmd:        &dto.CarCmd{CarId: "c1"},
+		ServiceAreaId:  int64Ptr(1),
+		CarLocation:    &dto.LocationCmd{Lng: 116.40, Lat: 39.90},
+		UserLocation:   &dto.LocationCmd{Lng: 116.50, Lat: 39.90},
+		CarCmd:         &dto.CarCmd{CarId: "c1"},
 		IzRemoteUnlock: &izRemote,
 	}
 

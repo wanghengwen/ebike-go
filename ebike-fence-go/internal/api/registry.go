@@ -74,7 +74,10 @@ func BindAndDispatch(c *gin.Context, obj interface{}, msgs map[string]string, fn
 	}
 	res, err := fn(c)
 	if err != nil {
-		if biz, ok := err.(interface{ Code() string; Error() string }); ok {
+		if biz, ok := err.(interface {
+			Code() string
+			Error() string
+		}); ok {
 			web.WriteBizError(c, biz.Code(), biz.Error())
 			return
 		}

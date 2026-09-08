@@ -2,6 +2,8 @@ package config
 
 import "testing"
 
+// buildDSN deliberately drops the Java JDBC parameters, which go-sql-driver/mysql rejects,
+// and substitutes the equivalent Go driver parameters.
 func TestBuildDSNFromNacosTemplate(t *testing.T) {
 	ds := mysqlDataSource{
 		Host:     "127.0.0.1",
@@ -11,7 +13,7 @@ func TestBuildDSNFromNacosTemplate(t *testing.T) {
 		Password: "secret",
 	}
 	dsn := ds.buildDSN(defaultMySQLParams)
-	want := "root:secret@tcp(127.0.0.1:3306)/ebike_fence?" + defaultMySQLParams
+	want := "root:secret@tcp(127.0.0.1:3306)/ebike_fence?parseTime=true&loc=Asia%2FShanghai&charset=utf8mb4"
 	if dsn != want {
 		t.Fatalf("got %q want %q", dsn, want)
 	}

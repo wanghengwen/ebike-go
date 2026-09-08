@@ -9,14 +9,14 @@ import (
 
 // FenceRedisKeys
 const (
-	ServiceAreaPrefix = "fence_serviceArea"
-	ServiceAreaGeo    = "fence_serviceArea_geo"
-	ParkingPrefix     = "fence_parking"
-	ParkingGeo        = "fence_parking_geo"
-	NoParkingPrefix   = "fence_noParking"
-	NoParkingGeo      = "fence_noParking_geo"
-	BanRidingPrefix   = "fence_banRiding"
-	BanRidingGeo      = "fence_banRiding_geo"
+	ServiceAreaPrefix  = "fence_serviceArea"
+	ServiceAreaGeo     = "fence_serviceArea_geo"
+	ParkingPrefix      = "fence_parking"
+	ParkingGeo         = "fence_parking_geo"
+	NoParkingPrefix    = "fence_noParking"
+	NoParkingGeo       = "fence_noParking_geo"
+	BanRidingPrefix    = "fence_banRiding"
+	BanRidingGeo       = "fence_banRiding_geo"
 	MaintainAreaPrefix = "fence_maintainArea"
 	MaintainAreaGeo    = "fence_maintainArea_geo"
 	FenceCustomPrefix  = "fence_custom"

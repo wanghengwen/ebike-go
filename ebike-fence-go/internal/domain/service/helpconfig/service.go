@@ -11,8 +11,8 @@ import (
 	"ebike-fence-go/internal/infrastructure/persistence/model"
 	"ebike-fence-go/internal/infrastructure/persistence/repo"
 	"ebike-fence-go/internal/infrastructure/rpc"
-	pkg_rpc "ebike-fence-go/internal/pkg/rpc"
 	"ebike-fence-go/internal/pkg/mysql"
+	pkg_rpc "ebike-fence-go/internal/pkg/rpc"
 )
 
 const (
@@ -327,10 +327,9 @@ func (s *Service) GetCustomerService(ctx context.Context, tenantID, pin string, 
 	if co.UpdatedPin != "" && cmdCtx != nil {
 		name, err := s.fetchUserName(ctx, co.UpdatedPin, cmdCtx)
 		if err != nil || name == "" {
-			co.UpdatedName = "--"
-		} else {
-			co.UpdatedName = name
+			name = "--"
 		}
+		co.UpdatedName = &name
 	}
 	return &co, nil
 }

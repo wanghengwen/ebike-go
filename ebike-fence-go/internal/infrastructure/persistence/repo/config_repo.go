@@ -27,7 +27,7 @@ func NewConfigRepository(db *gorm.DB) *ConfigRepository {
 	return &ConfigRepository{db: db, store: gateway.NewConfigStore(db)}
 }
 
-func (r *ConfigRepository) DB() *gorm.DB { return r.db }
+func (r *ConfigRepository) DB() *gorm.DB                { return r.db }
 func (r *ConfigRepository) Store() *gateway.ConfigStore { return r.store }
 
 func notDeleted(db *gorm.DB) *gorm.DB {
@@ -409,9 +409,10 @@ func (r *ConfigRepository) FilterFenceIDsByTags(ctx context.Context, tagIDs []in
 
 // ListFenceRefTagsByFenceID mirrors Java FenceTagMapper.queryFenceRefTagsById.
 func (r *ConfigRepository) ListFenceRefTagsByFenceID(ctx context.Context, fenceID int64, fenceType int) ([]model.FenceTag, error) {
+	// version/created_at/created_pin come from the ref row, not the tag row, matching Java.
 	var rows []model.FenceTag
 	err := r.db.WithContext(ctx).Raw(`
-		SELECT t.id, t.tag_name, t.tenant_id, t.created_at, t.updated_at, t.created_pin, t.updated_pin, t.version, t.iz_del, t.iz_enable
+		SELECT t.id, t.tag_name, t.iz_enable, ref.created_at, ref.version, ref.created_pin
 		FROM t_fence_tag t
 		LEFT JOIN t_fence_tag_ref ref ON ref.tag_id = t.id
 		WHERE ref.fence_id = ? AND ref.fence_type = ? AND (ref.iz_del = 0 OR ref.iz_del IS NULL)
@@ -419,7 +420,6 @@ func (r *ConfigRepository) ListFenceRefTagsByFenceID(ctx context.Context, fenceI
 	`, fenceID, fenceType).Scan(&rows).Error
 	return rows, err
 }
-
 
 // CountAdConfigByService counts rows for service.
 func (r *ConfigRepository) CountAdConfigByService(ctx context.Context, serviceID int64) (int64, error) {

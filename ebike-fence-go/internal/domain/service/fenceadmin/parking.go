@@ -122,6 +122,38 @@ func (p *ParkingAdmin) GetByID(ctx context.Context, tenantID string, id int64) (
 	return co, nil
 }
 
+// GetByIDDetail mirrors Java ParkingServiceImpl.getParkingById, which additionally binds the
+// tag list and the enabled RFID codes. Both stay null when empty, like Java's guarded setter
+// and buildRfids.
+func (p *ParkingAdmin) GetByIDDetail(ctx context.Context, tenantID string, id int64) (dto.ParkingCO, error) {
+	co, err := p.GetByID(ctx, tenantID, id)
+	if err != nil {
+		return co, err
+	}
+	if tags, err := p.RefTags(ctx, tenantID, id); err == nil && len(tags) > 0 {
+		co.RefTags = tags
+	}
+	if codes, err := p.rfidCodes(ctx, id); err == nil && len(codes) > 0 {
+		co.Rfids = codes
+	}
+	return co, nil
+}
+
+func (p *ParkingAdmin) rfidCodes(ctx context.Context, fenceID int64) ([]string, error) {
+	if persistence.FenceRfid == nil {
+		return nil, nil
+	}
+	rows, err := persistence.FenceRfid.ListByFenceID(ctx, fenceID)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]string, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, row.RfidCode)
+	}
+	return out, nil
+}
+
 func (p *ParkingAdmin) GetByIDs(ctx context.Context, tenantID string, ids []int64) ([]dto.ParkingCO, error) {
 	r, err := requireFenceRepo()
 	if err != nil {

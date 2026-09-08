@@ -144,6 +144,7 @@ func PayToCO(m *model.ConfigPay) *dto.ConfigPayCO {
 		NotifyInterval:            nullIntPtr(m.NotifyInterval),
 		TimesUpperBound:           nullIntPtr(m.TimesUpperBound),
 		RemindWay:                 nullStrPtr(m.RemindWay),
+		IzAutoRefundAfterOrder:    nullBoolPtr(m.IzAutoRefundAfterOrder),
 	}
 }
 
@@ -153,43 +154,43 @@ func UseCarToCO(m *model.ConfigUseCar) *dto.ConfigUseCarCO {
 	}
 	id, sid := m.ID, m.ServiceID
 	co := &dto.ConfigUseCarCO{
-		Id:                         &id,
-		ServiceId:                  &sid,
-		RechargeBeforeUse:          nullBoolPtr(m.RechargeBeforeUse),
-		RechargeVisibleRange:       nullIntPtr(m.RechargeVisibleRange),
-		RechargeByRegister:         nullBoolPtr(m.RechargeByRegister),
-		RechargeByTags:             nullBoolPtr(m.RechargeByTags),
-		RechargeTagIds:             nullStrPtr(m.RechargeTagIds),
-		RechargeCost:               nullIntPtr(m.RechargeCost),
-		IzStopService:              nullBoolPtr(m.IzStopService),
-		StopTimeStart:              normalizeTimeStrPtr(m.StopTimeStart),
-		StopTimeEnd:                normalizeTimeStrPtr(m.StopTimeEnd),
-		IzAutoRecovery:             nullBoolPtr(m.IzAutoRecovery),
-		StopServiceNotice:          nullStrPtr(m.StopServiceNotice),
-		IzOnCertification:          nullBoolPtr(m.IzOnCertification),
-		IzOnUseCar:                 nullBoolPtr(m.IzOnUseCar),
-		RecognitionDegree:          nullIntPtr(m.RecognitionDegree),
-		EffectiveTime:              nullIntPtr(m.EffectiveTime),
-		IzRidingStopTrigger:        nullBoolPtr(m.IzRidingStopTrigger),
-		IzParkingTriggerReturnBike: nullBoolPtr(m.IzParkingTriggerReturnBike),
-		RidingStopTime:             nullIntPtr(m.RidingStopTime),
-		RidingStopEvent:            nullIntPtr(m.RidingStopEvent),
-		ParkingTime:                nullIntPtr(m.ParkingTime),
-		RemindWay:                  nullStrPtr(m.RemindWay),
-		IzBeacon:                   nullBoolPtr(m.IzBeacon),
-		OutServiceAreaAutoLock:     nullIntPtr(m.OutServiceAreaAutoLock),
+		Id:                              &id,
+		ServiceId:                       &sid,
+		RechargeBeforeUse:               nullBoolPtr(m.RechargeBeforeUse),
+		RechargeVisibleRange:            nullIntPtr(m.RechargeVisibleRange),
+		RechargeByRegister:              nullBoolPtr(m.RechargeByRegister),
+		RechargeByTags:                  nullBoolPtr(m.RechargeByTags),
+		RechargeTagIds:                  nullStrPtr(m.RechargeTagIds),
+		RechargeCost:                    nullIntPtr(m.RechargeCost),
+		IzStopService:                   nullBoolPtr(m.IzStopService),
+		StopTimeStart:                   normalizeTimeStrPtr(m.StopTimeStart),
+		StopTimeEnd:                     normalizeTimeStrPtr(m.StopTimeEnd),
+		IzAutoRecovery:                  nullBoolPtr(m.IzAutoRecovery),
+		StopServiceNotice:               nullStrPtr(m.StopServiceNotice),
+		IzOnCertification:               nullBoolPtr(m.IzOnCertification),
+		IzOnUseCar:                      nullBoolPtr(m.IzOnUseCar),
+		RecognitionDegree:               nullIntPtr(m.RecognitionDegree),
+		EffectiveTime:                   nullIntPtr(m.EffectiveTime),
+		IzRidingStopTrigger:             nullBoolPtr(m.IzRidingStopTrigger),
+		IzParkingTriggerReturnBike:      nullBoolPtr(m.IzParkingTriggerReturnBike),
+		RidingStopTime:                  nullIntPtr(m.RidingStopTime),
+		RidingStopEvent:                 nullIntPtr(m.RidingStopEvent),
+		ParkingTime:                     nullIntPtr(m.ParkingTime),
+		RemindWay:                       nullStrPtr(m.RemindWay),
+		IzBeacon:                        nullBoolPtr(m.IzBeacon),
+		OutServiceAreaAutoLock:          nullIntPtr(m.OutServiceAreaAutoLock),
 		OutServiceAreaAutoLockRemindWay: nullStrPtr(m.OutServiceAreaAutoLockRemindWay),
-		IzOpenSaddleOverloadMonitor: nullBoolPtr(m.IzOpenSaddleOverloadMonitor),
-		OverloadRemind:             nullIntPtr(m.OverloadRemind),
-		IzRemoteUnlock:             nullBoolPtr(m.IzRemoteUnlock),
-		HelmetConfig:               nullStrPtr(m.HelmetConfig),
-		IzOrderNotice:              nullBoolPtr(m.IzOrderNotice),
-		NoticeRidingTime:           nullIntPtr(m.NoticeRidingTime),
-		OrderRemindWay:             nullStrPtr(m.OrderRemindWay),
-		MinAge:                     nullIntPtr(m.MinAge),
-		MaxAge:                     nullIntPtr(m.MaxAge),
-		HideCarConfig:              nullStrPtr(m.HideCarConfig),
-		IzAuth:                     nullBoolPtr(m.IzAuth),
+		IzOpenSaddleOverloadMonitor:     nullBoolPtr(m.IzOpenSaddleOverloadMonitor),
+		OverloadRemind:                  nullIntPtr(m.OverloadRemind),
+		IzRemoteUnlock:                  nullBoolPtr(m.IzRemoteUnlock),
+		HelmetConfig:                    nullStrPtr(m.HelmetConfig),
+		IzOrderNotice:                   nullBoolPtr(m.IzOrderNotice),
+		NoticeRidingTime:                nullIntPtr(m.NoticeRidingTime),
+		OrderRemindWay:                  nullStrPtr(m.OrderRemindWay),
+		MinAge:                          nullIntPtr(m.MinAge),
+		MaxAge:                          nullIntPtr(m.MaxAge),
+		HideCarConfig:                   nullStrPtr(m.HideCarConfig),
+		IzAuth:                          nullBoolPtr(m.IzAuth),
 	}
 	if m.RecoveryData.Valid {
 		s := m.RecoveryData.Time.UTC().Format("2006-01-02T15:04:05")
@@ -366,9 +367,9 @@ func UnmarshalBaseItemCO(raw string) (*dto.ConfigBaseItemCO, error) {
 	}
 	type baseItemAlias dto.ConfigBaseItemCO
 	aux := &struct {
-		UserTicketPhotoWays  json.RawMessage `json:"userTicketPhotoWays"`
-		DashboardStartTime   json.RawMessage `json:"dashboardStartTime"`
-		DashboardEndTime     json.RawMessage `json:"dashboardEndTime"`
+		UserTicketPhotoWays json.RawMessage `json:"userTicketPhotoWays"`
+		DashboardStartTime  json.RawMessage `json:"dashboardStartTime"`
+		DashboardEndTime    json.RawMessage `json:"dashboardEndTime"`
 		*baseItemAlias
 	}{
 		baseItemAlias: (*baseItemAlias)(&dto.ConfigBaseItemCO{}),
@@ -467,17 +468,17 @@ func CreditScoreToCO(m *model.CreditScoreConfig) *dto.CreditScoreConfigCO {
 	}
 	id := m.ID
 	co := &dto.CreditScoreConfigCO{
-		Id:                 &id,
-		IzCreditScore:      nullBoolPtr(m.IzCreditScore),
-		Score:              nullFloatPtr(m.Score),
-		WarnScore:          nullFloatPtr(m.WarnScore),
-		NoRiddingScore:     nullFloatPtr(m.NoRiddingScore),
-		FirstNoRiddingDays: nullIntPtr(m.FirstNoRiddingDays),
+		Id:                  &id,
+		IzCreditScore:       nullBoolPtr(m.IzCreditScore),
+		Score:               nullFloatPtr(m.Score),
+		WarnScore:           nullFloatPtr(m.WarnScore),
+		NoRiddingScore:      nullFloatPtr(m.NoRiddingScore),
+		FirstNoRiddingDays:  nullIntPtr(m.FirstNoRiddingDays),
 		SecondNoRiddingDays: nullIntPtr(m.SecondNoRiddingDays),
-		MoreNoRiddingDays:  nullIntPtr(m.MoreNoRiddingDays),
-		AddScore:           nullFloatPtr(m.AddScore),
-		AddScoreUpperLimit: nullFloatPtr(m.AddScoreUpperLimit),
-		RemindWay:          nullStrPtr(m.RemindWay),
+		MoreNoRiddingDays:   nullIntPtr(m.MoreNoRiddingDays),
+		AddScore:            nullFloatPtr(m.AddScore),
+		AddScoreUpperLimit:  nullFloatPtr(m.AddScoreUpperLimit),
+		RemindWay:           nullStrPtr(m.RemindWay),
 	}
 	return co
 }
@@ -575,11 +576,20 @@ func ProtocolToCO(m *model.ConfigProtocol) *dto.ConfigProtocolCO {
 func FenceTagToCO(m model.FenceTag) dto.FenceTagCO {
 	id := m.TagID
 	name := m.TagName
-	return dto.FenceTagCO{
-		TagId:    &id,
-		TagName:  &name,
-		IzEnable: nullBoolPtr(m.IzEnable),
+	co := dto.FenceTagCO{
+		TagId:   &id,
+		TagName: &name,
+		Version: nullIntPtr(m.Version),
 	}
+	if m.CreatedPin != "" {
+		pin := m.CreatedPin
+		co.CreatedPin = &pin
+	}
+	if !m.CreatedAt.IsZero() {
+		at := timefmt.FormatJavaLocal(m.CreatedAt)
+		co.CreatedAt = &at
+	}
+	return co
 }
 
 func ResourceToCO(m model.ResourceManagement) dto.ResourceManagementCO {

@@ -28,8 +28,8 @@ func loadLogYangheServiceArea(t *testing.T) *gateway.FenceE {
 		t.Fatal(err)
 	}
 	return &gateway.FenceE{
-		Id:             338362359727786125,
-		Name:           "洋河镇",
+		Id:            338362359727786125,
+		Name:          "洋河镇",
 		ParsedPolygon: poly,
 		PointList:     pointList,
 	}

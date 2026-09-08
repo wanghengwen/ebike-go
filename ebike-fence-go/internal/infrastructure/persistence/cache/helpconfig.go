@@ -146,24 +146,24 @@ func (c guidePage) toModel() model.TConfigGuidePage {
 
 type homeActivityEntrance struct {
 	ConfigBase
-	ID           int64                `json:"id"`
-	ServiceID    int64                `json:"serviceId"`
-	ChainType    int                  `json:"chainType"`
-	LinkUrl      string               `json:"linkUrl"`
-	PicUrl       string               `json:"picUrl"`
-	LinkTitle    string               `json:"linkTitle"`
-	AppId        string               `json:"appId"`
-	Param        string               `json:"param"`
-	IzOn         *bool                `json:"izOn"`
-	Position     int                  `json:"position"`
-	OpDownOffset int                  `json:"opDownOffset"`
-	VisibleRange int                  `json:"visibleRange"`
+	ID           int64                 `json:"id"`
+	ServiceID    int64                 `json:"serviceId"`
+	ChainType    int                   `json:"chainType"`
+	LinkUrl      string                `json:"linkUrl"`
+	PicUrl       string                `json:"picUrl"`
+	LinkTitle    string                `json:"linkTitle"`
+	AppId        string                `json:"appId"`
+	Param        string                `json:"param"`
+	IzOn         *bool                 `json:"izOn"`
+	Position     int                   `json:"position"`
+	OpDownOffset int                   `json:"opDownOffset"`
+	VisibleRange int                   `json:"visibleRange"`
 	StartTime    timefmt.JavaLocalTime `json:"startTime"`
 	EndTime      timefmt.JavaLocalTime `json:"endTime"`
-	Unlimited    *bool                `json:"unlimited"`
-	ByRegister   *bool                `json:"byRegister"`
-	ByTags       *bool                `json:"byTags"`
-	TagIds       string               `json:"tagIds"`
+	Unlimited    *bool                 `json:"unlimited"`
+	ByRegister   *bool                 `json:"byRegister"`
+	ByTags       *bool                 `json:"byTags"`
+	TagIds       string                `json:"tagIds"`
 }
 
 func (c homeActivityEntrance) toModel() model.TConfigHomeActivityEntrance {

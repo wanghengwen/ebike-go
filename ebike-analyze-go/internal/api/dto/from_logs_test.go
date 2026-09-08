@@ -12,12 +12,12 @@ import (
 type logPathFixture struct {
 	Path    string `json:"path"`
 	Samples []struct {
-		Fingerprint string                 `json:"fingerprint"`
-		Request     json.RawMessage        `json:"request"`
-		DataRaw     string                 `json:"dataRaw"`
-		Success     *bool                  `json:"success"`
-		Code        string                 `json:"code"`
-		Source      string                 `json:"source"`
+		Fingerprint string          `json:"fingerprint"`
+		Request     json.RawMessage `json:"request"`
+		DataRaw     string          `json:"dataRaw"`
+		Success     *bool           `json:"success"`
+		Code        string          `json:"code"`
+		Source      string          `json:"source"`
 	} `json:"samples"`
 }
 

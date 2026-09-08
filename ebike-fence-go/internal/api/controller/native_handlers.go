@@ -11,10 +11,10 @@ import (
 
 func registerNativeHandlers() {
 	handlers := map[string]gin.HandlerFunc{
-		"/serviceArea/returnCar":       ReturnCar,
-		"/serviceArea/ridingCar":       RidingCar,
+		"/serviceArea/returnCar":        ReturnCar,
+		"/serviceArea/ridingCar":        RidingCar,
 		"/serviceArea/getFenceRelation": GetFenceRelation,
-		"/actuator/deregisterService":  DeregisterService,
+		"/actuator/deregisterService":   DeregisterService,
 	}
 	mergeHandlers(handlers, helpConfigHandlers())
 	mergeHandlers(handlers, resourceManagementHandlers())

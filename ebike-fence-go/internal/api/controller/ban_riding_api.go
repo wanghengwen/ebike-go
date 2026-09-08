@@ -9,14 +9,14 @@ import (
 func banRidingHandlers() map[string]gin.HandlerFunc {
 	initFenceAdmin()
 	return map[string]gin.HandlerFunc{
-		"/banRiding/getById":              handleBanRidingGetByID,
-		"/banRiding/getListByServiceId":   handleBanRidingGetListByServiceID,
-		"/banRiding/getNearestBanRiding":  handleBanRidingGetNearest,
+		"/banRiding/getById":               handleBanRidingGetByID,
+		"/banRiding/getListByServiceId":    handleBanRidingGetListByServiceID,
+		"/banRiding/getNearestBanRiding":   handleBanRidingGetNearest,
 		"/banRiding/getNearBanRidingAreas": handleBanRidingGetNearAreas,
-		"/banRiding/createBanRiding":      handleBanRidingCreate,
-		"/banRiding/updateBanRiding":      handleBanRidingUpdate,
-		"/banRiding/deleteBanRiding":      handleBanRidingDelete,
-		"/banRiding/deleteBanRidingBatch": handleBanRidingDeleteBatch,
+		"/banRiding/createBanRiding":       handleBanRidingCreate,
+		"/banRiding/updateBanRiding":       handleBanRidingUpdate,
+		"/banRiding/deleteBanRiding":       handleBanRidingDelete,
+		"/banRiding/deleteBanRidingBatch":  handleBanRidingDeleteBatch,
 	}
 }
 

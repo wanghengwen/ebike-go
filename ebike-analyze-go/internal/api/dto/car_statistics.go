@@ -31,14 +31,14 @@ type CarStatisticsCO struct {
 	CarID                   string  `json:"carId"`
 	Imei                    *string `json:"imei"`
 	OrderCount              *int    `json:"orderCount"`
-	OrderCost               *int64 `json:"orderCost"`
-	RidingDistance          *int64 `json:"ridingDistance"`
-	RidingTime              *int64 `json:"ridingTime"`
-	DdMissOrder             *int   `json:"ddMissOrder"`
-	OperationMissOrderCount *int   `json:"operationMissOrderCount"`
-	ChangeBatteryCount      *int   `json:"changeBatteryCount"`
-	RepairCount             *int   `json:"repairCount"`
-	MoveCarCount            *int   `json:"moveCarCount"`
+	OrderCost               *int64  `json:"orderCost"`
+	RidingDistance          *int64  `json:"ridingDistance"`
+	RidingTime              *int64  `json:"ridingTime"`
+	DdMissOrder             *int    `json:"ddMissOrder"`
+	OperationMissOrderCount *int    `json:"operationMissOrderCount"`
+	ChangeBatteryCount      *int    `json:"changeBatteryCount"`
+	RepairCount             *int    `json:"repairCount"`
+	MoveCarCount            *int    `json:"moveCarCount"`
 }
 
 // CarServiceStatisticsCo mirrors Java api.dto.CarServiceStatisticsCo, including

@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	infrarpc "ebike-fence-go/internal/infrastructure/rpc"
 	"ebike-fence-go/internal/infrastructure/persistence/model"
+	infrarpc "ebike-fence-go/internal/infrastructure/rpc"
 )
 
 var managementRPC = infrarpc.NewManagementRPC()

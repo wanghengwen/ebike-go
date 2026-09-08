@@ -88,7 +88,6 @@ func loadFencesOnGeoMiss(ctx context.Context, tenantId, prefix string, serviceID
 	return fenceGeoListFetcher(ctx, tenantId, prefix, serviceID, lng, lat, radius, count)
 }
 
-
 // FencesNearPoint filters and sorts fences by center-point distance (meters).
 func FencesNearPoint(fences []FenceE, lng, lat, radius float64, count int) []FenceE {
 	type item struct {
@@ -119,49 +118,49 @@ func FencesNearPoint(fences []FenceE, lng, lat, radius float64, count int) []Fen
 }
 
 type FenceE struct {
-	Id                     int64   `json:"id"`
-	Name                   string  `json:"name"`
-	ShapeType              string  `json:"shapeType"`
-	CenterLat              float64 `json:"centerLat"`
-	CenterLng              float64 `json:"centerLng"`
-	PointList              string  `json:"pointList"`
-	Type                   int     `json:"type"`
-	ServiceId              int64   `json:"serviceId"`
-	IzEnable               bool    `json:"izEnable"`
-	BufferDistance         float64 `json:"bufferDistance"`
-	CoefficientOfDifficult float64 `json:"coefficientOfDifficult"`
-	CoefficientOfDifficultSet bool `json:"-"`
-	BufferDistanceSet      bool    `json:"-"`
-	IzFullPileNoStop       *int    `json:"izFullPileNoStop"`
-	MaxParkingNumber       int     `json:"maxParkingNumber"`
-	OpeningHoursBegin      string  `json:"openingHoursBegin"`
-	OpeningHoursEnd        string  `json:"openingHoursEnd"`
-	IzOpenAllDay           *bool   `json:"izOpenAllDay"`
+	Id                        int64   `json:"id"`
+	Name                      string  `json:"name"`
+	ShapeType                 string  `json:"shapeType"`
+	CenterLat                 float64 `json:"centerLat"`
+	CenterLng                 float64 `json:"centerLng"`
+	PointList                 string  `json:"pointList"`
+	Type                      int     `json:"type"`
+	ServiceId                 int64   `json:"serviceId"`
+	IzEnable                  bool    `json:"izEnable"`
+	BufferDistance            float64 `json:"bufferDistance"`
+	CoefficientOfDifficult    float64 `json:"coefficientOfDifficult"`
+	CoefficientOfDifficultSet bool    `json:"-"`
+	BufferDistanceSet         bool    `json:"-"`
+	IzFullPileNoStop          *int    `json:"izFullPileNoStop"`
+	MaxParkingNumber          int     `json:"maxParkingNumber"`
+	OpeningHoursBegin         string  `json:"openingHoursBegin"`
+	OpeningHoursEnd           string  `json:"openingHoursEnd"`
+	IzOpenAllDay              *bool   `json:"izOpenAllDay"`
 
 	// Parking capability flags (ParkingE.getParts in Java)
-	Tbeacon     *bool `json:"tbeacon"`
-	Directional *bool `json:"directional"`
-	Rfid        *bool `json:"rfid"`
-	Camera      *bool `json:"camera"`
-	Kickstand          *bool    `json:"kickstand"`
-	Direction          *float64 `json:"direction"`
-	FormulateDirection *float64 `json:"formulateDirection"`
-	CustomTypeId       int64    `json:"customTypeId,omitempty"`
-	AreaSize           float64  `json:"areaSize,omitempty"`
-	AreaSizeSet        bool     `json:"-"`
-	MinAmount          *int     `json:"minAmount,omitempty"`
-	MinAmountSet       bool     `json:"-"`
-	MaxAmount          *int     `json:"maxAmount,omitempty"`
-	MaxAmountSet       bool     `json:"-"`
-	Distance           float64  `json:"distance,omitempty"`
-	TenantId           string   `json:"tenantId,omitempty"`
-	DataVersion        int64    `json:"dataVersion,omitempty"`
-	CreatedPin         string   `json:"createdPin,omitempty"`
-	CreatedAt          string   `json:"createdAt,omitempty"`
-	UpdatedPin         string   `json:"updatedPin,omitempty"`
-	UpdatedAt          string   `json:"updatedAt,omitempty"`
-	IzCameraDirectionalBackcar *bool `json:"izCameraDirectionalBackcar,omitempty"`
-	IzCameraPointBackcar       *bool `json:"izCameraPointBackcar,omitempty"`
+	Tbeacon                    *bool    `json:"tbeacon"`
+	Directional                *bool    `json:"directional"`
+	Rfid                       *bool    `json:"rfid"`
+	Camera                     *bool    `json:"camera"`
+	Kickstand                  *bool    `json:"kickstand"`
+	Direction                  *float64 `json:"direction"`
+	FormulateDirection         *float64 `json:"formulateDirection"`
+	CustomTypeId               int64    `json:"customTypeId,omitempty"`
+	AreaSize                   float64  `json:"areaSize,omitempty"`
+	AreaSizeSet                bool     `json:"-"`
+	MinAmount                  *int     `json:"minAmount,omitempty"`
+	MinAmountSet               bool     `json:"-"`
+	MaxAmount                  *int     `json:"maxAmount,omitempty"`
+	MaxAmountSet               bool     `json:"-"`
+	Distance                   float64  `json:"distance,omitempty"`
+	TenantId                   string   `json:"tenantId,omitempty"`
+	DataVersion                int64    `json:"dataVersion,omitempty"`
+	CreatedPin                 string   `json:"createdPin,omitempty"`
+	CreatedAt                  string   `json:"createdAt,omitempty"`
+	UpdatedPin                 string   `json:"updatedPin,omitempty"`
+	UpdatedAt                  string   `json:"updatedAt,omitempty"`
+	IzCameraDirectionalBackcar *bool    `json:"izCameraDirectionalBackcar,omitempty"`
+	IzCameraPointBackcar       *bool    `json:"izCameraPointBackcar,omitempty"`
 
 	// ParsedPolygon avoids massive string parsing overhead during requests
 	ParsedPolygon []geo.Location `json:"-"`

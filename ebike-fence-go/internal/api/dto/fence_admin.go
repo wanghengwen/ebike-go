@@ -77,8 +77,8 @@ func (c *ComputeDistanceCmd) UnmarshalJSON(data []byte) error {
 }
 
 type ComputeDistanceCO struct {
-	Distance   float64 `json:"distance"`
-	IzCloseLine bool   `json:"izCloseLine"`
+	Distance    float64 `json:"distance"`
+	IzCloseLine bool    `json:"izCloseLine"`
 }
 
 type TenantServiceCmd struct {
@@ -103,54 +103,58 @@ type ParkingPartCO struct {
 
 type ParkingCO struct {
 	FenceCO
-	MaxParkingNumber       int      `json:"maxParkingNumber"`
-	ServiceId              int64    `json:"serviceId"`
-	Tbeacon                *bool    `json:"tbeacon"`
-	Directional            *bool    `json:"directional"`
-	Direction              *float64 `json:"direction"`
-	FormulateDirection     *float64 `json:"formulateDirection"`
-	Rfid                   *bool    `json:"rfid"`
-	IzEnable               bool     `json:"izEnable"`
-	CoefficientOfDifficult *float64 `json:"coefficientOfDifficult"`
-	BufferDistance         *float64 `json:"bufferDistance"`
-	Camera                 *bool    `json:"camera"`
-	IzCameraDirectionalBackcar *bool `json:"izCameraDirectionalBackcar"`
-	IzCameraPointBackcar       *bool `json:"izCameraPointBackcar"`
-	Kickstand              *bool    `json:"kickstand"`
-	IzFullPileNoStop       *int     `json:"izFullPileNoStop"`
-	AreaSize               *float64 `json:"areaSize"`
-	UseCount               int      `json:"useCount"`
-	OfflineCount           int      `json:"offlineCount"`
-	RepairCount            int      `json:"repairCount"`
-	OrderCount             int      `json:"orderCount"`
-	OrderCost              int      `json:"orderCost"`
-	FullCar                *bool    `json:"fullCar"`
-	RefTags                []int64  `json:"refTags"`
-	CarCount               *int64   `json:"carCount"`
-	Distance               float64  `json:"distance"`
-	OpeningHoursBegin      *string  `json:"openingHoursBegin"`
-	OpeningHoursEnd        *string  `json:"openingHoursEnd"`
-	IzOpenAllDay           *bool    `json:"izOpenAllDay"`
-	ActivityId             *int64   `json:"activityId"`
-	MinAmount              *int     `json:"minAmount"`
-	MaxAmount              *int     `json:"maxAmount"`
-	ExpirationTime         *string  `json:"expirationTime"`
-	Rfids                  *string  `json:"rfids"`
+	MaxParkingNumber           int          `json:"maxParkingNumber"`
+	ServiceId                  int64        `json:"serviceId"`
+	Tbeacon                    *bool        `json:"tbeacon"`
+	Directional                *bool        `json:"directional"`
+	Direction                  *float64     `json:"direction"`
+	Rfid                       *bool        `json:"rfid"`
+	IzEnable                   bool         `json:"izEnable"`
+	CoefficientOfDifficult     *float64     `json:"coefficientOfDifficult"`
+	BufferDistance             *float64     `json:"bufferDistance"`
+	Camera                     *bool        `json:"camera"`
+	IzCameraDirectionalBackcar *bool        `json:"izCameraDirectionalBackcar"`
+	IzCameraPointBackcar       *bool        `json:"izCameraPointBackcar"`
+	Kickstand                  *bool        `json:"kickstand"`
+	IzFullPileNoStop           *int         `json:"izFullPileNoStop"`
+	AreaSize                   *float64     `json:"areaSize"`
+	UseCount                   int          `json:"useCount"`
+	OfflineCount               int          `json:"offlineCount"`
+	RepairCount                int          `json:"repairCount"`
+	OrderCount                 int          `json:"orderCount"`
+	OrderCost                  int          `json:"orderCost"`
+	FullCar                    *bool        `json:"fullCar"`
+	RefTags                    []FenceTagCO `json:"refTags"`
+	CarCount                   *int64       `json:"carCount"`
+	Distance                   float64      `json:"distance"`
+	OpeningHoursBegin          *string      `json:"openingHoursBegin"`
+	OpeningHoursEnd            *string      `json:"openingHoursEnd"`
+	ActivityId                 *int64       `json:"activityId"`
+	MinAmount                  *int         `json:"minAmount"`
+	MaxAmount                  *int         `json:"maxAmount"`
+	ExpirationTime             *string      `json:"expirationTime"`
+	// Java exposes the field as List<String> RFIDs; Jackson mangles the getter to "rfids".
+	Rfids []string `json:"rfids"`
 }
 
+// ParkingCmd mirrors Java ParkingCmd. refTags is a plain id list on the request side, and
+// formulateDirection/izOpenAllDay are accepted here only — Java's ParkingCO exposes neither.
 type ParkingCmd struct {
 	Command
 	ParkingCO
+	RefTags            []int64  `json:"refTags"`
+	FormulateDirection *float64 `json:"formulateDirection"`
+	IzOpenAllDay       *bool    `json:"izOpenAllDay"`
 }
 
 type IdPageCmd struct {
 	Command
-	Id        *int64    `json:"id"`
-	Name      string    `json:"name,omitempty"`
-	AreaSize  *float64  `json:"areaSize,omitempty"`
-	FieldList []string  `json:"fieldList,omitempty"`
-	PageNum   int       `json:"pageNum,omitempty"`
-	PageSize  int       `json:"pageSize,omitempty"`
+	Id        *int64   `json:"id"`
+	Name      string   `json:"name,omitempty"`
+	AreaSize  *float64 `json:"areaSize,omitempty"`
+	FieldList []string `json:"fieldList,omitempty"`
+	PageNum   int      `json:"pageNum,omitempty"`
+	PageSize  int      `json:"pageSize,omitempty"`
 }
 
 type CarIdCmd struct {
@@ -160,7 +164,7 @@ type CarIdCmd struct {
 
 type NearLocationCmd struct {
 	Command
-	ServiceId int64   `json:"serviceId"`
+	ServiceId int64 `json:"serviceId"`
 	Location  struct {
 		Lat float64 `json:"lat"`
 		Lng float64 `json:"lng"`
@@ -243,7 +247,7 @@ type CopyByServiceCmd struct {
 
 type NoParkingCO struct {
 	FenceCO
-	ServiceId int64 `json:"serviceId"`
+	ServiceId int64   `json:"serviceId"`
 	Distance  float64 `json:"distance"`
 }
 
@@ -355,8 +359,8 @@ type FenceRfidCO struct {
 
 type FenceRfidCmd struct {
 	Command
-	FenceId int64  `json:"fenceId"`
-	IzDel   *int   `json:"izDel,omitempty"`
+	FenceId int64 `json:"fenceId"`
+	IzDel   *int  `json:"izDel,omitempty"`
 }
 
 type RfidCmd struct {
@@ -412,20 +416,20 @@ type SiteApplicationCmd struct {
 }
 
 type SiteApplicationCO struct {
-	Id              int64  `json:"id"`
-	ServiceId       int64  `json:"serviceId"`
-	UserPin         string `json:"userPin"`
-	Location        string `json:"location"`
+	Id              int64   `json:"id"`
+	ServiceId       int64   `json:"serviceId"`
+	UserPin         string  `json:"userPin"`
+	Location        string  `json:"location"`
 	Lat             float64 `json:"lat"`
 	Lng             float64 `json:"lng"`
-	ApplicantPhone  string `json:"applicantPhone"`
-	PhotoUrl        string `json:"photoUrl"`
-	ApplicantRemark string `json:"applicantRemark"`
-	State           int    `json:"state"`
-	OpManPin        string `json:"opManPin"`
-	OpManPhone      string `json:"opManPhone"`
-	OpManRemark     string `json:"opManRemark"`
-	CreatedAt       string `json:"createdAt"`
+	ApplicantPhone  string  `json:"applicantPhone"`
+	PhotoUrl        string  `json:"photoUrl"`
+	ApplicantRemark string  `json:"applicantRemark"`
+	State           int     `json:"state"`
+	OpManPin        string  `json:"opManPin"`
+	OpManPhone      string  `json:"opManPhone"`
+	OpManRemark     string  `json:"opManRemark"`
+	CreatedAt       string  `json:"createdAt"`
 }
 
 type ApplicationQuery struct {
@@ -474,10 +478,10 @@ type ParkingStationFilterCmd struct {
 
 type ParkingPageOrderByQry struct {
 	Command
-	ServiceId      int64 `json:"serviceId"`
+	ServiceId      int64  `json:"serviceId"`
 	MaintainAreaId *int64 `json:"maintainAreaId,omitempty"`
-	PageNum        int   `json:"pageNum,omitempty"`
-	PageSize       int   `json:"pageSize,omitempty"`
+	PageNum        int    `json:"pageNum,omitempty"`
+	PageSize       int    `json:"pageSize,omitempty"`
 }
 
 type ParkingMonitorPageQry struct {

@@ -42,7 +42,7 @@ func ToHomeScrollerMsgCOList(rows []model.TConfigHomeScrollMsg) []dto.HomeScroll
 }
 
 func ToFaqCO(m model.TConfigFaq) dto.FaqCO {
-	return dto.FaqCO{
+	co := dto.FaqCO{
 		Id:          m.ID,
 		ServiceId:   m.ServiceID,
 		Title:       m.Title,
@@ -50,6 +50,11 @@ func ToFaqCO(m model.TConfigFaq) dto.FaqCO {
 		Detail:      m.Detail,
 		IzOn:        m.IzOn,
 	}
+	if !m.CreatedAt.IsZero() {
+		at := timefmt.FormatJavaLocalSpace(m.CreatedAt.Time)
+		co.CreatedAt = &at
+	}
+	return co
 }
 
 func ToFaqCOList(rows []model.TConfigFaq) []dto.FaqCO {
@@ -79,7 +84,55 @@ func ToGuidePageCO(m model.TConfigGuidePage) dto.GuidePageConfigCO {
 			co.GuidePages = pages
 		}
 	}
+	// Mirror Java GuidePageConfigCO.getPageNumEsc(): empty pages / null / overflow → clamp.
+	if len(co.GuidePages) == 0 {
+		co.PageNumEsc = 1
+	} else if co.PageNumEsc <= 0 {
+		co.PageNumEsc = 1
+	} else if co.PageNumEsc > len(co.GuidePages) {
+		co.PageNumEsc = len(co.GuidePages)
+	}
 	return co
+}
+
+// ToHomeActivityCO mirrors Java ConvertorHelper HomeActivityEntranceDO → HomeActivityEntranceCO:
+// no audit fields, no orderWeights, and times formatted as "yyyy-MM-dd HH:mm:ss".
+func ToHomeActivityCO(m model.TConfigHomeActivityEntrance) dto.HomeActivityEntranceCO {
+	co := dto.HomeActivityEntranceCO{
+		Id:           m.ID,
+		ServiceId:    m.ServiceID,
+		ChainType:    m.ChainType,
+		LinkUrl:      m.LinkUrl,
+		PicUrl:       m.PicUrl,
+		LinkTitle:    m.LinkTitle,
+		AppId:        m.AppId,
+		Param:        m.Param,
+		IzOn:         m.IzOn,
+		Position:     m.Position,
+		OpDownOffset: m.OpDownOffset,
+		VisibleRange: m.VisibleRange,
+		Unlimited:    m.Unlimited,
+		ByRegister:   m.ByRegister,
+		ByTags:       m.ByTags,
+		TagIds:       m.TagIds,
+	}
+	if m.StartTime != nil && !m.StartTime.IsZero() {
+		at := timefmt.FormatJavaLocalSpace(*m.StartTime)
+		co.StartTime = &at
+	}
+	if m.EndTime != nil && !m.EndTime.IsZero() {
+		at := timefmt.FormatJavaLocalSpace(*m.EndTime)
+		co.EndTime = &at
+	}
+	return co
+}
+
+func ToHomeActivityCOList(rows []model.TConfigHomeActivityEntrance) []dto.HomeActivityEntranceCO {
+	out := make([]dto.HomeActivityEntranceCO, 0, len(rows))
+	for _, row := range rows {
+		out = append(out, ToHomeActivityCO(row))
+	}
+	return out
 }
 
 func ToGuidePageCOList(rows []model.TConfigGuidePage) []dto.GuidePageConfigCO {

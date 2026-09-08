@@ -20,8 +20,8 @@ type mysqlNacosFile struct {
 }
 
 type mysqlNacosRoot struct {
-	ConnectionParam string           `yaml:"connection-param"`
-	EbikeFence      mysqlDataSource  `yaml:"ebike_fence"`
+	ConnectionParam string          `yaml:"connection-param"`
+	EbikeFence      mysqlDataSource `yaml:"ebike_fence"`
 }
 
 type mysqlDataSource struct {

@@ -100,21 +100,21 @@ func FenceToEntity(row model.TFence) gateway.FenceE {
 
 func EntityToModel(tenantID, pin string, fe gateway.FenceE) model.TFence {
 	row := model.TFence{
-		ID:                fe.Id,
-		TenantID:          tenantID,
-		Type:              fe.Type,
-		Name:              fe.Name,
-		ShapeType:         fe.ShapeType,
-		MaxParkingNumber:  fe.MaxParkingNumber,
-		CenterLat:         fe.CenterLat,
-		CenterLng:         fe.CenterLng,
-		PointList:         fe.PointList,
-		ServiceID:         fe.ServiceId,
-		OpeningHoursBegin: sql.NullString{String: fe.OpeningHoursBegin, Valid: fe.OpeningHoursBegin != ""},
-		OpeningHoursEnd:   sql.NullString{String: fe.OpeningHoursEnd, Valid: fe.OpeningHoursEnd != ""},
-		BufferDistance:    sql.NullFloat64{Float64: fe.BufferDistance, Valid: fe.BufferDistance > 0},
+		ID:                     fe.Id,
+		TenantID:               tenantID,
+		Type:                   fe.Type,
+		Name:                   fe.Name,
+		ShapeType:              fe.ShapeType,
+		MaxParkingNumber:       fe.MaxParkingNumber,
+		CenterLat:              fe.CenterLat,
+		CenterLng:              fe.CenterLng,
+		PointList:              fe.PointList,
+		ServiceID:              fe.ServiceId,
+		OpeningHoursBegin:      sql.NullString{String: fe.OpeningHoursBegin, Valid: fe.OpeningHoursBegin != ""},
+		OpeningHoursEnd:        sql.NullString{String: fe.OpeningHoursEnd, Valid: fe.OpeningHoursEnd != ""},
+		BufferDistance:         sql.NullFloat64{Float64: fe.BufferDistance, Valid: fe.BufferDistance > 0},
 		CoefficientOfDifficult: sql.NullFloat64{Float64: fe.CoefficientOfDifficult, Valid: fe.CoefficientOfDifficult > 0},
-		IzEnable:          sql.NullBool{Bool: fe.IzEnable, Valid: true},
+		IzEnable:               sql.NullBool{Bool: fe.IzEnable, Valid: true},
 	}
 	if fe.IzFullPileNoStop != nil {
 		row.IzFullPileNoStop = sql.NullInt32{Int32: int32(*fe.IzFullPileNoStop), Valid: true}

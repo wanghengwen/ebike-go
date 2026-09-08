@@ -9,12 +9,12 @@ import (
 func fenceRfidHandlers() map[string]gin.HandlerFunc {
 	initFenceAdmin()
 	return map[string]gin.HandlerFunc{
-		"/rfid/bind/queryRFIDsByFenceId":       handleRfidQueryByFenceID,
-		"/rfid/bind/queryFenceIdByRfidCache":   handleRfidQueryFenceByRfid,
-		"/rfid/bind/queryFenceByRfids":         handleRfidQueryFenceByRfids,
-		"/rfid/bind/saveOrUpdate":              handleRfidSaveOrUpdate,
-		"/rfid/bind/change":                    handleRfidChange,
-		"/rfid/bind/batchSaveOrUpdate":         handleRfidBatchSaveOrUpdate,
+		"/rfid/bind/queryRFIDsByFenceId":     handleRfidQueryByFenceID,
+		"/rfid/bind/queryFenceIdByRfidCache": handleRfidQueryFenceByRfid,
+		"/rfid/bind/queryFenceByRfids":       handleRfidQueryFenceByRfids,
+		"/rfid/bind/saveOrUpdate":            handleRfidSaveOrUpdate,
+		"/rfid/bind/change":                  handleRfidChange,
+		"/rfid/bind/batchSaveOrUpdate":       handleRfidBatchSaveOrUpdate,
 	}
 }
 

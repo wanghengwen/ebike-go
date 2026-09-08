@@ -394,4 +394,3 @@ func (r *FenceRepository) UpdateRadPacketParking(ctx context.Context, tenantID s
 	_ = gateway.InvalidateFenceCache(ctx, gateway.CacheParking, tenantID, parkingID)
 	return nil
 }
-

@@ -347,7 +347,7 @@ func PointToPolygonDistance(pointJson, polygonJson string) (float64, error) {
 	if err != nil {
 		return 0, err
 	}
-	
+
 	var loc Location
 	if err2 := json.Unmarshal([]byte(pointJson), &loc); err2 != nil {
 		// Fallback for weird point format like just a coordinate array or GeoJSON
@@ -380,7 +380,7 @@ func rayCasting(loc Location, polygon []Location) bool {
 	for i, j := 0, n-1; i < n; j, i = i, i+1 {
 		xi, yi := polygon[i].Lng, polygon[i].Lat
 		xj, yj := polygon[j].Lng, polygon[j].Lat
-		
+
 		// The point's Y coordinate must be strictly between the Y coordinates of the edge
 		intersect := ((yi > loc.Lat) != (yj > loc.Lat)) && (loc.Lng < (xj-xi)*(loc.Lat-yi)/(yj-yi)+xi)
 		if intersect {

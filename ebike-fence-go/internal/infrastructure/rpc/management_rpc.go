@@ -8,8 +8,8 @@ import (
 
 	"ebike-fence-go/internal/api/dto"
 	"ebike-fence-go/internal/middleware"
-	pkg_rpc "ebike-fence-go/internal/pkg/rpc"
 	"ebike-fence-go/internal/pkg/config"
+	pkg_rpc "ebike-fence-go/internal/pkg/rpc"
 	"ebike-fence-go/internal/pkg/shadow"
 
 	lru "github.com/hashicorp/golang-lru/v2"
@@ -300,7 +300,7 @@ type carTagRecordCmd struct {
 	CommandContext *dto.CommandContext `json:"commandContext,omitempty"`
 	ServiceId      int64               `json:"serviceId"`
 	CarId          string              `json:"carId"`
-	TypeIds        []int                 `json:"typeIds"`
+	TypeIds        []int               `json:"typeIds"`
 }
 
 // CarTagRecordAdd mirrors Java ManagementApiRpcImpl.carTagRecordAdd (async).
