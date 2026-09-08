@@ -145,7 +145,7 @@ func InitNamingClient() {
 		Ip:          ip,
 		Port:        port,
 		ServiceName: config.GlobalConfig.Server.Name,
-		GroupName:    nc.Group,
+		GroupName:   nc.Group,
 		Weight:      1,
 		Enable:      true,
 		Healthy:     true,
@@ -174,7 +174,7 @@ func Deregister() {
 		Ip:          ip,
 		Port:        port,
 		ServiceName: config.GlobalConfig.Server.Name,
-		GroupName:    nc.Group,
+		GroupName:   nc.Group,
 		Ephemeral:   true,
 	})
 	if err != nil || !ok {

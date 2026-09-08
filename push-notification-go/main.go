@@ -13,9 +13,9 @@ import (
 	"push-notification-go/internal/cache"
 	"push-notification-go/internal/handler"
 	"push-notification-go/internal/pkg/config"
-	"push-notification-go/internal/pkg/validator"
 	"push-notification-go/internal/pkg/mysql"
 	"push-notification-go/internal/pkg/nacos"
+	"push-notification-go/internal/pkg/validator"
 	"push-notification-go/internal/pool"
 	"push-notification-go/internal/sender"
 
