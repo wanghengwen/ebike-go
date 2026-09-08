@@ -45,7 +45,7 @@ func main() {
 	// Initialize Gin
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-	
+
 	// Add global middlewares
 	r.Use(middleware.RecoveryMiddleware())
 	r.Use(middleware.SecurityMiddleware())

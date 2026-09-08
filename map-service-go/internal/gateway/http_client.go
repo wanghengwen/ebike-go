@@ -15,9 +15,9 @@ func NewMapHTTPClient() *resty.Client {
 			Timeout:   2 * time.Second,
 			KeepAlive: 30 * time.Second,
 		}).DialContext,
-		MaxIdleConns:        200,
-		MaxIdleConnsPerHost: 200,
-		IdleConnTimeout:     90 * time.Second,
+		MaxIdleConns:          200,
+		MaxIdleConnsPerHost:   200,
+		IdleConnTimeout:       90 * time.Second,
 		ResponseHeaderTimeout: 5 * time.Second,
 	}
 

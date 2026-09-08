@@ -69,9 +69,9 @@ type Navigate struct {
 	Distance2   *string    `json:"distance2"`
 	Duration3   *string    `json:"duration3"`
 	Distance3   *string    `json:"distance3"`
-	PolylineApi *string `json:"polylineApi"`
-	Api         *string `json:"api"`
-	Route       *ARoute `json:"route"`
+	PolylineApi *string    `json:"polylineApi"`
+	Api         *string    `json:"api"`
+	Route       *ARoute    `json:"route"`
 }
 
 type ARoute struct {

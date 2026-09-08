@@ -3,7 +3,7 @@ package registry
 import "sync"
 
 var (
-	mu          sync.Mutex
+	mu           sync.Mutex
 	deregisterFn func() error
 )
 

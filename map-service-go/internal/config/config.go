@@ -15,9 +15,9 @@ import (
 )
 
 var (
-	GlobalConfig *Config
-	once         sync.Once
-	configMu     sync.RWMutex
+	GlobalConfig    *Config
+	once            sync.Once
+	configMu        sync.RWMutex
 	lastProfileYAML string
 )
 
@@ -26,7 +26,6 @@ func GetConfig() *Config {
 	defer configMu.RUnlock()
 	return GlobalConfig
 }
-
 
 type Config struct {
 	Xyy   XyyConfig   `yaml:"xyy"`
