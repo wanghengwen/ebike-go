@@ -4,9 +4,9 @@ import "testing"
 
 func TestParseAuthCacheValue(t *testing.T) {
 	cases := []struct {
-		in      string
-		want    bool
-		wantOK  bool
+		in     string
+		want   bool
+		wantOK bool
 	}{
 		{"true", true, true},
 		{"false", false, true},

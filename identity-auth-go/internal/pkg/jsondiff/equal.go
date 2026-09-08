@@ -1,4 +1,4 @@
-﻿// Package jsondiff compares JSON documents for shadow-traffic diffing, tolerating
+// Package jsondiff compares JSON documents for shadow-traffic diffing, tolerating
 // Java-vs-Go representation differences (e.g. Long as number vs string).
 package jsondiff
 

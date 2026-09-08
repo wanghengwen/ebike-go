@@ -1,12 +1,12 @@
 package nacos
 
 import (
-	"log"
-	"net"
 	"identity-auth-go/internal/pkg/config"
 	"identity-auth-go/internal/pkg/mysql"
 	"identity-auth-go/internal/pkg/oss"
 	goredis "identity-auth-go/internal/pkg/redis"
+	"log"
+	"net"
 
 	"github.com/nacos-group/nacos-sdk-go/v2/clients"
 	"github.com/nacos-group/nacos-sdk-go/v2/clients/config_client"
@@ -197,7 +197,7 @@ func InitNamingClient() {
 		Ip:          ip,
 		Port:        port,
 		ServiceName: config.GlobalConfig.Server.Name,
-		GroupName:    nc.Group,
+		GroupName:   nc.Group,
 		Weight:      1,
 		Enable:      true,
 		Healthy:     true,
@@ -226,7 +226,7 @@ func Deregister() {
 		Ip:          ip,
 		Port:        port,
 		ServiceName: config.GlobalConfig.Server.Name,
-		GroupName:    nc.Group,
+		GroupName:   nc.Group,
 		Ephemeral:   true,
 	})
 	if err != nil || !ok {

@@ -32,11 +32,11 @@ type CallRecord struct {
 // All queries use raw SQL with dynamic table names.
 
 type ChargeRecord struct {
-	ID       int64   `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
-	TenantId string  `gorm:"column:tenant_id" json:"tenantId"`
-	Amount   string  `gorm:"column:amount" json:"amount"` // Use string to match Java BigDecimal
-	Quantity int64   `gorm:"column:quantity" json:"quantity"`
-	Type     int     `gorm:"column:type" json:"type"`
+	ID       int64  `gorm:"column:id;primaryKey;autoIncrement" json:"id"`
+	TenantId string `gorm:"column:tenant_id" json:"tenantId"`
+	Amount   string `gorm:"column:amount" json:"amount"` // Use string to match Java BigDecimal
+	Quantity int64  `gorm:"column:quantity" json:"quantity"`
+	Type     int    `gorm:"column:type" json:"type"`
 	BaseEntity
 }
 
@@ -75,7 +75,7 @@ type ShadowRecordList struct {
 	Payload     string    `gorm:"column:payload" json:"payload"` // JSON string of the request
 	TenantId    string    `gorm:"column:tenant_id" json:"tenantId"`
 	TraceId     string    `gorm:"column:trace_id" json:"traceId"`
-	Type        int       `gorm:"column:type" json:"type"`           // 1=二要素, 2=三要素
+	Type        int       `gorm:"column:type" json:"type"` // 1=二要素, 2=三要素
 	CreatedAt   time.Time `gorm:"column:created_at" json:"createdAt"`
 }
 

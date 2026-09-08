@@ -1,8 +1,8 @@
-﻿package mysql
+package mysql
 
 import (
-	"log"
 	"identity-auth-go/internal/pkg/config"
+	"log"
 	"time"
 
 	mysqldriver "gorm.io/driver/mysql"
