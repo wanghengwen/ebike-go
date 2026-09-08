@@ -18,7 +18,6 @@ func logRPC(ctx context.Context, apiName string, req interface{}, respBody []byt
 	logger.WithContext(ctx).Info(fmt.Sprintf("userApi.%s cmd=%s result=%s", apiName, string(cmdBytes), string(respBody)))
 }
 
-
 type UserDO struct {
 	Pin         string   `json:"pin"`
 	Nickname    string   `json:"nickname"`
@@ -52,7 +51,6 @@ type UserAuthInfoCo struct {
 	Status      int      `json:"status"`
 	Avatar      string   `json:"avatar"`
 }
-
 
 type ThirdUserInfoCo struct {
 	Id        int64  `json:"id"`

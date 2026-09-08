@@ -21,8 +21,8 @@ type nacosWeixinProperties struct {
 }
 
 type WeixinPublicPlatformConfig struct {
-	AppId     string
-	AppSecret string
+	AppId      string
+	AppSecret  string
 	APIBaseURL string
 }
 

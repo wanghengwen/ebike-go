@@ -55,7 +55,7 @@ func InitLogger() {
 // WithContext extracts logging attributes from Gin context or standard context
 func WithContext(ctx context.Context) *zap.Logger {
 	var traceId, tenantId, pin string
-	
+
 	if ginCtx, ok := ctx.(*gin.Context); ok {
 		traceId = ginCtx.GetString("traceId")
 		tenantId = ginCtx.GetString("tenantId")
@@ -112,4 +112,3 @@ func DetachContext(ctx context.Context) context.Context {
 	bgCtx = context.WithValue(bgCtx, PinKey, pin)
 	return bgCtx
 }
-

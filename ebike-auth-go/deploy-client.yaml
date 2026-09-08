@@ -38,10 +38,6 @@ spec:
             # Nacos 注册中心与配置中心相关环境变量 (兼容原SpringCloud变量名)
             - name: SPRING_CLOUD_NACOS_DISCOVERY_REGISTER_ENABLED
               value: 'true'
-            - name: SPRING_CLOUD_NACOS_CONFIG_SERVER_ADDR
-              value: '192.168.2.20:8848'
-            - name: SPRING_CLOUD_NACOS_DISCOVERY_SERVER_ADDR
-              value: '192.168.2.20:8848'
             - name: SPRING_CLOUD_NACOS_CONFIG_NAMESPACE
               value: prod
             - name: SPRING_CLOUD_NACOS_DISCOVERY_NAMESPACE
@@ -50,12 +46,18 @@ spec:
               value: xyy
             - name: SPRING_CLOUD_NACOS_DISCOVERY_GROUP
               value: xyy
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.1.108:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
             - name: POD_IP
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
           # 统一使用打包好的 Go 镜像版本
-          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-auth-go:v1.0.8
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-auth-go:v1.0.9
           imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:

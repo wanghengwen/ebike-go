@@ -18,9 +18,9 @@ type FacebookVerifyAccessToken struct {
 }
 
 type FacebookProfile struct {
-	Name    string                  `json:"name"`
-	Email   string                  `json:"email"`
-	Picture FacebookProfilePicture  `json:"picture"`
+	Name    string                 `json:"name"`
+	Email   string                 `json:"email"`
+	Picture FacebookProfilePicture `json:"picture"`
 }
 
 type FacebookProfilePicture struct {
@@ -32,11 +32,11 @@ type FacebookProfilePictureData struct {
 }
 
 type FacebookUserInfo struct {
-	AppId   string
-	UserID  string
-	Email   string
-	Name    string
-	Avatar  string
+	AppId     string
+	UserID    string
+	Email     string
+	Name      string
+	Avatar    string
 	ThirdType int
 }
 

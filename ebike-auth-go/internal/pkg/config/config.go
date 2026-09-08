@@ -47,7 +47,7 @@ type NacosAppProperties struct {
 		EnableTenantSecretVerify bool              `yaml:"enableTenantSecretVerify"`
 		Aks                      map[string]string `yaml:"aks"`
 		GrayTenantIds            []string          `yaml:"grayTenantIds"`
-		Wechat struct {
+		Wechat                   struct {
 			ComponentAppId     string `yaml:"componentAppId"`
 			ComponentAppSecret string `yaml:"componentAppSecret"`
 		} `yaml:"wechat"`

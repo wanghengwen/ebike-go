@@ -26,7 +26,7 @@ type AuthCmd struct {
 	Key          string `json:"key,omitempty"`
 	Secret       string `json:"secret,omitempty"`
 	RefreshToken string `json:"refresh_token,omitempty"`
-	
+
 	// ClientDTO fields
 	TraceId  string `json:"traceId,omitempty"`
 	TenantId string `json:"tenantId,omitempty"`
@@ -55,7 +55,6 @@ func getPlatformName(platform string) string {
 	}
 	return platform
 }
-
 
 func verifyClient(c *gin.Context) (string, error) {
 	var clientId, clientSecret string
@@ -121,7 +120,7 @@ func BusinessTokenHandler(c *gin.Context) {
 	if platform == "" {
 		platform = c.GetHeader("platform")
 	}
-	
+
 	deviceId := cmd.DeviceId
 	if deviceId == "" {
 		deviceId = c.GetHeader("deviceId")
@@ -129,7 +128,7 @@ func BusinessTokenHandler(c *gin.Context) {
 	if deviceId == "" {
 		deviceId = "normal"
 	}
-	
+
 	tenantId := cmd.TenantId
 	if tenantId == "" {
 		tenantId = c.GetHeader("tenantId")
@@ -348,7 +347,7 @@ func BusinessTokenHandler(c *gin.Context) {
 		sendError(c, CodeException, "Failed to generate tokens")
 		return
 	}
-	
+
 	logger.WithContext(c).Info("Token generated successfully", zap.String("pin", user.Pin), zap.String("nickname", user.Nickname), zap.String("tenantId", tenantId), zap.String("platform", platform), zap.String("deviceId", deviceId))
 
 	// Update Login State in Redis

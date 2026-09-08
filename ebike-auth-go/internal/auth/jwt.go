@@ -62,12 +62,12 @@ func GenerateTokenPair(pin, clientId, platform, deviceId, nickname, avatar, open
 
 	// 2. Refresh Token Claims (typically simpler but has exp, user_name, platform, deviceId, client_id)
 	refreshTokenClaims := JWTClaims{
-		UserName:    pin,
-		Scope:       scopes,
-		GrantType:   grantType,
-		Platform:    platform,
-		DeviceId:    deviceId,
-		ClientId:    clientId,
+		UserName:  pin,
+		Scope:     scopes,
+		GrantType: grantType,
+		Platform:  platform,
+		DeviceId:  deviceId,
+		ClientId:  clientId,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Subject:   pin,
 			Audience:  jwt.ClaimStrings{clientId},

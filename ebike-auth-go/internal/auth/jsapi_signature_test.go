@@ -13,8 +13,8 @@ import (
 	"ebike-auth-go/internal/pkg/redis"
 
 	"github.com/alicebob/miniredis/v2"
-	goredis "github.com/redis/go-redis/v9"
 	"github.com/gin-gonic/gin"
+	goredis "github.com/redis/go-redis/v9"
 )
 
 func TestGenerateJsApiSignature(t *testing.T) {
