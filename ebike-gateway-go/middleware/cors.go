@@ -1,7 +1,6 @@
 package middleware
 
 import (
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,9 +12,9 @@ func CorsMiddleware() gin.HandlerFunc {
 		} else {
 			c.Header("Access-Control-Allow-Origin", "*")
 		}
-		
+
 		c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE, PATCH")
-		
+
 		// 动态反射前端请求的自定义请求头，防止漏配导致浏览器拦截 POST
 		reqHeaders := c.Request.Header.Get("Access-Control-Request-Headers")
 		if reqHeaders != "" {
@@ -23,7 +22,7 @@ func CorsMiddleware() gin.HandlerFunc {
 		} else {
 			c.Header("Access-Control-Allow-Headers", "Authorization, Content-Type, tenant-id, sign, timestamp, nonce, app-id, X-Requested-With")
 		}
-		
+
 		c.Header("Access-Control-Allow-Credentials", "true")
 		c.Header("Access-Control-Max-Age", "43200")
 		c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type")

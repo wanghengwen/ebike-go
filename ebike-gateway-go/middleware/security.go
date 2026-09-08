@@ -22,8 +22,8 @@ import (
 )
 
 var (
-	Rdb    *redis.Client
-	rdbMu  sync.RWMutex
+	Rdb   *redis.Client
+	rdbMu sync.RWMutex
 )
 
 // InitRedis connects to Redis using current configuration.
