@@ -12,7 +12,7 @@ type CommandContext struct {
 	UserId   string `json:"userId,omitempty"`
 	// Platform mirrors CommandContext.platform (ios/android/wechat/pc/other);
 	// the voice find-car rate limiter only triggers for platform=="wechat".
-	Platform string `json:"platform,omitempty"`
+	Platform      string  `json:"platform,omitempty"`
 	IP            *string `json:"ip,omitempty"`
 	DeviceID      *string `json:"deviceId,omitempty"`
 	Source        *string `json:"source,omitempty"`

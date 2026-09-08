@@ -38,15 +38,15 @@ func (r *responseRecorder) Flush() {}
 // shadowUnorderedByPath lists per-endpoint UnorderedKeys for jsondiff (top-level
 // "data" lists whose Java order follows HashMap / unstable sort ties).
 var shadowUnorderedByPath = map[string][]string{
-	"/device/paas/device/car_count":              {"data"},
-	"/device/paas/device/getCarNumByServiceId":   {"data"},
-	"/device/paas/device/carStatistics":          {"data"},
-	"/device/paas/device/getRackCarNumAll":       {"data"},
-	"/device/paas/device/queryDeviceByBattery":   {"data"},
-	"/device/paas/device/queryDeviceByTotalMiles": {"data"},
+	"/device/paas/device/car_count":                {"data"},
+	"/device/paas/device/getCarNumByServiceId":     {"data"},
+	"/device/paas/device/carStatistics":            {"data"},
+	"/device/paas/device/getRackCarNumAll":         {"data"},
+	"/device/paas/device/queryDeviceByBattery":     {"data"},
+	"/device/paas/device/queryDeviceByTotalMiles":  {"data"},
 	"/device/paas/device/queryDeviceByNoOrderTime": {"data"},
 	"/device/paas/device/queryDeviceByStaticTime":  {"data"},
-	"/device/paas/device/carParkingStatistics":   {"data"},
+	"/device/paas/device/carParkingStatistics":     {"data"},
 }
 
 // ProxyGateway implements fence-go 3-tier routing:
