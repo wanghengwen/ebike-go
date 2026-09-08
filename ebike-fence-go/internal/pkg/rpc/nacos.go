@@ -88,7 +88,15 @@ func registerNacosConfigListeners(dataID, group string) {
 
 // InitNacos initializes the Nacos naming client to register the service and discover downstream services
 func InitNacos() {
+	// Re-apply env so NACOS_SERVER_ADDR wins even if local yaml still lists an old addr.
+	config.ApplyEnvOverrides()
 	nacosCfg := config.GlobalConfig.Nacos
+	if nacosCfg.Port == 0 {
+		nacosCfg.Port = 8848
+		config.GlobalConfig.Nacos.Port = 8848
+	}
+	log.Printf("[nacos] connecting to %s:%d namespace=%s group=%s",
+		nacosCfg.ServerAddr, nacosCfg.Port, nacosCfg.Namespace, nacosCfg.Group)
 
 	// Configure Nacos server
 	serverConfigs := []constant.ServerConfig{
@@ -160,6 +168,7 @@ func InitNacos() {
 	if err := config.ApplyFastIDFromNacos(ConfigClient); err != nil {
 		log.Printf("[WARN] %v", err)
 	}
+	config.ApplyFastIDEnvOverrides()
 
 	registerNacosConfigListeners(nacosCfg.DataId, nacosCfg.Group)
 

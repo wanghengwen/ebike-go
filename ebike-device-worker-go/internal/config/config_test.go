@@ -61,3 +61,26 @@ func TestResolvedFastIDFromSpringXyy(t *testing.T) {
 		t.Fatalf("port=%d", fc.Port)
 	}
 }
+
+func TestServerURLOverridesServerAddr(t *testing.T) {
+	t.Setenv("SPRING_XYY_FASTID_SERVER_ADDR", "")
+	t.Setenv("SPRING_XYY_FASTID_SERVER_URL", "")
+	t.Setenv("SPRING_XYY_FASTID_URL", "")
+
+	cfg := &config.Config{}
+	cfg.Spring.Application.Name = "ebike-device-worker"
+	cfg.Spring.Xyy.Fastid = config.FastIDSettings{
+		Enabled:    true,
+		ServerAddr: "fastid.luopingtech.com",
+		ServerURL:  "http://xyy-fastid:8080",
+		Secret:     "from-nacos",
+	}
+	config.FinalizeConfigForTest(cfg)
+	fc := cfg.ResolvedFastID()
+	if fc.URL != "xyy-fastid:8080" {
+		t.Fatalf("url=%s", fc.URL)
+	}
+	if fc.UseHTTPS {
+		t.Fatal("expected UseHTTPS=false")
+	}
+}

@@ -12,6 +12,8 @@ import (
 type FastIDSettings struct {
 	Enabled                  bool   `yaml:"enabled"`
 	ServerAddr               string `yaml:"server-addr"`
+	// ServerURL overrides ServerAddr for Go clients; Java ignores this field.
+	ServerURL                string `yaml:"server-url"`
 	URL                      string `yaml:"url"`
 	Namespace                string `yaml:"namespace"`
 	GroupID                  string `yaml:"groupId"`
@@ -38,22 +40,29 @@ func ResolvedFastID() fastid.Config {
 }
 
 func resolvedFastIDSettings() (fastid.Config, bool) {
+	ApplyFastIDEnvOverrides()
+	applyFastIDSchemeFromAddr(&GlobalConfig.Spring.Xyy.Fastid)
+
 	src := GlobalConfig.Spring.Xyy.Fastid
 	if !src.Enabled && GlobalConfig.FastID.Enabled {
 		src = GlobalConfig.FastID
 	}
-	if src.ServerAddr == "" && src.URL == "" && GlobalConfig.FastID.URL != "" {
+	if !hasFastIDEndpoint(src) && hasFastIDEndpoint(GlobalConfig.FastID) {
 		src = GlobalConfig.FastID
 	}
-	if !src.Enabled && !GlobalConfig.FastID.Enabled && (src.ServerAddr != "" || GlobalConfig.FastID.URL != "") {
+	if !src.Enabled && !GlobalConfig.FastID.Enabled && hasFastIDEndpoint(src) {
 		src.Enabled = true
 	}
 
-	url := firstNonEmpty(src.ServerAddr, src.URL, GlobalConfig.FastID.ServerAddr, GlobalConfig.FastID.URL)
+	// Endpoint precedence within merged settings: server-url > server-addr > url
+	url := firstNonEmpty(
+		src.ServerURL, src.ServerAddr, src.URL,
+		GlobalConfig.FastID.ServerURL, GlobalConfig.FastID.ServerAddr, GlobalConfig.FastID.URL,
+	)
 	appName := resolveFastIDAppName(src.AppName, GlobalConfig.Spring.Application.Name, GlobalConfig.Server.Name)
 	namespace := firstNonEmpty(src.Namespace, GlobalConfig.FastID.Namespace, GlobalConfig.Nacos.Namespace)
 	groupID := firstNonEmpty(src.GroupID, GlobalConfig.FastID.GroupID, "xyy")
-	secret := firstNonEmpty(os.Getenv("SPRING_XYY_FASTID_SECRET"), src.Secret, GlobalConfig.FastID.Secret)
+	secret := firstNonEmpty(src.Secret, GlobalConfig.FastID.Secret)
 
 	port := src.Port
 	if port == 0 {
@@ -94,6 +103,56 @@ func resolvedFastIDSettings() (fastid.Config, bool) {
 		UseHTTPS:                 src.UseHTTPS,
 		UseHTTPSExplicit:         src.UseHTTPSExplicit,
 	}, enabled
+}
+
+func hasFastIDEndpoint(s FastIDSettings) bool {
+	return s.ServerURL != "" || s.ServerAddr != "" || s.URL != ""
+}
+
+// ApplyFastIDEnvOverrides lets SPRING_XYY_FASTID_* override Nacos/local FastID settings.
+// Precedence: env > nacos > local. Within endpoint fields: server-url > server-addr > url.
+func ApplyFastIDEnvOverrides() {
+	dst := &GlobalConfig.Spring.Xyy.Fastid
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_SECRET")); v != "" {
+		dst.Secret = v
+	}
+	serverURLEnv := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_SERVER_URL"))
+	if serverURLEnv == "" {
+		serverURLEnv = strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_URL"))
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_SERVER_ADDR")); v != "" {
+		dst.ServerAddr = v
+		// Env server-addr should beat Nacos server-url unless env also sets server-url.
+		if serverURLEnv == "" {
+			dst.ServerURL = ""
+		}
+		applyFastIDSchemeFromAddr(dst)
+	}
+	if serverURLEnv != "" {
+		dst.ServerURL = serverURLEnv
+		applyFastIDSchemeFromAddr(dst)
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_NAMESPACE")); v != "" {
+		dst.Namespace = v
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_GROUPID")); v != "" {
+		dst.GroupID = v
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_APP_NAME")); v != "" {
+		dst.AppName = v
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_PORT")); v != "" {
+		if port, err := strconv.Atoi(v); err == nil {
+			dst.Port = port
+		}
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_ENABLED")); v != "" {
+		dst.Enabled, _ = strconv.ParseBool(v)
+	}
+	if v := strings.TrimSpace(os.Getenv("SPRING_XYY_FASTID_USE_HTTPS")); v != "" {
+		dst.UseHTTPS, _ = strconv.ParseBool(v)
+		dst.UseHTTPSExplicit = true
+	}
 }
 
 func firstNonEmpty(values ...string) string {

@@ -52,7 +52,7 @@ spec:
       terminationGracePeriodSeconds: 75
       containers:
         - name: ebike-fence-go
-          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-fence-go:v1.0.31
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-fence-go:v1.0.33
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -67,6 +67,12 @@ spec:
               value: "true"
             - name: NACOS_REGISTER_ENABLED
               value: "true"
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.1.108:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy
             - name: POD_IP
               valueFrom:
                 fieldRef:

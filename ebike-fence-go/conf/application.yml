@@ -9,6 +9,8 @@ spring:
     fastid:
       enabled: true
       server-addr: fastid.luopingtech.com
+      # server-url 覆盖 server-addr（仅 Go）；本地/skip-nacos 时可启用
+      # server-url: http://xyy-fastid:8080
       namespace: prod
       groupId: xyy
       drift-time: 10

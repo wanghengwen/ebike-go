@@ -55,12 +55,16 @@ func applyFastIDEnv(c *Config) {
 	if v, ok := envFirst("SPRING_XYY_FASTID_SECRET"); ok {
 		c.Spring.Xyy.Fastid.Secret = v
 	}
+	serverURL, hasServerURL := envFirst("SPRING_XYY_FASTID_SERVER_URL", "SPRING_XYY_FASTID_URL")
 	if v, ok := envFirst("SPRING_XYY_FASTID_SERVER_ADDR"); ok {
 		c.Spring.Xyy.Fastid.ServerAddr = v
+		if !hasServerURL {
+			c.Spring.Xyy.Fastid.ServerURL = ""
+		}
 		applyFastIDSchemeFromAddr(&c.Spring.Xyy.Fastid)
 	}
-	if v, ok := envFirst("SPRING_XYY_FASTID_URL"); ok {
-		c.Spring.Xyy.Fastid.URL = v
+	if hasServerURL {
+		c.Spring.Xyy.Fastid.ServerURL = serverURL
 		applyFastIDSchemeFromAddr(&c.Spring.Xyy.Fastid)
 	}
 	if v, ok := envFirst("SPRING_XYY_FASTID_NAMESPACE"); ok {

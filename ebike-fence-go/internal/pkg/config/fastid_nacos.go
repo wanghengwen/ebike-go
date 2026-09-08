@@ -60,6 +60,9 @@ func mergeFastIDSettings(dst *FastIDSettings, from FastIDSettings) {
 	if from.ServerAddr != "" {
 		dst.ServerAddr = from.ServerAddr
 	}
+	if from.ServerURL != "" {
+		dst.ServerURL = from.ServerURL
+	}
 	if from.URL != "" {
 		dst.URL = from.URL
 	}
@@ -95,7 +98,16 @@ func mergeFastIDSettings(dst *FastIDSettings, from FastIDSettings) {
 }
 
 func applyFastIDSchemeFromAddr(dst *FastIDSettings) {
+	// Prefer server-url (Go-only), then server-addr, then legacy url.
 	switch {
+	case strings.HasPrefix(dst.ServerURL, "http://"):
+		dst.ServerURL = strings.TrimPrefix(dst.ServerURL, "http://")
+		dst.UseHTTPS = false
+		dst.UseHTTPSExplicit = true
+	case strings.HasPrefix(dst.ServerURL, "https://"):
+		dst.ServerURL = strings.TrimPrefix(dst.ServerURL, "https://")
+		dst.UseHTTPS = true
+		dst.UseHTTPSExplicit = true
 	case strings.HasPrefix(dst.ServerAddr, "http://"):
 		dst.ServerAddr = strings.TrimPrefix(dst.ServerAddr, "http://")
 		dst.UseHTTPS = false

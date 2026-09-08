@@ -2,7 +2,10 @@ package config
 
 import (
 	"log"
+	"net"
 	"os"
+	"strconv"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -81,4 +84,47 @@ func LoadConfig(path string) {
 	}
 
 	log.Printf("Loaded local config successfully. Service: %s, Port: %d", GlobalConfig.Server.Name, GlobalConfig.Server.Port)
+	ApplyEnvOverrides()
+}
+
+// ApplyEnvOverrides lets NACOS_SERVER_ADDR / NACOS_NAMESPACE / NACOS_GROUP
+// override values loaded from the local YAML (highest precedence).
+// Must run before creating any Nacos client.
+func ApplyEnvOverrides() {
+	if v := strings.TrimSpace(os.Getenv("NACOS_SERVER_ADDR")); v != "" {
+		host, port := splitHostPort(v, 8848)
+		GlobalConfig.Nacos.ServerAddr = host
+		GlobalConfig.Nacos.Port = port
+	} else if v := strings.TrimSpace(os.Getenv("NACOS_SERVERADDR")); v != "" {
+		GlobalConfig.Nacos.ServerAddr = v
+	}
+	if v := strings.TrimSpace(os.Getenv("NACOS_PORT")); v != "" {
+		if port, err := strconv.ParseUint(v, 10, 64); err == nil {
+			GlobalConfig.Nacos.Port = port
+		}
+	}
+	if v := strings.TrimSpace(os.Getenv("NACOS_NAMESPACE")); v != "" {
+		GlobalConfig.Nacos.Namespace = v
+	}
+	if v := strings.TrimSpace(os.Getenv("NACOS_GROUP")); v != "" {
+		GlobalConfig.Nacos.Group = v
+	}
+}
+
+func splitHostPort(raw string, defaultPort uint64) (host string, port uint64) {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return "", defaultPort
+	}
+	if idx := strings.Index(raw, "://"); idx >= 0 {
+		raw = raw[idx+3:]
+	}
+	if h, p, err := net.SplitHostPort(raw); err == nil {
+		portNum, err := strconv.ParseUint(p, 10, 64)
+		if err != nil {
+			return h, defaultPort
+		}
+		return h, portNum
+	}
+	return raw, defaultPort
 }

@@ -35,7 +35,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: ebike-device-worker-go
-          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-device-worker-go:v1.0.32
+          image: registry.cn-shanghai.aliyuncs.com/ebike_luoping/ebike-device-worker-go:v1.0.34
           imagePullPolicy: Always
           ports:
             - name: http
@@ -48,10 +48,16 @@ spec:
                   fieldPath: status.podIP
             - name: SPRING_PROFILES_ACTIVE
               value: prod
-            - name: DRY_RUN
-              value: "true"
             - name: NACOS_REGISTER_ENABLED
               value: "true"
+            - name: NACOS_SERVER_ADDR
+              value: "192.168.1.108:8848"
+            - name: NACOS_NAMESPACE
+              value: prod
+            - name: NACOS_GROUP
+              value: xyy              
+            - name: DRY_RUN
+              value: "false"
             - name: KAFKA_ENABLED
               value: "true"
             - name: KAFKA_PUSH_ENABLED

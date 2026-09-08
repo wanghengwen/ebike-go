@@ -10,9 +10,19 @@ func LoadExtensionConfigsFromNacos() error {
 	if GlobalConfig == nil {
 		return fmt.Errorf("config not loaded")
 	}
+
+	// Nacos connection settings (addr/port/namespace/group) must come from env
+	// before the client is created; FinalizeConfig runs too late for this.
+	applyNacosEnv(GlobalConfig)
 	if GlobalConfig.Nacos.ServerAddr == "" {
 		return fmt.Errorf("nacos.serverAddr is empty")
 	}
+	port := GlobalConfig.Nacos.Port
+	if port == 0 {
+		port = 8848
+	}
+	log.Printf("[nacos] connecting to %s:%d namespace=%s group=%s",
+		GlobalConfig.Nacos.ServerAddr, port, GlobalConfig.Nacos.Namespace, GlobalConfig.Nacos.Group)
 
 	client, err := InitNacosConfigClient()
 	if err != nil {

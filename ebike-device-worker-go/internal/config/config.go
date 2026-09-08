@@ -101,6 +101,8 @@ type Config struct {
 type FastIDSettings struct {
 	Enabled                  bool   `mapstructure:"enabled" yaml:"enabled"`
 	ServerAddr               string `mapstructure:"server-addr" yaml:"server-addr"`
+	// ServerURL overrides ServerAddr for Go clients; Java ignores this field.
+	ServerURL                string `mapstructure:"server-url" yaml:"server-url"`
 	URL                      string `mapstructure:"url" yaml:"url"`
 	Namespace                string `mapstructure:"namespace" yaml:"namespace"`
 	GroupID                  string `mapstructure:"groupId" yaml:"groupId"`
@@ -164,7 +166,9 @@ func LoadConfig(configPath string) {
 		log.Fatalf("Error unmarshaling config: %v", err)
 	}
 	normalizeConfig(GlobalConfig)
-	// Env overrides run in FinalizeConfig after Nacos (see nacos_bootstrap.go).
+	// Nacos bootstrap addr/namespace/group: apply env before any Nacos client is created.
+	// Remaining env overrides (FastID/Redis/Kafka/...) run in FinalizeConfig after Nacos merge.
+	applyNacosEnv(GlobalConfig)
 }
 
 func normalizeConfig(c *Config) {
@@ -186,18 +190,24 @@ func (c *Config) ResolvedFastID() fastid.Config {
 }
 
 func (c *Config) resolvedFastIDSettings() (fastid.Config, bool) {
+	applyFastIDSchemeFromAddr(&c.Spring.Xyy.Fastid)
+
 	src := c.Spring.Xyy.Fastid
 	if !src.Enabled && c.FastID.Enabled {
 		src = c.FastID
 	}
-	if src.ServerAddr == "" && src.URL == "" && c.FastID.URL != "" {
+	if !hasFastIDEndpoint(src) && hasFastIDEndpoint(c.FastID) {
 		src = c.FastID
 	}
-	if !src.Enabled && !c.FastID.Enabled && (src.ServerAddr != "" || c.FastID.URL != "") {
+	if !src.Enabled && !c.FastID.Enabled && hasFastIDEndpoint(src) {
 		src.Enabled = true
 	}
 
-	url := firstNonEmpty(src.ServerAddr, src.URL, c.FastID.ServerAddr, c.FastID.URL)
+	// Endpoint precedence within merged settings: server-url > server-addr > url
+	url := firstNonEmpty(
+		src.ServerURL, src.ServerAddr, src.URL,
+		c.FastID.ServerURL, c.FastID.ServerAddr, c.FastID.URL,
+	)
 	appName := resolveAppName(src.AppName, c.Spring.Application.Name)
 	namespace := firstNonEmpty(src.Namespace, c.FastID.Namespace)
 	groupID := firstNonEmpty(src.GroupID, c.FastID.GroupID)
@@ -241,6 +251,10 @@ func (c *Config) resolvedFastIDSettings() (fastid.Config, bool) {
 		UseHTTPS:                 src.UseHTTPS,
 		UseHTTPSExplicit:         src.UseHTTPSExplicit,
 	}, enabled
+}
+
+func hasFastIDEndpoint(s FastIDSettings) bool {
+	return s.ServerURL != "" || s.ServerAddr != "" || s.URL != ""
 }
 
 func firstNonEmpty(values ...string) string {

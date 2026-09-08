@@ -48,6 +48,7 @@ spring:
     fastid:
       enabled: true
       server-addr: fastid.luopingtech.com
+      server-url: http://xyy-fastid:8080
       namespace: prod
       groupId: xyy
       app-name: ebike-device-worker

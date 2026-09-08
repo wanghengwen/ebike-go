@@ -16,6 +16,7 @@ spring:
     fastid:
       enabled: true
       server-addr: fastid.luopingtech.com
+      server-url: http://xyy-fastid:8080
       namespace: prod
       groupId: xyy
       secret: nacos-secret
@@ -28,6 +29,9 @@ spring:
 	if fastid.Secret != "nacos-secret" || fastid.ServerAddr != "fastid.luopingtech.com" {
 		t.Fatalf("unexpected fastid: %+v", fastid)
 	}
+	if fastid.ServerURL != "http://xyy-fastid:8080" {
+		t.Fatalf("server-url=%s", fastid.ServerURL)
+	}
 }
 
 func TestMergeFastIDSettings(t *testing.T) {
@@ -36,10 +40,24 @@ func TestMergeFastIDSettings(t *testing.T) {
 		ServerAddr: "local-host",
 		Namespace:  "local-ns",
 	}
-	from := config.FastIDSettings{Secret: "from-nacos", GroupID: "xyy"}
+	from := config.FastIDSettings{
+		Secret:     "from-nacos",
+		GroupID:    "xyy",
+		ServerAddr: "fastid.luopingtech.com",
+		ServerURL:  "http://xyy-fastid:8080",
+	}
 	config.MergeFastIDSettingsForTest(&dst, from)
-	if dst.Secret != "from-nacos" || dst.ServerAddr != "local-host" || dst.GroupID != "xyy" {
+	if dst.Secret != "from-nacos" || dst.GroupID != "xyy" {
 		t.Fatalf("merge failed: %+v", dst)
+	}
+	if dst.ServerAddr != "fastid.luopingtech.com" {
+		t.Fatalf("addr=%s", dst.ServerAddr)
+	}
+	if dst.ServerURL != "xyy-fastid:8080" {
+		t.Fatalf("server-url=%s", dst.ServerURL)
+	}
+	if dst.UseHTTPS {
+		t.Fatal("expected UseHTTPS=false from http://server-url")
 	}
 }
 

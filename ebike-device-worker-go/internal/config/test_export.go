@@ -40,6 +40,11 @@ func ApplyEnvOverridesForTest(c *Config) {
 	applyEnvOverrides(c)
 }
 
+// ApplyNacosEnvForTest exposes Nacos bootstrap env merge (must run before client create).
+func ApplyNacosEnvForTest(c *Config) {
+	applyNacosEnv(c)
+}
+
 // FinalizeConfigForTest runs placeholder resolution + env overrides (same as production).
 func FinalizeConfigForTest(c *Config) {
 	FinalizeConfig(c)

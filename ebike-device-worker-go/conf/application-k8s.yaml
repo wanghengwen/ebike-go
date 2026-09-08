@@ -34,7 +34,8 @@ proxy:
     - /cmd/saveEbikeCmd
   record_list: []
 nacos:
-  serverAddr: 192.168.2.20
+  # 可被 NACOS_SERVER_ADDR 覆盖（建连前生效）；与 deployment 默认一致
+  serverAddr: 192.168.1.108
   port: 8848
   namespace: prod
   group: xyy
@@ -55,7 +56,9 @@ spring:
   xyy:
     fastid:
       enabled: true
+      # 与 Nacos fast_id.yaml 对齐：server-url 覆盖 server-addr（仅 Go 生效）
       server-addr: fastid.luopingtech.com
+      server-url: http://xyy-fastid:8080
       namespace: prod
       groupId: xyy
       app-name: ebike-device-worker

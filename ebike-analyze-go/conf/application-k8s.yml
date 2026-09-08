@@ -7,11 +7,12 @@ spring:
     name: ebike-analyze
 
 nacos:
-  serverAddr: 192.168.2.20
+  # 可被 NACOS_SERVER_ADDR 覆盖（LoadConfig / InitNacos 建连前生效）
+  serverAddr: 192.168.1.108
   port: 8848
   namespace: prod
   group: xyy
-  dataId: ebike-analyze-go.yaml
+  dataId: ebike-analyze.yaml
 
 redis:
   addr: ""
