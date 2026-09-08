@@ -27,31 +27,31 @@ const (
 
 // BelongDiagnostics captures one ownership check for logs and /internal/debug.
 type BelongDiagnostics struct {
-	OK              bool         `json:"ok"`
-	Reason          BelongReason `json:"reason"`
-	ExpectedTenant  string       `json:"expectedTenant"`
-	CachedTenant    string       `json:"cachedTenant,omitempty"`
-	IMEI            string       `json:"imei"`
-	RedisKey        string       `json:"redisKey"`
-	RedisAddr       string       `json:"redisAddr"`
-	RegistryDB      int          `json:"registryDb"`
-	ShadowDB        int          `json:"shadowDb"`
-	KeyExists       bool         `json:"keyExists"`
-	TenantFieldSet  bool         `json:"tenantFieldSet"`
-	SeparateRegistry bool        `json:"separateRegistryClient"`
-	Hint            string       `json:"hint,omitempty"`
+	OK               bool         `json:"ok"`
+	Reason           BelongReason `json:"reason"`
+	ExpectedTenant   string       `json:"expectedTenant"`
+	CachedTenant     string       `json:"cachedTenant,omitempty"`
+	IMEI             string       `json:"imei"`
+	RedisKey         string       `json:"redisKey"`
+	RedisAddr        string       `json:"redisAddr"`
+	RegistryDB       int          `json:"registryDb"`
+	ShadowDB         int          `json:"shadowDb"`
+	KeyExists        bool         `json:"keyExists"`
+	TenantFieldSet   bool         `json:"tenantFieldSet"`
+	SeparateRegistry bool         `json:"separateRegistryClient"`
+	Hint             string       `json:"hint,omitempty"`
 }
 
 // DiagnoseDeviceBelongs inspects device_ebike_{imei}.tenantId against the
 // agent's tenantId without side effects.
 func DiagnoseDeviceBelongs(expectedTenant, imei string) BelongDiagnostics {
 	d := BelongDiagnostics{
-		IMEI:           imei,
-		ExpectedTenant: stringsTrim(expectedTenant),
-		RedisKey:       rediskey.DeviceEbike(imei),
-		RedisAddr:      redis.RegistryAddr(),
-		RegistryDB:     redis.RegistryDB(),
-		ShadowDB:       redis.ShadowDB(),
+		IMEI:             imei,
+		ExpectedTenant:   stringsTrim(expectedTenant),
+		RedisKey:         rediskey.DeviceEbike(imei),
+		RedisAddr:        redis.RegistryAddr(),
+		RegistryDB:       redis.RegistryDB(),
+		ShadowDB:         redis.ShadowDB(),
 		SeparateRegistry: redis.UsesSeparateRegistryDB(),
 	}
 

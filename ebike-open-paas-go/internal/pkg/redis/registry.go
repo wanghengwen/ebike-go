@@ -10,10 +10,10 @@ import (
 
 // RegistryLookupResult is the outcome of reading device_ebike_* from the registry DB.
 type RegistryLookupResult struct {
-	Value        string
-	KeyExists    bool
-	FieldExists  bool
-	Err          error
+	Value       string
+	KeyExists   bool
+	FieldExists bool
+	Err         error
 }
 
 // registryClient returns the client used for device_ebike_* (separate DB or primary).
