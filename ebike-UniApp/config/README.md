@@ -1,4 +1,4 @@
-# 多租户配置发布（对齐旧版 wechat/config）
+# 多租户配置发布
 
 旧版：`npm run build:mp-weixin --env=xiaolongyu --mode=release`  
 新版：同样以 `config/{env}_{mode}.json` 为**唯一必需**配置源（含 `platformSecret` / `platformSign`）。
