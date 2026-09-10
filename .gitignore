@@ -26,3 +26,17 @@ coverage.html
 *.swo
 .DS_Store
 Thumbs.db
+
+# ebike-UniApp (frontend)
+ebike-UniApp/node_modules/
+ebike-UniApp/dist/
+ebike-UniApp/unpackage/
+ebike-UniApp/tenants/local.secrets.json
+ebike-UniApp/tenants/*_secrets.json
+ebike-UniApp/src/tenants/merged.runtime.json
+ebike-UniApp/.env
+ebike-UniApp/.env.*
+!ebike-UniApp/.env.example
+# 正式/租户 release 配置含密钥，仅保留 demo 与 defaults 入库
+ebike-UniApp/config/*_release.json
+!ebike-UniApp/config/demo_release.json

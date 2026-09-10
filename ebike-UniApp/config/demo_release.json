@@ -1,0 +1,36 @@
+{
+  "name": "Demo E-Bike",
+  "alias": "demo",
+  "description": "luopingtech demo tenant",
+  "platformTenantId": "",
+  "api": {
+    "baseUrl": "https://client.luopingtech.com",
+    "logApi": ""
+  },
+  "qrDomain": ["https://demo-qr.luopingtech.com"],
+  "appId": "",
+  "auth": {
+    "wechatGrantType": "wechat_miniapp",
+    "wechatPartnerCode": ""
+  },
+  "pay": {
+    "channelType": "BAOFU_WXLITE"
+  },
+  "customSetting": {
+    "buttonGreenColor": "#3AA0E8",
+    "buttonWhiteColor": "#FFFFFF",
+    "logo": "",
+    "documentCfg": {
+      "userProtocol": "https://ebike.luopingtech.com/miniapp/html/user_protocol.html",
+      "privacyProtocol": "https://ebike.luopingtech.com/miniapp/html/privicyProtocol.html"
+    }
+  },
+  "globalStyle": {
+    "navigationBarTitleText": "Demo E-Bike",
+    "navigationBarBackgroundColor": "#FFFFFF"
+  },
+  "appPlus": {
+    "androidPackage": "com.luopingtech.ebike.demo",
+    "iosBundleId": "com.luopingtech.ebike.demo"
+  }
+}

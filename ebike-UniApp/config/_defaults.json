@@ -1,0 +1,62 @@
+{
+  "name": "E-Bike",
+  "alias": "demo",
+  "description": "luopingtech shared e-bike defaults",
+  "platformTenantId": "",
+  "platformSecret": "",
+  "platformSign": "",
+  "api": {
+    "baseUrl": "https://client.luopingtech.com",
+    "logApi": ""
+  },
+  "qrDomain": [],
+  "appId": "",
+  "auth": {
+    "wechatGrantType": "wechat_miniapp",
+    "wechatPartnerCode": ""
+  },
+  "pay": {
+    "channelType": "WXLITE",
+    "payBaseApi": ""
+  },
+  "networkTimeout": {
+    "request": 60000,
+    "connectSocket": 60000,
+    "uploadFile": 60000,
+    "downloadFile": 60000
+  },
+  "customSetting": {
+    "buttonGreenColor": "#3AA0E8",
+    "buttonWhiteColor": "#FFFFFF",
+    "buttonDisabledColor": "#CCCCCC",
+    "logo": "",
+    "autoRefundBalance": false,
+    "insufficientBalanceAutoJump": false,
+    "tempHideOrderPrice": false,
+    "hideCancelAccount": false,
+    "showRidePanelTips": false,
+    "documentCfg": {
+      "userProtocol": "",
+      "privacyProtocol": "",
+      "reChargeProtocol": ""
+    },
+    "cyclingCfg": {
+      "bikeReturn": "我要还车",
+      "tempRecoverPowerEnable": true,
+      "tempRecoverPowerTime": 60,
+      "tempRecoverPowerTitle": "恢复动力1分钟",
+      "tempRecoverPowerDesc": "本次订单将为你提供1次通电机会",
+      "tempRecoverPowerTips": "请尽快骑回服务区",
+      "tempRecoverPowerBtn": "恢复动力"
+    },
+    "mapCfg": {},
+    "iconCfg": {},
+    "redEnvelopeCfg": {}
+  },
+  "globalStyle": {
+    "navigationBarTitleText": "E-Bike",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F5F6F8"
+  },
+  "returnReturnCarStatistics": false
+}

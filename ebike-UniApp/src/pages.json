@@ -1,0 +1,431 @@
+{
+  "pages": [
+    {
+      "path": "pages/launch/launch",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/map/map",
+      "style": {
+        "navigationStyle": "custom",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/riding/riding",
+      "style": {
+        "navigationBarTitleText": "骑行中",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "pages/pay/pay",
+      "style": {
+        "navigationBarTitleText": "行程费用"
+      }
+    },
+    {
+      "path": "pages/auth/quick-login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/auth/phone-login",
+      "style": {
+        "navigationBarTitleText": "登录"
+      }
+    },
+    {
+      "path": "pages/auth/verified",
+      "style": {
+        "navigationBarTitleText": "实名认证"
+      }
+    },
+    {
+      "path": "pages/account/profile",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/account/settings",
+      "style": {
+        "navigationBarTitleText": "设置"
+      }
+    },
+    {
+      "path": "pages/webview/webview",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    }
+  ],
+  "subPackages": [
+    {
+      "root": "pages-sub/ride",
+      "pages": [
+        {
+          "path": "precycling/precycling",
+          "style": {
+            "navigationBarTitleText": "预开锁"
+          }
+        },
+        {
+          "path": "enter-id/enter-id",
+          "style": {
+            "navigationBarTitleText": "输入编号"
+          }
+        },
+        {
+          "path": "scan/scan",
+          "style": {
+            "navigationBarTitleText": "扫码用车",
+            "navigationBarBackgroundColor": "#000000",
+            "navigationBarTextStyle": "white",
+            "backgroundColor": "#000000"
+          }
+        },
+        {
+          "path": "apply-return/apply-return",
+          "style": {
+            "navigationBarTitleText": "还车申请"
+          }
+        },
+        {
+          "path": "trip-map/trip-map",
+          "style": {
+            "navigationBarTitleText": "行程轨迹"
+          }
+        },
+        {
+          "path": "park-search/park-search",
+          "style": {
+            "navigationBarTitleText": "附近停车点"
+          }
+        },
+        {
+          "path": "return-guide/return-guide",
+          "style": {
+            "navigationBarTitleText": "还车指引"
+          }
+        },
+        {
+          "path": "red-envelope-tips/red-envelope-tips",
+          "style": {
+            "navigationBarTitleText": "红包车说明"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/pay",
+      "pages": [
+        {
+          "path": "wallet/wallet",
+          "style": {
+            "navigationBarTitleText": "钱包"
+          }
+        },
+        {
+          "path": "recharge/recharge",
+          "style": {
+            "navigationBarTitleText": "充值"
+          }
+        },
+        {
+          "path": "invoice/list",
+          "style": {
+            "navigationBarTitleText": "发票"
+          }
+        },
+        {
+          "path": "invoice/create",
+          "style": {
+            "navigationBarTitleText": "申请开票"
+          }
+        },
+        {
+          "path": "invoice/detail",
+          "style": {
+            "navigationBarTitleText": "发票详情"
+          }
+        },
+        {
+          "path": "withdraw/withdraw",
+          "style": {
+            "navigationBarTitleText": "提现"
+          }
+        },
+        {
+          "path": "deposit-refund/deposit-refund",
+          "style": {
+            "navigationBarTitleText": "退押金"
+          }
+        },
+        {
+          "path": "cost-detail/cost-detail",
+          "style": {
+            "navigationBarTitleText": "费用明细"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/account",
+      "pages": [
+        {
+          "path": "orders/orders",
+          "style": {
+            "navigationBarTitleText": "我的行程"
+          }
+        },
+        {
+          "path": "orders/order-detail",
+          "style": {
+            "navigationBarTitleText": "行程详情"
+          }
+        },
+        {
+          "path": "cards/cards",
+          "style": {
+            "navigationBarTitleText": "我的卡券"
+          }
+        },
+        {
+          "path": "card-shop/shop",
+          "style": {
+            "navigationBarTitleText": "卡券商城"
+          }
+        },
+        {
+          "path": "about/about",
+          "style": {
+            "navigationBarTitleText": "关于我们"
+          }
+        },
+        {
+          "path": "credit/credit",
+          "style": {
+            "navigationBarTitleText": "信用分"
+          }
+        },
+        {
+          "path": "invite/invite",
+          "style": {
+            "navigationBarTitleText": "邀请有礼"
+          }
+        },
+        {
+          "path": "invite/records",
+          "style": {
+            "navigationBarTitleText": "邀请记录"
+          }
+        },
+        {
+          "path": "invite/share",
+          "style": {
+            "navigationBarTitleText": "邀您免费骑"
+          }
+        },
+        {
+          "path": "invite/rules",
+          "style": {
+            "navigationBarTitleText": "活动规则"
+          }
+        },
+        {
+          "path": "cancel/cancel",
+          "style": {
+            "navigationBarTitleText": "注销账号"
+          }
+        },
+        {
+          "path": "career/career",
+          "style": {
+            "navigationBarTitleText": "职业认证"
+          }
+        },
+        {
+          "path": "billing-rules/billing-rules",
+          "style": {
+            "navigationBarTitleText": "计费规则"
+          }
+        },
+        {
+          "path": "qualification/qualification",
+          "style": {
+            "navigationBarTitleText": "用车资格"
+          }
+        },
+        {
+          "path": "pay-score/pay-score",
+          "style": {
+            "navigationBarTitleText": "微信支付分"
+          }
+        },
+        {
+          "path": "activity/activity",
+          "style": {
+            "navigationBarTitleText": "活动中心"
+          }
+        },
+        {
+          "path": "voucher/voucher",
+          "style": {
+            "navigationBarTitleText": "兑换券"
+          }
+        },
+        {
+          "path": "security/security",
+          "style": {
+            "navigationBarTitleText": "账户与安全"
+          }
+        },
+        {
+          "path": "change-phone/change-phone",
+          "style": {
+            "navigationBarTitleText": "修改手机号"
+          }
+        },
+        {
+          "path": "bind-card/bind-card-select",
+          "style": {
+            "navigationBarTitleText": "身份核验"
+          }
+        },
+        {
+          "path": "bind-card/bind-card-form",
+          "style": {
+            "navigationBarTitleText": "证件申诉"
+          }
+        },
+        {
+          "path": "bind-card/bind-card-state",
+          "style": {
+            "navigationBarTitleText": "实名认证审核中…"
+          }
+        },
+        {
+          "path": "wallet-records/wallet-records",
+          "style": {
+            "navigationBarTitleText": "账户明细"
+          }
+        },
+        {
+          "path": "identity-auth/identity-auth",
+          "style": {
+            "navigationBarTitleText": "人脸核验"
+          }
+        },
+        {
+          "path": "face-scan/face-scan",
+          "style": {
+            "navigationBarTitleText": "人脸采集",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "face-result/face-result",
+          "style": {
+            "navigationBarTitleText": "核验结果"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages-sub/support",
+      "pages": [
+        {
+          "path": "help/help",
+          "style": {
+            "navigationBarTitleText": "客户服务"
+          }
+        },
+        {
+          "path": "repair/repair",
+          "style": {
+            "navigationBarTitleText": "车辆报修"
+          }
+        },
+        {
+          "path": "repair/repair-list",
+          "style": {
+            "navigationBarTitleText": "报修记录"
+          }
+        },
+        {
+          "path": "repair/repair-progress",
+          "style": {
+            "navigationBarTitleText": "报修进度"
+          }
+        },
+        {
+          "path": "messages/list",
+          "style": {
+            "navigationBarTitleText": "消息中心"
+          }
+        },
+        {
+          "path": "messages/detail",
+          "style": {
+            "navigationBarTitleText": "消息详情"
+          }
+        },
+        {
+          "path": "customer-service/customer-service",
+          "style": {
+            "navigationBarTitleText": "联系客服"
+          }
+        },
+        {
+          "path": "faq/faq",
+          "style": {
+            "navigationBarTitleText": "常见问题"
+          }
+        },
+        {
+          "path": "faq/faq-detail",
+          "style": {
+            "navigationBarTitleText": "问题详情"
+          }
+        },
+        {
+          "path": "objection/objection",
+          "style": {
+            "navigationBarTitleText": "费用异议"
+          }
+        },
+        {
+          "path": "violation/violation",
+          "style": {
+            "navigationBarTitleText": "违规举报"
+          }
+        },
+        {
+          "path": "apply-station/apply-station",
+          "style": {
+            "navigationBarTitleText": "申请还车站"
+          }
+        }
+      ]
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "伴我出行",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "backgroundColor": "#F8F8F8"
+  }
+}

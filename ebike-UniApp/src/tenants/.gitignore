@@ -1,0 +1,2 @@
+# Keep generated runtime merge out of VCS by default pattern in root gitignore if needed
+merged.runtime.json

@@ -1,0 +1,116 @@
+{
+  "name": "伴我出行",
+  "appid": "__UNI__LUOPINGTECH",
+  "description": "伴我出行",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "app-plus": {
+    "usingComponents": true,
+    "nvueStyleCompiler": "uni-app",
+    "compilerVersion": 3,
+    "splashscreen": {
+      "alwaysShowBeforeRender": true,
+      "waiting": true,
+      "autoclose": true,
+      "delay": 0
+    },
+    "modules": {
+      "Maps": {},
+      "Payment": {},
+      "Bluetooth": {},
+      "Camera": {},
+      "Geolocation": {},
+      "Barcode": {}
+    },
+    "distribute": {
+      "android": {
+        "permissions": [
+          "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
+          "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>",
+          "<uses-permission android:name=\"android.permission.BLUETOOTH_CONNECT\"/>",
+          "<uses-permission android:name=\"android.permission.BLUETOOTH_SCAN\"/>",
+          "<uses-permission android:name=\"android.permission.CAMERA\"/>",
+          "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+          "<uses-permission android:name=\"android.permission.INTERNET\"/>",
+          "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
+          "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+          "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+          "<uses-feature android:name=\"android.hardware.camera\"/>",
+          "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>"
+        ],
+        "abiFilters": [
+          "armeabi-v7a",
+          "arm64-v8a"
+        ]
+      },
+      "ios": {
+        "privacyDescription": {
+          "NSLocationWhenInUseUsageDescription": "Need location to find nearby bikes and return within service areas",
+          "NSLocationAlwaysAndWhenInUseUsageDescription": "Need location during rides for safety and asset protection",
+          "NSCameraUsageDescription": "Need camera to scan bike QR codes",
+          "NSBluetoothAlwaysUsageDescription": "Need Bluetooth to unlock and lock bikes",
+          "NSBluetoothPeripheralUsageDescription": "Need Bluetooth to communicate with bike locks",
+          "NSPhotoLibraryUsageDescription": "Need photo library for avatar and repair images"
+        },
+        "idfa": false
+      },
+      "sdkConfigs": {
+        "maps": {},
+        "payment": {
+          "weixin": {},
+          "alipay": {}
+        }
+      }
+    }
+  },
+  "mp-weixin": {
+    "appid": "wxd456774aeef4b810",
+    "setting": {
+      "urlCheck": false,
+      "es6": true,
+      "minified": true
+    },
+    "usingComponents": true,
+    "optimization": {
+      "subPackages": true
+    },
+    "permission": {
+      "scope.userLocation": {
+        "desc": "需要定位权限以确定您的位置"
+      }
+    },
+    "requiredPrivateInfos": [
+      "getLocation",
+      "onLocationChange",
+      "chooseLocation",
+      "choosePoi"
+    ]
+  },
+  "h5": {
+    "title": "ebike-UniApp",
+    "router": {
+      "mode": "hash",
+      "base": "./"
+    },
+    "sdkConfigs": {
+      "maps": {}
+    }
+  },
+  "uniStatistics": {
+    "enable": false
+  },
+  "vueVersion": "3",
+  "networkTimeout": {
+    "request": 60000,
+    "connectSocket": 60000,
+    "uploadFile": 60000,
+    "downloadFile": 60000
+  }
+}
