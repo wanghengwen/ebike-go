@@ -44,10 +44,16 @@ jobs:
 
       # 这一步单独放最前面，因为它是唯一能发现「平台专有 API 漏进 commonMain」的检查。
       # assembleDebug 和单测走 Android/JVM 目标，@Volatile、System.currentTimeMillis()、
-      # String.format 这类在那儿全是绿灯；iOS 目标又只能在 macOS 上编译。
+      # String.format 这类在那儿全是绿灯。
       # 实测：注入一处 System.currentTimeMillis() 后本步失败，而下面两步照样通过。
       - name: Verify commonMain is platform-neutral
         run: ./gradlew verifyCommonMain
+
+      # 元数据编译不覆盖 iosMain 的 actual 实现，那些代码得真按 iOS target 编一遍才有人管。
+      # 需要 macOS 的只有 linkFramework，klib 编译在 Linux 上就能跑。
+      # 实测：iosMain 里一处 `x as NSString` 的必失败 cast，就是被本步拦下的。
+      - name: Compile iOS targets
+        run: ./gradlew :shared:compileKotlinIosArm64 :sharedUi:compileKotlinIosArm64
 
       - name: Unit tests
         run: ./gradlew :shared:testAndroidHostTest
@@ -86,6 +92,9 @@ jobs:
       # vue-tsc 会命中这一步的增量缓存，不重复付出代价。
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Unit tests
+        run: npm test
 
       # 地图 key 留空：构建期不校验，运行期靠 hasMapKey() 优雅降级。
       - name: Build

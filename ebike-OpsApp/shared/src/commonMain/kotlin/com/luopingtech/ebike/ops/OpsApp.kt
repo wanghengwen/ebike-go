@@ -110,6 +110,7 @@ import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepository
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepositoryImpl
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleDetailMapFeature
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleFeature
+import com.luopingtech.ebike.ops.feature.analysis.VehicleConditionDistributionFeature
 import com.luopingtech.ebike.ops.feature.warehouse.WarehouseFeature
 import com.luopingtech.ebike.ops.platform.BleTransport
 import com.luopingtech.ebike.ops.platform.BleTransportFactory
@@ -268,6 +269,8 @@ class OpsApp(
         api = vehicleApi,
     )
     val vehicleFeature: VehicleFeature = VehicleFeature(vehicleRepository)
+    val vehicleConditionDistributionFeature: VehicleConditionDistributionFeature =
+        VehicleConditionDistributionFeature(vehicleRepository)
 
     private val fenceApi: FenceApi? = signedApiClient?.let { client ->
         FenceApi(

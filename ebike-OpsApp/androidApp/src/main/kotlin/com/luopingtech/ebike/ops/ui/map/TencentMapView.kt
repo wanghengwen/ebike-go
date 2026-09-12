@@ -55,6 +55,9 @@ fun TencentMapView(
     clusterOverview: Boolean = true,
     fencePolygons: List<FencePolygon> = emptyList(),
     trackPoints: List<TrackPoint> = emptyList(),
+    /** 递增后强制重新 fit 视野（定位按钮）。 */
+    fitNonce: Int = 0,
+    showStatusOverlay: Boolean = true,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -155,7 +158,7 @@ fun TencentMapView(
             }
         }
 
-        LaunchedEffect(displayPins, selectedCarId, mapLoaded, tencentMap, fencePolygons, trackPoints) {
+        LaunchedEffect(displayPins, selectedCarId, mapLoaded, tencentMap, fencePolygons, trackPoints, fitNonce) {
             val map = tencentMap ?: return@LaunchedEffect
             if (!mapLoaded) return@LaunchedEffect
             try {
@@ -216,7 +219,7 @@ fun TencentMapView(
                 }
 
                 val fitKey = valid.joinToString("|") { "${it.id}:${it.lat},${it.lng}" } +
-                    "|f${fencePolygons.size}|t${trackPoints.size}"
+                    "|f${fencePolygons.size}|t${trackPoints.size}|n$fitNonce"
                 if (valid.isNotEmpty() && fitKey != cameraFittedFor) {
                     if (valid.size == 1 && fencePolygons.isEmpty() && trackPoints.isEmpty()) {
                         map.moveCamera(
@@ -256,23 +259,34 @@ fun TencentMapView(
             }
         }
 
-        Text(
-            text = when {
-                mapError != null -> mapError!!
-                !mapLoaded -> Strings.t(Str.TencentMapLoading)
-                pins.isEmpty() -> Strings.t(Str.TencentMapNoPins)
-                else -> Strings.t(Str.TencentMapPins, displayPins.size, pins.size)
-            },
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(10.dp),
-            style = MaterialTheme.typography.labelMedium,
-            color = if (mapError != null) {
-                MaterialTheme.colorScheme.error
-            } else {
-                MaterialTheme.colorScheme.onSurface
-            },
-        )
+        if (showStatusOverlay) {
+            Text(
+                text = when {
+                    mapError != null -> mapError!!
+                    !mapLoaded -> Strings.t(Str.TencentMapLoading)
+                    pins.isEmpty() -> Strings.t(Str.TencentMapNoPins)
+                    else -> Strings.t(Str.TencentMapPins, displayPins.size, pins.size)
+                },
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(10.dp),
+                style = MaterialTheme.typography.labelMedium,
+                color = if (mapError != null) {
+                    MaterialTheme.colorScheme.error
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            )
+        } else if (mapError != null) {
+            Text(
+                text = mapError!!,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
     }
 }
 

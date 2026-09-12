@@ -92,6 +92,14 @@
 | `push-notification-go` | 消息推送 | 短信、推送等多通道异步投递 |
 | `docs/` | 协议与交付文档 | MQTT 协议、DDL、部署相关说明等 |
 
+## 仓库结构（客户端）
+
+| 目录 | 角色 | 说明 |
+|------|------|------|
+| `ebike-UniApp` | 用户端 | uni-app Vue3，一套代码输出微信小程序 / H5 / Android / iOS |
+| `ebike-OpsApp` | 运维 / 商户端 | Kotlin Multiplatform 共享逻辑 + Android / iOS 原生 UI，重写替换遗留混合工程 |
+
+客户端项目不参与 Go 构建，各自 README 说明环境与构建方式。
 
 ---
 

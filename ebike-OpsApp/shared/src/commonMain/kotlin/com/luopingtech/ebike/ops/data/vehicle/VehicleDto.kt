@@ -38,6 +38,10 @@ data class VehicleDto(
     val acc: Int? = null,
     val defend: Int? = null,
     val timestamp: Long? = null,
+    @Serializable(with = FlexibleEpochMsSerializer::class)
+    val lockTime: Long = 0L,
+    @Serializable(with = FlexibleEpochMsSerializer::class)
+    val unlockTime: Long = 0L,
 ) {
     fun toDomain(): Vehicle {
         val batteryFromRest = restBattery ?: 0
@@ -72,6 +76,8 @@ data class VehicleDto(
             acc = acc,
             defend = defend,
             timestamp = timestamp,
+            lockTimeMs = lockTime,
+            unlockTimeMs = unlockTime,
         )
     }
 }

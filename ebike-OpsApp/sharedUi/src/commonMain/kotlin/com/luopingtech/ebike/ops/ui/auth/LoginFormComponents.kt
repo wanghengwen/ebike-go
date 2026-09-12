@@ -235,8 +235,8 @@ private fun PasswordEyeIcon(
         val cy = size.height / 2f
         val path = Path().apply {
             moveTo(size.width * 0.12f, cy)
-            quadraticBezierTo(cx, size.height * 0.18f, size.width * 0.88f, cy)
-            quadraticBezierTo(cx, size.height * 0.82f, size.width * 0.12f, cy)
+            quadraticTo(cx, size.height * 0.18f, size.width * 0.88f, cy)
+            quadraticTo(cx, size.height * 0.82f, size.width * 0.12f, cy)
             close()
         }
         drawPath(path, color = color, style = stroke)

@@ -1,10 +1,5 @@
 package com.luopingtech.ebike.ops.ui.sneak
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,15 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.luopingtech.ebike.ops.OpsApp
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.result.OpsResult
 import com.luopingtech.ebike.ops.domain.model.SneakCheckResultLabels
 import com.luopingtech.ebike.ops.feature.sneak.SneakPage
-import com.luopingtech.ebike.ops.ui.common.createCachePhotoUri
 import kotlinx.coroutines.launch
 
 @Composable
@@ -112,42 +104,18 @@ private fun SubmitPane(app: OpsApp) {
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     val state by app.sneakReportFeature.state.collectAsState()
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
     var photoHint by remember { mutableStateOf<String?>(null) }
 
-    val takePictureLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicture(),
-    ) { ok ->
-        val uri = pendingCameraUri
-        pendingCameraUri = null
-        if (ok && uri != null) {
-            app.sneakReportFeature.addPhotoUrl(uri.toString())
-            photoHint = null
-        } else {
-            photoHint = t(Str.NoPhotoTaken)
-        }
-    }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent(),
-    ) { uri ->
-        if (uri != null) {
-            app.sneakReportFeature.addPhotoUrl(uri.toString())
-            photoHint = null
-        }
-    }
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { granted ->
-        if (granted) {
-            val uri = createCachePhotoUri(context, prefix = "sneak")
-                ?: return@rememberLauncherForActivityResult
-            pendingCameraUri = uri
-            takePictureLauncher.launch(uri)
-        } else {
-            photoHint = t(Str.CameraPermissionRequired)
+    /** 相机与相册只差取图那一步，权限与取消都由 [PhotoCapture] 实现方吞掉。 */
+    fun addPhoto(take: suspend () -> OpsResult<String>) {
+        scope.launch {
+            when (val shot = take()) {
+                is OpsResult.Ok -> {
+                    app.sneakReportFeature.addPhotoUrl(shot.value)
+                    photoHint = null
+                }
+                is OpsResult.Err -> photoHint = shot.error.message
+            }
         }
     }
 
@@ -235,24 +203,12 @@ private fun SubmitPane(app: OpsApp) {
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(
-                onClick = {
-                    val granted = ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.CAMERA,
-                    ) == PackageManager.PERMISSION_GRANTED
-                    if (granted) {
-                        val uri = createCachePhotoUri(context, prefix = "sneak") ?: return@Button
-                        pendingCameraUri = uri
-                        takePictureLauncher.launch(uri)
-                    } else {
-                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
-                },
+                onClick = { addPhoto { app.photoCapture.takePhoto("sneak") } },
                 enabled = state.photoUrls.size < 3,
                 modifier = Modifier.weight(1f),
             ) { Text(t(Str.Camera)) }
             Button(
-                onClick = { galleryLauncher.launch("image/*") },
+                onClick = { addPhoto { app.photoCapture.pickFromGallery() } },
                 enabled = state.photoUrls.size < 3,
                 modifier = Modifier.weight(1f),
             ) { Text(t(Str.Album)) }

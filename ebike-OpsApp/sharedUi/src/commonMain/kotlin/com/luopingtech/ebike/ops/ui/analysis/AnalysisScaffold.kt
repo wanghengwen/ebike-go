@@ -1,6 +1,5 @@
 package com.luopingtech.ebike.ops.ui.analysis
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,18 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.luopingtech.ebike.ops.R
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 
 data class AnalysisCardItem(
     val id: String,
     val title: String,
-    @DrawableRes val iconRes: Int,
+    val icon: OpsIcon,
     val onClick: () -> Unit,
 )
 
@@ -56,7 +55,7 @@ fun AnalysisScaffold(
     val colors = OpsTheme.colors
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(R.drawable.bg_analysis),
+            painter = painterResource(OpsIcon.BgAnalysis),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds,
@@ -149,7 +148,7 @@ private fun AnalysisCard(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
-            painter = painterResource(item.iconRes),
+            painter = painterResource(item.icon),
             contentDescription = item.title,
             modifier = Modifier.size(24.dp),
             contentScale = ContentScale.Fit,

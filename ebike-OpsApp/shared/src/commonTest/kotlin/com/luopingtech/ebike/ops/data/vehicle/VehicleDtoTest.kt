@@ -42,7 +42,9 @@ class VehicleDtoTest {
               "izHaveOverload":true,
               "isOnline":0,
               "alarmState":[7,3],
-              "operationState":[4]
+              "operationState":[4],
+              "lockTime":"1710000000000",
+              "unlockTime":1709000000000
             }
             """.trimIndent(),
         )
@@ -59,6 +61,8 @@ class VehicleDtoTest {
         assertTrue(v.siteLabel.contains("边缘站"))
         assertTrue(v.siteLabel.contains("超区"))
         assertTrue(v.alarmStates.contains(VehicleAlarmStates.OFFLINE))
+        assertEquals(1_710_000_000_000L, v.lockTimeMs)
+        assertEquals(1_709_000_000_000L, v.unlockTimeMs)
     }
 }
 

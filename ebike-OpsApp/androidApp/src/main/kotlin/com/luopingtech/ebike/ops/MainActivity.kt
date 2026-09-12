@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,6 +57,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.luopingtech.ebike.ops.ui.analysis.AnalysisCardItem
 import com.luopingtech.ebike.ops.ui.analysis.AnalysisScaffold
+import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionMapScreen
+import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionScreen
 import com.luopingtech.ebike.ops.ui.auth.BusinessPickerScaffold
 import com.luopingtech.ebike.ops.ui.auth.GetSmsCodeAction
 import com.luopingtech.ebike.ops.ui.auth.LoginModeTabs
@@ -68,6 +72,7 @@ import com.luopingtech.ebike.ops.ui.home.HomeMapToolsRail
 import com.luopingtech.ebike.ops.ui.home.HomeStatItem
 import com.luopingtech.ebike.ops.ui.home.HomeStatisticsPanel
 import com.luopingtech.ebike.ops.ui.home.homeStatColor
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import com.luopingtech.ebike.ops.ui.workbench.WORKBENCH_COMMON_MAX
 import com.luopingtech.ebike.ops.ui.workbench.WorkbenchEditBadge
@@ -107,7 +112,7 @@ import com.luopingtech.ebike.ops.feature.task.ClaimableTaskFeature
 import com.luopingtech.ebike.ops.platform.ActivityCodeScanner
 import com.luopingtech.ebike.ops.platform.ActivityPhotoCapture
 import com.luopingtech.ebike.ops.platform.AndroidLocationTracker
-import com.luopingtech.ebike.ops.ui.common.createCachePhotoUri
+import com.luopingtech.ebike.ops.scan.OpsCameraScanPreview
 import com.luopingtech.ebike.ops.ui.h5.H5Screen
 import com.luopingtech.ebike.ops.ui.map.SimulatorMapView
 import com.luopingtech.ebike.ops.ui.map.TencentMapView
@@ -654,6 +659,8 @@ private fun MainShell(
     var tab by remember { mutableStateOf(MainTab.Map) }
     var taskKind by remember { mutableStateOf(TaskKind.Hub) }
     var warehouseOpen by remember { mutableStateOf(false) }
+    var vehicleConditionDistOpen by remember { mutableStateOf(false) }
+    var vehicleConditionDistMapOpen by remember { mutableStateOf(false) }
     var productionOpen by remember { mutableStateOf(false) }
     var faultReportOpen by remember { mutableStateOf(false) }
     var sneakReportOpen by remember { mutableStateOf(false) }
@@ -728,6 +735,21 @@ private fun MainShell(
         }
     }
 
+    if (vehicleConditionDistMapOpen) {
+        VehicleConditionDistributionMapScreen(
+            app = app,
+            onClose = { vehicleConditionDistMapOpen = false },
+        )
+        return
+    }
+    if (vehicleConditionDistOpen) {
+        VehicleConditionDistributionScreen(
+            app = app,
+            onClose = { vehicleConditionDistOpen = false },
+            onOpenMap = { vehicleConditionDistMapOpen = true },
+        )
+        return
+    }
     if (warehouseOpen) {
         WarehouseScreen(
             app = app,
@@ -936,6 +958,10 @@ private fun MainShell(
                     homeState = homeState,
                     permissions = permissions,
                     onChangeArea = onChangeArea,
+                    onOpenVehicleDist = {
+                        app.vehicleConditionDistributionFeature.open()
+                        vehicleConditionDistOpen = true
+                    },
                 )
                 MainTab.Workbench -> WorkbenchTab(
                     app = app,
@@ -1286,6 +1312,7 @@ private fun AnalysisTab(
     homeState: HomeUiState,
     permissions: OpsPermissions,
     onChangeArea: () -> Unit,
+    onOpenVehicleDist: () -> Unit,
 ) {
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     val context = LocalContext.current
@@ -1293,22 +1320,22 @@ private fun AnalysisTab(
         android.widget.Toast.makeText(context, t(Str.FeatureComingSoon), android.widget.Toast.LENGTH_SHORT).show()
     }
     val cards = buildList {
-        fun addCard(visible: Boolean, id: String, title: String, icon: Int) {
+        fun addCard(visible: Boolean, id: String, title: String, icon: OpsIcon, onClick: () -> Unit) {
             if (visible || app.isDemoMode) {
                 add(
                     AnalysisCardItem(
                         id = id,
                         title = title,
-                        iconRes = icon,
-                        onClick = ::comingSoon,
+                        icon = icon,
+                        onClick = onClick,
                     ),
                 )
             }
         }
-        addCard(permissions.showAnalysisOfflineOps, "offline", t(Str.OfflineOperation), R.drawable.ic_offline_operation)
-        addCard(permissions.showAnalysisStation, "station", t(Str.StationMonitor), R.drawable.icon_analysis_station)
-        addCard(permissions.showAnalysisReturnCar, "return", t(Str.ReturnCarAnalysis), R.drawable.icon_analysis_return_bike)
-        addCard(permissions.showAnalysisVehicleDist, "vdist", t(Str.VehicleDistribution), R.drawable.icon_analysis_vehicle_distribution)
+        addCard(permissions.showAnalysisOfflineOps, "offline", t(Str.OfflineOperation), OpsIcon.OfflineOperation, ::comingSoon)
+        addCard(permissions.showAnalysisStation, "station", t(Str.StationMonitor), OpsIcon.AnalysisStation, ::comingSoon)
+        addCard(permissions.showAnalysisReturnCar, "return", t(Str.ReturnCarAnalysis), OpsIcon.AnalysisReturnBike, ::comingSoon)
+        addCard(permissions.showAnalysisVehicleDist, "vdist", t(Str.VehicleDistribution), OpsIcon.AnalysisVehicleDistribution, onOpenVehicleDist)
     }.distinctBy { it.id }
 
     AnalysisScaffold(
@@ -1480,7 +1507,7 @@ private fun TasksTab(
                         TaskCenterCardItem(
                             id = "battery",
                             title = t(Str.ChangeBatteryShort),
-                            iconRes = R.drawable.icon_task_change_battery,
+                            icon = OpsIcon.TaskChangeBattery,
                             badgeText = badgeTotalCount(battery.tasks.size),
                             onClick = { onTaskKind(TaskKind.ChangeBattery) },
                         ),
@@ -1491,7 +1518,7 @@ private fun TasksTab(
                         TaskCenterCardItem(
                             id = "move",
                             title = t(Str.MoveCarShort),
-                            iconRes = R.drawable.icon_task_move_bike,
+                            icon = OpsIcon.TaskMoveBike,
                             badgeText = badgeTotalCount(move.tasks.size),
                             onClick = { onTaskKind(TaskKind.MoveCar) },
                         ),
@@ -1502,7 +1529,7 @@ private fun TasksTab(
                         TaskCenterCardItem(
                             id = "inspection",
                             title = t(Str.InspectionShort),
-                            iconRes = R.drawable.icon_task_inspection,
+                            icon = OpsIcon.TaskInspection,
                             badgeText = badgeClaimed(inspection.tasks),
                             onClick = { onTaskKind(TaskKind.Inspection) },
                         ),
@@ -1513,7 +1540,7 @@ private fun TasksTab(
                         TaskCenterCardItem(
                             id = "repair",
                             title = t(Str.RepairShort),
-                            iconRes = R.drawable.icon_task_repair,
+                            icon = OpsIcon.TaskRepair,
                             badgeText = badgeClaimed(repair.tasks),
                             onClick = { onTaskKind(TaskKind.Repair) },
                         ),
@@ -1660,7 +1687,7 @@ private fun ScanOverlay(
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     var mode by remember {
-        // Legacy ScanActivity.initPermissionView: default Detail when available; Unlock only if no detail.
+        // 对齐遗留 ScanActivity.initPermissionView：有详情优先详情，否则开锁。
         mutableStateOf(
             if (!permissions.canScanDetails && permissions.canScanUnlock) {
                 ScanMode.Unlock
@@ -1671,76 +1698,302 @@ private fun ScanOverlay(
     }
     val scope = rememberCoroutineScope()
     val scanState by app.scanFeature.state.collectAsState()
+    val homeState by app.homeFeature.state.collectAsState()
+
+    var torchOn by remember { mutableStateOf(false) }
+    var showManual by remember { mutableStateOf(false) }
+    var manualInput by remember { mutableStateOf("") }
+    // 对齐遗留 preScanResult：同一串不重复处理；切模式时清空。
+    var lastRaw by remember { mutableStateOf("") }
+    var busy by remember { mutableStateOf(false) }
+
+    fun resetDedupe() {
+        lastRaw = ""
+        busy = false
+    }
+
+    LaunchedEffect(mode) {
+        resetDedupe()
+        app.scanFeature.clear()
+        showManual = false
+    }
+
+    suspend fun handleRaw(raw: String) {
+        val trimmed = raw.trim()
+        if (trimmed.isEmpty() || busy || trimmed == lastRaw) return
+        lastRaw = trimmed
+        busy = true
+        when (app.scanFeature.resolveManual(trimmed)) {
+            is OpsResult.Err -> {
+                busy = false
+                // 识别错了允许马上再扫；同码也允许重试。error 已写入 scanFeature.state。
+                lastRaw = ""
+            }
+            is OpsResult.Ok -> when (mode) {
+                ScanMode.Detail -> {
+                    // 详情留在本页展示 VehicleDetailSection；分析继续开着以便扫下一辆。
+                    busy = false
+                }
+                ScanMode.Unlock -> {
+                    app.scanFeature.unlock()
+                    delay(1_200)
+                    app.scanFeature.clear()
+                    resetDedupe()
+                }
+                ScanMode.Lock -> {
+                    app.scanFeature.lock()
+                    delay(1_200)
+                    app.scanFeature.clear()
+                    resetDedupe()
+                }
+            }
+        }
+    }
+
+    val scanBg = Color(0xFF242936)
+    val scanMuted = Color(0xFFCCCCCC)
+    val tabStroke = Color(0xFF4B4B4B)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .background(scanBg)
+            .statusBarsPadding()
+            .navigationBarsPadding(),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(t(Str.ScanTitle), style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = onClose) { Text(t(Str.Close)) }
-        }
-        Text(
-            text = t(Str.ScanModeHint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            if (permissions.canScanDetails) {
-                FilterChip(
-                    selected = mode == ScanMode.Detail,
-                    onClick = { mode = ScanMode.Detail },
-                    label = { Text(t(Str.ScanDetail)) },
-                )
-            }
-            if (permissions.canScanUnlock) {
-                FilterChip(
-                    selected = mode == ScanMode.Unlock,
-                    onClick = { mode = ScanMode.Unlock },
-                    label = { Text(t(Str.ScanUnlock)) },
-                )
-                FilterChip(
-                    selected = mode == ScanMode.Lock,
-                    onClick = { mode = ScanMode.Lock },
-                    label = { Text(t(Str.ScanLock)) },
-                )
-            }
-        }
-        Text(
-            text = when (mode) {
-                ScanMode.Detail -> t(Str.ScanModeDetailHint)
-                ScanMode.Unlock -> t(Str.ScanModeUnlockHint)
-                ScanMode.Lock -> t(Str.ScanModeLockHint)
-            },
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        ScanUnlockSection(
-            app = app,
-            permissions = permissions,
-            mode = mode,
-            onResolved = { vehicleId ->
-                when (mode) {
-                    ScanMode.Detail -> Unit
-                    ScanMode.Unlock -> scope.launch { app.scanFeature.unlock() }
-                    ScanMode.Lock -> scope.launch { app.scanFeature.lock() }
-                }
-            },
-        )
-        if (mode == ScanMode.Detail && scanState.vehicle != null) {
             Text(
-                text = t(Str.OpenBoxOnMapHint),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = t(Str.ScanTitle),
+                color = Color.White,
+                style = MaterialTheme.typography.titleMedium,
             )
+            TextButton(onClick = onClose) {
+                Text(t(Str.Close), color = scanMuted)
+            }
         }
+
+        // 上半屏预览：只吃剩余高度，绝不和下方操作区叠层。
+        OpsCameraScanPreview(
+            onCode = { raw -> scope.launch { handleRaw(raw) } },
+            torchOn = torchOn,
+            enabled = !busy && !showManual,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        )
+
+        // 不透明底栏：SurfaceView/预览再怎么画，也盖不住这块。
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(scanBg)
+                .padding(top = 4.dp),
+        ) {
+            Text(
+                text = when (mode) {
+                    ScanMode.Detail -> t(Str.ScanModeDetailHint)
+                    ScanMode.Unlock -> t(Str.ScanModeUnlockHint)
+                    ScanMode.Lock -> t(Str.ScanModeLockHint)
+                },
+                color = scanMuted,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 10.dp),
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 56.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                ScanActionIcon(
+                    iconRes = R.drawable.ic_scan_manual,
+                    label = t(Str.InputCarNumber),
+                    onClick = { showManual = !showManual },
+                )
+                ScanActionIcon(
+                    iconRes = if (torchOn) R.drawable.ic_torch_on else R.drawable.ic_torch_off,
+                    label = if (torchOn) t(Str.CloseTorch) else t(Str.OpenTorch),
+                    onClick = { torchOn = !torchOn },
+                )
+            }
+
+            if (showManual) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    OutlinedTextField(
+                        value = manualInput,
+                        onValueChange = { manualInput = it },
+                        label = { Text(t(Str.VehicleIdImeiQr)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Button(
+                            onClick = {
+                                scope.launch {
+                                    showManual = false
+                                    handleRaw(manualInput)
+                                }
+                            },
+                            enabled = !busy && manualInput.isNotBlank(),
+                            modifier = Modifier.weight(1f),
+                        ) { Text(if (busy) t(Str.LoadingEllipsis) else t(Str.Confirm)) }
+                        TextButton(
+                            onClick = { showManual = false },
+                            modifier = Modifier.weight(1f),
+                        ) { Text(t(Str.Cancel), color = scanMuted) }
+                    }
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp, vertical = 16.dp)
+                    .border(1.dp, tabStroke, RoundedCornerShape(8.dp))
+                    .padding(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                if (permissions.canScanDetails) {
+                    ScanModeTab(
+                        label = t(Str.ScanDetail),
+                        selected = mode == ScanMode.Detail,
+                        onClick = { mode = ScanMode.Detail },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+                if (permissions.canScanUnlock) {
+                    ScanModeTab(
+                        label = t(Str.ScanUnlock),
+                        selected = mode == ScanMode.Unlock,
+                        onClick = { mode = ScanMode.Unlock },
+                        modifier = Modifier.weight(1f),
+                    )
+                    ScanModeTab(
+                        label = t(Str.ScanLock),
+                        selected = mode == ScanMode.Lock,
+                        onClick = { mode = ScanMode.Lock },
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+
+            scanState.message?.let {
+                Text(
+                    text = it,
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
+                )
+            }
+            scanState.errorMessage?.let {
+                Text(
+                    text = it,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
+            }
+        }
+
+        // 详情单独占一块可滚动区域，不再跟预览抢 weight。
+        if (mode == ScanMode.Detail && scanState.vehicle != null && !showManual) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                val vehicle = scanState.vehicle!!
+                Text(
+                    text = t(
+                        Str.ParsedVehicleSummary,
+                        vehicle.carId,
+                        vehicle.batteryLabel,
+                        vehicle.ridingLabel,
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                VehicleDetailSection(
+                    app = app,
+                    vehicle = vehicle,
+                    serviceAreaId = homeState.currentArea?.id,
+                    canBindBattery = permissions.canBindBatterySn,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScanActionIcon(
+    @androidx.annotation.DrawableRes iconRes: Int,
+    label: String,
+    onClick: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = label,
+            modifier = Modifier.size(40.dp),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = label,
+            color = Color(0xFFCCCCCC),
+            style = MaterialTheme.typography.bodySmall,
+        )
+    }
+}
+
+@Composable
+private fun ScanModeTab(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .background(
+                color = if (selected) Color(0xFFB8D4E8) else Color.Transparent,
+                shape = RoundedCornerShape(6.dp),
+            )
+            .padding(vertical = 10.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = label,
+            color = if (selected) Color.Black else Color.White,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+        )
     }
 }
 
@@ -1782,24 +2035,24 @@ private fun WorkbenchTab(
             visible: Boolean,
             id: String,
             title: String,
-            icon: Int,
+            icon: OpsIcon,
             onClick: () -> Unit,
         ) {
             if (visible) add(WorkbenchModuleItem(id, title, icon, onClick))
         }
-        addModule(permissions.showVehicleList, "vlist", t(Str.VehicleList), R.drawable.vehicle_list) { comingSoon() }
-        addModule(permissions.showChangeBatteryTool, "batt", t(Str.ChangeBatteryTool), R.drawable.replace_battery) { comingSoon() }
-        addModule(permissions.showMoveCarTool, "move", t(Str.MoveCarTool), R.drawable.move_vehicle) { comingSoon() }
-        addModule(permissions.showFaultReport, "fault", t(Str.FaultReport), R.drawable.repair) {
+        addModule(permissions.showVehicleList, "vlist", t(Str.VehicleList), OpsIcon.VehicleList) { comingSoon() }
+        addModule(permissions.showChangeBatteryTool, "batt", t(Str.ChangeBatteryTool), OpsIcon.ReplaceBattery) { comingSoon() }
+        addModule(permissions.showMoveCarTool, "move", t(Str.MoveCarTool), OpsIcon.MoveVehicle) { comingSoon() }
+        addModule(permissions.showFaultReport, "fault", t(Str.FaultReport), OpsIcon.Repair) {
             app.faultReportFeature.openHub()
             onOpenFaultReport()
         }
-        addModule(permissions.showUnlockedVehicles, "unlocked", t(Str.UnlockedVehicles), R.drawable.unlocked_vehicle_icon, onOpenUnlockedVehicles)
-        addModule(permissions.showBluetoothRadar, "ble", t(Str.BluetoothRadar), R.drawable.btn_bluetooth_radar) { comingSoon() }
-        addModule(permissions.showOpsSetting, "ops-set", t(Str.OpsSettingTool), R.drawable.ic_operation_setting) { comingSoon() }
-        addModule(permissions.showMyTask, "my-task", t(Str.MyTaskTool), R.drawable.mine_my_task) { comingSoon() }
-        addModule(permissions.showVehicleTag, "vtag", t(Str.VehicleTagTool), R.drawable.mine_vehicle_tag) { comingSoon() }
-        addModule(permissions.showRelocation, "reloc", t(Str.Relocation), R.drawable.mine_relocation, onOpenRelocation)
+        addModule(permissions.showUnlockedVehicles, "unlocked", t(Str.UnlockedVehicles), OpsIcon.UnlockedVehicle, onOpenUnlockedVehicles)
+        addModule(permissions.showBluetoothRadar, "ble", t(Str.BluetoothRadar), OpsIcon.BluetoothRadar) { comingSoon() }
+        addModule(permissions.showOpsSetting, "ops-set", t(Str.OpsSettingTool), OpsIcon.OperationSetting) { comingSoon() }
+        addModule(permissions.showMyTask, "my-task", t(Str.MyTaskTool), OpsIcon.MyTask) { comingSoon() }
+        addModule(permissions.showVehicleTag, "vtag", t(Str.VehicleTagTool), OpsIcon.VehicleTag) { comingSoon() }
+        addModule(permissions.showRelocation, "reloc", t(Str.Relocation), OpsIcon.Relocation, onOpenRelocation)
     }
 
     val operationItems = buildList {
@@ -1808,17 +2061,17 @@ private fun WorkbenchTab(
             visible: Boolean,
             id: String,
             title: String,
-            icon: Int,
+            icon: OpsIcon,
             onClick: () -> Unit,
         ) {
             if (visible) add(WorkbenchModuleItem(id, title, icon, onClick))
         }
-        addModule(permissions.showParkingFence, "fence", t(Str.ParkingFence), R.drawable.btn_parking_area) { comingSoon() }
+        addModule(permissions.showParkingFence, "fence", t(Str.ParkingFence), OpsIcon.ParkingArea) { comingSoon() }
         addModule(
             permissions.has(OpsPermissionCodes.ORDER_QUERY),
             "h5-order",
             t(Str.OrderQueryScreen),
-            R.drawable.ic_order_query,
+            OpsIcon.OrderQuery,
         ) {
             if (H5ScreenUrls.isConfigured(app.config, H5ScreenKind.Order)) {
                 onOpenH5(H5ScreenKind.Order)
@@ -1826,26 +2079,26 @@ private fun WorkbenchTab(
                 comingSoon()
             }
         }
-        addModule(permissions.showOperationScreen, "h5-op", t(Str.OperationScreen), R.drawable.btn_operation) {
+        addModule(permissions.showOperationScreen, "h5-op", t(Str.OperationScreen), OpsIcon.OperationScreen) {
             if (H5ScreenUrls.isConfigured(app.config, H5ScreenKind.Operation)) {
                 onOpenH5(H5ScreenKind.Operation)
             } else {
                 comingSoon()
             }
         }
-        addModule(permissions.showRevenueScreen, "h5-rev", t(Str.RevenueScreen), R.drawable.btn_revenue) {
+        addModule(permissions.showRevenueScreen, "h5-rev", t(Str.RevenueScreen), OpsIcon.RevenueScreen) {
             if (H5ScreenUrls.isConfigured(app.config, H5ScreenKind.Revenue)) {
                 onOpenH5(H5ScreenKind.Revenue)
             } else {
                 comingSoon()
             }
         }
-        addModule(permissions.showStaffManage, "staff", t(Str.StaffManage), R.drawable.ic_employee_manager) { comingSoon() }
-        addModule(permissions.showProfessionAudit, "prof", t(Str.ProfessionAudit), R.drawable.mine_profession_audit_ic) { comingSoon() }
-        addModule(permissions.showObjectionOrder, "obj", t(Str.ObjectionOrder), R.drawable.mine_objection_order) { comingSoon() }
-        addModule(permissions.showBlacklist, "black", t(Str.Blacklist), R.drawable.black_list) { comingSoon() }
-        addModule(permissions.showIdBindAudit, "idbind", t(Str.IdBindAudit), R.drawable.mine_id_audit_ic) { comingSoon() }
-        addModule(permissions.showOperationLog, "oplog", t(Str.OperationLog), R.drawable.ic_operation_log) { comingSoon() }
+        addModule(permissions.showStaffManage, "staff", t(Str.StaffManage), OpsIcon.EmployeeManager) { comingSoon() }
+        addModule(permissions.showProfessionAudit, "prof", t(Str.ProfessionAudit), OpsIcon.ProfessionAudit) { comingSoon() }
+        addModule(permissions.showObjectionOrder, "obj", t(Str.ObjectionOrder), OpsIcon.ObjectionOrder) { comingSoon() }
+        addModule(permissions.showBlacklist, "black", t(Str.Blacklist), OpsIcon.BlackList) { comingSoon() }
+        addModule(permissions.showIdBindAudit, "idbind", t(Str.IdBindAudit), OpsIcon.IdAudit) { comingSoon() }
+        addModule(permissions.showOperationLog, "oplog", t(Str.OperationLog), OpsIcon.OperationLog) { comingSoon() }
     }
 
     val productionItems = buildList {
@@ -1854,7 +2107,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "prod-detect",
                     title = t(Str.ProductionDetect),
-                    iconRes = R.drawable.ic_vehicle_inspection,
+                    icon = OpsIcon.VehicleInspection,
                     onClick = {
                         app.productionFeature.openHub()
                         onOpenProduction()
@@ -1867,7 +2120,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "prod-bind",
                     title = t(Str.ProductionBind),
-                    iconRes = R.drawable.btn_center_control_bind,
+                    icon = OpsIcon.CenterControlBind,
                     onClick = {
                         app.productionFeature.openHub()
                         onOpenProduction()
@@ -1880,7 +2133,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "prod-shelves",
                     title = t(Str.ProductionShelves),
-                    iconRes = R.drawable.btn_put_pull_shelves,
+                    icon = OpsIcon.PutPullShelves,
                     onClick = {
                         app.productionFeature.openHub()
                         onOpenProduction()
@@ -1896,7 +2149,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "wh-in",
                     title = t(Str.WarehouseIn),
-                    iconRes = R.drawable.ic_in_warehouse,
+                    icon = OpsIcon.InWarehouse,
                     onClick = {
                         app.warehouseFeature.openHub()
                         onOpenWarehouse()
@@ -1909,7 +2162,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "wh-out",
                     title = t(Str.WarehouseOut),
-                    iconRes = R.drawable.ic_out_warehouse,
+                    icon = OpsIcon.OutWarehouse,
                     onClick = {
                         app.warehouseFeature.openHub()
                         onOpenWarehouse()
@@ -1922,7 +2175,7 @@ private fun WorkbenchTab(
                 WorkbenchModuleItem(
                     id = "wh-rec",
                     title = t(Str.WarehouseRecords),
-                    iconRes = R.drawable.ic_warehouse_record,
+                    icon = OpsIcon.WarehouseRecord,
                     onClick = {
                         app.warehouseFeature.openHub()
                         onOpenWarehouse()
@@ -1981,7 +2234,7 @@ private fun WorkbenchTab(
         WorkbenchModuleItem(
             id = base.id,
             title = base.title,
-            iconRes = base.iconRes,
+            icon = base.icon,
             onClick = {
                 if (!editingCommon) base.onClick()
             },
@@ -1999,7 +2252,7 @@ private fun WorkbenchTab(
             WorkbenchModuleItem(
                 id = item.id,
                 title = item.title,
-                iconRes = item.iconRes,
+                icon = item.icon,
                 onClick = {},
                 editBadge = if (alreadyPinned) WorkbenchEditBadge.None else WorkbenchEditBadge.Add,
                 onBadgeClick = {
@@ -2222,124 +2475,6 @@ private fun TrackUploadStatus(
 }
 
 @Composable
-private fun ScanUnlockSection(
-    app: OpsApp,
-    permissions: OpsPermissions,
-    mode: ScanMode = ScanMode.Detail,
-    onResolved: (String) -> Unit = {},
-) {
-    val language by app.i18n.languageFlow.collectAsState()
-    fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
-    val scanState by app.scanFeature.state.collectAsState()
-    val homeState by app.homeFeature.state.collectAsState()
-    val scope = rememberCoroutineScope()
-    val demoHint = t(Str.VehicleIdImeiQr)
-
-    suspend fun afterResolve() {
-        val carId = app.scanFeature.state.value.vehicle?.carId ?: return
-        onResolved(carId)
-    }
-
-    OutlinedTextField(
-        value = scanState.rawInput,
-        onValueChange = { app.scanFeature.updateRawInput(it) },
-        label = { Text(demoHint) },
-        modifier = Modifier.fillMaxWidth(),
-        singleLine = true,
-    )
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Button(
-            onClick = {
-                scope.launch {
-                    app.scanFeature.resolveFromScanner()
-                    afterResolve()
-                }
-            },
-            enabled = !scanState.loading,
-            modifier = Modifier.weight(1f),
-        ) { Text(t(Str.Camera)) }
-        Button(
-            onClick = {
-                scope.launch {
-                    app.scanFeature.resolveManual()
-                    afterResolve()
-                }
-            },
-            enabled = !scanState.loading,
-            modifier = Modifier.weight(1f),
-        ) { Text(if (scanState.loading) t(Str.LoadingEllipsis) else t(Str.Parse)) }
-        if (app.isDemoMode) {
-            Button(
-                onClick = {
-                    scope.launch {
-                        app.scanFeature.resolveManual("D1001-001")
-                        afterResolve()
-                    }
-                },
-                enabled = !scanState.loading,
-                modifier = Modifier.weight(1f),
-            ) { Text(t(Str.DemoPhoto)) }
-        }
-    }
-    scanState.vehicle?.let { vehicle ->
-        Text(
-            text = t(
-                Str.ParsedVehicleSummary,
-                vehicle.carId,
-                vehicle.batteryLabel,
-                vehicle.ridingLabel,
-            ),
-            style = MaterialTheme.typography.bodyMedium,
-        )
-        if (mode == ScanMode.Detail) {
-            VehicleDetailSection(
-                app = app,
-                vehicle = vehicle,
-                serviceAreaId = homeState.currentArea?.id,
-                canBindBattery = permissions.canBindBatterySn,
-            )
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                if (permissions.canScanUnlock) {
-                    Button(
-                        onClick = { scope.launch { app.scanFeature.unlock() } },
-                        enabled = !scanState.loading,
-                        modifier = Modifier.weight(1f),
-                    ) { Text(t(Str.ScanUnlock)) }
-                    Button(
-                        onClick = { scope.launch { app.scanFeature.lock() } },
-                        enabled = !scanState.loading,
-                        modifier = Modifier.weight(1f),
-                    ) { Text(t(Str.ScanLock)) }
-                }
-                Button(
-                    onClick = { scope.launch { app.scanFeature.ring() } },
-                    enabled = !scanState.loading,
-                    modifier = Modifier.weight(1f),
-                ) { Text(t(Str.ScanRing)) }
-            }
-            if (!permissions.canScanUnlock) {
-                Text(
-                    text = t(Str.NoUnlockPermission),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
-    scanState.message?.let { Text(text = it) }
-    scanState.errorMessage?.let {
-        Text(text = it, color = MaterialTheme.colorScheme.error)
-    }
-}
-
-@Composable
 private fun TaskSelectedCard(app: OpsApp, task: OpsTask?) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
@@ -2516,56 +2651,18 @@ private fun ClaimableTaskSection(
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     val taskState by feature.state.collectAsState()
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    var pendingCameraUri by remember { mutableStateOf<Uri?>(null) }
     var photoHint by remember { mutableStateOf<String?>(null) }
 
-    val takePictureLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicture(),
-    ) { ok ->
-        val uri = pendingCameraUri
-        pendingCameraUri = null
-        if (ok && uri != null) {
-            feature.addPhotoUrl(uri.toString())
-            photoHint = null
-        } else {
-            photoHint = t(Str.NoPhotoTaken)
-        }
-    }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.GetContent(),
-    ) { uri ->
-        if (uri != null) {
-            feature.addPhotoUrl(uri.toString())
-            photoHint = null
-        }
-    }
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission(),
-    ) { granted ->
-        if (granted) {
-            val uri = createCachePhotoUri(context, prefix = title.lowercase())
-                ?: return@rememberLauncherForActivityResult
-            pendingCameraUri = uri
-            takePictureLauncher.launch(uri)
-        } else {
-            photoHint = t(Str.CameraPermissionRequired)
-        }
-    }
-
-    fun launchCamera() {
-        val granted = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.CAMERA,
-        ) == PackageManager.PERMISSION_GRANTED
-        if (granted) {
-            val uri = createCachePhotoUri(context, prefix = title.lowercase()) ?: return
-            pendingCameraUri = uri
-            takePictureLauncher.launch(uri)
-        } else {
-            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+    /** 相机与相册只差取图那一步，权限与取消都由 [PhotoCapture] 实现方吞掉。 */
+    fun addPhoto(take: suspend () -> OpsResult<String>) {
+        scope.launch {
+            when (val shot = take()) {
+                is OpsResult.Ok -> {
+                    feature.addPhotoUrl(shot.value)
+                    photoHint = null
+                }
+                is OpsResult.Err -> photoHint = shot.error.message
+            }
         }
     }
 
@@ -2730,11 +2827,11 @@ private fun ClaimableTaskSection(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Button(
-                    onClick = { launchCamera() },
+                    onClick = { addPhoto { app.photoCapture.takePhoto(title.lowercase()) } },
                     modifier = Modifier.weight(1f),
                 ) { Text(t(Str.Camera)) }
                 Button(
-                    onClick = { galleryLauncher.launch("image/*") },
+                    onClick = { addPhoto { app.photoCapture.pickFromGallery() } },
                     modifier = Modifier.weight(1f),
                 ) { Text(t(Str.Album)) }
                 if (app.isDemoMode) {

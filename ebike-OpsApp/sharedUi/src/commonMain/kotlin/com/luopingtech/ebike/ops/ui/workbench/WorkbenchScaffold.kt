@@ -1,6 +1,5 @@
 package com.luopingtech.ebike.ops.ui.workbench
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -43,7 +42,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,7 +49,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import com.luopingtech.ebike.ops.R
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import kotlin.math.roundToInt
 
@@ -64,7 +63,7 @@ enum class WorkbenchEditBadge {
 data class WorkbenchModuleItem(
     val id: String,
     val title: String,
-    @DrawableRes val iconRes: Int,
+    val icon: OpsIcon,
     val onClick: () -> Unit,
     val editBadge: WorkbenchEditBadge = WorkbenchEditBadge.None,
     val onBadgeClick: (() -> Unit)? = null,
@@ -110,7 +109,7 @@ fun WorkbenchScaffold(
     onCancelEditCommon: () -> Unit,
     onSaveEditCommon: () -> Unit,
     onReorderCommon: (from: Int, to: Int) -> Unit,
-    @DrawableRes avatarRes: Int = R.drawable.tenant_logo,
+    avatar: OpsIcon = OpsIcon.TenantLogo,
 ) {
     if (settingsOpen && settingsContent != null) {
         Column(
@@ -179,7 +178,7 @@ fun WorkbenchScaffold(
                     companyName = companyName,
                     userName = userName,
                     roleLabel = roleLabel,
-                    avatarRes = avatarRes,
+                    avatar = avatar,
                 )
             }
             Column(
@@ -204,7 +203,7 @@ fun WorkbenchScaffold(
                 WorkbenchModuleCard(
                     title = commonTitle,
                     items = commonItems,
-                    emptyIconRes = R.drawable.mine_module_add_gray,
+                    emptyIcon = OpsIcon.MineModuleAddGray,
                     editLabel = if (!editingCommon && commonItems.isNotEmpty()) editLabel else null,
                     onEditClick = if (!editingCommon && commonItems.isNotEmpty()) onStartEditCommon else null,
                     onEmptyClick = if (!editingCommon) onStartEditCommon else null,
@@ -289,7 +288,7 @@ private fun WorkbenchToolbar(
             )
             if (onTitleClick != null) {
                 Image(
-                    painter = painterResource(R.drawable.arrow_down),
+                    painter = painterResource(OpsIcon.ArrowDown),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 4.dp)
@@ -315,7 +314,7 @@ private fun WorkbenchToolbar(
             }
             onSettings != null -> {
                 Image(
-                    painter = painterResource(R.drawable.setting),
+                    painter = painterResource(OpsIcon.Setting),
                     contentDescription = "settings",
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
@@ -337,7 +336,7 @@ private fun WorkbenchProfileHeader(
     companyName: String,
     userName: String,
     roleLabel: String,
-    @DrawableRes avatarRes: Int,
+    avatar: OpsIcon,
 ) {
     val colors = OpsTheme.colors
     val density = LocalDensity.current
@@ -365,7 +364,7 @@ private fun WorkbenchProfileHeader(
             verticalAlignment = Alignment.Top,
         ) {
             Image(
-                painter = painterResource(avatarRes),
+                painter = painterResource(avatar),
                 contentDescription = null,
                 modifier = Modifier
                     .size(70.dp)
@@ -412,7 +411,7 @@ private fun WorkbenchProfileHeader(
 private fun WorkbenchModuleCard(
     title: String,
     items: List<WorkbenchModuleItem>,
-    emptyIconRes: Int? = null,
+    emptyIcon: OpsIcon? = null,
     editLabel: String? = null,
     onEditClick: (() -> Unit)? = null,
     onEmptyClick: (() -> Unit)? = null,
@@ -457,9 +456,9 @@ private fun WorkbenchModuleCard(
                 )
             }
         }
-        if (items.isEmpty() && emptyIconRes != null) {
+        if (items.isEmpty() && emptyIcon != null) {
             Image(
-                painter = painterResource(emptyIconRes),
+                painter = painterResource(emptyIcon),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 12.dp, top = 12.dp, bottom = 12.dp)
@@ -615,7 +614,7 @@ private fun WorkbenchGridCell(
             contentAlignment = Alignment.TopCenter,
         ) {
             Image(
-                painter = painterResource(item.iconRes),
+                painter = painterResource(item.icon),
                 contentDescription = item.title,
                 modifier = Modifier.size(30.dp),
                 contentScale = ContentScale.Fit,
@@ -623,7 +622,7 @@ private fun WorkbenchGridCell(
             when (item.editBadge) {
                 WorkbenchEditBadge.Add -> {
                     Image(
-                        painter = painterResource(R.drawable.mine_module_edit_add),
+                        painter = painterResource(OpsIcon.MineModuleEditAdd),
                         contentDescription = null,
                         modifier = Modifier
                             .align(Alignment.TopEnd)
@@ -638,7 +637,7 @@ private fun WorkbenchGridCell(
                 }
                 WorkbenchEditBadge.Remove -> {
                     Image(
-                        painter = painterResource(R.drawable.mine_module_edit_delete),
+                        painter = painterResource(OpsIcon.MineModuleEditDelete),
                         contentDescription = null,
                         modifier = Modifier
                             .align(Alignment.TopEnd)

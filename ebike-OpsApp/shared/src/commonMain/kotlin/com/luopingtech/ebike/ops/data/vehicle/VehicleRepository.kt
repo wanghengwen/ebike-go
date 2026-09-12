@@ -1,6 +1,7 @@
 package com.luopingtech.ebike.ops.data.vehicle
 
 import com.luopingtech.ebike.ops.core.result.OpsResult
+import com.luopingtech.ebike.ops.core.time.nowEpochMillis
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
 import com.luopingtech.ebike.ops.domain.model.Vehicle
 import com.luopingtech.ebike.ops.domain.scan.ScanTarget
@@ -66,6 +67,8 @@ class VehicleRepositoryImpl(
         fun demoVehicles(area: ServiceArea): List<Vehicle> {
             val baseLat = if (area.centerLat != 0.0) area.centerLat else 28.22
             val baseLng = if (area.centerLng != 0.0) area.centerLng else 112.94
+            val now = nowEpochMillis()
+            val hour = 3_600_000L
             return listOf(
                 Vehicle(
                     carId = "D${area.id}-001",
@@ -86,6 +89,8 @@ class VehicleRepositoryImpl(
                     serviceName = area.name,
                     model = "1",
                     izHaveOverload = true,
+                    lockTimeMs = now - 2 * hour,
+                    unlockTimeMs = now - 5 * hour,
                 ),
                 Vehicle(
                     carId = "D${area.id}-002",
@@ -104,6 +109,8 @@ class VehicleRepositoryImpl(
                     totalMiles = 640.5,
                     serviceName = area.name,
                     model = "1",
+                    lockTimeMs = now - hour,
+                    unlockTimeMs = now - hour / 2,
                 ),
                 Vehicle(
                     carId = "D${area.id}-003",
@@ -127,6 +134,8 @@ class VehicleRepositoryImpl(
                     serviceName = area.name,
                     model = "2",
                     izHaveOverload = true,
+                    lockTimeMs = now - 30 * hour,
+                    unlockTimeMs = now - 40 * hour,
                 ),
                 Vehicle(
                     carId = "D${area.id}-004",
@@ -145,6 +154,8 @@ class VehicleRepositoryImpl(
                     totalMiles = 88.0,
                     serviceName = area.name,
                     model = "1",
+                    lockTimeMs = now - 8 * hour,
+                    unlockTimeMs = now - 10 * hour,
                 ),
                 Vehicle(
                     carId = "D${area.id}-005",
@@ -164,6 +175,8 @@ class VehicleRepositoryImpl(
                     totalMiles = 450.0,
                     serviceName = area.name,
                     model = "1",
+                    lockTimeMs = now - 50 * hour,
+                    unlockTimeMs = now - 55 * hour,
                 ),
                 Vehicle(
                     carId = "D${area.id}-006",
@@ -183,6 +196,8 @@ class VehicleRepositoryImpl(
                     totalMiles = 320.0,
                     serviceName = area.name,
                     model = "1",
+                    lockTimeMs = now - 80 * hour,
+                    unlockTimeMs = now - 90 * hour,
                 ),
                 Vehicle(
                     carId = "D${area.id}-007",
@@ -204,6 +219,8 @@ class VehicleRepositoryImpl(
                     totalMiles = 990.0,
                     serviceName = area.name,
                     model = "1",
+                    lockTimeMs = now - 4 * hour,
+                    unlockTimeMs = now - 6 * hour,
                 ),
                 // Sold-out: should never appear on home map.
                 Vehicle(
@@ -217,6 +234,8 @@ class VehicleRepositoryImpl(
                     isOnline = false,
                     serviceId = area.id,
                     model = "1",
+                    lockTimeMs = now - 100 * hour,
+                    unlockTimeMs = now - 110 * hour,
                 ),
             )
         }

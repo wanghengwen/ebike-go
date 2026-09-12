@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 手电关：灯头 + 手柄，无光束 -->
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M9,2h6v2H9z" />
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M8,4h8l-1.2,3.5H9.2L8,4z" />
+    <path
+        android:fillColor="#CCCCCC"
+        android:pathData="M9.5,7.5h5V21c0,0.55 -0.45,1 -1,1h-3c-0.55,0 -1,-0.45 -1,-1V7.5z" />
+    <path
+        android:fillColor="#242936"
+        android:pathData="M12,12m-1.2,0a1.2,1.2 0,1 1,2.4,0a1.2,1.2 0,1 1,-2.4,0" />
+</vector>

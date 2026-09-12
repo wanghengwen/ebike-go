@@ -44,6 +44,10 @@ data class Vehicle(
     val acc: Int? = null,
     val defend: Int? = null,
     val timestamp: Long? = null,
+    /** 关锁时间 epoch ms；闲置分档用。接口可能是数字或数字字符串。 */
+    val lockTimeMs: Long = 0L,
+    /** 开锁时间 epoch ms。 */
+    val unlockTimeMs: Long = 0L,
 ) {
     val batteryLabel: String get() = "$restBattery%"
 

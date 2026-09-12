@@ -33,9 +33,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.domain.model.BusinessTenant
+import com.luopingtech.ebike.ops.ui.text.labelComparator
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
-import java.text.Collator
-import java.util.Locale
 import kotlinx.coroutines.launch
 
 private val IndexLetters = listOf("#") + ('A'..'Z').map { it.toString() }
@@ -54,7 +53,7 @@ fun BusinessPickerScaffold(
     onSelect: (String) -> Unit,
 ) {
     val colors = OpsTheme.colors
-    val collator = remember { Collator.getInstance(Locale.CHINA) }
+    val collator = remember { labelComparator() }
     val sorted = remember(businesses, query) {
         val q = query.trim()
         businesses
