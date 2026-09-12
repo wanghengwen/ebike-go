@@ -69,15 +69,4 @@ export const Endpoints = {
   activityGivingDay: '/ebike_visual/activity/business/wallet/giving_day',
 
   screenRevenueConfig: '/business/fence/bigScreen/getConfigByServiceId',
-
-  // --- 订单查询 ---
-  // 商户端用 bList，PC 后台用的是 /business/order/list。两者下游同一个服务，
-  // 但列表元素类型不同：bList 给 bLastOrderDetailCO（带轨迹），list 给 bOrderCo。
-  orderList: '/business/order/bList',
-  orderDetail: '/business/order/orderDetail',
-  orderDetailLast: '/business/order/detailLast',
-  updateCostTicket: '/business/createUpdateCostTicket',
-  userDetail: '/business/user/user/detail',
-  userDetailByPhone: '/business/user/user/detailByPhone',
-  userPage: '/business/user/user/page',
 } as const

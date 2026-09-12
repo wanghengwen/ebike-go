@@ -96,6 +96,7 @@ import com.luopingtech.ebike.ops.feature.task.MoveCarTaskFeature
 import com.luopingtech.ebike.ops.feature.task.RepairTaskFeature
 import com.luopingtech.ebike.ops.feature.task.TaskAuditFeature
 import com.luopingtech.ebike.ops.feature.tenant.ServiceAreaFeature
+import com.luopingtech.ebike.ops.feature.tools.FieldChangeBatteryFeature
 import com.luopingtech.ebike.ops.feature.tools.UnlockedVehicleFeature
 import com.luopingtech.ebike.ops.feature.tracking.TrackUploadFeature
 import com.luopingtech.ebike.ops.data.fence.FenceApi
@@ -105,13 +106,48 @@ import com.luopingtech.ebike.ops.data.geo.GeoApi
 import com.luopingtech.ebike.ops.data.order.OrderApi
 import com.luopingtech.ebike.ops.data.order.OrderRepository
 import com.luopingtech.ebike.ops.data.order.OrderRepositoryImpl
+import com.luopingtech.ebike.ops.feature.order.OrderQueryFeature
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryApi
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepository
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepositoryImpl
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleDetailMapFeature
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleFeature
 import com.luopingtech.ebike.ops.feature.analysis.VehicleConditionDistributionFeature
+import com.luopingtech.ebike.ops.feature.analysis.OfflineOpsFeature
+import com.luopingtech.ebike.ops.feature.analysis.StationAnalysisFeature
+import com.luopingtech.ebike.ops.feature.analysis.ReturnCarAnalysisFeature
+import com.luopingtech.ebike.ops.feature.analysis.TaskStatisticsFeature
+import com.luopingtech.ebike.ops.feature.admin.BlacklistFeature
+import com.luopingtech.ebike.ops.feature.admin.IdBindAuditFeature
+import com.luopingtech.ebike.ops.feature.admin.ObjectionOrderFeature
+import com.luopingtech.ebike.ops.feature.admin.OperationLogFeature
+import com.luopingtech.ebike.ops.feature.admin.ProfessionAuditFeature
+import com.luopingtech.ebike.ops.feature.fence.FenceBrowseFeature
+import com.luopingtech.ebike.ops.feature.staff.StaffDirectoryFeature
+import com.luopingtech.ebike.ops.feature.tag.VehicleTagFeature
+import com.luopingtech.ebike.ops.feature.tools.BluetoothRadarFeature
+import com.luopingtech.ebike.ops.feature.tools.OpsSettingFeature
 import com.luopingtech.ebike.ops.feature.warehouse.WarehouseFeature
+import com.luopingtech.ebike.ops.data.admin.AdminApi
+import com.luopingtech.ebike.ops.data.admin.AdminRepository
+import com.luopingtech.ebike.ops.data.admin.AdminRepositoryImpl
+import com.luopingtech.ebike.ops.data.tag.VehicleTagApi
+import com.luopingtech.ebike.ops.data.tag.VehicleTagRepository
+import com.luopingtech.ebike.ops.data.tag.VehicleTagRepositoryImpl
+import com.luopingtech.ebike.ops.data.tools.OpsSettingApi
+import com.luopingtech.ebike.ops.data.tools.OpsSettingRepository
+import com.luopingtech.ebike.ops.data.tools.OpsSettingRepositoryImpl
+import com.luopingtech.ebike.ops.data.analysis.OfflineOpsApi
+import com.luopingtech.ebike.ops.data.analysis.OfflineOpsRepository
+import com.luopingtech.ebike.ops.data.analysis.OfflineOpsRepositoryImpl
+import com.luopingtech.ebike.ops.data.analysis.StationAnalysisApi
+import com.luopingtech.ebike.ops.data.analysis.StationAnalysisRepository
+import com.luopingtech.ebike.ops.data.analysis.StationAnalysisRepositoryImpl
+import com.luopingtech.ebike.ops.data.analysis.ReturnCarAnalysisApi
+import com.luopingtech.ebike.ops.data.analysis.ReturnCarAnalysisRepository
+import com.luopingtech.ebike.ops.data.analysis.ReturnCarAnalysisRepositoryImpl
+import com.luopingtech.ebike.ops.data.analysis.TaskStatisticsRepository
+import com.luopingtech.ebike.ops.data.analysis.TaskStatisticsRepositoryImpl
 import com.luopingtech.ebike.ops.platform.BleTransport
 import com.luopingtech.ebike.ops.platform.BleTransportFactory
 import com.luopingtech.ebike.ops.platform.BindableMediaUploader
@@ -272,6 +308,100 @@ class OpsApp(
     val vehicleConditionDistributionFeature: VehicleConditionDistributionFeature =
         VehicleConditionDistributionFeature(vehicleRepository)
 
+    private val offlineOpsApi: OfflineOpsApi? = signedApiClient?.let { client ->
+        OfflineOpsApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val offlineOpsRepository: OfflineOpsRepository = OfflineOpsRepositoryImpl(
+        demoMode = demoMode,
+        api = offlineOpsApi,
+    )
+    val offlineOpsFeature: OfflineOpsFeature = OfflineOpsFeature(offlineOpsRepository)
+
+    private val stationAnalysisApi: StationAnalysisApi? = signedApiClient?.let { client ->
+        StationAnalysisApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val stationAnalysisRepository: StationAnalysisRepository = StationAnalysisRepositoryImpl(
+        demoMode = demoMode,
+        api = stationAnalysisApi,
+    )
+    val stationAnalysisFeature: StationAnalysisFeature = StationAnalysisFeature(stationAnalysisRepository)
+
+    private val returnCarAnalysisApi: ReturnCarAnalysisApi? = signedApiClient?.let { client ->
+        ReturnCarAnalysisApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val returnCarAnalysisRepository: ReturnCarAnalysisRepository = ReturnCarAnalysisRepositoryImpl(
+        demoMode = demoMode,
+        api = returnCarAnalysisApi,
+    )
+    val returnCarAnalysisFeature: ReturnCarAnalysisFeature =
+        ReturnCarAnalysisFeature(returnCarAnalysisRepository)
+
+    private val opsSettingApi: OpsSettingApi? = signedApiClient?.let { client ->
+        OpsSettingApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val opsSettingRepository: OpsSettingRepository = OpsSettingRepositoryImpl(
+        demoMode = demoMode,
+        api = opsSettingApi,
+    )
+    val opsSettingFeature: OpsSettingFeature = OpsSettingFeature(opsSettingRepository)
+
+    private val vehicleTagApi: VehicleTagApi? = signedApiClient?.let { client ->
+        VehicleTagApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+            pinProvider = { authRepository.currentSession()?.userId.orEmpty() },
+        )
+    }
+    val vehicleTagRepository: VehicleTagRepository = VehicleTagRepositoryImpl(
+        demoMode = demoMode,
+        api = vehicleTagApi,
+    )
+    val vehicleTagFeature: VehicleTagFeature = VehicleTagFeature(
+        repository = vehicleTagRepository,
+        vehicleRepository = vehicleRepository,
+        qrHostsProvider = { authRepository.runtimeConfig()?.qrHosts.orEmpty() },
+    )
+
+    private val adminApi: AdminApi? = signedApiClient?.let { client ->
+        AdminApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val adminRepository: AdminRepository = AdminRepositoryImpl(
+        demoMode = demoMode,
+        api = adminApi,
+    )
+    val professionAuditFeature: ProfessionAuditFeature = ProfessionAuditFeature(adminRepository)
+    val objectionOrderFeature: ObjectionOrderFeature = ObjectionOrderFeature(adminRepository)
+    val blacklistFeature: BlacklistFeature = BlacklistFeature(adminRepository)
+    val idBindAuditFeature: IdBindAuditFeature = IdBindAuditFeature(adminRepository)
+    val operationLogFeature: OperationLogFeature = OperationLogFeature(adminRepository)
+
     private val fenceApi: FenceApi? = signedApiClient?.let { client ->
         FenceApi(
             signedApi = client,
@@ -281,6 +411,7 @@ class OpsApp(
         )
     }
     val fenceRepository: FenceRepository = FenceRepositoryImpl(demoMode = demoMode, api = fenceApi)
+    val fenceBrowseFeature: FenceBrowseFeature = FenceBrowseFeature(repository = fenceRepository)
 
     private val orderApi: OrderApi? = signedApiClient?.let { client ->
         OrderApi(
@@ -292,6 +423,11 @@ class OpsApp(
     }
     val orderRepository: OrderRepository =
         OrderRepositoryImpl(demoMode = demoMode, api = orderApi)
+
+    val orderQueryFeature: OrderQueryFeature = OrderQueryFeature(
+        repository = orderRepository,
+        permissionsProvider = { sessionPermissions() },
+    )
 
     private val geoApi: GeoApi? = signedApiClient?.let { client ->
         GeoApi(
@@ -345,6 +481,11 @@ class OpsApp(
 
     val vehicleControl: VehicleControlPolicy =
         VehicleControlPolicy(ble = bleTransport, network = resolvedNetworkControl)
+
+    val bluetoothRadarFeature: BluetoothRadarFeature = BluetoothRadarFeature(
+        bleTransport = bleTransport,
+        control = vehicleControl,
+    )
 
     private val unlockedVehicleApi: UnlockedVehicleApi? = signedApiClient?.let { client ->
         UnlockedVehicleApi(
@@ -446,6 +587,12 @@ class OpsApp(
         serviceAreaIdProvider = { serviceAreaRepository.currentArea()?.id.orEmpty() },
     )
 
+    val fieldChangeBatteryFeature: FieldChangeBatteryFeature = FieldChangeBatteryFeature(
+        repository = vehicleRepository,
+        control = vehicleControl,
+        qrHostsProvider = { authRepository.runtimeConfig()?.qrHosts.orEmpty() },
+    )
+
     private val changeBatteryTaskApi: ChangeBatteryTaskApi? = signedApiClient?.let { client ->
         ChangeBatteryTaskApi(
             signedApi = client,
@@ -530,6 +677,7 @@ class OpsApp(
         demoMode = demoMode,
         api = serviceUserApi,
     )
+    val staffDirectoryFeature: StaffDirectoryFeature = StaffDirectoryFeature(serviceUserRepository)
 
     val freeMoveCarFeature: FreeMoveCarFeature = FreeMoveCarFeature(
         repository = freeMoveCarRepository,
@@ -596,6 +744,18 @@ class OpsApp(
         repository = repairTaskRepository,
         pinProvider = { authRepository.currentSession()?.userId.orEmpty() },
         mediaUploader = this.mediaUploader,
+    )
+
+    val taskStatisticsRepository: TaskStatisticsRepository = TaskStatisticsRepositoryImpl(
+        demoMode = demoMode,
+        changeBatteryApi = changeBatteryTaskApi,
+        moveCarApi = moveCarTaskApi,
+        inspectionApi = inspectionTaskApi,
+        repairApi = repairTaskApi,
+    )
+    val taskStatisticsFeature: TaskStatisticsFeature = TaskStatisticsFeature(
+        repository = taskStatisticsRepository,
+        opPinProvider = { authRepository.currentSession()?.userId.orEmpty() },
     )
 
     private val warehouseApi: WarehouseApi? = signedApiClient?.let { client ->

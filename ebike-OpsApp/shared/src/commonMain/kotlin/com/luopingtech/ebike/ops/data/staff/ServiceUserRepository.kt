@@ -22,9 +22,9 @@ class ServiceUserRepositoryImpl(
 
     companion object {
         fun demoWorkers(serviceId: String): List<TeamWorker> = listOf(
-            TeamWorker(name = Strings.t(Str.DemoTeamWorkerA), phone = "1380000${serviceId.takeLast(4).padStart(4, '0')}"),
-            TeamWorker(name = Strings.t(Str.DemoTeamWorkerB), phone = "1390000${serviceId.takeLast(4).padStart(4, '0')}"),
-            TeamWorker(name = Strings.t(Str.DemoTeamWorkerC), phone = "1370000${serviceId.takeLast(4).padStart(4, '0')}"),
+            TeamWorker(name = Strings.t(Str.DemoTeamWorkerA), phone = "1380000${serviceId.takeLast(4).padStart(4, '0')}", pin = "demo-a"),
+            TeamWorker(name = Strings.t(Str.DemoTeamWorkerB), phone = "1390000${serviceId.takeLast(4).padStart(4, '0')}", pin = "demo-b"),
+            TeamWorker(name = Strings.t(Str.DemoTeamWorkerC), phone = "1370000${serviceId.takeLast(4).padStart(4, '0')}", pin = "demo-c"),
         )
     }
 }

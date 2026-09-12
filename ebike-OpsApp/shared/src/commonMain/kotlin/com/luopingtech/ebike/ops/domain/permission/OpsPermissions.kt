@@ -16,6 +16,8 @@ object OpsPermissionCodes {
     const val TASK_MOVE_CAR: String = "123402"
     const val TASK_INSPECTION: String = "123403"
     const val TASK_REPAIR: String = "123404"
+    /** 任务指派。遗留 PCODE_TASK_ASSIGN。 */
+    const val TASK_ASSIGN: String = "123405"
 
     /** 运维模块父节点。遗留 PCODE_MAINTENANCE。 */
     const val MAINTENANCE_MODULE: String = "maintenanceModule"
@@ -127,6 +129,7 @@ object OpsPermissionCodes {
         TASK_MOVE_CAR,
         TASK_INSPECTION,
         TASK_REPAIR,
+        TASK_ASSIGN,
         MAINTENANCE_MODULE,
         OPERATION_MODULE,
         WAREHOUSE_MODULE,
@@ -200,6 +203,9 @@ class OpsPermissions(
         get() = showTaskCenter && has(OpsPermissionCodes.TASK_INSPECTION)
     val showRepair: Boolean
         get() = showTaskCenter && has(OpsPermissionCodes.TASK_REPAIR)
+    /** 巡检/维修指派。 */
+    val canAssignTask: Boolean
+        get() = showTaskCenter && has(OpsPermissionCodes.TASK_ASSIGN)
 
     /** Legacy: parent code must exist or section is GONE. */
     val showMaintainModule: Boolean get() = has(OpsPermissionCodes.MAINTENANCE_MODULE)
@@ -280,6 +286,14 @@ class OpsPermissions(
 
     val showOperationScreen: Boolean get() = has(OpsPermissionCodes.OPERATION_DATA)
     val showRevenueScreen: Boolean get() = has(OpsPermissionCodes.REVENUE_DATA)
+    /** 订单查询入口：父码 / PC 码 / 叶子码任一即可。 */
+    val showOrderQuery: Boolean
+        get() = hasAny(
+            OpsPermissionCodes.ORDER_QUERY,
+            OpsPermissionCodes.PC_ORDER_MENU,
+            OpsPermissionCodes.ORDER_QUERY_VEHICLE,
+            OpsPermissionCodes.ORDER_QUERY_PERSONAL,
+        )
 
     val canScanUnlock: Boolean get() = has(OpsPermissionCodes.SCAN_SWITCH_LOCK)
     val canScanDetails: Boolean get() = has(OpsPermissionCodes.SCAN_DETAILS)

@@ -124,6 +124,36 @@ class ChangeBatteryTaskApi(
         izBlue = izBlue,
     )
 
+    suspend fun pageStats(
+        serviceId: String,
+        state: Int,
+        pageNum: Int,
+        pageSize: Int,
+        opPin: String,
+        finishTimeBegin: String,
+        finishTimeEnd: String,
+    ): OpsResult<ChangeBatteryTaskListDto> {
+        val body = CommonRequestBody.toJsonString(
+            source = "/business/ebike-operation/change_battery/task/page",
+            tenantId = tenantIdProvider(),
+            deviceInfo = deviceInfo,
+            deviceId = deviceIdProvider(),
+        ) {
+            put("serviceId", serviceId)
+            put("pageNum", pageNum)
+            put("pageSize", pageSize)
+            put("state", state)
+            put("opPin", opPin)
+            put("finishTimeBegin", finishTimeBegin)
+            put("finishTimeEnd", finishTimeEnd)
+        }
+        return signedApi.post(
+            path = "business/ebike-operation/change_battery/task/page",
+            bodyJson = body,
+            deserializer = ChangeBatteryTaskListDto.serializer(),
+        )
+    }
+
     private suspend fun postAction(
         path: String,
         source: String,

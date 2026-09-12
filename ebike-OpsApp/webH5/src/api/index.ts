@@ -23,7 +23,6 @@ import type {
 } from './models'
 
 export * from './models'
-export * from './order'
 export type { ApiResponse, ServiceArea, UserInfo } from './types'
 
 // --- 通用 -----------------------------------------------------------------

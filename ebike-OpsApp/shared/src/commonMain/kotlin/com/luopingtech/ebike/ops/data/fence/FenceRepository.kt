@@ -70,6 +70,8 @@ class FenceRepositoryImpl(
                         name = "Demo service $serviceId",
                         points = ring,
                         kind = FenceKind.ServiceArea,
+                        carCount = 128,
+                        izEnable = true,
                     ),
                 ),
                 parkings = listOf(
@@ -78,6 +80,19 @@ class FenceRepositoryImpl(
                         name = "Demo parking",
                         points = parkRing,
                         kind = FenceKind.Parking,
+                        carCount = 6,
+                        currentParkingNumber = 6,
+                        maxParkingNumber = 20,
+                        izEnable = true,
+                    ),
+                ),
+                noParkings = listOf(
+                    FencePolygon(
+                        id = "nopark-$serviceId",
+                        name = "Demo no-parking",
+                        points = parkRing.map { GeoLatLng(it.lat + 0.002, it.lng + 0.002) },
+                        kind = FenceKind.NoParking,
+                        izEnable = true,
                     ),
                 ),
             )

@@ -49,7 +49,7 @@ class ProductionFeatureTest {
         f.addShelfCar()
         assertEquals(1, f.state.value.shelfQueue.size)
         f.submitShelfQueue()
-        assertEquals(ProductionPage.Hub, f.state.value.page)
+        assertEquals(ProductionPage.Shelves, f.state.value.page)
         assertEquals(
             Strings.t(Str.ShelfSubmitOk, Strings.t(Str.ShelfPutOn), 1),
             f.state.value.message,

@@ -57,6 +57,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.luopingtech.ebike.ops.ui.analysis.AnalysisCardItem
 import com.luopingtech.ebike.ops.ui.analysis.AnalysisScaffold
+import com.luopingtech.ebike.ops.ui.analysis.OfflineOpsScreen
+import com.luopingtech.ebike.ops.ui.analysis.ReturnCarAnalysisMapScreen
+import com.luopingtech.ebike.ops.ui.analysis.StationAnalysisScreen
 import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionMapScreen
 import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionScreen
 import com.luopingtech.ebike.ops.ui.auth.BusinessPickerScaffold
@@ -101,13 +104,16 @@ import com.luopingtech.ebike.ops.domain.model.MapPin
 import com.luopingtech.ebike.ops.domain.model.OpsTask
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
 import com.luopingtech.ebike.ops.domain.model.Vehicle
-import com.luopingtech.ebike.ops.domain.permission.OpsPermissionCodes
+import com.luopingtech.ebike.ops.domain.model.WarehouseOperationType
 import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleAlarmFilter
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleAlarmFilterLogic
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleMapFilter
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleMapFilterLogic
 import com.luopingtech.ebike.ops.feature.home.HomeUiState
+import com.luopingtech.ebike.ops.feature.home.SignedInHomeGate
+import com.luopingtech.ebike.ops.feature.home.resolveSignedInHomeGate
+import com.luopingtech.ebike.ops.feature.production.ShelfMode
 import com.luopingtech.ebike.ops.feature.task.ClaimableTaskFeature
 import com.luopingtech.ebike.ops.platform.ActivityCodeScanner
 import com.luopingtech.ebike.ops.platform.ActivityPhotoCapture
@@ -116,22 +122,40 @@ import com.luopingtech.ebike.ops.scan.OpsCameraScanPreview
 import com.luopingtech.ebike.ops.ui.h5.H5Screen
 import com.luopingtech.ebike.ops.ui.map.SimulatorMapView
 import com.luopingtech.ebike.ops.ui.map.TencentMapView
+import com.luopingtech.ebike.ops.ui.movecar.FieldMoveCarScreen
+import com.luopingtech.ebike.ops.ui.order.OrderQueryScreen
 import com.luopingtech.ebike.ops.ui.production.ProductionScreen
 import com.luopingtech.ebike.ops.ui.report.FaultReportScreen
 import com.luopingtech.ebike.ops.ui.task.BatchMoveCarSection
+import com.luopingtech.ebike.ops.ui.task.ChangeBatteryMapScreen
 import com.luopingtech.ebike.ops.ui.task.FreeMoveCarSection
-import com.luopingtech.ebike.ops.ui.task.MoveCarTaskSection
+import com.luopingtech.ebike.ops.ui.task.InspectionTaskScreen
+import com.luopingtech.ebike.ops.ui.task.MoveCarMapScreen
+import com.luopingtech.ebike.ops.ui.task.RepairTaskScreen
 import com.luopingtech.ebike.ops.ui.task.TaskAuditResultSection
 import com.luopingtech.ebike.ops.ui.task.TaskCenterCardItem
-import com.luopingtech.ebike.ops.ui.task.TaskMapKind
-import com.luopingtech.ebike.ops.ui.task.TaskMapScreen
+import com.luopingtech.ebike.ops.ui.task.TaskFullscreenTopBar
+import com.luopingtech.ebike.ops.ui.task.TaskStatisticsScreen
+import com.luopingtech.ebike.ops.domain.analysis.TaskStatisticsKind
 import com.luopingtech.ebike.ops.ui.task.TaskScaffold
 import com.luopingtech.ebike.ops.ui.relocation.RelocationScreen
+import com.luopingtech.ebike.ops.ui.tools.FieldChangeBatteryScreen
 import com.luopingtech.ebike.ops.ui.tools.UnlockedVehiclesScreen
+import com.luopingtech.ebike.ops.ui.tools.OpsSettingScreen
+import com.luopingtech.ebike.ops.ui.tools.BluetoothRadarScreen
+import com.luopingtech.ebike.ops.ui.fence.FenceBrowseScreen
+import com.luopingtech.ebike.ops.ui.staff.StaffDirectoryScreen
+import com.luopingtech.ebike.ops.ui.tag.VehicleTagScreen
+import com.luopingtech.ebike.ops.ui.admin.ProfessionAuditScreen
+import com.luopingtech.ebike.ops.ui.admin.ObjectionOrderScreen
+import com.luopingtech.ebike.ops.ui.admin.BlacklistScreen
+import com.luopingtech.ebike.ops.ui.admin.IdBindAuditScreen
+import com.luopingtech.ebike.ops.ui.admin.OperationLogScreen
 import com.luopingtech.ebike.ops.ui.sneak.SneakReportScreen
 import com.luopingtech.ebike.ops.ui.workorder.WorkOrderScreen
 import com.luopingtech.ebike.ops.domain.model.WorkOrderKind
 import com.luopingtech.ebike.ops.ui.vehicle.VehicleDetailSection
+import com.luopingtech.ebike.ops.ui.vehicle.VehicleListScreen
 import com.luopingtech.ebike.ops.ui.warehouse.WarehouseScreen
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -139,16 +163,6 @@ import kotlinx.coroutines.launch
 private enum class MainTab { Map, Tasks, Analysis, Workbench }
 
 private enum class ScanMode { Detail, Unlock, Lock }
-
-private enum class TaskKind {
-    Hub,
-    ChangeBattery,
-    MoveCar,
-    FreeMoveCar,
-    BatchMoveCar,
-    Inspection,
-    Repair,
-}
 
 class MainActivity : ComponentActivity() {
     private lateinit var activityCodeScanner: ActivityCodeScanner
@@ -196,21 +210,31 @@ private fun RootNav(app: OpsApp) {
     when {
         authState.session == null -> LoginScreen(app)
         authState.needSetPassword -> SetPasswordScreen(app)
-        homeState.loadingAreas && homeState.serviceAreas.isEmpty() -> LoadingScreen(t(Str.LoadingServiceAreas))
-        homeState.currentArea == null || pickingArea -> {
-            AreaGateScreen(
+        else -> when (
+            resolveSignedInHomeGate(
+                pickingArea = pickingArea,
+                currentArea = homeState.currentArea,
+                // Session / SecureStore / 仓库任一有记录，启动都直接进主页，避免闪选区页。
+                persistedAreaId = authState.session?.serviceAreaId
+                    ?.takeIf { it.isNotBlank() }
+                    ?: app.serviceAreaRepository.currentArea()?.id,
+                areasLoaded = homeState.areasLoaded,
+            )
+        ) {
+            SignedInHomeGate.LoadingAreas -> LoadingScreen(t(Str.LoadingServiceAreas))
+            SignedInHomeGate.AreaPicker -> AreaGateScreen(
                 app = app,
                 homeState = homeState,
                 allowCancel = homeState.currentArea != null && pickingArea,
                 onCancel = { pickingArea = false },
                 onSelected = { pickingArea = false },
             )
+            SignedInHomeGate.Home -> MainShell(
+                app = app,
+                homeState = homeState,
+                onChangeArea = { pickingArea = true },
+            )
         }
-        else -> MainShell(
-            app = app,
-            homeState = homeState,
-            onChangeArea = { pickingArea = true },
-        )
     }
 }
 
@@ -657,19 +681,44 @@ private fun MainShell(
         }
     }
     var tab by remember { mutableStateOf(MainTab.Map) }
-    var taskKind by remember { mutableStateOf(TaskKind.Hub) }
     var warehouseOpen by remember { mutableStateOf(false) }
+    var changeBatteryMapOpen by remember { mutableStateOf(false) }
+    var moveCarMapOpen by remember { mutableStateOf(false) }
+    var inspectionTaskOpen by remember { mutableStateOf(false) }
+    var repairTaskOpen by remember { mutableStateOf(false) }
+    var taskStatisticsKind by remember { mutableStateOf<TaskStatisticsKind?>(null) }
+    var taskChangeAreaOpen by remember { mutableStateOf(false) }
+    var freeMoveFromTaskOpen by remember { mutableStateOf(false) }
+    var batchMoveFromTaskOpen by remember { mutableStateOf(false) }
+    var batchParentTaskId by remember { mutableStateOf<String?>(null) }
     var vehicleConditionDistOpen by remember { mutableStateOf(false) }
     var vehicleConditionDistMapOpen by remember { mutableStateOf(false) }
+    var offlineOpsOpen by remember { mutableStateOf(false) }
+    var stationAnalysisOpen by remember { mutableStateOf(false) }
+    var returnCarAnalysisOpen by remember { mutableStateOf(false) }
     var productionOpen by remember { mutableStateOf(false) }
     var faultReportOpen by remember { mutableStateOf(false) }
     var sneakReportOpen by remember { mutableStateOf(false) }
     var unlockedVehiclesOpen by remember { mutableStateOf(false) }
+    var myTaskOpen by remember { mutableStateOf(false) }
+    var fenceBrowseOpen by remember { mutableStateOf(false) }
+    var opsSettingOpen by remember { mutableStateOf(false) }
+    var vehicleTagOpen by remember { mutableStateOf(false) }
+    var bluetoothRadarOpen by remember { mutableStateOf(false) }
+    var staffDirectoryOpen by remember { mutableStateOf(false) }
+    var professionAuditOpen by remember { mutableStateOf(false) }
+    var objectionOrderOpen by remember { mutableStateOf(false) }
+    var blacklistOpen by remember { mutableStateOf(false) }
+    var idBindAuditOpen by remember { mutableStateOf(false) }
+    var operationLogOpen by remember { mutableStateOf(false) }
+    var vehicleListOpen by remember { mutableStateOf(false) }
+    var fieldChangeBatteryOpen by remember { mutableStateOf(false) }
+    var fieldMoveCarOpen by remember { mutableStateOf(false) }
+    var orderQueryOpen by remember { mutableStateOf(false) }
     var relocationOpen by remember { mutableStateOf(false) }
     var inspectionOrderOpen by remember { mutableStateOf(false) }
     var repairOrderOpen by remember { mutableStateOf(false) }
     var h5Screen by remember { mutableStateOf<H5ScreenKind?>(null) }
-    var taskMapOpen by remember { mutableStateOf(false) }
     var scanOpen by remember { mutableStateOf(false) }
     var trackPermissionHint by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
@@ -735,6 +784,177 @@ private fun MainShell(
         }
     }
 
+    if (myTaskOpen) {
+        OfflineOpsScreen(
+            app = app,
+            mineOnly = true,
+            onClose = {
+                app.offlineOpsFeature.clear()
+                myTaskOpen = false
+            },
+        )
+        return
+    }
+    if (fenceBrowseOpen) {
+        FenceBrowseScreen(app = app, onClose = { fenceBrowseOpen = false })
+        return
+    }
+    if (opsSettingOpen) {
+        OpsSettingScreen(app = app, onClose = { opsSettingOpen = false })
+        return
+    }
+    if (vehicleTagOpen) {
+        VehicleTagScreen(app = app, onClose = { vehicleTagOpen = false })
+        return
+    }
+    if (bluetoothRadarOpen) {
+        BluetoothRadarScreen(app = app, onClose = { bluetoothRadarOpen = false })
+        return
+    }
+    if (staffDirectoryOpen) {
+        StaffDirectoryScreen(app = app, onClose = { staffDirectoryOpen = false })
+        return
+    }
+    if (professionAuditOpen) {
+        ProfessionAuditScreen(app = app, onClose = { professionAuditOpen = false })
+        return
+    }
+    if (objectionOrderOpen) {
+        ObjectionOrderScreen(app = app, onClose = { objectionOrderOpen = false })
+        return
+    }
+    if (blacklistOpen) {
+        BlacklistScreen(app = app, onClose = { blacklistOpen = false })
+        return
+    }
+    if (idBindAuditOpen) {
+        IdBindAuditScreen(app = app, onClose = { idBindAuditOpen = false })
+        return
+    }
+    if (operationLogOpen) {
+        OperationLogScreen(app = app, onClose = { operationLogOpen = false })
+        return
+    }
+    if (taskStatisticsKind != null) {
+        TaskStatisticsScreen(
+            app = app,
+            kind = taskStatisticsKind!!,
+            onClose = { taskStatisticsKind = null },
+        )
+        return
+    }
+    if (changeBatteryMapOpen) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ChangeBatteryMapScreen(
+                app = app,
+                onClose = {
+                    taskChangeAreaOpen = false
+                    changeBatteryMapOpen = false
+                },
+                onOpenStats = { taskStatisticsKind = TaskStatisticsKind.ChangeBattery },
+                onChangeArea = { taskChangeAreaOpen = true },
+            )
+            if (taskChangeAreaOpen) {
+                AreaGateScreen(
+                    app = app,
+                    homeState = homeState,
+                    allowCancel = true,
+                    onCancel = { taskChangeAreaOpen = false },
+                    onSelected = { taskChangeAreaOpen = false },
+                )
+            }
+        }
+        return
+    }
+    if (moveCarMapOpen) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            MoveCarMapScreen(
+                app = app,
+                onClose = {
+                    taskChangeAreaOpen = false
+                    moveCarMapOpen = false
+                },
+                onOpenFreeMove = {
+                    freeMoveFromTaskOpen = true
+                },
+                onOpenStats = { taskStatisticsKind = TaskStatisticsKind.MoveCar },
+                onChangeArea = { taskChangeAreaOpen = true },
+            )
+            if (taskChangeAreaOpen) {
+                AreaGateScreen(
+                    app = app,
+                    homeState = homeState,
+                    allowCancel = true,
+                    onCancel = { taskChangeAreaOpen = false },
+                    onSelected = { taskChangeAreaOpen = false },
+                )
+            }
+        }
+        return
+    }
+    if (freeMoveFromTaskOpen) {
+        Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+            TaskFullscreenTopBar(
+                title = app.i18n.t(Str.FreeMoveTaskTitle),
+                primary = OpsTheme.colors.primary,
+                onBack = { freeMoveFromTaskOpen = false },
+            )
+            FreeMoveCarSection(app = app, currentArea = homeState.currentArea)
+        }
+        return
+    }
+    if (batchMoveFromTaskOpen) {
+        Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
+            TaskFullscreenTopBar(
+                title = app.i18n.t(Str.BatchMoveTaskTitle),
+                primary = OpsTheme.colors.primary,
+                onBack = {
+                    app.batchMoveCarFeature.clear()
+                    batchParentTaskId = null
+                    batchMoveFromTaskOpen = false
+                },
+            )
+            BatchMoveCarSection(app = app, parentTaskId = batchParentTaskId)
+        }
+        return
+    }
+    if (inspectionTaskOpen) {
+        InspectionTaskScreen(
+            app = app,
+            onClose = { inspectionTaskOpen = false },
+            onOpenStats = { taskStatisticsKind = TaskStatisticsKind.Inspection },
+        )
+        return
+    }
+    if (repairTaskOpen) {
+        RepairTaskScreen(
+            app = app,
+            onClose = { repairTaskOpen = false },
+            onOpenStats = { taskStatisticsKind = TaskStatisticsKind.Repair },
+        )
+        return
+    }
+    if (offlineOpsOpen) {
+        OfflineOpsScreen(
+            app = app,
+            onClose = { offlineOpsOpen = false },
+        )
+        return
+    }
+    if (stationAnalysisOpen) {
+        StationAnalysisScreen(
+            app = app,
+            onClose = { stationAnalysisOpen = false },
+        )
+        return
+    }
+    if (returnCarAnalysisOpen) {
+        ReturnCarAnalysisMapScreen(
+            app = app,
+            onClose = { returnCarAnalysisOpen = false },
+        )
+        return
+    }
     if (vehicleConditionDistMapOpen) {
         VehicleConditionDistributionMapScreen(
             app = app,
@@ -754,7 +974,10 @@ private fun MainShell(
         WarehouseScreen(
             app = app,
             permissions = permissions,
-            onClose = { warehouseOpen = false },
+            onClose = {
+                app.warehouseFeature.clear()
+                warehouseOpen = false
+            },
         )
         return
     }
@@ -792,6 +1015,78 @@ private fun MainShell(
         )
         return
     }
+    if (vehicleListOpen) {
+        VehicleListScreen(
+            app = app,
+            currentArea = homeState.currentArea,
+            onClose = { vehicleListOpen = false },
+            onChangeArea = onChangeArea,
+            onVehicleClick = { carId ->
+                app.vehicleFeature.selectVehicle(carId)
+                vehicleListOpen = false
+                tab = MainTab.Map
+            },
+        )
+        return
+    }
+    if (fieldChangeBatteryOpen) {
+        FieldChangeBatteryScreen(
+            app = app,
+            onClose = { fieldChangeBatteryOpen = false },
+            onHelp = {
+                android.widget.Toast.makeText(
+                    context,
+                    app.i18n.t(Str.FieldChangeBatteryHelp),
+                    android.widget.Toast.LENGTH_LONG,
+                ).show()
+            },
+            scanPreview = { modifier, torchOn, enabled, onCode ->
+                OpsCameraScanPreview(
+                    onCode = onCode,
+                    modifier = modifier,
+                    torchOn = torchOn,
+                    enabled = enabled,
+                )
+            },
+        )
+        return
+    }
+    if (fieldMoveCarOpen) {
+        FieldMoveCarScreen(
+            app = app,
+            currentArea = homeState.currentArea,
+            onClose = { fieldMoveCarOpen = false },
+            onBleSearch = {
+                android.widget.Toast.makeText(
+                    context,
+                    app.i18n.t(Str.FeatureComingSoon),
+                    android.widget.Toast.LENGTH_SHORT,
+                ).show()
+            },
+            scanPreview = { modifier, torchOn, enabled, onCode ->
+                OpsCameraScanPreview(
+                    onCode = onCode,
+                    modifier = modifier,
+                    torchOn = torchOn,
+                    enabled = enabled,
+                )
+            },
+        )
+        return
+    }
+    if (orderQueryOpen) {
+        OrderQueryScreen(
+            app = app,
+            currentArea = homeState.currentArea,
+            onClose = { orderQueryOpen = false },
+            onOpenVehicleDetail = { carId ->
+                app.vehicleFeature.selectVehicle(carId)
+                orderQueryOpen = false
+                tab = MainTab.Map
+            },
+        )
+        return
+    }
     if (relocationOpen) {
         RelocationScreen(
             app = app,
@@ -823,18 +1118,6 @@ private fun MainShell(
             app = app,
             kind = h5Screen!!,
             onClose = { h5Screen = null },
-        )
-        return
-    }
-    if (taskMapOpen) {
-        com.luopingtech.ebike.ops.ui.task.TaskMapScreen(
-            app = app,
-            permissions = permissions,
-            initialKind = when {
-                permissions.showChangeBattery -> com.luopingtech.ebike.ops.ui.task.TaskMapKind.ChangeBattery
-                else -> com.luopingtech.ebike.ops.ui.task.TaskMapKind.MoveCar
-            },
-            onClose = { taskMapOpen = false },
         )
         return
     }
@@ -890,7 +1173,6 @@ private fun MainShell(
                         selected = tab == MainTab.Tasks,
                         onClick = {
                             tab = MainTab.Tasks
-                            taskKind = TaskKind.Hub
                         },
                         colors = itemColors,
                         icon = { Text("☑", fontSize = 16.sp) },
@@ -948,16 +1230,29 @@ private fun MainShell(
                     app = app,
                     homeState = homeState,
                     permissions = permissions,
-                    taskKind = taskKind,
-                    onTaskKind = { taskKind = it },
                     onChangeArea = onChangeArea,
-                    onOpenTaskMap = { taskMapOpen = true },
+                    onOpenChangeBatteryMap = { changeBatteryMapOpen = true },
+                    onOpenMoveCarMap = { moveCarMapOpen = true },
+                    onOpenInspectionTask = { inspectionTaskOpen = true },
+                    onOpenRepairTask = { repairTaskOpen = true },
                 )
                 MainTab.Analysis -> AnalysisTab(
                     app = app,
                     homeState = homeState,
                     permissions = permissions,
                     onChangeArea = onChangeArea,
+                    onOpenOfflineOps = {
+                        app.offlineOpsFeature.open()
+                        offlineOpsOpen = true
+                    },
+                    onOpenStationAnalysis = {
+                        app.stationAnalysisFeature.open()
+                        stationAnalysisOpen = true
+                    },
+                    onOpenReturnCarAnalysis = {
+                        app.returnCarAnalysisFeature.open()
+                        returnCarAnalysisOpen = true
+                    },
                     onOpenVehicleDist = {
                         app.vehicleConditionDistributionFeature.open()
                         vehicleConditionDistOpen = true
@@ -973,10 +1268,28 @@ private fun MainShell(
                     onOpenFaultReport = { faultReportOpen = true },
                     onOpenSneakReport = { sneakReportOpen = true },
                     onOpenUnlockedVehicles = { unlockedVehiclesOpen = true },
+                    onOpenVehicleList = { vehicleListOpen = true },
+                    onOpenFieldChangeBattery = { fieldChangeBatteryOpen = true },
+                    onOpenFieldMoveCar = { fieldMoveCarOpen = true },
+                    onOpenOrderQuery = { orderQueryOpen = true },
                     onOpenRelocation = { relocationOpen = true },
                     onOpenInspectionOrder = { inspectionOrderOpen = true },
                     onOpenRepairOrder = { repairOrderOpen = true },
                     onOpenH5 = { h5Screen = it },
+                    onOpenMyTask = {
+                        app.offlineOpsFeature.open()
+                        myTaskOpen = true
+                    },
+                    onOpenFenceBrowse = { fenceBrowseOpen = true },
+                    onOpenOpsSetting = { opsSettingOpen = true },
+                    onOpenVehicleTag = { vehicleTagOpen = true },
+                    onOpenBluetoothRadar = { bluetoothRadarOpen = true },
+                    onOpenStaffDirectory = { staffDirectoryOpen = true },
+                    onOpenProfessionAudit = { professionAuditOpen = true },
+                    onOpenObjectionOrder = { objectionOrderOpen = true },
+                    onOpenBlacklist = { blacklistOpen = true },
+                    onOpenIdBindAudit = { idBindAuditOpen = true },
+                    onOpenOperationLog = { operationLogOpen = true },
                     onChangeArea = onChangeArea,
                 )
             }
@@ -1312,6 +1625,9 @@ private fun AnalysisTab(
     homeState: HomeUiState,
     permissions: OpsPermissions,
     onChangeArea: () -> Unit,
+    onOpenOfflineOps: () -> Unit,
+    onOpenStationAnalysis: () -> Unit,
+    onOpenReturnCarAnalysis: () -> Unit,
     onOpenVehicleDist: () -> Unit,
 ) {
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
@@ -1332,9 +1648,9 @@ private fun AnalysisTab(
                 )
             }
         }
-        addCard(permissions.showAnalysisOfflineOps, "offline", t(Str.OfflineOperation), OpsIcon.OfflineOperation, ::comingSoon)
-        addCard(permissions.showAnalysisStation, "station", t(Str.StationMonitor), OpsIcon.AnalysisStation, ::comingSoon)
-        addCard(permissions.showAnalysisReturnCar, "return", t(Str.ReturnCarAnalysis), OpsIcon.AnalysisReturnBike, ::comingSoon)
+        addCard(permissions.showAnalysisOfflineOps, "offline", t(Str.OfflineOperation), OpsIcon.OfflineOperation, onOpenOfflineOps)
+        addCard(permissions.showAnalysisStation, "station", t(Str.StationMonitor), OpsIcon.AnalysisStation, onOpenStationAnalysis)
+        addCard(permissions.showAnalysisReturnCar, "return", t(Str.ReturnCarAnalysis), OpsIcon.AnalysisReturnBike, onOpenReturnCarAnalysis)
         addCard(permissions.showAnalysisVehicleDist, "vdist", t(Str.VehicleDistribution), OpsIcon.AnalysisVehicleDistribution, onOpenVehicleDist)
     }.distinctBy { it.id }
 
@@ -1478,10 +1794,11 @@ private fun TasksTab(
     app: OpsApp,
     homeState: HomeUiState,
     permissions: OpsPermissions,
-    taskKind: TaskKind,
-    onTaskKind: (TaskKind) -> Unit,
     onChangeArea: () -> Unit,
-    onOpenTaskMap: () -> Unit,
+    onOpenChangeBatteryMap: () -> Unit,
+    onOpenMoveCarMap: () -> Unit,
+    onOpenInspectionTask: () -> Unit,
+    onOpenRepairTask: () -> Unit,
 ) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
@@ -1489,7 +1806,6 @@ private fun TasksTab(
     val move by app.moveCarTaskFeature.state.collectAsState()
     val inspection by app.inspectionTaskFeature.state.collectAsState()
     val repair by app.repairTaskFeature.state.collectAsState()
-    var batchParentTaskId by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(homeState.currentArea?.id) {
         val area = homeState.currentArea ?: return@LaunchedEffect
@@ -1499,149 +1815,72 @@ private fun TasksTab(
         if (permissions.showRepair) app.repairTaskFeature.load(area)
     }
 
-    when (taskKind) {
-        TaskKind.Hub -> {
-            val cards = buildList {
-                if (permissions.showChangeBattery || app.isDemoMode) {
-                    add(
-                        TaskCenterCardItem(
-                            id = "battery",
-                            title = t(Str.ChangeBatteryShort),
-                            icon = OpsIcon.TaskChangeBattery,
-                            badgeText = badgeTotalCount(battery.tasks.size),
-                            onClick = { onTaskKind(TaskKind.ChangeBattery) },
-                        ),
-                    )
-                }
-                if (permissions.showMoveCar || app.isDemoMode) {
-                    add(
-                        TaskCenterCardItem(
-                            id = "move",
-                            title = t(Str.MoveCarShort),
-                            icon = OpsIcon.TaskMoveBike,
-                            badgeText = badgeTotalCount(move.tasks.size),
-                            onClick = { onTaskKind(TaskKind.MoveCar) },
-                        ),
-                    )
-                }
-                if (permissions.showInspection || app.isDemoMode) {
-                    add(
-                        TaskCenterCardItem(
-                            id = "inspection",
-                            title = t(Str.InspectionShort),
-                            icon = OpsIcon.TaskInspection,
-                            badgeText = badgeClaimed(inspection.tasks),
-                            onClick = { onTaskKind(TaskKind.Inspection) },
-                        ),
-                    )
-                }
-                if (permissions.showRepair || app.isDemoMode) {
-                    add(
-                        TaskCenterCardItem(
-                            id = "repair",
-                            title = t(Str.RepairShort),
-                            icon = OpsIcon.TaskRepair,
-                            badgeText = badgeClaimed(repair.tasks),
-                            onClick = { onTaskKind(TaskKind.Repair) },
-                        ),
-                    )
-                }
-            }
-            TaskScaffold(
-                areaName = homeState.currentArea?.name?.takeIf { it.isNotBlank() }
-                    ?: t(Str.SelectServiceArea),
-                pageTitle = t(Str.TaskCenter),
-                cards = cards,
-                onChangeArea = onChangeArea,
-                emptyHint = t(Str.NoTaskPermission),
+    val cards = buildList {
+        if (permissions.showChangeBattery || app.isDemoMode) {
+            add(
+                TaskCenterCardItem(
+                    id = "battery",
+                    title = t(Str.ChangeBatteryTaskTitle),
+                    icon = OpsIcon.TaskChangeBattery,
+                    badgeText = badgeTotalCount(battery.tasks.size),
+                    onClick = onOpenChangeBatteryMap,
+                ),
             )
         }
-        TaskKind.ChangeBattery -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.ChangeBatteryTaskTitle),
-            onBack = { onTaskKind(TaskKind.Hub) },
-            trailing = {
-                TextButton(onClick = onOpenTaskMap) { Text(t(Str.TaskMap)) }
-            },
-        ) {
-            ChangeBatteryTaskSection(app = app, currentArea = homeState.currentArea)
-        }
-        TaskKind.MoveCar -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.MoveCarTaskTitle),
-            onBack = { onTaskKind(TaskKind.Hub) },
-            trailing = {
-                TextButton(onClick = onOpenTaskMap) { Text(t(Str.TaskMap)) }
-            },
-        ) {
-            MoveCarTaskSection(
-                app = app,
-                currentArea = homeState.currentArea,
-                selectedCard = { task -> TaskSelectedCard(app = app, task = task) },
-                onOpenBatchMove = { task ->
-                    batchParentTaskId = task.batchParentId
-                    onTaskKind(TaskKind.BatchMoveCar)
-                },
-                onOpenFreeMove = { onTaskKind(TaskKind.FreeMoveCar) },
+        if (permissions.showMoveCar || app.isDemoMode) {
+            add(
+                TaskCenterCardItem(
+                    id = "move",
+                    title = t(Str.MoveCarTaskTitle),
+                    icon = OpsIcon.TaskMoveBike,
+                    badgeText = badgeTotalCount(move.tasks.size),
+                    onClick = onOpenMoveCarMap,
+                ),
             )
         }
-        TaskKind.FreeMoveCar -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.FreeMoveTaskTitle),
-            onBack = { onTaskKind(TaskKind.MoveCar) },
-        ) {
-            FreeMoveCarSection(app = app, currentArea = homeState.currentArea)
-        }
-        TaskKind.BatchMoveCar -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.BatchMoveTaskTitle),
-            onBack = {
-                app.batchMoveCarFeature.clear()
-                batchParentTaskId = null
-                onTaskKind(TaskKind.MoveCar)
-            },
-        ) {
-            BatchMoveCarSection(app = app, parentTaskId = batchParentTaskId)
-        }
-        TaskKind.Inspection -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.InspectionTaskTitle),
-            onBack = { onTaskKind(TaskKind.Hub) },
-        ) {
-            ClaimableTaskSection(
-                app = app,
-                title = t(Str.InspectionShort),
-                hint = t(Str.ClaimStartFinishHint),
-                feature = app.inspectionTaskFeature,
-                currentArea = homeState.currentArea,
+        if (permissions.showInspection || app.isDemoMode) {
+            add(
+                TaskCenterCardItem(
+                    id = "inspection",
+                    title = t(Str.InspectionTaskTitle),
+                    icon = OpsIcon.TaskInspection,
+                    badgeText = badgeClaimed(inspection.tasks),
+                    onClick = onOpenInspectionTask,
+                ),
             )
         }
-        TaskKind.Repair -> TaskDetailScaffold(
-            app = app,
-            title = t(Str.RepairTaskTitle),
-            onBack = { onTaskKind(TaskKind.Hub) },
-        ) {
-            ClaimableTaskSection(
-                app = app,
-                title = t(Str.RepairShort),
-                hint = t(Str.ClaimStartFinishHint),
-                feature = app.repairTaskFeature,
-                currentArea = homeState.currentArea,
-                showDragBack = true,
+        if (permissions.showRepair || app.isDemoMode) {
+            add(
+                TaskCenterCardItem(
+                    id = "repair",
+                    title = t(Str.RepairTaskTitle),
+                    icon = OpsIcon.TaskRepair,
+                    badgeText = badgeClaimed(repair.tasks),
+                    onClick = onOpenRepairTask,
+                ),
             )
         }
     }
+    TaskScaffold(
+        areaName = homeState.currentArea?.name?.takeIf { it.isNotBlank() }
+            ?: t(Str.SelectServiceArea),
+        pageTitle = t(Str.TaskCenter),
+        cards = cards,
+        onChangeArea = onChangeArea,
+        emptyHint = t(Str.NoTaskPermission),
+    )
 }
 
 /** Legacy: hide tip when total is 0. */
 private fun badgeTotalCount(total: Int): String? =
     if (total <= 0) null else total.toString()
 
-/** Legacy inspection/repair tip: received/total; hide when total is 0. */
+/** Legacy inspection/repair tip: received/total among pending+processing; hide when 0. */
 private fun badgeClaimed(tasks: List<com.luopingtech.ebike.ops.domain.model.OpsTask>): String? {
-    if (tasks.isEmpty()) return null
-    val claimed = tasks.count { it.state == 1 }
-    return "$claimed/${tasks.size}"
+    val active = tasks.filter { it.state == 0 || it.state == 1 }
+    if (active.isEmpty()) return null
+    val claimed = active.count { it.state == 1 }
+    return "$claimed/${active.size}"
 }
 
 @Composable
@@ -2008,10 +2247,25 @@ private fun WorkbenchTab(
     onOpenFaultReport: () -> Unit,
     onOpenSneakReport: () -> Unit,
     onOpenUnlockedVehicles: () -> Unit,
+    onOpenVehicleList: () -> Unit,
+    onOpenFieldChangeBattery: () -> Unit,
+    onOpenFieldMoveCar: () -> Unit,
+    onOpenOrderQuery: () -> Unit,
     onOpenRelocation: () -> Unit,
     onOpenInspectionOrder: () -> Unit,
     onOpenRepairOrder: () -> Unit,
     onOpenH5: (H5ScreenKind) -> Unit,
+    onOpenMyTask: () -> Unit,
+    onOpenFenceBrowse: () -> Unit,
+    onOpenOpsSetting: () -> Unit,
+    onOpenVehicleTag: () -> Unit,
+    onOpenBluetoothRadar: () -> Unit,
+    onOpenStaffDirectory: () -> Unit,
+    onOpenProfessionAudit: () -> Unit,
+    onOpenObjectionOrder: () -> Unit,
+    onOpenBlacklist: () -> Unit,
+    onOpenIdBindAudit: () -> Unit,
+    onOpenOperationLog: () -> Unit,
     onChangeArea: () -> Unit,
 ) {
     val language by app.i18n.languageFlow.collectAsState()
@@ -2040,18 +2294,18 @@ private fun WorkbenchTab(
         ) {
             if (visible) add(WorkbenchModuleItem(id, title, icon, onClick))
         }
-        addModule(permissions.showVehicleList, "vlist", t(Str.VehicleList), OpsIcon.VehicleList) { comingSoon() }
-        addModule(permissions.showChangeBatteryTool, "batt", t(Str.ChangeBatteryTool), OpsIcon.ReplaceBattery) { comingSoon() }
-        addModule(permissions.showMoveCarTool, "move", t(Str.MoveCarTool), OpsIcon.MoveVehicle) { comingSoon() }
+        addModule(permissions.showVehicleList, "vlist", t(Str.VehicleList), OpsIcon.VehicleList, onOpenVehicleList)
+        addModule(permissions.showChangeBatteryTool, "batt", t(Str.ChangeBatteryTool), OpsIcon.ReplaceBattery, onOpenFieldChangeBattery)
+        addModule(permissions.showMoveCarTool, "move", t(Str.MoveCarTool), OpsIcon.MoveVehicle, onOpenFieldMoveCar)
         addModule(permissions.showFaultReport, "fault", t(Str.FaultReport), OpsIcon.Repair) {
-            app.faultReportFeature.openHub()
+            app.faultReportFeature.openSubmit()
             onOpenFaultReport()
         }
         addModule(permissions.showUnlockedVehicles, "unlocked", t(Str.UnlockedVehicles), OpsIcon.UnlockedVehicle, onOpenUnlockedVehicles)
-        addModule(permissions.showBluetoothRadar, "ble", t(Str.BluetoothRadar), OpsIcon.BluetoothRadar) { comingSoon() }
-        addModule(permissions.showOpsSetting, "ops-set", t(Str.OpsSettingTool), OpsIcon.OperationSetting) { comingSoon() }
-        addModule(permissions.showMyTask, "my-task", t(Str.MyTaskTool), OpsIcon.MyTask) { comingSoon() }
-        addModule(permissions.showVehicleTag, "vtag", t(Str.VehicleTagTool), OpsIcon.VehicleTag) { comingSoon() }
+        addModule(permissions.showBluetoothRadar, "ble", t(Str.BluetoothRadar), OpsIcon.BluetoothRadar, onOpenBluetoothRadar)
+        addModule(permissions.showOpsSetting, "ops-set", t(Str.OpsSettingTool), OpsIcon.OperationSetting, onOpenOpsSetting)
+        addModule(permissions.showMyTask, "my-task", t(Str.MyTaskTool), OpsIcon.MyTask, onOpenMyTask)
+        addModule(permissions.showVehicleTag, "vtag", t(Str.VehicleTagTool), OpsIcon.VehicleTag, onOpenVehicleTag)
         addModule(permissions.showRelocation, "reloc", t(Str.Relocation), OpsIcon.Relocation, onOpenRelocation)
     }
 
@@ -2066,19 +2320,14 @@ private fun WorkbenchTab(
         ) {
             if (visible) add(WorkbenchModuleItem(id, title, icon, onClick))
         }
-        addModule(permissions.showParkingFence, "fence", t(Str.ParkingFence), OpsIcon.ParkingArea) { comingSoon() }
+        addModule(permissions.showParkingFence, "fence", t(Str.ParkingFence), OpsIcon.ParkingArea, onOpenFenceBrowse)
         addModule(
-            permissions.has(OpsPermissionCodes.ORDER_QUERY),
-            "h5-order",
+            permissions.showOrderQuery,
+            "order-query",
             t(Str.OrderQueryScreen),
             OpsIcon.OrderQuery,
-        ) {
-            if (H5ScreenUrls.isConfigured(app.config, H5ScreenKind.Order)) {
-                onOpenH5(H5ScreenKind.Order)
-            } else {
-                comingSoon()
-            }
-        }
+            onOpenOrderQuery,
+        )
         addModule(permissions.showOperationScreen, "h5-op", t(Str.OperationScreen), OpsIcon.OperationScreen) {
             if (H5ScreenUrls.isConfigured(app.config, H5ScreenKind.Operation)) {
                 onOpenH5(H5ScreenKind.Operation)
@@ -2093,12 +2342,12 @@ private fun WorkbenchTab(
                 comingSoon()
             }
         }
-        addModule(permissions.showStaffManage, "staff", t(Str.StaffManage), OpsIcon.EmployeeManager) { comingSoon() }
-        addModule(permissions.showProfessionAudit, "prof", t(Str.ProfessionAudit), OpsIcon.ProfessionAudit) { comingSoon() }
-        addModule(permissions.showObjectionOrder, "obj", t(Str.ObjectionOrder), OpsIcon.ObjectionOrder) { comingSoon() }
-        addModule(permissions.showBlacklist, "black", t(Str.Blacklist), OpsIcon.BlackList) { comingSoon() }
-        addModule(permissions.showIdBindAudit, "idbind", t(Str.IdBindAudit), OpsIcon.IdAudit) { comingSoon() }
-        addModule(permissions.showOperationLog, "oplog", t(Str.OperationLog), OpsIcon.OperationLog) { comingSoon() }
+        addModule(permissions.showStaffManage, "staff", t(Str.StaffManage), OpsIcon.EmployeeManager, onOpenStaffDirectory)
+        addModule(permissions.showProfessionAudit, "prof", t(Str.ProfessionAudit), OpsIcon.ProfessionAudit, onOpenProfessionAudit)
+        addModule(permissions.showObjectionOrder, "obj", t(Str.ObjectionOrder), OpsIcon.ObjectionOrder, onOpenObjectionOrder)
+        addModule(permissions.showBlacklist, "black", t(Str.Blacklist), OpsIcon.BlackList, onOpenBlacklist)
+        addModule(permissions.showIdBindAudit, "idbind", t(Str.IdBindAudit), OpsIcon.IdAudit, onOpenIdBindAudit)
+        addModule(permissions.showOperationLog, "oplog", t(Str.OperationLog), OpsIcon.OperationLog, onOpenOperationLog)
     }
 
     val productionItems = buildList {
@@ -2109,7 +2358,7 @@ private fun WorkbenchTab(
                     title = t(Str.ProductionDetect),
                     icon = OpsIcon.VehicleInspection,
                     onClick = {
-                        app.productionFeature.openHub()
+                        app.productionFeature.openDetect()
                         onOpenProduction()
                     },
                 ),
@@ -2122,7 +2371,7 @@ private fun WorkbenchTab(
                     title = t(Str.ProductionBind),
                     icon = OpsIcon.CenterControlBind,
                     onClick = {
-                        app.productionFeature.openHub()
+                        app.productionFeature.openBind()
                         onOpenProduction()
                     },
                 ),
@@ -2135,7 +2384,8 @@ private fun WorkbenchTab(
                     title = t(Str.ProductionShelves),
                     icon = OpsIcon.PutPullShelves,
                     onClick = {
-                        app.productionFeature.openHub()
+                        // Legacy defaults to put-on tab inside the same activity.
+                        app.productionFeature.openShelves(ShelfMode.PutOn)
                         onOpenProduction()
                     },
                 ),
@@ -2151,7 +2401,7 @@ private fun WorkbenchTab(
                     title = t(Str.WarehouseIn),
                     icon = OpsIcon.InWarehouse,
                     onClick = {
-                        app.warehouseFeature.openHub()
+                        app.warehouseFeature.openKind(WarehouseOperationType.In)
                         onOpenWarehouse()
                     },
                 ),
@@ -2164,7 +2414,7 @@ private fun WorkbenchTab(
                     title = t(Str.WarehouseOut),
                     icon = OpsIcon.OutWarehouse,
                     onClick = {
-                        app.warehouseFeature.openHub()
+                        app.warehouseFeature.openKind(WarehouseOperationType.Out)
                         onOpenWarehouse()
                     },
                 ),
@@ -2177,8 +2427,10 @@ private fun WorkbenchTab(
                     title = t(Str.WarehouseRecords),
                     icon = OpsIcon.WarehouseRecord,
                     onClick = {
-                        app.warehouseFeature.openHub()
-                        onOpenWarehouse()
+                        scope.launch {
+                            app.warehouseFeature.openRecords()
+                            onOpenWarehouse()
+                        }
                     },
                 ),
             )

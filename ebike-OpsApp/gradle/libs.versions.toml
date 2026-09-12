@@ -12,6 +12,7 @@ android-minSdk = "24"
 android-compileSdk = "37"
 android-targetSdk = "34"
 tencent-map = "4.5.12"
+tencent-map-utilities = "1.0.6"
 # Compose Multiplatform。1.12.0 尚在 beta，取 1.11.1 稳定版。
 compose-multiplatform = "1.11.1"
 
@@ -42,6 +43,7 @@ androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "camerax" }
 mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit-barcode" }
 tencent-map-vector-sdk = { module = "com.tencent.map:tencent-map-vector-sdk", version.ref = "tencent-map" }
+tencent-map-sdk-utilities = { module = "com.tencent.map:sdk-utilities", version.ref = "tencent-map-utilities" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

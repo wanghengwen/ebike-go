@@ -21,11 +21,25 @@ class WarehouseFeatureTest {
         feature.resolveCode("BAT-9001")
         assertEquals(1, feature.state.value.scanned.size)
         feature.submitOperate()
-        assertEquals(WarehousePage.Hub, feature.state.value.page)
+        assertEquals(WarehousePage.KindMenu, feature.state.value.page)
+        assertEquals(WarehouseOperationType.Out, feature.state.value.operationType)
         assertEquals(
             Strings.t(Str.OpSuccess, WarehouseOperationType.Out.label),
             feature.state.value.message,
         )
+    }
+
+    @Test
+    fun workbench_openKind_goes_to_kind_menu() {
+        val feature = WarehouseFeature(
+            repository = WarehouseRepositoryImpl(demoMode = true),
+            pinProvider = { "demo-user" },
+        )
+        feature.openKind(WarehouseOperationType.In)
+        assertEquals(WarehousePage.KindMenu, feature.state.value.page)
+        assertEquals(WarehouseOperationType.In, feature.state.value.operationType)
+        feature.openKind(WarehouseOperationType.Out)
+        assertEquals(WarehouseOperationType.Out, feature.state.value.operationType)
     }
 
     @Test

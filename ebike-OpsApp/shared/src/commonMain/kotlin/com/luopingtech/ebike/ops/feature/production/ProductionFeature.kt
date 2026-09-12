@@ -504,7 +504,7 @@ class ProductionFeature(
                 }
                 _state.value = _state.value.copy(
                     loading = false,
-                    page = ProductionPage.Hub,
+                    page = ProductionPage.Shelves,
                     shelfQueue = emptyList(),
                     message = Strings.t(Str.ShelfSubmitOk, label, carIds.size),
                 )

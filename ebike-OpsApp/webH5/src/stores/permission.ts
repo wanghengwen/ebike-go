@@ -6,15 +6,6 @@ import { getUserInfo } from '@/api'
 export const PermissionCode = {
   OperationScreen: '0221',
   RevenueScreen: 'LargeRevenueScreen',
-
-  /** 订单查询。App 侧发这个码。 */
-  OrderQuery: '1212',
-  /** 订单查询 · 按车号 / IMEI 检索。 */
-  OrderQueryVehicle: '121201',
-  /** 订单查询 · 按手机号 / 姓名检索。 */
-  OrderQueryPersonal: '121202',
-  /** 同一个功能 PC 后台发的是这个码，入口按 `1212 || 0204` 放行。 */
-  PcOrderMenu: '0204',
 } as const
 
 export const usePermissionStore = defineStore('permission', () => {
@@ -38,9 +29,15 @@ export const usePermissionStore = defineStore('permission', () => {
 
   async function load(): Promise<void> {
     if (loaded.value) return
-    const { success, data } = await getUserInfo()
-    if (success) codes.value = data?.codes ?? []
-    loaded.value = true
+    try {
+      const { success, data } = await getUserInfo()
+      if (success) {
+        codes.value = data?.codes ?? []
+        loaded.value = true
+      }
+    } catch {
+      // 保留未加载态，下次导航可重试。
+    }
   }
 
   return { codes, loaded, has, hasExpression, load }

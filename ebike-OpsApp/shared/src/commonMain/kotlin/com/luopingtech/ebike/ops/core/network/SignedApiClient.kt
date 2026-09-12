@@ -5,6 +5,8 @@ import com.luopingtech.ebike.ops.core.result.OpsResult
 import com.luopingtech.ebike.ops.core.signing.RequestSigner
 import com.luopingtech.ebike.ops.data.api.ApiEnvelope
 import io.ktor.client.HttpClient
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -50,6 +52,17 @@ class SignedApiClient(
             decodeUnit(status, raw)
         }
 
+    /**
+     * Multipart form POST (legacy carTag/record/add etc.).
+     * Body is not JSON-signed; headers reuse empty-object sign like [FileUploadApi].
+     */
+    suspend fun postMultipartUnit(
+        path: String,
+        fields: Map<String, String>,
+    ): OpsResult<Unit> = withAuthRetryMultipart(path, fields) { status, raw ->
+        decodeUnit(status, raw)
+    }
+
     private suspend fun <T> withAuthRetry(
         path: String,
         bodyJson: String,
@@ -94,6 +107,69 @@ class SignedApiClient(
         val response = client.post(clean) {
             requestAuth.applyPostJson(this, bodyJson, session, AuthHeaderMode.Bearer)
             setBody(bodyJson)
+        }
+        return RawResponse(response.status, response.bodyAsText())
+    }
+
+    private suspend fun <T> withAuthRetryMultipart(
+        path: String,
+        fields: Map<String, String>,
+        decode: (HttpStatusCode, String) -> OpsResult<T>,
+    ): OpsResult<T> {
+        val first = executeMultipart(path, fields, sessionProvider())
+        val code = peekCode(first.raw)
+        if (ApiCodes.shouldForceRelogin(code)) {
+            onSessionInvalid(code, peekMessage(first.raw))
+            return OpsResult.Err(OpsError.unauthorized(peekMessage(first.raw).ifBlank { code }))
+        }
+        if (!ApiCodes.shouldRefresh(code)) {
+            return decode(first.status, first.raw)
+        }
+
+        val refreshed = refreshMutex.withLock { refreshAccessToken() }
+        return when (refreshed) {
+            is OpsResult.Err -> {
+                onSessionInvalid(refreshed.error.code, refreshed.error.message)
+                refreshed
+            }
+            is OpsResult.Ok -> {
+                val retrySession = NetworkSession(accessToken = refreshed.value)
+                val second = executeMultipart(path, fields, retrySession)
+                val retryCode = peekCode(second.raw)
+                if (ApiCodes.shouldForceRelogin(retryCode) || ApiCodes.shouldRefresh(retryCode)) {
+                    onSessionInvalid(retryCode, peekMessage(second.raw))
+                    OpsResult.Err(OpsError.unauthorized(peekMessage(second.raw).ifBlank { retryCode }))
+                } else {
+                    decode(second.status, second.raw)
+                }
+            }
+        }
+    }
+
+    private suspend fun executeMultipart(
+        path: String,
+        fields: Map<String, String>,
+        session: NetworkSession,
+    ): RawResponse {
+        val clean = path.trimStart('/')
+        val signBody = "{}"
+        val response = client.post(clean) {
+            requestAuth.applyPostJson(this, signBody, session, AuthHeaderMode.Bearer)
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        fields.forEach { (key, value) ->
+                            append(key, value)
+                        }
+                    },
+                ),
+            )
+            if (session.accessToken.isNotBlank()) {
+                headers.set(
+                    RequestSigner.HEADER_AUTHORIZATION,
+                    "Bearer ${session.accessToken.trim()}",
+                )
+            }
         }
         return RawResponse(response.status, response.bodyAsText())
     }

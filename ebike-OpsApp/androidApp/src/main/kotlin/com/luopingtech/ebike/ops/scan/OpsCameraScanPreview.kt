@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -166,7 +167,8 @@ fun OpsCameraScanPreview(
                         analysis,
                     )
                     previewReady = true
-                    status = Strings.t(Str.AimAtQr)
+                    // 成功时不在预览上叠提示文案，避免换电/挪车等页「字压在画面上」。
+                    status = null
                 } catch (t: Throwable) {
                     camera = null
                     previewReady = false
@@ -185,10 +187,13 @@ fun OpsCameraScanPreview(
         }
     }
 
-    Box(modifier = modifier.background(Color.Black)) {
+    // clipToBounds：TextureView 偶发画出 Compose 测量边界时，不让画面盖住下方「手电筒」等文案。
+    Box(modifier = modifier.clipToBounds().background(Color.Black)) {
         AndroidView(
             factory = { previewView },
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .clipToBounds(),
         )
         if (!previewReady && status == null) {
             CircularProgressIndicator(
@@ -196,15 +201,17 @@ fun OpsCameraScanPreview(
                 color = Color.White,
             )
         }
-        // 状态只作轻量角标，不占布局、不跟下方操作区抢空间。
+        // 仅错误时叠字；对准提示由业务页自己放在预览外。
         status?.let { msg ->
             Text(
                 text = msg,
-                color = Color.White.copy(alpha = 0.75f),
+                color = Color.White.copy(alpha = 0.9f),
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 8.dp),
+                    .align(Alignment.BottomCenter)
+                    .padding(8.dp)
+                    .background(Color.Black.copy(alpha = 0.55f))
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }
     }

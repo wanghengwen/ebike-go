@@ -27,6 +27,7 @@ data class ServiceUserDto(
         return TeamWorker(
             name = displayName.ifBlank { phoneNumber },
             phone = phoneNumber,
+            pin = pin?.trim().orEmpty(),
         )
     }
 }
@@ -49,6 +50,7 @@ class ServiceUserApi(
             deviceId = deviceIdProvider(),
         ) {
             put("ids", buildJsonArray { add(JsonPrimitive(serviceId)) })
+            put("status", 1)
         }
         return when (
             val result = signedApi.post(

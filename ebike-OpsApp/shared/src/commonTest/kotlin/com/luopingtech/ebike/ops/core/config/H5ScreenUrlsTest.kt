@@ -114,18 +114,6 @@ class H5ScreenUrlsTest {
         )
     }
 
-    /** 路由必须和 `webH5/src/router/index.ts` 注册的 path 一字不差，写错只会 404。 */
-    @Test
-    fun rawUrl_orderScreenDerivesFromDashboardUrl() {
-        val config = TenantConfig(
-            h5 = H5ScreensConfig(operationUrl = H5ScreensConfig.DEFAULT_OPERATION_URL),
-        )
-        assertEquals(
-            "https://ebike.luopingtech.com/mop-saas/index.html#/order/search",
-            H5ScreenUrls.rawUrl(config, H5ScreenKind.Order),
-        )
-    }
-
     @Test
     fun rawUrl_blankWhenNothingConfigured() {
         assertEquals("", H5ScreenUrls.rawUrl(TenantConfig(), H5ScreenKind.Revenue))

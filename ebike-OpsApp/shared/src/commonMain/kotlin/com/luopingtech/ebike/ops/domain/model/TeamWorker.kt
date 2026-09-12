@@ -7,9 +7,11 @@ package com.luopingtech.ebike.ops.domain.model
 data class TeamWorker(
     val name: String,
     val phone: String,
+    /** 员工 pin，指派 `signPin` 必填；协同人场景可空。 */
+    val pin: String = "",
 ) {
     val selectionKey: String
-        get() = phone.ifBlank { name }
+        get() = pin.ifBlank { phone.ifBlank { name } }
 
     val label: String
         get() = if (phone.isBlank()) name else "$name · $phone"

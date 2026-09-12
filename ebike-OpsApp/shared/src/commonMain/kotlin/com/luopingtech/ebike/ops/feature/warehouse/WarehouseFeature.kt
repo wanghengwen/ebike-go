@@ -13,15 +13,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 enum class WarehousePage {
-    Hub,
+    /** Legacy WarehouseMainActivity: 有编码 / 无编码 for a single In or Out kind. */
+    KindMenu,
     Operate,
     Records,
     Detail,
 }
 
 data class WarehouseUiState(
-    val page: WarehousePage = WarehousePage.Hub,
+    val page: WarehousePage = WarehousePage.KindMenu,
     val loading: Boolean = false,
+    /** Required for KindMenu / Operate — set by workbench 归还入库 / 领用出库. */
     val operationType: WarehouseOperationType = WarehouseOperationType.Out,
     val withCode: Boolean = true,
     val componentNames: List<String> = emptyList(),
@@ -44,8 +46,12 @@ class WarehouseFeature(
     private val _state = MutableStateFlow(WarehouseUiState())
     val state: StateFlow<WarehouseUiState> = _state.asStateFlow()
 
-    fun openHub() {
-        _state.value = WarehouseUiState()
+    /** Workbench 归还入库 / 领用出库 → 遗留 WarehouseMainActivity. */
+    fun openKind(type: WarehouseOperationType) {
+        _state.value = WarehouseUiState(
+            page = WarehousePage.KindMenu,
+            operationType = type,
+        )
     }
 
     fun openOperate(type: WarehouseOperationType, withCode: Boolean) {
@@ -54,6 +60,11 @@ class WarehouseFeature(
             operationType = type,
             withCode = withCode,
         )
+    }
+
+    fun backToKindMenu() {
+        val type = _state.value.operationType
+        openKind(type)
     }
 
     fun setCodeInput(value: String) {
@@ -176,10 +187,9 @@ class WarehouseFeature(
         }
         when (result) {
             is OpsResult.Ok -> {
-                _state.value = current.copy(
-                    loading = false,
-                    page = WarehousePage.Hub,
-                    scanned = emptyList(),
+                _state.value = WarehouseUiState(
+                    page = WarehousePage.KindMenu,
+                    operationType = current.operationType,
                     message = Strings.t(Str.OpSuccess, current.operationType.label),
                 )
             }
@@ -193,12 +203,10 @@ class WarehouseFeature(
     }
 
     suspend fun openRecords(operationType: WarehouseOperationType? = null) {
-        _state.value = _state.value.copy(
+        _state.value = WarehouseUiState(
             page = WarehousePage.Records,
             loading = true,
-            errorMessage = null,
-            selectedRecordId = null,
-            details = emptyList(),
+            operationType = operationType ?: WarehouseOperationType.Out,
         )
         when (val result = repository.pageRecords(operationType = operationType)) {
             is OpsResult.Ok -> {

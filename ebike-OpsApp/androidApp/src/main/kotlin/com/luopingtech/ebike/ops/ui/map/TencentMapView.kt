@@ -55,8 +55,17 @@ fun TencentMapView(
     clusterOverview: Boolean = true,
     fencePolygons: List<FencePolygon> = emptyList(),
     trackPoints: List<TrackPoint> = emptyList(),
-    /** 递增后强制重新 fit 视野（定位按钮）。 */
+    /** 递增后强制重新 fit 视野（看全部）。 */
     fitNonce: Int = 0,
+    /** 递增后放大一级。 */
+    zoomInNonce: Int = 0,
+    /** 递增后缩小一级。 */
+    zoomOutNonce: Int = 0,
+    /** 递增后相机跟到 [followLat]/[followLng]（定位到我）。 */
+    followNonce: Int = 0,
+    followLat: Double? = null,
+    followLng: Double? = null,
+    mapTypeSatellite: Boolean = false,
     showStatusOverlay: Boolean = true,
 ) {
     val context = LocalContext.current
@@ -156,6 +165,39 @@ fun TencentMapView(
                 }
                 true
             }
+        }
+
+        LaunchedEffect(tencentMap, mapTypeSatellite) {
+            val map = tencentMap ?: return@LaunchedEffect
+            map.mapType = if (mapTypeSatellite) {
+                TencentMap.MAP_TYPE_SATELLITE
+            } else {
+                TencentMap.MAP_TYPE_NORMAL
+            }
+        }
+
+        LaunchedEffect(tencentMap, mapLoaded, zoomInNonce) {
+            val map = tencentMap ?: return@LaunchedEffect
+            if (!mapLoaded || zoomInNonce <= 0) return@LaunchedEffect
+            val next = (map.cameraPosition.zoom + 1f).coerceAtMost(20f)
+            map.animateCamera(CameraUpdateFactory.zoomTo(next))
+        }
+
+        LaunchedEffect(tencentMap, mapLoaded, zoomOutNonce) {
+            val map = tencentMap ?: return@LaunchedEffect
+            if (!mapLoaded || zoomOutNonce <= 0) return@LaunchedEffect
+            val next = (map.cameraPosition.zoom - 1f).coerceAtLeast(3f)
+            map.animateCamera(CameraUpdateFactory.zoomTo(next))
+        }
+
+        LaunchedEffect(tencentMap, mapLoaded, followNonce, followLat, followLng) {
+            val map = tencentMap ?: return@LaunchedEffect
+            val lat = followLat
+            val lng = followLng
+            if (!mapLoaded || followNonce <= 0 || lat == null || lng == null) return@LaunchedEffect
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(LatLng(lat, lng), 14f),
+            )
         }
 
         LaunchedEffect(displayPins, selectedCarId, mapLoaded, tencentMap, fencePolygons, trackPoints, fitNonce) {

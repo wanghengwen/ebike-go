@@ -3,11 +3,6 @@ export const RouteName = {
   OperationScreen: 'operation-screen',
   RevenueHome: 'revenue-home',
   TrendDetail: 'trend-detail',
-
-  OrderSearch: 'order-search',
-  OrderUserPicker: 'order-user-picker',
-  OrderUser: 'order-user',
-  OrderVehicle: 'order-vehicle',
 } as const
 
 export type RouteNameValue = (typeof RouteName)[keyof typeof RouteName]

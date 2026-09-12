@@ -91,6 +91,36 @@ class MoveCarTaskApi(
         )
     }
 
+    suspend fun pageStats(
+        serviceId: String,
+        state: Int,
+        pageNum: Int,
+        pageSize: Int,
+        opPin: String,
+        taskEndTimeBegin: String,
+        taskEndTimeEnd: String,
+    ): OpsResult<ChangeBatteryTaskListDto> {
+        val body = CommonRequestBody.toJsonString(
+            source = "/business/ebike-operation/move_car/task/page",
+            tenantId = tenantIdProvider(),
+            deviceInfo = deviceInfo,
+            deviceId = deviceIdProvider(),
+        ) {
+            put("serviceId", serviceId)
+            put("pageNum", pageNum)
+            put("pageSize", pageSize)
+            put("state", state)
+            put("opPin", opPin)
+            put("taskEndTimeBegin", taskEndTimeBegin)
+            put("taskEndTimeEnd", taskEndTimeEnd)
+        }
+        return signedApi.post(
+            path = "business/ebike-operation/move_car/task/page",
+            bodyJson = body,
+            deserializer = ChangeBatteryTaskListDto.serializer(),
+        )
+    }
+
     suspend fun start(taskId: String): OpsResult<Unit> {
         val body = CommonRequestBody.toJsonString(
             source = "/business/ebike-operation/move_car/task/auto_task_start",

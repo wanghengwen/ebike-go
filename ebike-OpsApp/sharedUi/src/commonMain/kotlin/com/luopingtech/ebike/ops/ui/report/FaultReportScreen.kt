@@ -5,11 +5,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -26,11 +29,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.luopingtech.ebike.ops.OpsApp
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.result.OpsResult
+import com.luopingtech.ebike.ops.domain.model.RepairType
+import com.luopingtech.ebike.ops.domain.report.RepairBodyParts
 import com.luopingtech.ebike.ops.feature.report.ReportPage
 import kotlinx.coroutines.launch
 
@@ -162,19 +168,17 @@ private fun SubmitPane(app: OpsApp) {
             ) { Text(t(Str.ScanFillCarId)) }
         }
         Text(t(Str.FaultType), style = MaterialTheme.typography.labelLarge)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            state.repairTypes.forEach { type ->
-                FilterChip(
-                    selected = type.id in state.selectedTypeIds,
-                    onClick = { app.faultReportFeature.toggleType(type.id) },
-                    label = { Text(type.name) },
-                )
-            }
-        }
+        RepairTypePartPicker(
+            types = state.repairTypes,
+            selectedIds = state.selectedTypeIds,
+            onToggle = { app.faultReportFeature.toggleType(it) },
+            otherTitle = t(Str.FaultOtherTypes),
+        )
         OutlinedTextField(
             value = state.fixReason,
             onValueChange = { app.faultReportFeature.setFixReason(it) },
             label = { Text(t(Str.FaultDesc)) },
+            supportingText = { Text("${state.fixReason.length}/100") },
             modifier = Modifier.fillMaxWidth(),
         )
         Text(t(Str.IzStop), style = MaterialTheme.typography.labelLarge)
@@ -309,3 +313,95 @@ private fun DetailPane(app: OpsApp) {
         record.photoUrls.forEach { Text("· $it", style = MaterialTheme.typography.bodySmall) }
     }
 }
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun RepairTypePartPicker(
+    types: List<RepairType>,
+    selectedIds: Set<String>,
+    onToggle: (String) -> Unit,
+    otherTitle: String,
+) {
+    val byId = remember(types) { types.associateBy { it.id } }
+    val leftTypes = RepairBodyParts.left.mapNotNull { part ->
+        val matched = byId[part.id] ?: types.firstOrNull { it.name == part.titleZh }
+        matched?.copy(name = matched.name.ifBlank { part.titleZh })
+    }
+    val rightTypes = RepairBodyParts.right.mapNotNull { part ->
+        val matched = byId[part.id] ?: types.firstOrNull { it.name == part.titleZh }
+        matched?.copy(name = matched.name.ifBlank { part.titleZh })
+    }
+    val bodyIds = (leftTypes + rightTypes).map { it.id }.toSet()
+    val others = types.filter { it.id !in bodyIds && it.id !in RepairBodyParts.allIds }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            leftTypes.forEach { type ->
+                FilterChip(
+                    selected = type.id in selectedIds,
+                    onClick = { onToggle(type.id) },
+                    label = { Text(type.name) },
+                )
+            }
+        }
+        Column(
+            modifier = Modifier
+                .width(56.dp)
+                .padding(top = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "VEH",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.End,
+        ) {
+            rightTypes.forEach { type ->
+                FilterChip(
+                    selected = type.id in selectedIds,
+                    onClick = { onToggle(type.id) },
+                    label = { Text(type.name) },
+                )
+            }
+        }
+    }
+
+    if (others.isNotEmpty()) {
+        Text(otherTitle, style = MaterialTheme.typography.labelMedium)
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            others.forEach { type ->
+                FilterChip(
+                    selected = type.id in selectedIds,
+                    onClick = { onToggle(type.id) },
+                    label = { Text(type.name) },
+                )
+            }
+        }
+    }
+
+    // Fallback when API type ids do not match legacy body-part codes.
+    if (leftTypes.isEmpty() && rightTypes.isEmpty() && types.isNotEmpty()) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            types.forEach { type ->
+                FilterChip(
+                    selected = type.id in selectedIds,
+                    onClick = { onToggle(type.id) },
+                    label = { Text(type.name) },
+                )
+            }
+        }
+    }
+}
+

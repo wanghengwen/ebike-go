@@ -26,19 +26,14 @@ class ServiceAreaRepositoryImpl(
     override suspend fun loadAreas(): OpsResult<List<ServiceArea>> {
         if (demoMode || api == null) {
             cachedAreas = DEMO_AREAS
-            // Do not auto-select — host shows area gate like legacy ChangeServiceAreaActivity.
+            reselectPersistedArea()
             return OpsResult.Ok(cachedAreas)
         }
         return when (val result = api.listByToken()) {
             is OpsResult.Err -> result
             is OpsResult.Ok -> {
                 cachedAreas = result.value
-                val currentId = selected?.id ?: secureStore.getString(SecureStore.KEY_SERVICE_AREA_ID)
-                val matched = cachedAreas.firstOrNull { it.id == currentId }
-                if (matched != null) {
-                    selectArea(matched)
-                }
-                // No match → leave unselected so UI can force picker.
+                reselectPersistedArea()
                 OpsResult.Ok(cachedAreas)
             }
         }
@@ -67,15 +62,24 @@ class ServiceAreaRepositoryImpl(
         secureStore.remove(KEY_AREA_JSON)
     }
 
+    private fun reselectPersistedArea() {
+        val currentId = selected?.id?.takeIf { it.isNotBlank() && it != "0" }
+            ?: secureStore.getString(SecureStore.KEY_SERVICE_AREA_ID)?.takeIf { it.isNotBlank() }
+            ?: return
+        val matched = cachedAreas.firstOrNull { it.id == currentId } ?: return
+        selectArea(matched)
+    }
+
     private fun restoreSelected(): ServiceArea? {
-        val raw = secureStore.getString(KEY_AREA_JSON) ?: return null
-        return runCatching { json.decodeFromString(ServiceAreaDto.serializer(), raw).toDomain() }
-            .getOrNull()
-            ?: run {
-                val id = secureStore.getString(SecureStore.KEY_SERVICE_AREA_ID) ?: return null
-                val name = secureStore.getString(SecureStore.KEY_SERVICE_AREA_NAME).orEmpty()
-                ServiceArea(id = id, name = name)
-            }
+        val fromJson = secureStore.getString(KEY_AREA_JSON)?.let { raw ->
+            runCatching { json.decodeFromString(ServiceAreaDto.serializer(), raw).toDomain() }
+                .getOrNull()
+        }?.takeIf { it.id.isNotBlank() && it.id != "0" }
+        if (fromJson != null) return fromJson
+        val id = secureStore.getString(SecureStore.KEY_SERVICE_AREA_ID)?.takeIf { it.isNotBlank() }
+            ?: return null
+        val name = secureStore.getString(SecureStore.KEY_SERVICE_AREA_NAME).orEmpty()
+        return ServiceArea(id = id, name = name)
     }
 
     companion object {

@@ -88,7 +88,14 @@ actual fun PlatformWebView(
         modifier = modifier,
         update = { view ->
             webView = view
-            if (view.url != url) view.loadUrl(url)
+            // SPA 会改 hash（大屏内跳转），view.url 随之变化。
+            // 若拿完整 URL 比较，Compose recomposition 会把用户打回入口页。
+            // 只在「文档基址」（# 之前）变化时才重新 load。
+            val currentDoc = view.url?.substringBefore('#')
+            val targetDoc = url.substringBefore('#')
+            if (currentDoc.isNullOrBlank() || currentDoc != targetDoc) {
+                view.loadUrl(url)
+            }
         },
     )
 }

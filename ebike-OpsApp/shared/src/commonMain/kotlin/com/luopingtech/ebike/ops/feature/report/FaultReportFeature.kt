@@ -141,7 +141,7 @@ class FaultReportFeature(
     }
 
     fun setFixReason(value: String) {
-        _state.value = _state.value.copy(fixReason = value, errorMessage = null)
+        _state.value = _state.value.copy(fixReason = value.take(MAX_FIX_REASON_LEN), errorMessage = null)
     }
 
     fun setIzStop(value: Boolean?) {
@@ -155,6 +155,10 @@ class FaultReportFeature(
     }
 
     fun addDemoPhoto() {
+        if (_state.value.photoUrls.size >= MAX_PHOTOS) {
+            _state.value = _state.value.copy(errorMessage = Strings.t(Str.PhotosRequired))
+            return
+        }
         val next = _state.value.photoUrls + "demo://photo/${_state.value.photoUrls.size + 1}"
         _state.value = _state.value.copy(photoUrls = next, errorMessage = null)
     }
@@ -162,6 +166,10 @@ class FaultReportFeature(
     fun addPhotoUrl(url: String) {
         val trimmed = url.trim()
         if (trimmed.isBlank()) return
+        if (_state.value.photoUrls.size >= MAX_PHOTOS) {
+            _state.value = _state.value.copy(errorMessage = Strings.t(Str.PhotosRequired))
+            return
+        }
         _state.value = _state.value.copy(
             photoUrls = _state.value.photoUrls + trimmed,
             errorMessage = null,
@@ -199,17 +207,7 @@ class FaultReportFeature(
         val selected = current.repairTypes.filter { it.id in current.selectedTypeIds }
         _state.value = current.copy(loading = true, errorMessage = null, message = null)
 
-        val serviceId = serviceAreaIdProvider()
-        when (val permission = repository.checkServicePermission(current.carId.trim(), serviceId)) {
-            is OpsResult.Err -> {
-                _state.value = current.copy(
-                    loading = false,
-                    errorMessage = permission.error.message,
-                )
-                return
-            }
-            is OpsResult.Ok -> Unit
-        }
+        // Legacy VehicleRepairActivity has carPermissionCheck commented out; do not hard-block submit.
 
         val remotePhotos = when (val uploaded = mediaUploader.upload(current.photoUrls)) {
             is OpsResult.Ok -> uploaded.value
@@ -292,5 +290,7 @@ class FaultReportFeature(
         const val MIN_CAR_ID_LEN = 7
         /** Legacy isValidVehicleNum / LengthFilter(10) for typed car ids. */
         const val MAX_CAR_ID_LEN = 10
+        const val MAX_FIX_REASON_LEN = 100
+        const val MAX_PHOTOS = 3
     }
 }

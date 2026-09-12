@@ -22,6 +22,7 @@ data class FreeMoveCarUiState(
     val cars: List<FreeMoveCar> = emptyList(),
     val selectedCarIds: Set<String> = emptySet(),
     val carInput: String = "",
+    val pushMode: Boolean = false,
     val serviceAreaId: String? = null,
     val photoUrls: List<String> = emptyList(),
     val needPhotograph: Boolean = false,
@@ -56,6 +57,10 @@ class FreeMoveCarFeature(
 
     fun setCarInput(value: String) {
         _state.value = _state.value.copy(carInput = value, errorMessage = null)
+    }
+
+    fun setPushMode(enabled: Boolean) {
+        _state.value = _state.value.copy(pushMode = enabled)
     }
 
     fun toggleSelect(carId: String) {
@@ -193,7 +198,7 @@ class FreeMoveCarFeature(
             }
             is OpsResult.Ok -> Unit
         }
-        return when (val started = repository.start(listOf(trimmed), area.id)) {
+        return when (val started = repository.start(listOf(trimmed), area.id, _state.value.pushMode)) {
             is OpsResult.Ok -> {
                 val merged = (_state.value.cars + started.value)
                     .distinctBy { it.carId }

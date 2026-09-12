@@ -24,7 +24,10 @@ class FenceApi(
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            put("serviceId", serviceId)
+            // 后端 FenceIdDTO / FenceTypeDTO 校验字段是 id（@NotNull Long），
+            // 不是 serviceId；写错会回「id不能为空」。与遗留 App / StationAnalysisApi 对齐。
+            val asLong = serviceId.toLongOrNull()
+            if (asLong != null) put("id", asLong) else put("id", serviceId)
         }
         return when (
             val result = signedApi.post(

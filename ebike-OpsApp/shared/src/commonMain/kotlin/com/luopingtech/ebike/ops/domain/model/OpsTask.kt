@@ -33,6 +33,9 @@ data class OpsTask(
     val lng: Double = 0.0,
     val serviceId: String = "",
     val createdAt: String = "",
+    /** 领取/开始时间（处理中时长用）。 */
+    val startTime: String = "",
+    val finishTime: String = "",
     /**
      * Repair drag-back: 1 = none, 2 = in progress, 3 = done (legacy dragState).
      * Null / 0 = not applicable (non-repair) or unknown.
@@ -44,6 +47,8 @@ data class OpsTask(
     val moveType: Int? = null,
     /** Parent batch record id when [isManMadeBatch]. */
     val recordId: String? = null,
+    /** 维修停运标记（仅看停运车）。 */
+    val izStop: Boolean = false,
 ) {
     val stateLabel: String
         get() = when (state) {

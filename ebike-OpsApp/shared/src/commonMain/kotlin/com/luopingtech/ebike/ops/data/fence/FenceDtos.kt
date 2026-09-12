@@ -1,5 +1,7 @@
 package com.luopingtech.ebike.ops.data.fence
 
+import com.luopingtech.ebike.ops.data.analysis.FlexibleIntSerializer
+import com.luopingtech.ebike.ops.data.analysis.FlexibleStringSerializer
 import com.luopingtech.ebike.ops.domain.model.FenceBundle
 import com.luopingtech.ebike.ops.domain.model.FenceKind
 import com.luopingtech.ebike.ops.domain.model.FencePolygon
@@ -15,30 +17,43 @@ data class FenceBundleDto(
     val banRidings: List<FenceInfoDto>? = null,
 ) {
     fun toDomain(): FenceBundle = FenceBundle(
-        serviceAreas = serviceAreas.orEmpty().mapNotNull { it.toDomain(FenceKind.ServiceArea) },
-        parkings = parkings.orEmpty().mapNotNull { it.toDomain(FenceKind.Parking) },
-        noParkings = noParkings.orEmpty().mapNotNull { it.toDomain(FenceKind.NoParking) },
+        serviceAreas = serviceAreas.orEmpty().map { it.toDomain(FenceKind.ServiceArea) },
+        parkings = parkings.orEmpty().map { it.toDomain(FenceKind.Parking) },
+        noParkings = noParkings.orEmpty().map { it.toDomain(FenceKind.NoParking) },
     )
 }
 
 @Serializable
 data class FenceInfoDto(
+    @Serializable(with = FlexibleStringSerializer::class)
     val id: String = "",
     val name: String = "",
     val pointList: List<List<Double>>? = null,
+    @Serializable(with = FlexibleIntSerializer::class)
+    val carCount: Int = 0,
+    @Serializable(with = FlexibleIntSerializer::class)
+    val currentParkingNumber: Int = 0,
+    @Serializable(with = FlexibleIntSerializer::class)
+    val maxParkingNumber: Int = 0,
+    val izEnable: Boolean? = null,
+    val address: String? = null,
 ) {
-    fun toDomain(kind: FenceKind): FencePolygon? {
+    fun toDomain(kind: FenceKind): FencePolygon {
         val pts = pointList.orEmpty().mapNotNull { pair ->
             if (pair.size < 2) return@mapNotNull null
             // Legacy geoJson style: [lng, lat]
             GeoLatLng(lat = pair[1], lng = pair[0])
         }
-        if (pts.size < 3) return null
         return FencePolygon(
             id = id.ifBlank { name.ifBlank { kind.name } },
-            name = name,
+            name = name.ifBlank { id.ifBlank { kind.name } },
             points = pts,
             kind = kind,
+            carCount = carCount,
+            currentParkingNumber = currentParkingNumber,
+            maxParkingNumber = maxParkingNumber,
+            izEnable = izEnable,
+            address = address.orEmpty(),
         )
     }
 }

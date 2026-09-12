@@ -26,15 +26,16 @@ class AndroidSecureStore(context: Context) : SecureStore {
     override fun getString(key: String): String? = prefs.getString(key, null)
 
     override fun putString(key: String, value: String) {
-        prefs.edit().putString(key, value).apply()
+        // commit：运营区等关键键需在进程被杀前落盘，避免冷启动读不到记录又闪选区页。
+        prefs.edit().putString(key, value).commit()
     }
 
     override fun remove(key: String) {
-        prefs.edit().remove(key).apply()
+        prefs.edit().remove(key).commit()
     }
 
     override fun clear() {
-        prefs.edit().clear().apply()
+        prefs.edit().clear().commit()
     }
 
     companion object {

@@ -50,20 +50,54 @@ class RepairTaskApi(
         }
     }
 
-    suspend fun claim(taskId: String, signPin: String): OpsResult<Unit> {
+    suspend fun claim(taskId: String, signPin: String): OpsResult<Unit> =
+        assign(type = 1, taskId = taskId, signPin = signPin)
+
+    /** type: 1 领取, 2 指派。 */
+    suspend fun assign(type: Int, taskId: String, signPin: String): OpsResult<Unit> {
         val body = CommonRequestBody.toJsonString(
             source = "/business/ebike-operation/fix/task/assign",
             tenantId = tenantIdProvider(),
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            put("type", 1)
+            put("type", type)
             put("id", taskId)
             put("signPin", signPin)
         }
         return signedApi.postUnit(
             path = "business/ebike-operation/fix/task/assign",
             bodyJson = body,
+        )
+    }
+
+    suspend fun pageStats(
+        serviceId: String,
+        state: Int,
+        pageNum: Int,
+        pageSize: Int,
+        opPin: String,
+        finishTimeBegin: String,
+        finishTimeEnd: String,
+    ): OpsResult<ChangeBatteryTaskListDto> {
+        val body = CommonRequestBody.toJsonString(
+            source = "/business/ebike-operation/fix/task/page",
+            tenantId = tenantIdProvider(),
+            deviceInfo = deviceInfo,
+            deviceId = deviceIdProvider(),
+        ) {
+            put("serviceId", serviceId)
+            put("pageNum", pageNum)
+            put("pageSize", pageSize)
+            put("state", state)
+            put("opPin", opPin)
+            put("finishTimeBegin", finishTimeBegin)
+            put("finishTimeEnd", finishTimeEnd)
+        }
+        return signedApi.post(
+            path = "business/ebike-operation/fix/task/page",
+            bodyJson = body,
+            deserializer = ChangeBatteryTaskListDto.serializer(),
         )
     }
 

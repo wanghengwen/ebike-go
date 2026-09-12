@@ -38,11 +38,6 @@ enum class H5ScreenKind(
         setOf(OpsPermissionCodes.REVENUE_DATA),
         legacyUrl = { it.revenueUrl },
     ),
-    Order(
-        "#/order/search",
-        Str.OrderQueryScreen,
-        setOf(OpsPermissionCodes.ORDER_QUERY, OpsPermissionCodes.PC_ORDER_MENU),
-    ),
 }
 
 /**

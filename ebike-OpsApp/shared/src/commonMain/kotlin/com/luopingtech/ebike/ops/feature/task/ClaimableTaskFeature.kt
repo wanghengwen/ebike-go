@@ -57,6 +57,7 @@ class ClaimableTaskFeature(
     private val kind: ClaimableKind,
     private val mediaUploader: MediaUploader = DemoMediaUploader(),
     private val createDrag: (suspend (OpsTask, String, String) -> OpsResult<Unit>)? = null,
+    private val assign: (suspend (List<OpsTask>, String) -> OpsResult<Unit>)? = null,
 ) {
     private val _state = MutableStateFlow(ClaimableTaskUiState())
     val state: StateFlow<ClaimableTaskUiState> = _state.asStateFlow()
@@ -174,6 +175,58 @@ class ClaimableTaskFeature(
     suspend fun claimSelected(): OpsResult<Unit> = act(Str.Claim) { task, pin ->
         claim(task, pin).also {
             if (it.isOk) patchLocalState(task.id) { t -> t.copy(state = 1) }
+        }
+    }
+
+    /** 批量领取（巡检待领取勾选底栏）。 */
+    suspend fun claimMany(taskIds: List<String>): OpsResult<Unit> {
+        if (taskIds.isEmpty()) {
+            return OpsResult.Err(OpsError.business("NO_SEL", Strings.t(Str.SelectTaskFirst)))
+        }
+        val pin = pinProvider()
+        _state.value = _state.value.copy(loading = true, errorMessage = null, message = null)
+        var lastErr: OpsResult.Err? = null
+        for (id in taskIds) {
+            val task = _state.value.tasks.firstOrNull { it.id == id } ?: continue
+            when (val r = claim(task, pin)) {
+                is OpsResult.Ok -> patchLocalState(id) { t -> t.copy(state = 1) }
+                is OpsResult.Err -> lastErr = r
+            }
+        }
+        _state.value = _state.value.copy(loading = false)
+        return lastErr ?: OpsResult.Ok(Unit).also {
+            _state.value = _state.value.copy(message = Strings.t(Str.ClaimOk, taskIds.size))
+        }
+    }
+
+    /** 指派给员工 pin（type=2）。 */
+    suspend fun assignMany(taskIds: List<String>, assigneePin: String): OpsResult<Unit> {
+        val assignFn = assign
+            ?: return OpsResult.Err(OpsError.business("NO_ASSIGN", Strings.t(Str.FeatureComingSoon)))
+        if (taskIds.isEmpty()) {
+            return OpsResult.Err(OpsError.business("NO_SEL", Strings.t(Str.SelectTaskFirst)))
+        }
+        if (assigneePin.isBlank()) {
+            return OpsResult.Err(OpsError.business("NO_PIN", Strings.t(Str.SelectStaffFirst)))
+        }
+        val tasks = taskIds.mapNotNull { id -> _state.value.tasks.firstOrNull { it.id == id } }
+        if (tasks.isEmpty()) {
+            return OpsResult.Err(OpsError.business("NO_SEL", Strings.t(Str.SelectTaskFirst)))
+        }
+        _state.value = _state.value.copy(loading = true, errorMessage = null, message = null)
+        return when (val r = assignFn(tasks, assigneePin)) {
+            is OpsResult.Ok -> {
+                tasks.forEach { patchLocalState(it.id) { t -> t.copy(state = 1) } }
+                _state.value = _state.value.copy(
+                    loading = false,
+                    message = Strings.t(Str.AssignOk),
+                )
+                r
+            }
+            is OpsResult.Err -> {
+                _state.value = _state.value.copy(loading = false, errorMessage = r.error.message)
+                r
+            }
         }
     }
 
@@ -376,6 +429,7 @@ fun InspectionTaskFeature(
     pinProvider = pinProvider,
     kind = ClaimableKind.Inspection,
     mediaUploader = mediaUploader,
+    assign = { tasks, pin -> repository.assign(tasks, pin) },
 )
 
 fun RepairTaskFeature(
@@ -391,4 +445,5 @@ fun RepairTaskFeature(
     kind = ClaimableKind.Repair,
     mediaUploader = mediaUploader,
     createDrag = { task, reason, address -> repository.createDrag(task, reason, address) },
+    assign = { tasks, pin -> repository.assign(tasks, pin) },
 )

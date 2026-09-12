@@ -2,19 +2,21 @@ package com.luopingtech.ebike.ops.data.report
 
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.i18n.Strings
+import com.luopingtech.ebike.ops.data.analysis.FlexibleStringSerializer
 import com.luopingtech.ebike.ops.domain.model.FaultReportRecord
 import com.luopingtech.ebike.ops.domain.model.RepairType
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class RepairTypeDto(
+    @Serializable(with = FlexibleStringSerializer::class)
     val id: String = "",
     val content: String = "",
     val type: Int = 0,
 ) {
     fun toDomain(): RepairType = RepairType(
         id = id,
-        name = content,
+        name = content.ifBlank { id },
         type = type,
     )
 }

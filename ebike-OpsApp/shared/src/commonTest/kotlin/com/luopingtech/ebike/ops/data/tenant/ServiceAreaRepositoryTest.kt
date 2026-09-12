@@ -22,4 +22,36 @@ class ServiceAreaRepositoryTest {
         assertEquals("1002", repo.currentArea()?.id)
         assertEquals("1002", store.getString(SecureStore.KEY_SERVICE_AREA_ID))
     }
+
+    @Test
+    fun restore_fallsBackToIdAndName_whenJsonMissing() {
+        val store = InMemorySecureStore()
+        store.putString(SecureStore.KEY_SERVICE_AREA_ID, "1002")
+        store.putString(SecureStore.KEY_SERVICE_AREA_NAME, "Demo 城西服务区")
+        val repo = ServiceAreaRepositoryImpl(secureStore = store, demoMode = true)
+        assertEquals("1002", repo.currentArea()?.id)
+        assertEquals("Demo 城西服务区", repo.currentArea()?.name)
+    }
+
+    @Test
+    fun restore_fromJson_onNewInstance() {
+        val store = InMemorySecureStore()
+        val first = ServiceAreaRepositoryImpl(secureStore = store, demoMode = true)
+        first.selectArea(ServiceAreaRepositoryImpl.DEMO_AREAS[0])
+        val restored = ServiceAreaRepositoryImpl(secureStore = store, demoMode = true)
+        assertEquals("1001", restored.currentArea()?.id)
+        assertEquals("Demo 城东服务区", restored.currentArea()?.name)
+    }
+
+    @Test
+    fun demoMode_loadAreas_reselectsPersistedId() = runBlocking {
+        val store = InMemorySecureStore()
+        store.putString(SecureStore.KEY_SERVICE_AREA_ID, "1003")
+        val repo = ServiceAreaRepositoryImpl(secureStore = store, demoMode = true)
+        assertEquals("1003", repo.currentArea()?.id)
+        val result = repo.loadAreas()
+        assertTrue(result.isOk)
+        assertEquals("1003", repo.currentArea()?.id)
+        assertEquals("Demo 高新区", repo.currentArea()?.name)
+    }
 }

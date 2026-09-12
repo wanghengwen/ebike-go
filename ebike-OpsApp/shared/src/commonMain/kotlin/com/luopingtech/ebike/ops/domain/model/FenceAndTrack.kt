@@ -11,6 +11,14 @@ data class FencePolygon(
     /** Closed ring of [lng,lat] vertices (legacy pointList). */
     val points: List<GeoLatLng>,
     val kind: FenceKind = FenceKind.ServiceArea,
+    /** Vehicles currently associated (legacy `carCount`, often used on parking markers). */
+    val carCount: Int = 0,
+    /** Occupancy / capacity for parking zones (legacy current/maxParkingNumber). */
+    val currentParkingNumber: Int = 0,
+    val maxParkingNumber: Int = 0,
+    /** null = unknown; true = 运营中. */
+    val izEnable: Boolean? = null,
+    val address: String = "",
 )
 
 enum class FenceKind {

@@ -108,5 +108,6 @@ dependencies {
     implementation(libs.androidx.camera.view)
     implementation(libs.mlkit.barcode.scanning)
     implementation(libs.tencent.map.vector.sdk)
+    implementation(libs.tencent.map.sdk.utilities)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

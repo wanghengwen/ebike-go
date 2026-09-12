@@ -1,6 +1,6 @@
 import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router'
 import { useConfigStore } from '@/stores/config'
-import { PermissionCode, usePermissionStore } from '@/stores/permission'
+import { usePermissionStore } from '@/stores/permission'
 import { applyTheme } from '@/utils/theme'
 import { setLocale, type Locale, SUPPORTED_LOCALES } from '@/i18n'
 import { RouteName } from './names'
@@ -37,34 +37,6 @@ const routes: RouteRecordRaw[] = [
     name: RouteName.TrendDetail,
     component: () => import('@/pages/trend/TrendDetail.vue'),
   },
-
-  // --- 订单查询 ---
-  // 入口权限按 `1212 || 0204` 放行：同一个功能 App 侧发 1212、PC 后台发 0204，
-  // 两边发码习惯不统一。与 `H5ScreenKind.Order.permissionCodes` 保持一致。
-  {
-    path: '/order/search',
-    name: RouteName.OrderSearch,
-    component: () => import('@/pages/order-search/OrderSearch.vue'),
-    meta: { permission: `${PermissionCode.OrderQuery}||${PermissionCode.PcOrderMenu}` },
-  },
-  {
-    path: '/order/users',
-    name: RouteName.OrderUserPicker,
-    component: () => import('@/pages/order-search/UserPicker.vue'),
-    meta: { permission: PermissionCode.OrderQueryPersonal },
-  },
-  {
-    path: '/order/user/:pin',
-    name: RouteName.OrderUser,
-    component: () => import('@/pages/order-search/UserOrders.vue'),
-    meta: { permission: PermissionCode.OrderQueryPersonal },
-  },
-  {
-    path: '/order/vehicle',
-    name: RouteName.OrderVehicle,
-    component: () => import('@/pages/order-search/VehicleOrders.vue'),
-    meta: { permission: PermissionCode.OrderQueryVehicle },
-  },
   // 遗留 App 里散落着 `/operationScreen`、`/opHome` 等旧路径，统一兜到运营大屏。
   { path: '/:pathMatch(.*)*', redirect: { name: RouteName.OperationScreen } },
 ]
@@ -99,9 +71,8 @@ router.beforeEach(async (to) => {
     // 大屏是逐卡片判权的，拉不到码顶多少显示几张卡，不要把用户卡在白屏。
   }
 
-  // 管理页不一样：整页都受权限约束，拉不到码就没有放行的依据。
   const required = to.meta.permission
-  if (required && (!permission.loaded || !permission.hasExpression(required))) {
+  if (required && permission.loaded && !permission.hasExpression(required)) {
     return { name: RouteName.OperationScreen }
   }
   return true

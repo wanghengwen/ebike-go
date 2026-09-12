@@ -22,6 +22,16 @@ class OpsI18nTest {
     }
 
     @Test
+    fun operationOkHasNoPlaceholders() {
+        val zh = OpsI18n.fallback(OpsLanguage.ZH_CN)
+        assertEquals("操作成功", zh.t(Str.OperationOk))
+        val en = OpsI18n.fallback(OpsLanguage.EN)
+        assertEquals("Done", en.t(Str.OperationOk))
+        assertEquals("已领取 3 项", zh.t(Str.ClaimOk, 3))
+        assertEquals("Claimed 3", en.t(Str.ClaimOk, 3))
+    }
+
+    @Test
     fun acceptLanguageFollowsLocale() {
         val i18n = OpsI18n.fallback(OpsLanguage.EN)
         Strings.install(i18n)

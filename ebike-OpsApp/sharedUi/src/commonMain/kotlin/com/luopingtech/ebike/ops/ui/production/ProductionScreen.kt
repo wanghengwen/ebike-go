@@ -57,7 +57,13 @@ fun ProductionScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text(t(Str.ProductionField), style = MaterialTheme.typography.headlineSmall)
+            val title = when (state.page) {
+                ProductionPage.Detect, ProductionPage.Overload -> t(Str.ProductionDetect)
+                ProductionPage.Bind -> t(Str.ProductionBind)
+                ProductionPage.Shelves -> t(Str.ProductionShelves)
+                ProductionPage.Hub -> t(Str.ProductionField)
+            }
+            Text(title, style = MaterialTheme.typography.headlineSmall)
             TextButton(onClick = {
                 app.productionFeature.clear()
                 onClose()
@@ -106,9 +112,9 @@ fun ProductionScreen(
                     }
                 }
             }
-            ProductionPage.Detect -> DetectPane(app, onLocateOnMap = onLocateOnMap)
-            ProductionPage.Bind -> BindPane(app)
-            ProductionPage.Shelves -> ShelvesPane(app)
+            ProductionPage.Detect -> DetectPane(app, onBack = onClose, onLocateOnMap = onLocateOnMap)
+            ProductionPage.Bind -> BindPane(app, onBack = onClose)
+            ProductionPage.Shelves -> ShelvesPane(app, onBack = onClose)
             ProductionPage.Overload -> OverloadPane(app)
         }
 
@@ -122,6 +128,7 @@ fun ProductionScreen(
 @Composable
 private fun DetectPane(
     app: OpsApp,
+    onBack: () -> Unit,
     onLocateOnMap: () -> Unit,
 ) {
     val language by app.i18n.languageFlow.collectAsState()
@@ -134,7 +141,10 @@ private fun DetectPane(
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        TextButton(onClick = { app.productionFeature.openHub() }) { Text("← ${t(Str.Back)}") }
+        TextButton(onClick = {
+            app.productionFeature.clear()
+            onBack()
+        }) { Text("← ${t(Str.Back)}") }
         Text(t(Str.ProductionDetect), style = MaterialTheme.typography.titleMedium)
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
@@ -317,7 +327,7 @@ private fun OverloadContactChip(label: String, on: Boolean) {
 }
 
 @Composable
-private fun BindPane(app: OpsApp) {
+private fun BindPane(app: OpsApp, onBack: () -> Unit) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     val state by app.productionFeature.state.collectAsState()
@@ -328,7 +338,10 @@ private fun BindPane(app: OpsApp) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        TextButton(onClick = { app.productionFeature.openHub() }) { Text("← ${t(Str.Back)}") }
+        TextButton(onClick = {
+            app.productionFeature.clear()
+            onBack()
+        }) { Text("← ${t(Str.Back)}") }
         Text(t(Str.ProductionBind), style = MaterialTheme.typography.titleMedium)
         OutlinedTextField(
             value = state.carId,
@@ -407,7 +420,7 @@ private fun BindPane(app: OpsApp) {
 }
 
 @Composable
-private fun ShelvesPane(app: OpsApp) {
+private fun ShelvesPane(app: OpsApp, onBack: () -> Unit) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
     val state by app.productionFeature.state.collectAsState()
@@ -419,7 +432,10 @@ private fun ShelvesPane(app: OpsApp) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        TextButton(onClick = { app.productionFeature.openHub() }) { Text("← ${t(Str.Back)}") }
+        TextButton(onClick = {
+            app.productionFeature.clear()
+            onBack()
+        }) { Text("← ${t(Str.Back)}") }
         Text(
             shelfAction,
             style = MaterialTheme.typography.titleMedium,

@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 data class ServiceAreaUiState(
     val loading: Boolean = false,
+    /** True after the first [ServiceAreaFeature.load] attempt finishes (ok or error). */
+    val listLoaded: Boolean = false,
     val areas: List<ServiceArea> = emptyList(),
     val selected: ServiceArea? = null,
     val errorMessage: String? = null,
@@ -28,6 +30,7 @@ class ServiceAreaFeature(
             is OpsResult.Ok -> {
                 _state.value = ServiceAreaUiState(
                     loading = false,
+                    listLoaded = true,
                     areas = result.value,
                     selected = repository.currentArea(),
                 )
@@ -35,6 +38,7 @@ class ServiceAreaFeature(
             is OpsResult.Err -> {
                 _state.value = _state.value.copy(
                     loading = false,
+                    listLoaded = true,
                     errorMessage = result.error.message,
                 )
             }
