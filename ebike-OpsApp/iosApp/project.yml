@@ -1,0 +1,44 @@
+# XcodeGen spec — generate the Xcode project on a Mac:
+#   brew install xcodegen
+#   cd iosApp && xcodegen generate
+#
+# Before building the app, produce Shared.framework (example: simulator arm64):
+#   cd ..
+#   ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+# Framework output (typical):
+#   shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework
+#
+# Then open OpsAppHost.xcodeproj and run on a simulator.
+
+name: OpsAppHost
+options:
+  bundleIdPrefix: com.luopingtech.ebike.ops
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+targets:
+  OpsAppHost:
+    type: application
+    platform: iOS
+    sources:
+      - OpsAppHost
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.luopingtech.ebike.ops.demo
+        INFOPLIST_GENERATION: YES
+        PRODUCT_NAME: OpsAppHost
+        FRAMEWORK_SEARCH_PATHS:
+          - "$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework"
+          - "$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework"
+        OTHER_LDFLAGS:
+          - "-framework"
+          - "Shared"
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+    dependencies:
+      - framework: ../shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework
+        embed: true
+        codeSign: true

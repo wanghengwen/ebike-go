@@ -1,0 +1,27 @@
+# 本机构建参数模板。复制为 local.properties 后填写，local.properties 不入库。
+
+# Android SDK 位置
+sdk.dir=
+
+# Gradle JVM（推荐 17 或 21；JDK 25 会导致 Kotlin DSL 解析失败）
+org.gradle.java.home=
+
+# 构建使用的租户配置：config/{tenant}_{mode}.json
+# 人人运维正式联调：ops.tenant=renren + ops.mode=release|debug
+ops.tenant=renren
+ops.mode=release
+
+# 腾讯地图 Key（写入 AndroidManifest TencentMapSDK；有 Key 且 provider 为 none/tencent 时启用真图）
+# renren 默认可用 flavor 中的 Key；包名需与 applicationId 一致（renren=com.renren.inspections）
+ops.map.tencentKey=
+
+# 签名配置。开源仓库不提供签名库，release 构建需自备。
+ops.signing.storeFile=
+ops.signing.storePassword=
+ops.signing.keyAlias=
+ops.signing.keyPassword=
+
+# 私有蓝牙 SDK 仓库（自备）。留空时使用 ble-simulator 模拟实现。
+ops.ble.mavenUrl=
+ops.ble.mavenUser=
+ops.ble.mavenPassword=

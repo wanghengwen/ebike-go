@@ -1,0 +1,65 @@
+{
+  "name": "",
+  "alias": "",
+  "description": "",
+  "tenantId": "",
+  "app": {
+    "androidApplicationId": "",
+    "iosBundleId": "",
+    "displayName": ""
+  },
+  "api": {
+    "baseUrl": "",
+    "logUploadUrl": ""
+  },
+  "auth": {
+    "businessSecret": "",
+    "signSecret": ""
+  },
+  "map": {
+    "provider": "none",
+    "tencentKey": "",
+    "googleKey": ""
+  },
+  "push": {
+    "provider": "none",
+    "appKey": ""
+  },
+  "ble": {
+    "transport": "simulator",
+    "defaultToken": []
+  },
+  "features": {
+    "bleTransport": "simulator",
+    "mapProvider": "none",
+    "push": false,
+    "backgroundLocation": false,
+    "overseas": false
+  },
+  "branding": {
+    "primaryColor": "",
+    "primaryMutedColor": "",
+    "onPrimaryColor": "",
+    "lightTextColor": "",
+    "navigationBarTextColor": "",
+    "navigationBarBackgroundColor": "",
+    "disabledColor": "",
+    "textColorPrimary": "",
+    "textColorSecondary": "",
+    "textColorTertiary": "",
+    "pageBackgroundColor": "",
+    "dividerColor": "",
+    "chipBackgroundColor": "",
+    "tabUnselectedColor": "",
+    "logo": ""
+  },
+  "documents": {
+    "privacyPolicy": "",
+    "userAgreement": ""
+  },
+  "h5": {
+    "operationUrl": "",
+    "revenueUrl": "",
+    "appendAuthQuery": true
+  }
+}

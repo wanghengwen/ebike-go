@@ -1,0 +1,31 @@
+{
+  "_comment": "Optional local runtime config. Copy from config/demo_release.json, fill api/auth/map, rename to tenant.json under androidApp/src/main/assets/. Do not commit secrets.",
+  "name": "Local Ops",
+  "alias": "local",
+  "tenantId": "",
+  "app": {
+    "androidApplicationId": "com.luopingtech.ebike.ops.demo",
+    "iosBundleId": "com.luopingtech.ebike.ops.demo",
+    "displayName": "Local Ops"
+  },
+  "api": {
+    "baseUrl": "",
+    "logUploadUrl": ""
+  },
+  "auth": {
+    "businessSecret": "",
+    "signSecret": ""
+  },
+  "map": {
+    "provider": "tencent",
+    "tencentKey": "",
+    "googleKey": ""
+  },
+  "features": {
+    "bleTransport": "simulator",
+    "mapProvider": "tencent",
+    "push": false,
+    "backgroundLocation": false,
+    "overseas": false
+  }
+}
