@@ -40,3 +40,22 @@ ebike-UniApp/.env.*
 # 正式/租户 release 配置含密钥，仅保留 demo 与 defaults 入库
 ebike-UniApp/config/*_release.json
 !ebike-UniApp/config/demo_release.json
+
+# ebike-OpsApp (Kotlin Multiplatform 运维端)
+ebike-OpsApp/.gradle/
+ebike-OpsApp/.kotlin/
+ebike-OpsApp/local.properties
+!ebike-OpsApp/local.properties.example
+ebike-OpsApp/**/build/
+ebike-OpsApp/iosApp/Pods/
+ebike-OpsApp/iosApp/**/*.xcuserdatad
+ebike-OpsApp/iosApp/**/xcuserdata/
+# 租户配置与签名材料含密钥，仅保留 demo 与 defaults 入库
+ebike-OpsApp/config/*_release.json
+ebike-OpsApp/config/*_debug.json
+!ebike-OpsApp/config/demo_release.json
+ebike-OpsApp/androidApp/src/main/assets/tenant.json
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
