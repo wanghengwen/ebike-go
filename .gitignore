@@ -37,11 +37,11 @@ ebike-UniApp/src/tenants/merged.runtime.json
 ebike-UniApp/.env
 ebike-UniApp/.env.*
 !ebike-UniApp/.env.example
-# 正式/租户 release 配置含密钥，仅保留 demo 与 defaults 入库
+# 姝ｅ紡/绉熸埛 release 閰嶇疆鍚瘑閽ワ紝浠呬繚鐣?demo 涓?defaults 鍏ュ簱
 ebike-UniApp/config/*_release.json
 !ebike-UniApp/config/demo_release.json
 
-# ebike-OpsApp (Kotlin Multiplatform 运维端)
+# ebike-OpsApp (Kotlin Multiplatform 杩愮淮绔?
 ebike-OpsApp/.gradle/
 ebike-OpsApp/.kotlin/
 ebike-OpsApp/local.properties
@@ -50,7 +50,7 @@ ebike-OpsApp/**/build/
 ebike-OpsApp/iosApp/Pods/
 ebike-OpsApp/iosApp/**/*.xcuserdatad
 ebike-OpsApp/iosApp/**/xcuserdata/
-# 租户配置与签名材料含密钥，仅保留 demo 与 defaults 入库
+# 绉熸埛閰嶇疆涓庣鍚嶆潗鏂欏惈瀵嗛挜锛屼粎淇濈暀 demo 涓?defaults 鍏ュ簱
 ebike-OpsApp/config/*_release.json
 ebike-OpsApp/config/*_debug.json
 !ebike-OpsApp/config/demo_release.json
@@ -59,3 +59,7 @@ ebike-OpsApp/androidApp/src/main/assets/tenant.json
 *.keystore
 *.p12
 *.mobileprovision
+
+# ebike-AdminWeb moved to its own repo; do not track here
+ebike-AdminWeb/
+

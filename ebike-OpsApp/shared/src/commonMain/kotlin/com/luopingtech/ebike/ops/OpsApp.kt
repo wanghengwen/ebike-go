@@ -200,7 +200,7 @@ class OpsApp(
     val pushRegistrar: PushRegistrar = DisabledPushRegistrar(),
     mediaUploader: MediaUploader? = null,
     networkVehicleControl: NetworkVehicleControl? = null,
-    /** Override system language detection (e.g. Android Locale). */
+    /** Override device language detection; null follows the platform locale. */
     systemLanguage: String? = null,
 ) {
     val bleTransport: BleTransport = BleTransportFactory.fromConfig(config, bleTransportOverride)

@@ -72,10 +72,10 @@ class OpsI18n(
             systemLanguage: String? = null,
         ): OpsI18n {
             val stored = secureStore.getString(SecureStore.KEY_LANGUAGE)
-            // Default Chinese for ops field work; do not follow device locale.
+            // Explicit user choice wins; first launch follows the device language.
             val lang = when {
                 !stored.isNullOrBlank() -> OpsLanguage.fromTag(stored)
-                else -> OpsLanguage.ZH_CN
+                else -> OpsLanguage.fromSystemLanguage(systemLanguage ?: platformLanguageTag())
             }
             return OpsI18n(secureStore = secureStore, initial = lang).also { Strings.install(it) }
         }

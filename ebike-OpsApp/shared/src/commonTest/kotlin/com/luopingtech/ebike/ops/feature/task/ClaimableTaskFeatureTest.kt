@@ -39,7 +39,7 @@ class ClaimableTaskFeatureTest {
             pinProvider = { "demo-pin" },
         )
         feature.load(area)
-        assertEquals(3, feature.state.value.tasks.size)
+        assertEquals(4, feature.state.value.tasks.size)
         feature.selectTask(feature.state.value.tasks.first { it.state == 0 }.id)
         assertTrue(feature.claimSelected().isOk)
         assertTrue(feature.finishSelected().isErr)

@@ -17,6 +17,7 @@ import com.luopingtech.ebike.ops.platform.SecureStore
 import com.luopingtech.ebike.ops.platform.SimulatorLocationTracker
 import com.luopingtech.ebike.ops.platform.DemoReverseGeocoder
 import com.tencent.tencentmap.mapsdk.maps.TencentMapInitializer
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -74,8 +75,8 @@ class OpsApplication : Application() {
             photoCapture = photoCaptureBridge,
             locationTracker = locationTracker,
             reverseGeocoder = reverseGeocoder,
-            // Ignore device locale; OpsI18n defaults to zh-CN unless user switched.
-            systemLanguage = null,
+            // Follow device locale on first launch; a stored user choice still wins.
+            systemLanguage = Locale.getDefault().toLanguageTag(),
         )
         bindMediaUploader()
         if (config.tenantId.isNotBlank()) {
