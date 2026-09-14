@@ -98,24 +98,28 @@ const routeHint = computed(() => {
 })
 
 const markers = computed(() => {
+  const centerIcon = getMapCfg('centerMarker')
+  const stationIcon = getMapCfg('station') || getMapCfg('parking') || getMapCfg('searchStationIcon')
   const list: Array<Record<string, unknown>> = [
     {
       id: 1,
       latitude: latitude.value,
       longitude: longitude.value,
-      width: 24,
-      height: 24,
+      width: 21,
+      height: 35,
+      // 查询中心：旧版 centerMarker，避免微信默认红针
+      ...(centerIcon ? { iconPath: centerIcon } : {}),
     },
   ]
   if (nearest.value?.lat && nearest.value?.lng) {
-    const iconPath = getMapCfg('station') || getMapCfg('parking')
     list.push({
       id: 2,
       latitude: nearest.value.lat,
       longitude: nearest.value.lng,
       width: 28,
-      height: 28,
-      ...(iconPath ? { iconPath } : {}),
+      height: 32,
+      // 最近停车点：必须用 P 点图
+      ...(stationIcon ? { iconPath: stationIcon } : {}),
       callout:
         routeMeta.value.distance != null && routeMeta.value.durationMin != null
           ? {
@@ -142,8 +146,24 @@ const markers = computed(() => {
             : undefined,
     })
   }
+  // 围栏站点：跳过与最近停车点几乎重合的，避免叠两个针
   for (const m of parkMarkers.value) {
-    if (m.id !== 2) list.push({ ...m })
+    if (m.id === 2) continue
+    if (nearest.value?.lat && nearest.value?.lng) {
+      const near =
+        Math.abs(m.latitude - nearest.value.lat) < 0.00001 &&
+        Math.abs(m.longitude - nearest.value.lng) < 0.00001
+      if (near) continue
+    }
+    const withIcon =
+      m.iconPath ||
+      (m.type === 1
+        ? getMapCfg('notAllowStation') || getMapCfg('noParking')
+        : stationIcon)
+    list.push({
+      ...m,
+      ...(withIcon ? { iconPath: withIcon } : {}),
+    })
   }
   return list
 })

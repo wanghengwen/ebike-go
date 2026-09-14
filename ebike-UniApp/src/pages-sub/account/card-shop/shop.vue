@@ -1,150 +1,149 @@
 <template>
   <view class="page">
-    <view class="card">
-      <view class="title">{{ t('account.cardShop') }}</view>
-      <view v-if="loading">{{ t('common.loading') }}</view>
-      <view v-else-if="!list.length">{{ t('common.empty') }}</view>
-      <view
-        v-for="(item, i) in list"
-        :key="i"
-        class="item"
-        :class="{ on: selected === i }"
-        @click="onSelect(i)"
-      >
-        <view>
-          <view class="name">{{ item.name || item.cardName || '-' }}</view>
-          <view class="sub">{{ tagText(item) }}</view>
-        </view>
-        <view class="price">¥{{ displayPrice(item) }}</view>
-      </view>
-      <view class="btn-primary" v-if="list.length" @click="openDetail">{{ t('pay.payNow') }}</view>
-      <view class="link" @click="openRule">{{ t('account.cardRule') }}</view>
-    </view>
-
-    <view v-if="showDetail" class="mask" @click.self="showDetail = false">
-      <view class="sheet">
-        <view class="sheet__head">
-          <view>
-            <view class="sheet__name">{{ current.name || current.cardName || '-' }}</view>
-            <view class="sheet__price">
-              ¥{{ displayPrice(current) }}
-              <text
-                v-if="originPrice(current) > Number(current.current_cost ?? current.price ?? current.amount ?? 0)"
-                class="sheet__origin"
-              >
-                ¥{{ fenToYuan(originPrice(current)) }}
-              </text>
-            </view>
-          </view>
-          <text class="sheet__close" @click="showDetail = false">×</text>
-        </view>
-        <view class="sheet__section">
-          <view class="sheet__row">
-            <text class="sheet__label">{{ t('account.cardUsage') }}</text>
-            <text class="sheet__link" @click="openRule">{{ t('account.cardRule') }} ›</text>
-          </view>
-          <rich-text v-if="detailHtml" class="sheet__html" :nodes="detailHtml" />
-          <view v-else class="sheet__empty">{{ t('common.empty') }}</view>
-        </view>
-        <view class="sheet__section">
-          <view class="sheet__label">{{ t('pay.walletPwd') }}</view>
-          <input
-            class="sheet__input"
-            password
-            maxlength="6"
-            v-model="walletPwd"
-            :placeholder="t('pay.walletPwd6')"
+    <scroll-view scroll-y class="list" :style="{ bottom: footerH }">
+      <view v-if="loading" class="no-data">{{ t('common.loading') }}</view>
+      <template v-else-if="list.length">
+        <view v-for="(item, i) in list" :key="i" class="cardItem">
+          <FoldCard
+            :card-cover="String(item.backOfCardUrl || '')"
+            :card-name="String(item.ridingCardName || item.name || '')"
+            :card-tag="tagArr(item)"
+            :card-origin-cost="Number(item.originCost ?? item.origin_cost ?? 0)"
+            :card-current-cost="Number(item.curCost ?? item.current_cost ?? 0)"
+            :card-promotion-tag="String(item.promotionTag || '')"
+            @click="onCardClick(item)"
           />
         </view>
-        <view class="sheet__actions">
-          <view class="btn-ghost" @click="showDetail = false">{{ t('common.cancel') }}</view>
-          <view class="btn-primary" @click="onBuy">
-            {{ t('pay.payNow') }} ¥{{ displayPrice(current) }}
-            <text v-if="saveFen > 0" class="sheet__save">
-              {{ t('pay.savedAmount', { m: fenToYuan(saveFen) }) }}
-            </text>
-          </view>
+        <view class="expired" @click="goRule">
+          <text>{{ t('account.cardRule') }}</text>
+          <image v-if="arrowIcon" class="img_right" :src="arrowIcon" mode="aspectFit" />
         </view>
+      </template>
+      <view v-else class="no-data">{{ t('account.cardShopEmpty') }}</view>
+    </scroll-view>
+
+    <view class="button_warpper">
+      <view>{{ t('account.buyCardTip') }}</view>
+      <view class="go_my_card" @click="goMyCard()">
+        <text :style="{ color: brand }">{{ t('account.myCards') }}</text>
+        <image v-if="greenArrow" class="img" :src="greenArrow" mode="aspectFit" />
       </view>
     </view>
+
+    <CardDetailSheet
+      :visible="showDetail"
+      :card="currentCard"
+      @close="showDetail = false"
+      @rule="goRule"
+      @pay="onPay"
+    />
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
-import { onShow } from '@dcloudio/uni-app'
+import { computed, ref } from 'vue'
+import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import {
   getRidingCardList,
   ridingConfigGetRule,
   getServiceRidingCard,
 } from '@/api/card'
-import { createChannelPay, fenToYuan } from '@/features/pay/usePay'
+import { createChannelPay } from '@/features/pay/usePay'
 import { checkPayCertification } from '@/features/pay/checkPayCertification'
 import { useUserStore } from '@/stores/user'
+import { getBrandColor } from '@/shared/config'
+import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 import { navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
+import FoldCard from '@/widgets/FoldCard.vue'
+import CardDetailSheet from '@/widgets/CardDetailSheet.vue'
 
 const { t } = useI18n()
 const user = useUserStore()
 const loading = ref(false)
 const list = ref<Array<Record<string, unknown>>>([])
-const selected = ref(0)
-const ruleUrl = ref('')
 const maxNum = ref(0)
 const showDetail = ref(false)
-const walletPwd = ref('')
+const currentCard = ref<Record<string, unknown>>({})
 const paying = ref(false)
+const pendingCardQuery = ref('')
+const footerH = '120rpx'
 
-const current = computed(() => list.value[selected.value] || {})
-const detailHtml = computed(() =>
-  String(current.value.detailInfo || current.value.detail_info || ''),
-)
-const saveFen = computed(() => {
-  const cur = Number(current.value.current_cost ?? current.value.price ?? current.value.amount ?? 0)
-  const origin = originPrice(current.value)
-  return origin > cur ? origin - cur : 0
-})
+const brand = computed(() => getBrandColor())
+const arrowIcon = computed(() => getMapCfg('iconRight'))
+const greenArrow = computed(() => getIconCfg('greenRightArrow') || getMapCfg('iconRight'))
 
-function requireLogin(): boolean {
-  user.hydrateFromStorage()
-  if (user.isLoggedIn) return true
-  uni.showToast({ title: t('account.needLogin'), icon: 'none' })
-  setTimeout(() => navigate('to', '/pages/auth/quick-login'), 400)
-  return false
-}
-
-onShow(() => {
-  setNavTitle(t('account.cardShop'))
-  if (!requireLogin()) return
-})
-
-function displayPrice(item: Record<string, unknown>) {
-  const p = Number(item.current_cost ?? item.curCost ?? item.price ?? item.amount ?? 0)
-  return fenToYuan(p)
-}
-
-function originPrice(item: Record<string, unknown>) {
-  return Number(item.origin_cost ?? item.originCost ?? item.originalPrice ?? 0)
-}
-
-function tagText(item: Record<string, unknown>) {
-  const raw = String(item.description_tag || item.descriptionTag || item.desc || '')
+function tagArr(item: Record<string, unknown>) {
+  const raw = String(item.descriptionTag || item.description_tag || '')
   return raw
     .split('|')
     .map((s) => s.trim())
     .filter(Boolean)
-    .join(' · ')
 }
 
-function onSelect(i: number) {
-  selected.value = i
+function requireLogin(): boolean {
+  user.hydrateFromStorage()
+  if (user.isLoggedIn) return true
+  uni.showModal({
+    title: t('auth.loginTitle'),
+    showCancel: false,
+    confirmText: t('auth.loginNow'),
+    success: (r) => {
+      if (r.confirm) navigate('redirect', '/pages/auth/quick-login')
+    },
+  })
+  return false
 }
 
-function openDetail() {
-  if (!list.value[selected.value]) return
-  walletPwd.value = ''
+onShow(() => setNavTitle(t('account.cardShop')))
+
+onLoad(async (q) => {
+  if (!requireLogin()) return
+  if (q?.card) pendingCardQuery.value = String(q.card)
+  await loadList()
+  if (pendingCardQuery.value) {
+    try {
+      const card = JSON.parse(decodeURIComponent(pendingCardQuery.value)) as Record<string, unknown>
+      pendingCardQuery.value = ''
+      await onCardClick(card)
+    } catch (e) {
+      logger.warn('parse card query fail', e)
+    }
+  }
+})
+
+async function loadList() {
+  loading.value = true
+  const sid = storage.get<string>('serviceId', '') || ''
+  try {
+    const [cards, rule] = await Promise.all([
+      getRidingCardList(sid ? { serviceId: sid } : {}),
+      ridingConfigGetRule(sid ? { serviceId: sid } : {}),
+    ])
+    const data = cards.data as { records?: Array<Record<string, unknown>> } | Array<Record<string, unknown>>
+    const raw = Array.isArray(data) ? data : data?.records || []
+    list.value = raw.filter((item) => Number(item.state) === 1)
+    if (rule.success && rule.data) {
+      maxNum.value = Number((rule.data as { maxNum?: number }).maxNum || 0)
+    }
+  } finally {
+    loading.value = false
+  }
+}
+
+async function onCardClick(item: Record<string, unknown>) {
+  const ok = await checkPayCertification()
+  if (!ok) return
+  currentCard.value = {
+    ...item,
+    name: item.ridingCardName || item.name,
+    curCost: item.curCost ?? item.current_cost,
+    originCost: item.originCost ?? item.origin_cost,
+    descriptionTag: item.descriptionTag || item.description_tag,
+    cardId: item.cardId || item.card_id || item.id,
+  }
   showDetail.value = true
 }
 
@@ -164,31 +163,17 @@ async function checkCanBuy(): Promise<boolean> {
   return true
 }
 
-async function onBuy() {
-  const item = list.value[selected.value]
-  if (!item) return
-  if (!walletPwd.value) {
-    uni.showToast({ title: t('pay.needWalletPwd'), icon: 'none' })
-    return
-  }
-  if (walletPwd.value.length !== 6) {
-    uni.showToast({ title: t('pay.walletPwd6'), icon: 'none' })
-    return
-  }
+async function onPay() {
+  const item = currentCard.value
+  if (!item || paying.value) return
   if (!(await checkCanBuy())) return
-  const ok = await checkPayCertification()
-  if (!ok) return
-  if (paying.value) return
   paying.value = true
   try {
-    const id = item.card_id || item.cardId || item.id
-    const cost = Number(item.current_cost ?? item.curCost ?? item.price ?? item.amount ?? 0)
+    const id = item.cardId || item.card_id || item.id
+    const cost = Number(item.curCost ?? item.current_cost ?? 0)
     const res = await createChannelPay({
       saleType: 'RIDING_CARD',
       totalFee: cost,
-      channelType: 'YUDAOXING_APP',
-      invokeWx: false,
-      walletPwd: walletPwd.value,
       saleInfo: {
         total_fee: cost,
         riding_card_id: id,
@@ -197,7 +182,7 @@ async function onBuy() {
     if (res.paid || res.success) {
       showDetail.value = false
       uni.showToast({ title: t('common.submitSuccess'), icon: 'success' })
-      setTimeout(() => navigate('to', '/pages-sub/account/cards/cards'), 500)
+      setTimeout(() => goMyCard({ focus: '0' }), 800)
     } else if (String(res.code) === '24005') {
       uni.showToast({ title: t('account.cardBuyLimit'), icon: 'none' })
     } else {
@@ -208,161 +193,85 @@ async function onBuy() {
   }
 }
 
-function openRule() {
-  if (!ruleUrl.value) {
-    uni.showToast({ title: t('common.empty'), icon: 'none' })
-    return
-  }
-  navigate('to', `/pages/webview/webview?url=${encodeURIComponent(ruleUrl.value)}`)
+function goRule() {
+  navigate('to', '/pages-sub/account/card-rules/card-rules?type=1')
 }
 
-onMounted(async () => {
-  if (!requireLogin()) return
-  loading.value = true
-  const sid = storage.get<string>('serviceId', '') || ''
-  try {
-    const [cards, rule] = await Promise.all([
-      getRidingCardList(sid ? { serviceId: sid } : {}),
-      ridingConfigGetRule(sid ? { serviceId: sid } : {}),
-    ])
-    const data = cards.data as { records?: Array<Record<string, unknown>> } | Array<Record<string, unknown>>
-    const raw = Array.isArray(data) ? data : data?.records || []
-    // Legacy cardCenter: only sell cards with state === 1
-    list.value = raw.filter((item) => Number(item.state) === 1)
-    selected.value = 0
-    if (rule.success && rule.data) {
-      const r = rule.data as { url?: string; maxNum?: number }
-      ruleUrl.value = String(r.url || '')
-      maxNum.value = Number(r.maxNum || 0)
-    }
-  } finally {
-    loading.value = false
+function goMyCard(params?: { focus?: string }) {
+  const pages = getCurrentPages() as Array<{ route?: string }>
+  const prev = pages[pages.length - 2]
+  if (prev?.route?.includes('cards/cards') && !params) {
+    navigate('back')
+    return
   }
-})
+  const q = params?.focus != null ? `?focus=${encodeURIComponent(params.focus)}` : ''
+  navigate('to', `/pages-sub/account/cards/cards${q}`)
+}
 </script>
 
 <style scoped lang="scss">
-.title {
-  font-weight: 700;
-  margin-bottom: 16rpx;
+.page {
+  width: 100vw;
+  height: 100vh;
+  background: #f8f8f8;
+  position: relative;
+  box-sizing: border-box;
 }
-.item {
-  padding: 24rpx 16rpx;
-  border: 1px solid #f0f0f0;
-  border-radius: 12rpx;
-  margin-bottom: 16rpx;
+.list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+}
+.cardItem {
+  margin: 32rpx;
+}
+.expired {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-.item.on {
-  border-color: #3aa0e8;
-}
-.name {
-  font-weight: 600;
-}
-.sub {
-  color: #888;
+  justify-content: center;
+  padding: 24rpx 0 48rpx;
   font-size: 24rpx;
-  margin-top: 8rpx;
-  max-width: 420rpx;
+  color: #999;
 }
-.price {
-  color: #3aa0e8;
-  font-weight: 600;
+.img_right {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 8rpx;
 }
-.link {
-  margin-top: 28rpx;
-  color: #3aa0e8;
+.no-data {
   text-align: center;
+  color: #999;
+  padding: 120rpx 0;
+  font-size: 28rpx;
 }
-.mask {
+.button_warpper {
   position: fixed;
-  inset: 0;
-  z-index: 1200;
-  background: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: flex-end;
-}
-.sheet {
-  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 120rpx;
+  padding-bottom: env(safe-area-inset-bottom);
   background: #fff;
-  border-radius: 32rpx 32rpx 0 0;
-  padding: 32rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
-  max-height: 85vh;
-  overflow-y: auto;
-}
-.sheet__head {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24rpx;
-}
-.sheet__name {
-  font-size: 34rpx;
-  font-weight: 700;
-}
-.sheet__price {
-  margin-top: 8rpx;
-  color: #ff5936;
-  font-size: 36rpx;
-  font-weight: 700;
-}
-.sheet__origin {
-  margin-left: 12rpx;
-  color: #999;
-  font-size: 24rpx;
-  font-weight: 400;
-  text-decoration: line-through;
-}
-.sheet__close {
-  font-size: 44rpx;
-  color: #999;
-  line-height: 1;
-  padding: 0 8rpx;
-}
-.sheet__section {
-  margin-bottom: 28rpx;
-}
-.sheet__row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 12rpx;
-}
-.sheet__label {
-  font-weight: 600;
-  color: #333;
-}
-.sheet__link {
-  color: #3aa0e8;
-  font-size: 24rpx;
-}
-.sheet__html {
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  box-sizing: content-box;
+  font-size: 28rpx;
   color: #666;
-  font-size: 24rpx;
-  line-height: 1.5;
+  z-index: 10;
 }
-.sheet__empty {
-  color: #999;
-  font-size: 24rpx;
-}
-.sheet__input {
-  margin-top: 12rpx;
-  background: #f5f6f8;
-  border-radius: 12rpx;
-  padding: 24rpx;
-}
-.sheet__actions {
+.go_my_card {
   display: flex;
-  gap: 16rpx;
+  align-items: center;
+  font-weight: 600;
 }
-.sheet__actions > view {
-  flex: 1;
-}
-.sheet__save {
-  display: block;
-  font-size: 20rpx;
-  font-weight: 400;
-  opacity: 0.9;
+.img {
+  width: 28rpx;
+  height: 28rpx;
+  margin-left: 8rpx;
 }
 </style>

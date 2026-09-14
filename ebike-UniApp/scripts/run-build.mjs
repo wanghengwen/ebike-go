@@ -36,22 +36,24 @@ const merge = spawnSync(process.execPath, [path.join(root, 'scripts', 'merge-ten
 })
 if (merge.status !== 0) process.exit(merge.status || 1)
 
-const uniArgs =
-  platform === 'h5'
-    ? ['uni', 'build', ...passthrough.filter((a) => !a.startsWith('--env=') && !a.startsWith('--mode=') && !a.startsWith('--alias='))]
-    : [
-        'uni',
-        'build',
-        '-p',
-        platform,
-        ...passthrough.filter((a) => !a.startsWith('--env=') && !a.startsWith('--mode=') && !a.startsWith('--alias=')),
-      ]
+// Use the local @dcloudio/vite-plugin-uni CLI. `npx uni` resolves to the
+// unrelated npm package `uni@0.0.6` when node_modules is missing / PATH is empty.
+const uniCli = path.join(root, 'node_modules', '@dcloudio', 'vite-plugin-uni', 'bin', 'uni.js')
+if (!existsSync(uniCli)) {
+  console.error('[build] missing @dcloudio/vite-plugin-uni. Run npm install in ebike-UniApp first.')
+  process.exit(1)
+}
 
-console.log(`[build] ${uniArgs.join(' ')}`)
-const build = spawnSync(process.platform === 'win32' ? 'npx.cmd' : 'npx', uniArgs, {
+const extraArgs = passthrough.filter(
+  (a) => !a.startsWith('--env=') && !a.startsWith('--mode=') && !a.startsWith('--alias='),
+)
+const uniArgs =
+  platform === 'h5' ? [uniCli, 'build', ...extraArgs] : [uniCli, 'build', '-p', platform, ...extraArgs]
+
+console.log(`[build] uni ${uniArgs.slice(1).join(' ')}`)
+const build = spawnSync(process.execPath, uniArgs, {
   cwd: root,
   stdio: 'inherit',
-  shell: process.platform === 'win32',
 })
 if (build.status !== 0) process.exit(build.status || 1)
 

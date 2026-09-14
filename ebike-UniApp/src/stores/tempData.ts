@@ -43,7 +43,13 @@ export const useTempDataStore = defineStore('tempData', {
       this.nearBikes = list
     },
     setRide(patch: Partial<RideSession>) {
-      this.ride = { ...this.ride, ...patch }
+      const next = { ...this.ride }
+      for (const [k, v] of Object.entries(patch) as Array<[keyof RideSession, RideSession[keyof RideSession]]>) {
+        // Keep last known carId/imei/orderId when poll omits them
+        if ((k === 'carId' || k === 'imei' || k === 'orderId') && (v == null || v === '')) continue
+        ;(next as Record<string, unknown>)[k] = v
+      }
+      this.ride = next
     },
     resetRide() {
       this.ride = { status: 'idle' }

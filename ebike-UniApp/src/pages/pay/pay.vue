@@ -1,139 +1,302 @@
 <template>
-  <view class="pay page">
-    <view class="card">
-      <view class="title">{{ t('pay.title') }}</view>
-      <view class="amount">¥{{ fenToYuan(payCost) }}</view>
-      <view class="balance-box" v-if="showWalletBuckets && !paid">
-        <text class="balance">{{ t('pay.rechargeBalance', { m: fenToYuan(rechargeBalance) }) }}</text>
-        <text class="balance">{{ t('pay.presentBalance', { m: fenToYuan(presentBalance) }) }}</text>
-      </view>
-      <view class="hint" v-if="loading">{{ t('common.loading') }}</view>
-      <view class="frozen" v-if="frozenTip">{{ frozenTip }}</view>
-      <view class="hint tip" v-if="wxScore && !paid">{{ t('pay.wxScorePaying') }}</view>
-      <view class="hint tip" v-else-if="wxScore && paid">{{ t('pay.wxScorePaid') }}</view>
-      <view class="meta" v-if="detail.ridingTime != null">
-        {{ t('ride.duration') }}：{{ durationText }}
-      </view>
-      <view class="meta" v-if="detail.mile != null">
-        {{ t('ride.distance') }}：{{ distanceText }}
-      </view>
+  <view class="page">
+    <view
+      class="hint-bar"
+      v-if="[1, 2].includes(izPaid) && frozenTime && cutRemainMs > 0"
+    >
+      <image v-if="iconClock" class="hint-bar__clock" :src="iconClock" mode="aspectFit" />
+      <text class="hint-bar__text">{{ t('pay.frozenPayWindow') }}</text>
+      <text class="hint-bar__time">{{ frozenCountdownText }}</text>
     </view>
 
-    <view class="card reward" v-if="showRedReward">
-      <image v-if="rewardBg" class="reward__bg" :src="rewardBg" mode="aspectFill" />
-      <view class="reward__body">
-        <text class="reward__done">{{ t('ride.redEnvelopeRewardDone') }}</text>
-        <text class="reward__amount">
-          {{ t('ride.redEnvelopeRewardAmount', { money: redRewardYuan }) }}
-        </text>
-        <view class="reward__hint">
-          <text>{{ t('ride.redEnvelopeRewardHint') }}</text>
-          <text class="reward__link" @click="goRedTips">{{ t('ride.redEnvelopeTips') }} ›</text>
-        </view>
-      </view>
-    </view>
+    <scroll-view class="scroll" scroll-y :style="{ paddingBottom: dockPad + 'px' }">
+      <view v-if="loading" class="loading-tip">{{ t('common.loading') }}</view>
 
-    <view class="card" v-if="!loading && Number(payCost) > 0">
-      <view class="section-title">{{ t('pay.costDetail') }}</view>
-      <view class="row" v-if="detail.originCost != null">
-        <text>{{ t('pay.rideCost') }}</text>
-        <text>¥{{ fenToYuan(detail.originCost) }}</text>
-      </view>
-      <view class="row" v-if="detail.startPrice != null">
-        <text>{{ t('pay.startPrice') }}</text>
-        <text>¥{{ fenToYuan(detail.startPrice) }}</text>
-      </view>
-      <view class="row" v-if="detail.timeCost != null || detail.durationCost != null">
-        <text>{{ t('pay.durationCost') }}</text>
-        <text>¥{{ fenToYuan(detail.timeCost ?? detail.durationCost) }}</text>
-      </view>
-      <view class="row" v-if="detail.mileCost != null">
-        <text>{{ t('pay.mileCost') }}</text>
-        <text>¥{{ fenToYuan(detail.mileCost) }}</text>
-      </view>
-      <view class="row" v-if="detail.dispatchCost != null">
-        <text>{{ t('pay.dispatchCost') }}</text>
-        <text>¥{{ fenToYuan(detail.dispatchCost) }}</text>
-      </view>
-      <view class="row" v-if="detail.penalty || detail.helmetPenalty">
-        <text>{{ t('pay.otherCost') }}</text>
-        <text>¥{{ fenToYuan(Number(detail.penalty || 0) + Number(detail.helmetPenalty || 0)) }}</text>
-      </view>
-      <view class="row" v-if="showDiscountBlock" @click="discountOpen = !discountOpen">
-        <text>{{ t('pay.discount') }} {{ discountOpen ? '▴' : '▾' }}</text>
-        <text class="warn">-¥{{ fenToYuan(discountTotal) }}</text>
-      </view>
-      <template v-if="discountOpen && showDiscountBlock">
-        <view class="row sub" v-if="detail.izActityFree || detail.izFreeN">
-          <text>{{ t('pay.actFree') }}</text>
-          <text class="warn">{{ t('pay.actFreeTag') }}</text>
+      <template v-else>
+        <view class="pay-card">
+          <view v-if="paid" class="hero">
+            <text class="hero__label">{{ t('pay.paidLabel') }}</text>
+            <text class="hero__value">{{ paidAmountText }}</text>
+            <text class="hero__unit">{{ t('pay.yuan') }}</text>
+          </view>
+          <view v-else class="hero">
+            <text class="hero__label">{{ t('pay.unpaidLabel') }}</text>
+            <text class="hero__value">{{ formatMoney(waitPayMoney) }}</text>
+            <text class="hero__unit">{{ t('pay.yuan') }}</text>
+          </view>
+
+          <view class="hint tip" v-if="wxScore && !paid">{{ t('pay.wxScorePaying') }}</view>
+          <view class="hint tip" v-else-if="wxScore && paid">{{ t('pay.wxScorePaid') }}</view>
+          <view class="frozen" v-if="frozenTip && !([1, 2].includes(izPaid) && frozenTime && cutRemainMs > 0)">
+            {{ frozenTip }}
+          </view>
+
+          <view v-if="!paid && showWalletBuckets" class="balance-box">
+            <text class="balance">
+              {{ t('pay.rechargeBalance', { m: formatMoney(rechargeBalance) }) }}
+            </text>
+            <text class="balance">
+              {{ t('pay.presentBalance', { m: formatMoney(presentBalance) }) }}
+            </text>
+          </view>
+
+          <view v-if="!paid" class="mile-time">
+            <text>
+              {{ t('pay.rideDuration') }}
+              <text class="mile-time__val">{{ formatRidingTimeUnit(detail.ridingTime) }}</text>
+            </text>
+            <text v-if="!tempHideOrderPrice">
+              ，{{ t('pay.rideMile') }}
+              <text class="mile-time__val">
+                {{ formatMile(detail.mile) }}{{ t('pay.kmUnit') }}
+              </text>
+            </text>
+          </view>
+
+          <!-- 待支付：费用明细 -->
+          <view v-if="!paid && Number(payCost) > 0" class="cost">
+            <view class="cost-head">
+              <text class="cost-head__title">{{ t('pay.costDetail') }}</text>
+              <image
+                v-if="iconQuestion"
+                class="cost-head__icon"
+                :src="iconQuestion"
+                mode="aspectFit"
+                @click="goBillingRules"
+              />
+            </view>
+            <view class="cost-body">
+              <view class="cost-row" @click="isOpen = !isOpen">
+                <text class="cost-row__label">{{ t('pay.rideCost') }}</text>
+                <view class="cost-row__right">
+                  <text class="cost-row__price">
+                    {{ formatMoney(detail.originCost) }}{{ t('pay.yuan') }}
+                  </text>
+                  <image
+                    v-if="!tempHideOrderPrice && arrowToggle(isOpen)"
+                    class="cost-row__arrow"
+                    :src="arrowToggle(isOpen)"
+                    mode="aspectFit"
+                  />
+                </view>
+              </view>
+              <template v-if="isOpen && !tempHideOrderPrice">
+                <view v-if="detail.startPrice != null" class="cost-child">
+                  <text>{{ t('pay.startPrice') }}</text>
+                  <text>{{ formatMoney(detail.startPrice) }}{{ t('pay.yuan') }}</text>
+                </view>
+                <view v-if="detail.timeCost != null || detail.durationCost != null" class="cost-child">
+                  <text>{{ t('pay.durationCost') }}</text>
+                  <text>
+                    {{ formatMoney(detail.timeCost ?? detail.durationCost) }}{{ t('pay.yuan') }}
+                  </text>
+                </view>
+                <view v-if="detail.mileCost != null" class="cost-child">
+                  <text>{{ t('pay.mileCost') }}</text>
+                  <text>{{ formatMoney(detail.mileCost) }}{{ t('pay.yuan') }}</text>
+                </view>
+              </template>
+
+              <view
+                v-if="detail.penalty || detail.helmetPenalty || detail.dispatchCost"
+                class="cost-row"
+                @click="isOpen1 = !isOpen1"
+              >
+                <text class="cost-row__label">{{ t('pay.otherCost') }}</text>
+                <view class="cost-row__right">
+                  <text class="cost-row__price">
+                    {{
+                      formatMoney(
+                        Number(detail.penalty || 0) +
+                          Number(detail.helmetPenalty || 0) +
+                          Number(detail.dispatchCost || 0),
+                      )
+                    }}{{ t('pay.yuan') }}
+                  </text>
+                  <image
+                    v-if="arrowToggle(isOpen1)"
+                    class="cost-row__arrow"
+                    :src="arrowToggle(isOpen1)"
+                    mode="aspectFit"
+                  />
+                </view>
+              </view>
+              <template v-if="isOpen1">
+                <view v-if="detail.dispatchCost != null" class="cost-child">
+                  <text>{{ t('pay.dispatchCost') }}</text>
+                  <text>{{ formatMoney(detail.dispatchCost) }}{{ t('pay.yuan') }}</text>
+                </view>
+                <view v-if="detail.helmetPenalty != null" class="cost-child">
+                  <text>{{ t('pay.helmetPenalty') }}</text>
+                  <text>{{ formatMoney(detail.helmetPenalty) }}{{ t('pay.yuan') }}</text>
+                </view>
+              </template>
+
+              <view v-if="showDiscountBlock" class="cost-row" @click="isOpen2 = !isOpen2">
+                <text class="cost-row__label">{{ t('pay.enjoyDiscount') }}</text>
+                <view class="cost-row__right">
+                  <text class="cost-row__price warn">
+                    -{{ formatMoney(discountTotal) }}{{ t('pay.yuan') }}
+                  </text>
+                  <image
+                    v-if="arrowToggle(isOpen2)"
+                    class="cost-row__arrow"
+                    :src="arrowToggle(isOpen2)"
+                    mode="aspectFit"
+                  />
+                </view>
+              </view>
+              <template v-if="isOpen2 && showDiscountBlock">
+                <view v-if="detail.izActityFree || detail.izFreeN" class="cost-child">
+                  <text>
+                    {{ t('pay.actFree') }}
+                    <text class="hint">{{ t('pay.actFreeHint') }}</text>
+                  </text>
+                  <text class="warn">{{ t('pay.actFreeTag') }}</text>
+                </view>
+                <view v-if="Number(detail.ridingCardCount) > 0" class="cost-child">
+                  <text>
+                    {{ t('pay.ridingCardAct') }}
+                    <text class="hint">{{ t('pay.actNoPenaltyHint') }}</text>
+                  </text>
+                  <text class="warn">-{{ formatMoney(detail.ridingCardCount) }}{{ t('pay.yuan') }}</text>
+                </view>
+                <view v-if="Number(detail.discountCount) > 0" class="cost-child">
+                  <text>
+                    {{ t('pay.discountAct', { n: discountFold }) }}
+                    <text class="hint">{{ t('pay.discountNoPenaltyHint') }}</text>
+                  </text>
+                  <text class="warn">-{{ formatMoney(detail.discountCount) }}{{ t('pay.yuan') }}</text>
+                </view>
+                <view v-if="Number(detail.randomCount) > 0" class="cost-child">
+                  <text>{{ t('pay.randomDeduct') }}</text>
+                  <text class="warn">-{{ formatMoney(detail.randomCount) }}{{ t('pay.yuan') }}</text>
+                </view>
+                <view
+                  v-if="
+                    Number(detail.redPaketCarDeduct) > 0 || Number(detail.redPaketParkingDeduct) > 0
+                  "
+                  class="cost-child"
+                >
+                  <text>{{ t('pay.redEnvelopeDeduct') }}</text>
+                  <text class="warn">
+                    -{{
+                      formatMoney(
+                        Number(detail.redPaketCarDeduct || 0) +
+                          Number(detail.redPaketParkingDeduct || 0),
+                      )
+                    }}{{ t('pay.yuan') }}
+                  </text>
+                </view>
+                <view
+                  v-if="
+                    Number(detail.deduction) > 0 &&
+                    !Number(detail.ridingCardCount) &&
+                    !Number(detail.discountCount) &&
+                    !Number(detail.randomCount)
+                  "
+                  class="cost-child"
+                >
+                  <text>{{ t('pay.otherDeduct') }}</text>
+                  <text class="warn">-{{ formatMoney(detail.deduction) }}{{ t('pay.yuan') }}</text>
+                </view>
+              </template>
+              <view class="cost-line" />
+            </view>
+            <view class="subtotal">
+              <text>
+                {{ t('pay.subtotal') }}
+                <text class="subtotal__price">{{ formatMoney(payCost) }}</text>
+                {{ t('pay.yuan') }}
+              </text>
+            </view>
+          </view>
+
+          <!-- 已支付：费用明细入口 + 骑行数据 -->
+          <view v-if="paid" class="cost cost--paid">
+            <view class="cost-paid-head" @click="goCostDetail">
+              <text class="cost-paid-head__title">{{ t('pay.costDetail') }}</text>
+              <image
+                v-if="iconRight"
+                class="cost-paid-head__arrow"
+                :src="iconRight"
+                mode="aspectFit"
+              />
+            </view>
+            <view class="cost-paid-row">
+              <text>{{ t('pay.rideDuration') }}</text>
+              <text class="cost-paid-row__val">{{ formatRidingTimeUnit(detail.ridingTime) }}</text>
+            </view>
+            <view v-if="!tempHideOrderPrice" class="cost-paid-row">
+              <text>{{ t('pay.rideMile') }}</text>
+              <text class="cost-paid-row__val">
+                {{ formatMile(detail.mile) }}{{ t('pay.kmUnit') }}
+              </text>
+            </view>
+          </view>
         </view>
-        <view class="row sub" v-if="Number(detail.ridingCardCount) > 0">
-          <text>{{ t('pay.ridingCardDeduct') }}</text>
-          <text class="warn">-¥{{ fenToYuan(detail.ridingCardCount) }}</text>
+
+        <view class="card reward" v-if="showRedReward">
+          <image v-if="rewardBg" class="reward__bg" :src="rewardBg" mode="aspectFill" />
+          <view class="reward__body">
+            <text class="reward__done">{{ t('ride.redEnvelopeRewardDone') }}</text>
+            <text class="reward__amount">
+              {{ t('ride.redEnvelopeRewardAmount', { money: redRewardYuan }) }}
+            </text>
+            <view class="reward__hint">
+              <text>{{ t('ride.redEnvelopeRewardHint') }}</text>
+              <text class="reward__link" @click="goRedTips">{{ t('ride.redEnvelopeTips') }} ›</text>
+            </view>
+          </view>
         </view>
-        <view class="row sub" v-if="Number(detail.discountCount) > 0">
-          <text>{{ t('pay.discountDeduct') }}</text>
-          <text class="warn">-¥{{ fenToYuan(detail.discountCount) }}</text>
-        </view>
-        <view class="row sub" v-if="Number(detail.randomCount) > 0">
-          <text>{{ t('pay.randomDeduct') }}</text>
-          <text class="warn">-¥{{ fenToYuan(detail.randomCount) }}</text>
-        </view>
-        <view
-          class="row sub"
-          v-if="
-            Number(detail.redPaketCarDeduct) > 0 || Number(detail.redPaketParkingDeduct) > 0
-          "
-        >
-          <text>{{ t('pay.redEnvelopeDeduct') }}</text>
-          <text class="warn">
-            -¥{{
-              fenToYuan(
-                Number(detail.redPaketCarDeduct || 0) + Number(detail.redPaketParkingDeduct || 0),
-              )
-            }}
-          </text>
-        </view>
-        <view
-          class="row sub"
-          v-if="
-            Number(detail.deduction) > 0 &&
-            !Number(detail.ridingCardCount) &&
-            !Number(detail.discountCount) &&
-            !Number(detail.randomCount)
-          "
-        >
-          <text>{{ t('pay.otherDeduct') }}</text>
-          <text class="warn">-¥{{ fenToYuan(detail.deduction) }}</text>
+
+        <view class="card wallet-pwd" v-if="!paid && !wxScore && waitPayMoney > 0">
+          <view class="wallet-pwd__title">
+            {{ t('pay.waitPay') }} {{ formatMoney(waitPayMoney) }}{{ t('pay.yuan') }}
+          </view>
+          <input
+            class="input"
+            password
+            v-model="walletPwd"
+            :placeholder="t('pay.walletPwdPlaceholder')"
+            maxlength="6"
+          />
         </view>
       </template>
-      <view class="row link" @click="goCostDetail">{{ t('pay.costDetail') }} ›</view>
-    </view>
+    </scroll-view>
 
-    <view class="card" v-if="!paid && !wxScore && waitPayMoney > 0">
-      <view class="section-title">{{ t('pay.waitPay') }} ¥{{ fenToYuan(waitPayMoney) }}</view>
-      <input
-        class="input"
-        password
-        v-model="walletPwd"
-        :placeholder="t('pay.walletPwdPlaceholder')"
-        maxlength="6"
-      />
-    </view>
-
-    <view class="actions">
-      <view class="btn-primary" v-if="!paid && !wxScore" @click="onPay">{{ t('pay.payNow') }}</view>
-      <view
-        class="btn-ghost"
-        v-if="showObjectionEntry"
-        @click="goObjection"
-      >
-        {{ t('support.objection') }}
+    <view class="dock" id="pay-dock">
+      <view class="extra-view">
+        <view v-if="showObjectionEntry" class="extra-view__item" @click="goObjection">
+          <image
+            v-if="iconObjection"
+            class="extra-view__icon"
+            :src="iconObjection"
+            mode="aspectFit"
+          />
+          <text>{{ t('support.objection') }}</text>
+        </view>
+        <view v-if="showRepairEntry" class="extra-view__item" @click="goRepair">
+          <image v-if="iconRepair" class="extra-view__icon" :src="iconRepair" mode="aspectFit" />
+          <text>{{ t('support.bikeRepair') }}</text>
+        </view>
       </view>
-      <view class="btn-ghost" v-if="showRepairEntry" @click="goRepair">{{ t('ride.goRepair') }}</view>
-      <view class="btn-ghost" v-if="paid && orderId" @click="goTripMap">{{ t('ride.tripTrack') }}</view>
-      <view class="btn-ghost" @click="goHome">{{ t('ride.homeTitle') }}</view>
+      <button
+        v-if="paid"
+        class="dock-btn"
+        :style="homeBtnStyle"
+        @click="goHome"
+      >
+        {{ t('pay.backHome') }}
+      </button>
+      <button
+        v-else-if="!wxScore"
+        class="dock-btn"
+        :style="payBtnStyle"
+        @click="onPay"
+      >
+        {{ payButtonText }}
+      </button>
     </view>
 
     <BizPopup
@@ -157,10 +320,12 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { onHide, onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { getWalletInfo, queryFrozen, setFrozenOrder } from '@/api/pay'
-import { usePay, fenToYuan } from '@/features/pay/usePay'
+import { usePay } from '@/features/pay/usePay'
 import { checkPayCertification } from '@/features/pay/checkPayCertification'
 import { getRedEnvelopeCfg, redEnvelopeRewardYuan } from '@/features/bike/redEnvelope'
-import { formatMile, formatRidingTime } from '@/shared/format'
+import { formatMoney, formatMile, formatRidingTimeUnit } from '@/shared/format'
+import { getBrandColor, getButtonWhiteColor, getTenantConfig } from '@/shared/config'
+import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 import { getConfigBaseItem } from '@/api/user'
 import BizPopup from '@/widgets/BizPopup.vue'
 import OpsPopup from '@/widgets/OpsPopup.vue'
@@ -185,6 +350,8 @@ const cutRemainMs = ref(0)
 const isTempFrozen = ref(false)
 const isEBikeLock = ref(false)
 const wxScore = ref(false)
+const frozenReady = ref(false)
+const dockPad = ref(200)
 let frozenPollTimer: ReturnType<typeof setInterval> | null = null
 let cutTimer: ReturnType<typeof setInterval> | null = null
 let wxScorePollTimer: ReturnType<typeof setInterval> | null = null
@@ -195,14 +362,48 @@ const waitPayMoney = computed(() => calcWaitPayMoney(detail.value))
 const paid = computed(() => Number(detail.value.izPaid) === 4)
 const orderId = computed(() => String(detail.value.id || detail.value.orderId || routeOrderId || ''))
 const izPaid = computed(() => Number(detail.value.izPaid))
-const durationText = computed(() => formatRidingTime(detail.value.ridingTime))
-const distanceText = computed(() => `${formatMile(detail.value.mile, 2)} km`)
+const tempHideOrderPrice = computed(() =>
+  Boolean(getTenantConfig().customSetting?.tempHideOrderPrice),
+)
+const paidAmountText = computed(() =>
+  formatMoney(detail.value.hasPaid ?? detail.value.payCost ?? 0),
+)
+const iconClock = computed(() => getIconCfg('clock'))
+const iconQuestion = computed(() => getIconCfg('qusetionIcon'))
+const iconObjection = computed(() => getIconCfg('qusetion'))
+const iconRepair = computed(() => getIconCfg('carRepair'))
+const iconRight = computed(() => getMapCfg('iconRight'))
+const arrowDown = computed(() => getIconCfg('bottomArrow'))
+const arrowUp = computed(() => getIconCfg('topArrow'))
+const homeBtnStyle = computed(() => ({
+  backgroundColor: getBrandColor(),
+  borderColor: getBrandColor(),
+  color: '#1E4A38',
+}))
+const payBtnStyle = computed(() => ({
+  backgroundColor: getBrandColor(),
+  borderColor: getBrandColor(),
+  color: getButtonWhiteColor(),
+}))
+const payButtonText = computed(() => {
+  if (waitPayMoney.value > 0) {
+    return `${t('pay.goPay')}${formatMoney(waitPayMoney.value)}${t('pay.yuan')}`
+  }
+  return t('pay.goPay')
+})
 const showObjectionEntry = computed(() => {
-  if (paid.value || wxScore.value) return false
-  if ([1, 2].includes(izPaid.value)) return false
+  if (!frozenReady.value) return false
   const complained = detail.value.izComplained
-  if (complained === 0 || complained === 1 || complained === '0' || complained === '1') return false
-  return complained === -1 || complained === '-1' || complained == null
+  if (complained !== -1 && complained !== '-1') return false
+  if (
+    !paid.value &&
+    [1, 2].includes(izPaid.value) &&
+    frozenTime.value &&
+    cutRemainMs.value > 0
+  ) {
+    return false
+  }
+  return true
 })
 const isRedEnvelopeCar = computed(
   () => detail.value.izRedPaket === true || detail.value.izRedPaket === 1,
@@ -214,7 +415,9 @@ const showRedReward = computed(
 const rewardBg = computed(() => getRedEnvelopeCfg('redEnvelopeRewardBg'))
 const showRepairEntry = ref(false)
 const showShortRepair = ref(false)
-const discountOpen = ref(true)
+const isOpen = ref(true)
+const isOpen1 = ref(true)
+const isOpen2 = ref(true)
 const walletRecharge = ref<number | null>(null)
 const walletPresent = ref<number | null>(null)
 let shortRepairAsked = false
@@ -255,6 +458,11 @@ const showDiscountBlock = computed(
     discountTotal.value > 0 ||
     Boolean(detail.value.izActityFree || detail.value.izFreeN || detail.value.deduction),
 )
+const discountFold = computed(() => {
+  const d = Number(detail.value.discount)
+  if (!Number.isFinite(d) || d >= 1) return 10
+  return Math.round(d * 10)
+})
 
 const frozenTip = computed(() => {
   if (![1, 2].includes(izPaid.value)) return ''
@@ -267,6 +475,17 @@ const frozenTip = computed(() => {
     time: `${m}:${String(s).padStart(2, '0')}`,
   })
 })
+const frozenCountdownText = computed(() => {
+  if (cutRemainMs.value <= 0) return '0:00'
+  const sec = Math.ceil(cutRemainMs.value / 1000)
+  const m = Math.floor(sec / 60)
+  const s = sec % 60
+  return `${m}:${String(s).padStart(2, '0')}`
+})
+
+function arrowToggle(open: boolean) {
+  return open ? arrowUp.value : arrowDown.value
+}
 
 onShow(() => setNavTitle(t('pay.title')))
 
@@ -399,9 +618,7 @@ async function maybeHandleFrozen() {
   const oid = orderId.value
   if (!oid) return
   const paidState = Number(detail.value.izPaid)
-  // Already locked / settled — skip
   if (paidState === 3 || paidState === 4) return
-  // Legacy unpaid-from-ride gate: skip frozen countdown
   if (isEBikeLock.value) return
 
   if (isTempFrozen.value) {
@@ -424,7 +641,6 @@ async function maybeHandleFrozen() {
 }
 
 async function maybeShortTripRepair() {
-  // Legacy: only after paid (izPaid===4)
   if (shortRepairAsked || !showRepairEntry.value || !paid.value) return
   if (detail.value.izRepair === 1 || detail.value.izRepair === true) return
   const mins = Number(detail.value.ridingTime || 0) / 1000 / 60
@@ -440,11 +656,11 @@ async function maybeEndTripPopup() {
 
 async function refresh() {
   loading.value = true
+  frozenReady.value = false
   const res = await loadOrder(routeOrderId)
   loading.value = false
   if (res.success && res.data) {
     detail.value = res.data as Record<string, unknown>
-    // Backend may mark wx-score order even without query flag
     if (Boolean((res.data as { izWxScoreOrder?: boolean }).izWxScoreOrder)) {
       wxScore.value = true
     }
@@ -453,6 +669,7 @@ async function refresh() {
     void maybeShortTripRepair()
     void maybeEndTripPopup()
   }
+  frozenReady.value = true
 }
 
 async function loadRepairFlag() {
@@ -480,11 +697,24 @@ async function loadWalletBuckets() {
   }
 }
 
+function measureDock() {
+  uni
+    .createSelectorQuery()
+    .select('#pay-dock')
+    .boundingClientRect((rect) => {
+      if (rect && !Array.isArray(rect) && rect.height) {
+        dockPad.value = rect.height + 16
+      }
+    })
+    .exec()
+}
+
 onMounted(() => {
   user.hydrateFromStorage()
   void loadRepairFlag()
   void loadWalletBuckets()
   void refresh()
+  setTimeout(measureDock, 100)
 })
 
 onHide(() => stopFrozenTimers())
@@ -503,6 +733,7 @@ async function onPay() {
       uni.showToast({ title: t('common.submitSuccess'), icon: 'success' })
       await refresh()
       void showEndTripPopup()
+      setTimeout(measureDock, 100)
       return
     }
     if (res.code === 'NEED_WALLET_PWD') {
@@ -559,9 +790,10 @@ function onShortRepairConfirm() {
 
 function goTripMap() {
   if (!orderId.value) return
+  const params = detail.value?.deviceTrajectory || []
   navigate(
     'to',
-    `/pages-sub/ride/trip-map/trip-map?orderId=${encodeURIComponent(orderId.value)}`,
+    `/pages-sub/ride/trip-map/trip-map?params=${encodeURIComponent(JSON.stringify(params))}`,
   )
 }
 
@@ -574,28 +806,268 @@ function goCostDetail() {
   if (!orderId.value) return
   navigate('to', `/pages-sub/pay/cost-detail/cost-detail?orderId=${encodeURIComponent(orderId.value)}`)
 }
+
+function goBillingRules() {
+  navigate('to', '/pages-sub/account/billing-rules/billing-rules')
+}
 </script>
 
 <style scoped lang="scss">
-.title {
-  font-size: 30rpx;
-  color: #666;
+.page {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8f8f8;
 }
-.amount {
-  margin-top: 16rpx;
-  font-size: 64rpx;
-  font-weight: 700;
+
+.scroll {
+  flex: 1;
+  height: 0;
+  background: #f8f8f8;
 }
+
+.loading-tip {
+  padding: 48rpx 32rpx;
+  text-align: center;
+  color: #999;
+}
+
+.hint-bar {
+  display: flex;
+  align-items: center;
+  margin: 32rpx 32rpx 0;
+  padding: 0 32rpx;
+  height: 80rpx;
+  background: rgba(255, 146, 43, 0.1);
+  border: 2rpx solid rgba(255, 146, 43, 0.5);
+  border-radius: 32rpx;
+  flex-shrink: 0;
+}
+
+.hint-bar__clock {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.hint-bar__text {
+  flex: 1;
+  margin-left: 16rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #ff922b;
+}
+
+.hint-bar__time {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #ff922b;
+}
+
+.pay-card {
+  margin: 32rpx 32rpx 0;
+  padding: 36rpx 32rpx 52rpx;
+  background: #fff;
+  border-radius: 32rpx;
+}
+
+.hero {
+  margin-bottom: 16rpx;
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.hero__value {
+  margin: 0 8rpx;
+}
+
+.hero__unit {
+  font-size: 28rpx;
+  font-weight: 800;
+}
+
 .balance-box {
   display: flex;
   flex-wrap: wrap;
-  gap: 16rpx 32rpx;
-  margin-top: 16rpx;
+  gap: 8rpx 24rpx;
 }
+
 .balance {
-  font-size: 24rpx;
-  color: #888;
+  font-size: 28rpx;
+  color: #666;
 }
+
+.hint,
+.frozen {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.frozen {
+  color: #ff8401;
+  line-height: 1.4;
+}
+
+.mile-time {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 24rpx 0;
+  padding: 24rpx 0;
+  border-top: 2rpx solid #f6f6f6;
+  border-bottom: 2rpx solid #f6f6f6;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.mile-time__val {
+  color: #333;
+  font-weight: 700;
+}
+
+.cost {
+  margin-top: 8rpx;
+}
+
+.cost-head {
+  display: flex;
+  align-items: center;
+}
+
+.cost-head__title {
+  margin-right: 8rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.cost-head__icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.cost-body {
+  margin-top: 36rpx;
+}
+
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32rpx;
+}
+
+.cost-row__label {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.cost-row__right {
+  display: flex;
+  align-items: center;
+}
+
+.cost-row__price {
+  margin-right: 8rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.cost-row__arrow {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.cost-child {
+  display: flex;
+  justify-content: space-between;
+  margin: 16rpx 0;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.cost-line {
+  height: 2rpx;
+  margin: 24rpx 0 22rpx;
+  background: #f6f6f6;
+}
+
+.subtotal {
+  text-align: right;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.subtotal__price {
+  margin: 0 8rpx;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.cost--paid {
+  margin-top: 24rpx;
+}
+
+.cost-paid-head {
+  display: flex;
+  align-items: center;
+}
+
+.cost-paid-head__title {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.cost-paid-head__arrow {
+  width: 24rpx;
+  height: 24rpx;
+  margin-left: 8rpx;
+}
+
+.cost-paid-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.cost-paid-row__val {
+  font-weight: 600;
+}
+
+.warn {
+  color: #ff461d;
+}
+
+.hint {
+  color: #999;
+  font-size: 24rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 32rpx;
+  margin: 24rpx 32rpx;
+}
+
+.wallet-pwd__title {
+  font-weight: 700;
+  margin-bottom: 16rpx;
+}
+
+.input {
+  background: #f5f6f8;
+  border-radius: 12rpx;
+  padding: 24rpx;
+}
+
 .reward {
   position: relative;
   overflow: hidden;
@@ -603,6 +1075,7 @@ function goCostDetail() {
   padding: 40rpx 24rpx;
   text-align: center;
 }
+
 .reward__bg {
   position: absolute;
   left: 0;
@@ -611,6 +1084,7 @@ function goCostDetail() {
   height: 100%;
   opacity: 0.85;
 }
+
 .reward__body {
   position: relative;
   z-index: 1;
@@ -619,16 +1093,19 @@ function goCostDetail() {
   align-items: center;
   gap: 12rpx;
 }
+
 .reward__done {
   font-size: 32rpx;
   font-weight: 600;
   color: #333;
 }
+
 .reward__amount {
   font-size: 36rpx;
   font-weight: 700;
   color: #ff461e;
 }
+
 .reward__hint {
   font-size: 22rpx;
   color: #999;
@@ -637,53 +1114,61 @@ function goCostDetail() {
   justify-content: center;
   gap: 8rpx;
 }
+
 .reward__link {
   color: #ff5936;
 }
-.hint,
-.meta {
-  margin-top: 12rpx;
-  color: #999;
+
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  padding: 10rpx 48rpx calc(32rpx + env(safe-area-inset-bottom));
+  background: #f8f8f8;
+  box-sizing: border-box;
 }
-.frozen {
-  margin-top: 12rpx;
-  color: #ff8401;
-  font-size: 26rpx;
-  line-height: 1.4;
-}
-.section-title {
-  font-weight: 700;
-  margin-bottom: 16rpx;
-}
-.row {
+
+.extra-view {
+  width: 654rpx;
+  max-width: 100%;
+  margin: 10rpx auto 22rpx;
   display: flex;
-  justify-content: space-between;
-  padding: 16rpx 0;
-  border-bottom: 1px solid #f0f0f0;
+  justify-content: space-around;
 }
-.row.link {
-  color: #3aa0e8;
-  border-bottom: none;
-  justify-content: flex-end;
-}
-.row.sub {
-  padding-left: 16rpx;
-  font-size: 26rpx;
-  color: #888;
-}
-.warn {
-  color: #ff8401;
-}
-.input {
-  background: #f5f6f8;
-  border-radius: 12rpx;
-  padding: 24rpx;
-  margin-top: 8rpx;
-}
-.actions {
-  padding: 24rpx 32rpx;
+
+.extra-view__item {
   display: flex;
-  flex-direction: column;
-  gap: 20rpx;
+  align-items: center;
+  height: 40rpx;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  color: #666;
+}
+
+.extra-view__icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 8rpx;
+}
+
+.dock-btn {
+  width: 654rpx;
+  max-width: 100%;
+  height: 96rpx;
+  margin: 0 auto;
+  border-radius: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-width: 0;
+  line-height: 96rpx;
+}
+
+.dock-btn::after {
+  border: none;
 }
 </style>

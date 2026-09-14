@@ -121,11 +121,16 @@ export function useBikeRide() {
       const res = await networkRide(body)
       if (res.success) {
         storage.set('showHelmetModal', true)
+        const unlockedCarId = String(payload.carId || temp.ride.carId || '')
+        const unlockedImei = String(payload.imei || temp.ride.imei || '')
         temp.setRide({
           status: 'riding',
           orderId: (res.data as { orderId?: string })?.orderId,
           startTime: Date.now(),
+          ...(unlockedCarId ? { carId: unlockedCarId } : {}),
+          ...(unlockedImei ? { imei: unlockedImei } : {}),
         })
+        if (unlockedCarId) storage.set('currentRidingCarId', unlockedCarId)
         if (!skipNavigate) {
           setTimeout(() => navigate('reLaunch', '/pages/riding/riding'), 800)
         }
@@ -200,7 +205,10 @@ export function useBikeRide() {
           status: 'riding',
           orderId: (reported.data as { orderId?: string })?.orderId,
           startTime: Date.now(),
+          ...(carId ? { carId } : {}),
+          ...(imei ? { imei } : {}),
         })
+        if (carId) storage.set('currentRidingCarId', carId)
         if (!skipNavigate) {
           setTimeout(() => navigate('reLaunch', '/pages/riding/riding'), 800)
         }
@@ -266,9 +274,18 @@ export function useBikeRide() {
       uni.showModal({ title: t('ride.returnBike'), content: t('ride.needLocation'), showCancel: false })
       return { success: false as const, data: null as ReturnPermissionData | null }
     }
+    const carId = String(payload.carId || temp.ride.carId || storage.get('currentRidingCarId', '') || '').trim()
+    if (!carId || carId === 'null' || carId === 'undefined') {
+      return {
+        success: false as const,
+        data: null as ReturnPermissionData | null,
+        code: 'NO_CAR',
+        msg: t('ride.carIdMissing'),
+      }
+    }
     const body = {
       orderId: payload.orderId || temp.ride.orderId,
-      carId: payload.carId || temp.ride.carId,
+      carId,
       userPin: locFields.userPin,
       userLat: locFields.userLat,
       userLng: locFields.userLng,
@@ -301,9 +318,15 @@ export function useBikeRide() {
       const forcePenalty = Boolean(payload.forcePenalty)
       const preferBle = Boolean(payload.preferBle)
       const orderId = payload.orderId || temp.ride.orderId
-      const carId = payload.carId || temp.ride.carId
+      const carId = String(
+        payload.carId || temp.ride.carId || storage.get('currentRidingCarId', '') || '',
+      ).trim()
       const imei = String(payload.imei || temp.ride.imei || '')
       const oid = String(orderId || '')
+      if (!carId || carId === 'null' || carId === 'undefined') {
+        uni.showToast({ title: t('ride.carIdMissing'), icon: 'none' })
+        return { success: false, msg: t('ride.carIdMissing') }
+      }
 
       const goPay = (extra = '') => {
         temp.setRide({ status: 'ended' })
@@ -473,7 +496,10 @@ export function useBikeRide() {
   }
 
   async function pauseRide(payload: Record<string, unknown>) {
-    const carId = payload.carId || temp.ride.carId
+    const carId = String(payload.carId || temp.ride.carId || '').trim()
+    if (!carId || carId === 'null' || carId === 'undefined') {
+      return { success: false as const, code: 'NO_CAR', msg: t('ride.carIdMissing') }
+    }
     const pin = payload.userPin || userPin()
     const orderId = payload.orderId || temp.ride.orderId
     const serviceId =
@@ -533,7 +559,10 @@ export function useBikeRide() {
   }
 
   async function resumeRide(payload: Record<string, unknown>) {
-    const carId = payload.carId || temp.ride.carId
+    const carId = String(payload.carId || temp.ride.carId || '').trim()
+    if (!carId || carId === 'null' || carId === 'undefined') {
+      return { success: false as const, code: 'NO_CAR', msg: t('ride.carIdMissing') }
+    }
     const pin = payload.userPin || userPin()
     const res = await endTempPark({ carId, userPin: pin })
     if (res.success) {

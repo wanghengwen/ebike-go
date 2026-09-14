@@ -24,6 +24,7 @@
     {
       "path": "pages/riding/riding",
       "style": {
+        "navigationStyle": "custom",
         "navigationBarTitleText": "骑行中",
         "disableScroll": true
       }
@@ -31,19 +32,23 @@
     {
       "path": "pages/pay/pay",
       "style": {
-        "navigationBarTitleText": "行程费用"
+        "navigationBarTitleText": "骑行结束"
       }
     },
     {
       "path": "pages/auth/quick-login",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTitleText": "登录",
+        "disableScroll": true,
+        "homeButton": false
       }
     },
     {
       "path": "pages/auth/phone-login",
       "style": {
-        "navigationBarTitleText": "登录"
+        "navigationBarTitleText": "登录",
+        "disableScroll": true,
+        "homeButton": false
       }
     },
     {
@@ -147,13 +152,25 @@
         {
           "path": "invoice/list",
           "style": {
-            "navigationBarTitleText": "发票"
+            "navigationBarTitleText": "开具发票"
           }
         },
         {
           "path": "invoice/create",
           "style": {
-            "navigationBarTitleText": "申请开票"
+            "navigationBarTitleText": "按订单开票"
+          }
+        },
+        {
+          "path": "invoice/apply",
+          "style": {
+            "navigationBarTitleText": "开票详情"
+          }
+        },
+        {
+          "path": "invoice/history",
+          "style": {
+            "navigationBarTitleText": "开票历史"
           }
         },
         {
@@ -204,15 +221,39 @@
           }
         },
         {
+          "path": "cards/cards-expired",
+          "style": {
+            "navigationBarTitleText": "失效卡券"
+          }
+        },
+        {
           "path": "card-shop/shop",
           "style": {
             "navigationBarTitleText": "卡券商城"
           }
         },
         {
+          "path": "card-rules/card-rules",
+          "style": {
+            "navigationBarTitleText": "购卡须知"
+          }
+        },
+        {
           "path": "about/about",
           "style": {
             "navigationBarTitleText": "关于我们"
+          }
+        },
+        {
+          "path": "protocol/protocol",
+          "style": {
+            "navigationBarTitleText": "条款与隐私政策"
+          }
+        },
+        {
+          "path": "protocol/detail",
+          "style": {
+            "navigationBarTitleText": "协议详情"
           }
         },
         {
@@ -247,6 +288,12 @@
         },
         {
           "path": "cancel/cancel",
+          "style": {
+            "navigationBarTitleText": "注销账号"
+          }
+        },
+        {
+          "path": "cancel/cancel-verify",
           "style": {
             "navigationBarTitleText": "注销账号"
           }

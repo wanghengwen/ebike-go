@@ -91,11 +91,15 @@ if (fs.existsSync(secretsPath)) {
 let merged = deepMerge(defaults, tenant)
 merged = deepMerge(merged, overlay)
 
-// Normalize pay / appId from nested platform if still present
+// Normalize pay / appId from nested platform if still present.
+// Legacy reads platform['mp-weixin'].pay.channelType — prefer that over _defaults WXLITE.
 const mp = merged.platform?.['mp-weixin'] || {}
 if (!merged.pay) merged.pay = {}
-if (!merged.pay.channelType && mp.pay?.channelType) {
+if (mp.pay?.channelType) {
   merged.pay.channelType = mp.pay.channelType
+}
+if (mp.pay?.payBaseApi != null && mp.pay.payBaseApi !== '') {
+  merged.pay.payBaseApi = mp.pay.payBaseApi
 }
 if (!merged.appId && mp.appid) merged.appId = mp.appid
 if (!merged.globalStyle) {

@@ -42,6 +42,8 @@ export type TenantConfig = {
     buttonDisabledColor?: string
     logo?: string
     launchBg?: string
+    /** Find-bike bell icon (riding page) */
+    carBell?: string
     /** Tenant-only static flags (e.g. bwcx) */
     autoRefundBalance?: boolean
     insufficientBalanceAutoJump?: boolean

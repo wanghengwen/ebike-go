@@ -1,443 +1,716 @@
 <template>
+  <!-- Legacy issueInvoice：按订单开票 -->
   <view class="page">
-    <view class="card filter-card">
-      <view class="filter-top">
-        <view class="tabs">
-          <text class="tab" :class="{ on: orderType === 0 }" @click="setOrderType(0)">
-            {{ t('pay.invoiceCanBill') }}
-          </text>
-          <text class="tab" :class="{ on: orderType === 1 }" @click="setOrderType(1)">
-            {{ t('pay.invoiceOtherOrders') }}
-          </text>
+    <view v-if="showOrderType || showFilter" class="mask" @click="closePanels" />
+
+    <view class="condition">
+      <view class="top_row">
+        <view class="top_left" @click="toggleOrderType">
+          <text>{{ orderType ? t('pay.invoiceOtherOrders') : t('pay.invoiceCanBill') }}</text>
+          <image
+            v-if="!showOrderType && arrowBottom"
+            class="img_arrow"
+            :src="arrowBottom"
+            mode="aspectFit"
+          />
+          <image
+            v-else-if="showOrderType && arrowTop"
+            class="img_arrow"
+            :src="arrowTop"
+            mode="aspectFit"
+          />
         </view>
-        <text class="filter-btn" @click="showFilter = !showFilter">{{ t('pay.invoiceFilter') }}</text>
+        <image
+          v-if="filterIcon"
+          class="img_filter"
+          :src="filterIcon"
+          mode="aspectFit"
+          @click="toggleFilter"
+        />
+        <text v-else class="filter_text" @click="toggleFilter">{{ t('pay.invoiceFilter') }}</text>
       </view>
-      <view v-if="showFilter" class="filter-body">
-        <view class="label">{{ t('pay.invoiceDateRange') }}</view>
-        <view class="range">
-          <picker mode="date" start="2010-01-01" end="2030-12-31" @change="onStartDate">
-            <view class="picker">{{ startDate || t('pay.invoiceStartDate') }}</view>
+
+      <view v-if="showOrderType" class="order_type">
+        <view
+          class="type_item"
+          :style="{ color: orderType === 0 ? brandColor : '' }"
+          @click="selectOrderType(0)"
+        >
+          {{ t('pay.invoiceCanBill') }}
+        </view>
+        <view class="line margin32" />
+        <view
+          class="type_item"
+          :style="{ color: orderType === 1 ? brandColor : '' }"
+          @click="selectOrderType(1)"
+        >
+          {{ t('pay.invoiceOtherOrders') }}
+        </view>
+      </view>
+
+      <view v-if="showFilter" class="filter">
+        <view class="filter_title">{{ t('pay.invoiceDateRange') }}</view>
+        <view class="input_container">
+          <picker mode="date" start="2010-01-01" end="2030-01-01" @change="onStartDate">
+            <view class="input">{{ startDate || t('pay.invoiceStartDate') }}</view>
           </picker>
           <text>-</text>
-          <picker mode="date" start="2010-01-01" end="2030-12-31" @change="onEndDate">
-            <view class="picker">{{ endDate || t('pay.invoiceEndDate') }}</view>
+          <picker mode="date" start="2010-01-01" end="2030-01-01" @change="onEndDate">
+            <view class="input">{{ endDate || t('pay.invoiceEndDate') }}</view>
           </picker>
         </view>
-        <view class="label">{{ t('pay.invoiceAmountRange') }}</view>
-        <view class="range">
-          <input class="input mini" type="digit" v-model="minYuan" :placeholder="t('pay.invoiceMinAmount')" />
+        <view class="filter_title">{{ t('pay.invoiceAmountRange') }}</view>
+        <view class="input_container">
+          <input class="input" type="digit" v-model="minYuan" :placeholder="t('pay.invoiceMinAmount')" />
           <text>-</text>
-          <input class="input mini" type="digit" v-model="maxYuan" :placeholder="t('pay.invoiceMaxAmount')" />
+          <input class="input" type="digit" v-model="maxYuan" :placeholder="t('pay.invoiceMaxAmount')" />
         </view>
-        <view class="filter-actions">
-          <view class="btn-ghost" @click="resetFilter">{{ t('pay.invoiceReset') }}</view>
-          <view class="btn-primary sm" @click="applyFilter">{{ t('common.confirm') }}</view>
+        <view class="line" />
+        <view class="button_container">
+          <button class="button reset" @click="resetFilter">{{ t('pay.invoiceReset') }}</button>
+          <button
+            class="button confirm"
+            :style="{ background: brandColor, color: '#fff' }"
+            @click="confirmFilter"
+          >
+            {{ t('common.confirm') }}
+          </button>
         </view>
       </view>
     </view>
 
-    <view class="card">
-      <view class="label row-between">
-        <text>{{ t('pay.selectOrders') }}</text>
-        <text class="link" v-if="orders.length" @click="toggleAll">{{ t('pay.invoiceSelectAll') }}</text>
+    <scroll-view v-if="orders.length" class="scroll" scroll-y>
+      <view v-for="(item, index) in orders" :key="String(item.id || index)" class="container">
+        <view class="check" @click="toggleOrder(item)">
+          <image
+            v-if="isSelected(item) && checkIcon"
+            class="img_check"
+            :src="checkIcon"
+            mode="aspectFit"
+          />
+          <image
+            v-else-if="!isSelected(item) && uncheckIcon"
+            class="img_check"
+            :src="uncheckIcon"
+            mode="aspectFit"
+          />
+          <view v-else class="img_check_fallback" :class="{ on: isSelected(item) }" />
+        </view>
+        <view class="order">
+          <view v-if="!item.izComplained" class="objection">
+            {{ t('pay.invoiceObjectionPending') }}
+          </view>
+          <view v-else-if="item.izComplained === 1" class="objection">
+            {{ t('pay.invoiceObjectionDone') }}
+          </view>
+          <view class="top">
+            <view class="top_info">
+              <image
+                v-if="bikeIcon(item.bikeType)"
+                class="img"
+                :src="bikeIcon(item.bikeType)"
+                mode="aspectFit"
+              />
+              <text class="top_title">{{ bikeLabel(item.bikeType) }}</text>
+              <text class="top_carid">{{ item.carId || '' }}</text>
+            </view>
+            <text v-if="!item.izPaid" class="unpaid">{{ t('account.orderUnpaid') }}</text>
+            <text v-else>{{ t('account.orderPaid') }}</text>
+          </view>
+          <view class="content">
+            <view class="content_item" style="margin-bottom: 24rpx">
+              <text class="dot" />
+              <text class="text">{{ item.startAddress || '--' }}</text>
+            </view>
+            <view class="content_item">
+              <view class="dot end" />
+              <text class="text">{{ item.endAddress || '--' }}</text>
+            </view>
+          </view>
+          <view class="bottom">
+            <view class="time">
+              <text>{{ item.startTime || '' }}</text>
+              <text>-</text>
+              <text>{{ item.endTime || '' }}</text>
+            </view>
+            <view>
+              <text class="yen">￥</text>
+              <text class="price">{{ fenToYuan(item.payCost as number) }}</text>
+            </view>
+          </view>
+        </view>
       </view>
-      <view v-if="loadingOrders">{{ t('common.loading') }}</view>
-      <view v-else-if="!orders.length" class="empty">{{ t('common.empty') }}</view>
-      <view
-        v-for="item in orders"
-        :key="String(item.id)"
-        class="order"
-        :class="{ on: selectedIds.includes(String(item.id)), disabled: !canSelect(item) }"
-        @click="toggleOrder(item)"
+    </scroll-view>
+
+    <view v-else class="empty">
+      <image v-if="emptyIcon" class="notice_img" :src="emptyIcon" mode="aspectFit" />
+      <text class="notice_text">{{ t('pay.invoiceNoOrders') }}</text>
+    </view>
+
+    <view class="next_container">
+      <view class="checkbox" @click="toggleAll">
+        <image
+          v-if="isChooseAll && checkIcon"
+          class="img_check"
+          :src="checkIcon"
+          mode="aspectFit"
+        />
+        <image
+          v-else-if="!isChooseAll && uncheckIcon"
+          class="img_check"
+          :src="uncheckIcon"
+          mode="aspectFit"
+        />
+        <view v-else class="img_check_fallback" :class="{ on: isChooseAll }" />
+        <text class="all">{{ t('pay.invoiceSelectAll') }}</text>
+      </view>
+      <text class="total">
+        <text :style="{ color: brandColor }">{{ selectedIds.length }}</text>
+        {{ t('pay.invoiceTripUnit') }}，{{ t('pay.invoiceTotalPrefix') }}
+        <text :style="{ color: brandColor }">{{ totalMoney }}</text>
+        {{ t('pay.invoiceYuan') }}
+      </text>
+      <button
+        class="next"
+        :style="nextBtnStyle"
+        :disabled="!canNext"
+        @click="goNext"
       >
-        <view class="order__main">
-          <view class="order__top">
-            <text class="bike">{{ bikeLabel(item.bikeType) }}</text>
-            <text class="car-id">{{ item.carId || item.id }}</text>
-            <text class="muted" v-if="!item.izPaid">{{ t('account.orderUnpaid') }}</text>
-          </view>
-          <view class="sub muted" v-if="complainText(item)">{{ complainText(item) }}</view>
-          <view class="route" v-if="item.startAddress || item.endAddress">
-            <view class="route__row" v-if="item.startAddress">
-              <text class="dot start" />
-              <text>{{ item.startAddress }}</text>
-            </view>
-            <view class="route__row" v-if="item.endAddress">
-              <text class="dot end" />
-              <text>{{ item.endAddress }}</text>
-            </view>
-          </view>
-          <view class="time" v-if="item.startTime || item.endTime">
-            <text>{{ item.startTime || '' }}</text>
-            <text v-if="item.startTime || item.endTime"> - </text>
-            <text>{{ item.endTime || '' }}</text>
-          </view>
-        </view>
-        <view class="right">
-          <view class="sub">¥{{ fenToYuan(item.payCost as number) }}</view>
-        </view>
-      </view>
-      <view class="sum" v-if="selectedIds.length">
-        {{ t('pay.invoiceSelectedSum', { n: selectedIds.length, amount: selectedSum }) }}
-      </view>
-    </view>
-
-    <view class="card" v-if="orderType === 0">
-      <view class="type-row">
-        <view class="type" :class="{ on: form.type === 0 }" @click="form.type = 0">{{ t('pay.invoicePersonal') }}</view>
-        <view class="type" :class="{ on: form.type === 1 }" @click="form.type = 1">{{ t('pay.invoiceCompany') }}</view>
-      </view>
-      <input class="input" v-model="form.title" :placeholder="t('pay.invoiceTitle')" />
-      <input v-if="form.type === 1" class="input" v-model="form.companyEin" :placeholder="t('pay.invoiceTaxNo')" />
-      <input v-if="form.type === 1" class="input" v-model="form.companyAddress" :placeholder="t('pay.invoiceCompanyAddress')" />
-      <input v-if="form.type === 1" class="input" v-model="form.companyPhone" :placeholder="t('pay.invoiceCompanyPhone')" />
-      <input v-if="form.type === 1" class="input" v-model="form.bank" :placeholder="t('pay.invoiceBank')" />
-      <input v-if="form.type === 1" class="input" v-model="form.bankAccount" :placeholder="t('pay.invoiceBankAccount')" />
-      <input class="input" v-model="form.email" :placeholder="t('pay.invoiceEmail')" />
-      <view class="btn-primary" @click="onSubmit">{{ t('common.confirm') }}</view>
+        {{ t('account.cancelNext') }}
+      </button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { computed, ref } from 'vue'
+import { onHide, onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
-import { createInvoice, getInvoicedOrders } from '@/api/invoice'
+import { getInvoicedOrders } from '@/api/invoice'
 import { fenToYuan } from '@/features/pay/usePay'
-import { useUserStore } from '@/stores/user'
+import { resolveAddress } from '@/shared/format'
+import { getBrandColor, getButtonDisabledColor, getButtonWhiteColor } from '@/shared/config'
+import { getIconCfg } from '@/shared/tenantSkin'
 import { navigate, setNavTitle } from '@/shared/navigate'
-import { storage } from '@/shared/storage'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
 const user = useUserStore()
-const loadingOrders = ref(false)
+
 const orders = ref<Array<Record<string, unknown>>>([])
-const selectedIds = ref<string[]>([])
-const orderType = ref(0) // 0 can invoice, 1 other
+const selectedIds = ref<Array<string | number>>([])
+const orderType = ref(0)
+const showOrderType = ref(false)
 const showFilter = ref(false)
-const startDate = ref('')
-const endDate = ref('')
-const minYuan = ref('')
-const maxYuan = ref('')
+const startDate = ref<string | null>(null)
+const endDate = ref<string | null>(null)
+const minYuan = ref<string | null>(null)
+const maxYuan = ref<string | null>(null)
+const isChooseAll = ref(false)
+const totalMoney = ref(0)
 
-const form = reactive({
-  type: 0,
-  title: '',
-  companyEin: '',
-  companyAddress: '',
-  companyPhone: '',
-  bank: '',
-  bankAccount: '',
-  email: '',
+const brandColor = computed(() => getBrandColor())
+const arrowBottom = computed(() => getIconCfg('invoiceArrowBottom'))
+const arrowTop = computed(() => getIconCfg('invoiceArrowTop'))
+const filterIcon = computed(() => getIconCfg('invoiceFilter'))
+const checkIcon = computed(() => getIconCfg('checkbox') || getIconCfg('checked_square_round'))
+const uncheckIcon = computed(() => getIconCfg('invoiceUncheck'))
+const emptyIcon = computed(() => getIconCfg('notLogin'))
+const canNext = computed(() => selectedIds.value.length > 0 && orderType.value === 0)
+const nextBtnStyle = computed(() => {
+  const enabled = brandColor.value
+  const disabled = getButtonDisabledColor()
+  const white = getButtonWhiteColor()
+  const bg = canNext.value ? enabled : disabled
+  return `background:${bg};color:${white};border:none;`
 })
 
-const selectedSum = computed(() => {
-  const fen = orders.value
-    .filter((o) => selectedIds.value.includes(String(o.id)))
-    .reduce((s, o) => s + Number(o.payCost || 0), 0)
-  return fenToYuan(fen)
-})
+onShow(() => setNavTitle(t('pay.invoiceByOrder')))
 
-onShow(() => setNavTitle(t('pay.invoiceCreate')))
-
-onLoad((q) => {
-  try {
-    if (q?.orderIds) {
-      const ids = JSON.parse(decodeURIComponent(String(q.orderIds)))
-      if (Array.isArray(ids)) selectedIds.value = ids.map(String)
-    }
-  } catch {
-    /* ignore */
-  }
-})
-
-onMounted(() => {
+onLoad(() => {
   void loadOrders()
 })
 
-function dayStart(d: string) {
-  return new Date(`${d}T00:00:00`).getTime()
+onHide(() => {
+  orderType.value = 0
+  selectedIds.value = []
+  resetFilterFields()
+  recalcMoney()
+  isChooseAll.value = false
+})
+
+function bikeIcon(bikeType: unknown) {
+  // Legacy issueInvoice: bikeType truthy → electricBicycle
+  return bikeType ? getIconCfg('electricBicycle') : getIconCfg('bicycle')
 }
-function dayEnd(d: string) {
-  return new Date(`${d}T23:59:59`).getTime()
+
+function bikeLabel(bikeType: unknown) {
+  // Legacy text: bikeType ? 单车 : 电单车
+  return bikeType ? t('account.bikeNormal') : t('account.bikeElectric')
+}
+
+function isSelected(item: Record<string, unknown>) {
+  return selectedIds.value.includes(item.id as string | number)
+}
+
+function transTimeStamp(value: string | null | undefined) {
+  if (!value) return null
+  const ms = +new Date(value)
+  return ms || null
+}
+
+/** 未选筛选日期时，默认查近 3 个月可开票订单 */
+function defaultMonthRange(): [number, number] {
+  const end = Date.now()
+  const start = end - 90 * 24 * 60 * 60 * 1000
+  return [start, end]
+}
+
+function resolveStartTime(): [number | null, number | null] {
+  const hasStart = Boolean(startDate.value)
+  const hasEnd = Boolean(endDate.value)
+  if (!hasStart && !hasEnd) return defaultMonthRange()
+  return [transTimeStamp(startDate.value), transTimeStamp(endDate.value)]
+}
+
+function resetFilterFields() {
+  startDate.value = null
+  endDate.value = null
+  minYuan.value = null
+  maxYuan.value = null
 }
 
 async function loadOrders() {
-  loadingOrders.value = true
-  selectedIds.value = []
-  const now = Date.now()
-  const yearAgo = now - 365 * 24 * 60 * 60 * 1000
-  const start = startDate.value ? dayStart(startDate.value) : yearAgo
-  const end = endDate.value ? dayEnd(endDate.value) : now
-  const minCost = minYuan.value ? Math.round(Number(minYuan.value) * 100) : null
-  const maxCost = maxYuan.value ? Math.round(Number(maxYuan.value) * 100) : null
-  const res = await getInvoicedOrders({
-    userPin: user.userInfo.pin,
-    izCanInvoiced: orderType.value === 0,
-    startTime: [start, end],
-    minCost,
-    maxCost,
-  })
-  loadingOrders.value = false
-  const data = res.data as { records?: Array<Record<string, unknown>>; list?: Array<Record<string, unknown>> } | Array<Record<string, unknown>>
-  orders.value = Array.isArray(data) ? data : data?.list || data?.records || []
+  uni.showLoading({ title: t('common.loading'), mask: true })
+  try {
+    const pin =
+      user.userInfo.pin ||
+      (user.userInfo as Record<string, unknown>).userPin ||
+      ''
+    const params = {
+      userPin: pin,
+      izCanInvoiced: !Boolean(orderType.value),
+      startTime: resolveStartTime(),
+      minCost: minYuan.value ? Math.round(Number(minYuan.value) * 100) : null,
+      maxCost: maxYuan.value ? Math.round(Number(maxYuan.value) * 100) : null,
+    }
+    const res = await getInvoicedOrders(params)
+    if (!res.success) {
+      orders.value = []
+      uni.showToast({ title: t('pay.invoiceOrdersFail'), icon: 'none' })
+      return
+    }
+    const data = res.data
+    const list = (Array.isArray(data) ? data : []) as Array<Record<string, unknown>>
+    orders.value = list
+    selectedIds.value = []
+    isChooseAll.value = false
+    recalcMoney()
+    // Legacy: reverse geocode start/end
+    void Promise.all(
+      list.map(async (item) => {
+        item.startAddress = await resolveAddress(item.startLat, item.startLng)
+        item.endAddress = await resolveAddress(item.endLat, item.endLng)
+      }),
+    ).then(() => {
+      orders.value = [...orders.value]
+    })
+  } finally {
+    uni.hideLoading()
+  }
 }
 
-function setOrderType(v: number) {
-  if (orderType.value === v) return
-  orderType.value = v
+function closePanels() {
+  showOrderType.value = false
+  showFilter.value = false
+}
+
+function toggleOrderType() {
+  if (showFilter.value) return
+  showOrderType.value = !showOrderType.value
+}
+
+function toggleFilter() {
+  if (showOrderType.value) return
+  showFilter.value = !showFilter.value
+}
+
+function selectOrderType(type: number) {
+  orderType.value = type
+  showOrderType.value = false
   void loadOrders()
 }
 
 function onStartDate(e: { detail: { value: string } }) {
-  startDate.value = e.detail.value
+  const v = e.detail.value
+  if (endDate.value) {
+    const end = transTimeStamp(endDate.value)
+    const now = transTimeStamp(v)
+    if (end != null && now != null && end < now) {
+      uni.showToast({ title: t('pay.invoiceDateInvalid'), icon: 'none' })
+      return
+    }
+  }
+  startDate.value = v
 }
+
 function onEndDate(e: { detail: { value: string } }) {
-  endDate.value = e.detail.value
+  const v = e.detail.value
+  if (startDate.value) {
+    const start = transTimeStamp(startDate.value)
+    const now = transTimeStamp(v)
+    if (start != null && now != null && start > now) {
+      uni.showToast({ title: t('pay.invoiceDateInvalid'), icon: 'none' })
+      return
+    }
+  }
+  endDate.value = v
 }
 
 function resetFilter() {
-  startDate.value = ''
-  endDate.value = ''
-  minYuan.value = ''
-  maxYuan.value = ''
-  void loadOrders()
+  // Legacy reset: only clear fields, no reload
+  resetFilterFields()
 }
 
-function applyFilter() {
+function confirmFilter() {
   showFilter.value = false
   void loadOrders()
 }
 
-function canSelect(item: Record<string, unknown>) {
-  if (orderType.value !== 0) return false
-  // Legacy blocks unpaid / complaint-pending
-  if (!item.izPaid) return false
-  if (item.izComplained === 0) return false
-  return true
-}
-
-function complainText(item: Record<string, unknown>) {
-  if (item.izComplained === 0) return t('pay.invoiceObjectionPending')
-  if (item.izComplained === 1) return t('pay.invoiceObjectionDone')
-  return ''
-}
-
-function bikeLabel(bikeType: unknown) {
-  if (bikeType == null || bikeType === '') return ''
-  return bikeType ? t('account.bikeNormal') : t('account.bikeElectric')
-}
-
 function toggleOrder(item: Record<string, unknown>) {
-  if (!canSelect(item)) return
-  const id = String(item.id)
+  const id = item.id as string | number
   const idx = selectedIds.value.indexOf(id)
-  if (idx >= 0) selectedIds.value.splice(idx, 1)
+  if (idx > -1) selectedIds.value.splice(idx, 1)
   else selectedIds.value.push(id)
+  isChooseAll.value = selectedIds.value.length === orders.value.length && orders.value.length > 0
+  recalcMoney()
 }
 
 function toggleAll() {
-  const ids = orders.value.filter(canSelect).map((o) => String(o.id))
-  if (selectedIds.value.length === ids.length) selectedIds.value = []
-  else selectedIds.value = ids
+  isChooseAll.value = !isChooseAll.value
+  if (isChooseAll.value) {
+    orders.value.forEach((item) => {
+      const id = item.id as string | number
+      if (!selectedIds.value.includes(id)) selectedIds.value.push(id)
+    })
+  } else {
+    selectedIds.value = []
+  }
+  recalcMoney()
 }
 
-async function onSubmit() {
-  if (!selectedIds.value.length) {
-    uni.showToast({ title: t('pay.selectOrders'), icon: 'none' })
-    return
-  }
-  if (!form.title.trim() || !form.email.trim()) {
-    uni.showToast({ title: t('pay.invoiceTitle'), icon: 'none' })
-    return
-  }
-  if (form.type === 1 && !form.companyEin.trim()) {
-    uni.showToast({ title: t('pay.invoiceTaxNo'), icon: 'none' })
-    return
-  }
-  const res = await createInvoice({
-    ...form,
-    content: '运输服务',
-    orderIds: selectedIds.value,
-    serviceId: storage.get('serviceId', ''),
-    userPin: user.userInfo.pin,
+function recalcMoney() {
+  let fen = 0
+  orders.value.forEach((item) => {
+    if (selectedIds.value.includes(item.id as string | number)) {
+      fen += Number(item.payCost || 0)
+    }
   })
-  if (res.success) {
-    uni.showToast({ title: t('common.submitSuccess'), icon: 'success' })
-    setTimeout(() => navigate('back'), 500)
+  totalMoney.value = fen / 100
+}
+
+function goNext() {
+  if (!canNext.value) return
+  const params = {
+    orderIds: selectedIds.value,
+    money: totalMoney.value,
   }
+  navigate(
+    'to',
+    `/pages-sub/pay/invoice/apply?params=${encodeURIComponent(JSON.stringify(params))}`,
+  )
 }
 </script>
 
 <style scoped lang="scss">
-.filter-top {
+.page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: #f8f8f8;
+}
+.mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+.condition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+}
+.top_row {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 32rpx;
+  background: #fff;
+}
+.top_left {
+  flex: 1;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #000;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+.img_arrow {
+  width: 24rpx;
+  height: 24rpx;
+}
+.img_filter {
+  width: 48rpx;
+  height: 48rpx;
+}
+.filter_text {
+  font-size: 26rpx;
+  color: #666;
+}
+.order_type {
+  padding: 32rpx 32rpx 48rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  border-radius: 0 0 32rpx 32rpx;
+  background: #fff;
+  color: #666;
+}
+.type_item {
+  font-size: 28rpx;
+}
+.line {
+  height: 2rpx;
+  margin: 48rpx 0 46rpx;
+  background: #f6f6f6;
+}
+.margin32 {
+  margin: 32rpx 0 30rpx;
+}
+.filter {
+  padding: 32rpx;
+  border-radius: 0 0 32rpx 32rpx;
+  background: #fff;
+}
+.filter_title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #000;
+}
+.input_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 32rpx;
+  margin-bottom: 48rpx;
 }
-.tabs {
+.input {
+  width: 310rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: #f6f6f6;
+  border-radius: 32rpx;
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+}
+.button_container {
   display: flex;
-  gap: 24rpx;
+  gap: 18rpx;
 }
-.tab {
-  color: #888;
-  &.on {
-    color: #3aa0e8;
-    font-weight: 600;
+.button {
+  flex: 1;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 32rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  &.reset {
+    border: 2rpx solid #ccc;
+    background: #fff;
+    color: #333;
   }
 }
-.filter-btn {
-  color: #3aa0e8;
-  font-size: 26rpx;
+.scroll {
+  box-sizing: border-box;
+  height: calc(100vh - 220rpx);
+  padding: 128rpx 0 220rpx;
 }
-.filter-body {
-  margin-top: 20rpx;
-  padding-top: 16rpx;
-  border-top: 1px solid #f0f0f0;
-}
-.range {
+.container {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  margin-bottom: 16rpx;
+  margin: 0 24rpx 32rpx;
+  padding: 32rpx 32rpx 32rpx 16rpx;
+  border-radius: 32rpx;
+  background: #fff;
 }
-.picker,
-.input.mini {
-  flex: 1;
-  background: #f5f6f8;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  text-align: center;
+.check {
+  margin-right: 16rpx;
 }
-.filter-actions {
-  display: flex;
-  gap: 16rpx;
+.img_check {
+  width: 32rpx;
+  height: 32rpx;
 }
-.btn-primary.sm {
-  flex: 1;
-  text-align: center;
-  padding: 20rpx;
-}
-.filter-actions .btn-ghost {
-  flex: 1;
-  text-align: center;
-  padding: 20rpx;
-  background: #f5f6f8;
-  border-radius: 12rpx;
-}
-.label {
-  color: #666;
-  margin-bottom: 12rpx;
-}
-.row-between {
-  display: flex;
-  justify-content: space-between;
-}
-.link {
-  color: #3aa0e8;
-  font-size: 26rpx;
+.img_check_fallback {
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ccc;
+  box-sizing: border-box;
+  &.on {
+    background: #3aa0e8;
+    border-color: #3aa0e8;
+  }
 }
 .order {
-  display: flex;
-  justify-content: space-between;
-  gap: 16rpx;
-  padding: 20rpx 0;
-  border-bottom: 1px solid #f0f0f0;
-}
-.order.on {
-  color: #3aa0e8;
-}
-.order.disabled {
-  opacity: 0.45;
-}
-.order__main {
   flex: 1;
   min-width: 0;
 }
-.order__top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12rpx;
-}
-.bike {
-  font-weight: 600;
-}
-.car-id {
-  color: #666;
-  font-size: 26rpx;
-}
-.route {
-  margin-top: 12rpx;
-}
-.route__row {
-  display: flex;
-  align-items: flex-start;
-  gap: 12rpx;
-  margin-top: 8rpx;
+.objection {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 6rpx 32rpx;
+  background: rgba(255, 171, 44, 0.2);
+  border-radius: 0 32rpx 0 32rpx;
   font-size: 24rpx;
-  color: #666;
+  font-weight: 500;
+  color: #ffab2c;
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+  color: #999;
+}
+.top_info {
+  display: flex;
+  align-items: flex-end;
+}
+.img {
+  width: 48rpx;
+  height: 48rpx;
+}
+.top_title {
+  margin: 0 8rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #000;
+}
+.top_carid {
+  line-height: 25rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+.unpaid {
+  color: #ff3434;
+}
+.content {
+  margin: 24rpx 0;
+}
+.content_item {
+  display: flex;
+  align-items: center;
 }
 .dot {
-  width: 12rpx;
-  height: 12rpx;
+  margin-right: 8rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background: #10d60e;
   border-radius: 50%;
-  margin-top: 10rpx;
   flex-shrink: 0;
+  &.end {
+    background: #fd2d30;
+  }
 }
-.dot.start {
-  background: #3aa0e8;
+.text {
+  font-size: 24rpx;
+  color: #333;
 }
-.dot.end {
-  background: #fd2d30;
+.bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16rpx;
 }
 .time {
-  margin-top: 10rpx;
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #999;
 }
-.right {
-  text-align: right;
-  flex-shrink: 0;
+.yen {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: #333;
 }
-.sub {
-  font-weight: 600;
-}
-.muted {
-  color: #999;
-  font-size: 22rpx;
-  font-weight: 400;
-  margin-top: 6rpx;
-}
-.sum {
-  margin-top: 16rpx;
-  color: #666;
-  font-size: 26rpx;
-}
-.type-row {
-  display: flex;
-  gap: 16rpx;
-  margin-bottom: 20rpx;
-}
-.type {
-  flex: 1;
-  text-align: center;
-  padding: 16rpx;
-  background: #f5f6f8;
-  border-radius: 8rpx;
-}
-.type.on {
-  background: #3aa0e8;
-  color: #fff;
-}
-.input {
-  background: #f5f6f8;
-  border-radius: 12rpx;
-  padding: 24rpx;
-  margin-bottom: 16rpx;
+.price {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
 }
 .empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background: #fff;
+  padding-top: 128rpx;
+  box-sizing: border-box;
+}
+.notice_img {
+  width: 300rpx;
+  height: 300rpx;
+}
+.notice_text {
+  margin-top: 48rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+.next_container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 48rpx 100rpx;
+  background: #fff;
+  font-size: 28rpx;
+  z-index: 50;
+}
+.checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 130rpx;
+}
+.all {
+  margin-left: 8rpx;
+  margin-right: 10rpx;
   color: #999;
+  white-space: nowrap;
+}
+.total {
+  flex: 1;
+  margin-right: 24rpx;
+  text-align: right;
+  color: #666;
+}
+.next {
+  width: 240rpx;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 32rpx;
+  font-size: 32rpx;
+  padding: 0;
+}
+button::after {
+  display: none;
 }
 </style>

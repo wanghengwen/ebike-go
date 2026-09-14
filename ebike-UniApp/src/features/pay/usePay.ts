@@ -32,8 +32,12 @@ function serviceId(): string {
   return String(storage.get<string>('serviceId', '') || '')
 }
 
+/** Align with legacy: customDefaultConfig.platform['mp-weixin'].pay.channelType */
 function channelTypeFromTenant(): PayChannelType {
-  return getTenantConfig().pay?.channelType || 'BAOFU_WXLITE'
+  const cfg = getTenantConfig()
+  const fromMp = cfg.platform?.['mp-weixin']?.pay?.channelType
+  if (fromMp) return fromMp
+  return cfg.pay?.channelType || 'BAOFU_WXLITE'
 }
 
 /** fen → yuan display string */

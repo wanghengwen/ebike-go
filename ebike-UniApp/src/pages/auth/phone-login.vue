@@ -35,7 +35,16 @@ const phone = ref('')
 const code = ref('')
 const agreed = ref(false)
 
-onShow(() => setNavTitle(t('auth.phoneLogin')))
+onShow(() => {
+  setNavTitle(t('auth.phoneLogin'))
+  try {
+    // #ifdef MP-WEIXIN
+    uni.hideHomeButton?.({})
+    // #endif
+  } catch {
+    /* ignore */
+  }
+})
 
 function ensureAgreed() {
   if (agreed.value) return true

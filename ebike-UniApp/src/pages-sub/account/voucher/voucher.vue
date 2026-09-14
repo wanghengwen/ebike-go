@@ -88,7 +88,7 @@ async function onSubmit() {
       showCancel: false,
       confirmText: t('auth.loginNow'),
       success: (r) => {
-        if (r.confirm) navigate('redirect', '/pages/auth/phone-login')
+        if (r.confirm) navigate('redirect', '/pages/auth/quick-login')
       },
     })
     return

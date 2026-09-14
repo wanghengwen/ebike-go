@@ -50,12 +50,10 @@
       </button>
       <!-- #endif -->
       <!-- #ifndef MP-WEIXIN -->
-      <view class="wechat-login" :style="brandBtnStyle" @click="goPhone">
+      <view class="wechat-login" :style="brandBtnStyle" @click="onNonWxLogin">
         {{ t('auth.quickLogin') }}
       </view>
       <!-- #endif -->
-
-      <view class="phone-btn" @click="goPhone">{{ t('auth.phoneLogin') }}</view>
     </view>
   </view>
 </template>
@@ -67,7 +65,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/features/auth/useAuth'
 import { getBrandColor, getButtonWhiteColor, getTenantConfig } from '@/shared/config'
 import { getIconCfg } from '@/shared/tenantSkin'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { setNavTitle } from '@/shared/navigate'
 import { openProtocol } from '@/shared/protocol'
 
 const { t } = useI18n()
@@ -100,18 +98,28 @@ const brandBtnStyle = computed(() => {
   }
 })
 
-onShow(() => setNavTitle(brandName.value))
+onShow(() => {
+  setNavTitle(brandName.value)
+  // 登录页若为页面栈底层会显示「返回首页」，与旧版一致隐藏，避免跳过登录进主页
+  try {
+    // #ifdef MP-WEIXIN
+    uni.hideHomeButton?.({})
+    // #endif
+  } catch {
+    /* ignore */
+  }
+})
 
 function onNeedAgree() {
   uni.showToast({ title: t('auth.agreeRequired'), icon: 'none' })
 }
 
-function goPhone() {
+function onNonWxLogin() {
   if (!agreed.value) {
     onNeedAgree()
     return
   }
-  navigate('to', '/pages/auth/phone-login')
+  uni.showToast({ title: t('auth.wxOnlyLogin'), icon: 'none' })
 }
 
 async function onWxPhone(e: {
@@ -232,20 +240,5 @@ async function onWxPhone(e: {
 }
 .wechat-login::after {
   border: none;
-}
-.phone-btn {
-  margin-top: 32rpx;
-  width: 636rpx;
-  height: 96rpx;
-  border-radius: 48rpx;
-  border: 2rpx solid #d8d8d8;
-  color: #333;
-  font-size: 30rpx;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  background: #fff;
 }
 </style>

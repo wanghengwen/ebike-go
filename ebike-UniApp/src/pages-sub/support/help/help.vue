@@ -44,6 +44,12 @@
         </view>
       </template>
     </view>
+
+    <view v-if="hasServiceConfig" class="button-wrap">
+      <view class="choose-button" :style="contactBtnStyle" @click="goCustomerService">
+        {{ t('support.customerService') }}
+      </view>
+    </view>
   </view>
 </template>
 
@@ -51,7 +57,7 @@
 import { computed, ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
-import { getFaqByServiceId, getAllService, getApplyStationConfig } from '@/api/service'
+import { getFaqByServiceId, getAllService, getApplyStationConfig, getCustomerService } from '@/api/service'
 import { getConfigBaseItem } from '@/api/user'
 import { getServiceByPoi } from '@/api/map'
 import { useMapLocation } from '@/features/map/useMapLocation'
@@ -59,6 +65,7 @@ import { openProtocol } from '@/shared/protocol'
 import { navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
+import { getBrandColor, getButtonWhiteColor } from '@/shared/config'
 import { useTempDataStore } from '@/stores/tempData'
 
 const { t } = useI18n()
@@ -70,6 +77,7 @@ const showRepair = ref(true)
 const showApplyStation = ref(true)
 const faqLoading = ref(true)
 const questionList = ref<Array<Record<string, unknown>>>([])
+const hasServiceConfig = ref(false)
 
 const repairIcon = computed(() => getIconCfg('newReportIcon') || getIconCfg('report'))
 const newsIcon = computed(
@@ -79,6 +87,15 @@ const stationIcon = computed(
   () => getIconCfg('newPepairIcon') || getIconCfg('newReportIcon'),
 )
 const arrowIcon = computed(() => getMapCfg('iconRight') || getMapCfg('iconRightRound'))
+const contactBtnStyle = computed(() => {
+  const bg = getBrandColor()
+  return {
+    backgroundColor: bg,
+    borderColor: bg,
+    color: getButtonWhiteColor() === '#FFFFFF' ? '#1E4A38' : getButtonWhiteColor(),
+    fontWeight: 'bold',
+  }
+})
 
 const fallbackDocs = [
   { key: 'registeredDesc', labelKey: 'support.faqRegister' },
@@ -105,8 +122,22 @@ onLoad(async (q) => {
     })
     return
   }
-  await Promise.all([loadRepairFlag(), loadApplyStation(), loadFaq()])
+  await Promise.all([loadRepairFlag(), loadApplyStation(), loadFaq(), loadCsConfig()])
 })
+
+async function loadCsConfig() {
+  try {
+    const serviceId = await resolveServiceId()
+    if (!serviceId) return
+    const res = await getCustomerService({ serviceId })
+    if (res.success && res.data) {
+      const data = res.data as { izOnlineEntrance?: boolean; izArtificialEntrance?: boolean }
+      hasServiceConfig.value = Boolean(data.izOnlineEntrance || data.izArtificialEntrance)
+    }
+  } catch {
+    hasServiceConfig.value = false
+  }
+}
 
 async function resolveServiceId(): Promise<string | undefined> {
   const cached = storage.get<string>('serviceId', '')
@@ -191,13 +222,17 @@ function goFaqDetail(item: Record<string, unknown>) {
 function openFallback(key: string) {
   openProtocol(key)
 }
+
+function goCustomerService() {
+  navigate('to', '/pages-sub/support/customer-service/customer-service')
+}
 </script>
 
 <style scoped lang="scss">
 .page {
   min-height: 100vh;
   background: #f7f8fa;
-  padding: 24rpx 0 48rpx;
+  padding: 24rpx 0 180rpx;
   box-sizing: border-box;
 }
 .card {
@@ -261,5 +296,22 @@ function openFallback(key: string) {
   width: 28rpx;
   height: 28rpx;
   flex-shrink: 0;
+}
+.button-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 48rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.04);
+}
+.choose-button {
+  height: 96rpx;
+  border-radius: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
 }
 </style>

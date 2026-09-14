@@ -1,39 +1,94 @@
 <template>
+  <!-- Legacy cancelAccount.vue -->
   <view class="page">
-    <view class="card" v-if="step === 0">
-      <view class="title">{{ t('account.cancelAccount') }}</view>
-      <view class="hint">{{ t('account.cancelHint') }}</view>
-      <view class="check-row" @click="agreed = !agreed">
-        <view class="check" :class="{ on: agreed }" />
-        <text>{{ t('account.cancelAgree') }}</text>
+    <view class="cancel_confirm">
+      <view class="confirm_title">
+        {{ isConfirm ? t('account.cancelTitleConfirm') : t('account.cancelTitle') }}
       </view>
-      <view class="btn-primary danger" :class="{ disabled: !agreed }" @click="onPrecheck">
-        {{ t('account.cancelConfirm') }}
+
+      <view v-if="!isConfirm">
+        <view class="confirm_des">{{ t('account.cancelCheckIntro') }}</view>
+        <view class="confirm_explain">
+          <view v-for="(item, i) in checklist" :key="i" class="confirm_box">
+            <view class="confirm_icon">{{ i + 1 }}</view>
+            <view class="confirm_content">{{ item }}</view>
+          </view>
+        </view>
+      </view>
+
+      <view v-else>
+        <view class="confirm_num">{{ maskPhone }}</view>
+        <view class="confirm_des1">
+          {{ isSatisfy ? t('account.cancelReadyDetail') : t('account.cancelBlockedDetail') }}
+        </view>
+        <view v-if="!isSatisfy">
+          <view v-if="flags.izRecharge" class="confirm_order">
+            <view class="confirm_name">{{ t('account.cancelFlagBalanceName') }}</view>
+            <view class="confirm_describe">{{ t('account.cancelFlagBalanceDesc') }}</view>
+          </view>
+          <view v-if="flags.izToPay" class="confirm_order">
+            <view class="confirm_name">{{ t('account.cancelFlagOrderName') }}</view>
+            <view class="confirm_describe">{{ t('account.cancelFlagOrderDesc') }}</view>
+          </view>
+          <view v-if="flags.izDeposit" class="confirm_order">
+            <view class="confirm_name">{{ t('account.cancelFlagDepositName') }}</view>
+            <view class="confirm_describe">{{ t('account.cancelFlagDepositDesc') }}</view>
+          </view>
+          <view v-if="flags.izHaveUnauditedUserTicket" class="confirm_order">
+            <view class="confirm_name">{{ t('account.cancelFlagTicketName') }}</view>
+            <view class="confirm_describe">{{ t('account.cancelFlagTicketDesc') }}</view>
+          </view>
+        </view>
+        <view v-else class="confirm_order">
+          <view class="confirm_name">{{ t('account.cancelIncludeTitle') }}</view>
+          <view v-for="item in clearItems" :key="item" class="confirm_describes">{{ item }}</view>
+        </view>
       </view>
     </view>
 
-    <view class="card" v-else-if="step === 1">
-      <view class="title">{{ t('account.cancelAccount') }}</view>
-      <view class="phone">{{ maskPhone }}</view>
-      <view class="hint" :class="{ warn: !canCancel }">
-        {{ canCancel ? t('account.cancelReady') : t('account.cancelBlocked') }}
+    <view v-if="!isConfirm" class="cancel_bottom">
+      <view class="cancel_bottom_des" @click="checkAgree = !checkAgree">
+        <image
+          v-if="checkAgree && checkIcon"
+          class="agree_icon"
+          :src="checkIcon"
+          mode="aspectFit"
+        />
+        <image
+          v-else-if="!checkAgree && uncheckIcon"
+          class="agree_icon"
+          :src="uncheckIcon"
+          mode="aspectFit"
+        />
+        <view v-else class="agree_fallback" :class="{ on: checkAgree }" />
+        <view class="cancel_bottom_des_title">{{ t('account.cancelAgree') }}</view>
       </view>
-      <view v-if="flags.izRecharge" class="flag">{{ t('account.cancelFlagBalance') }}</view>
-      <view v-if="flags.izToPay" class="flag">{{ t('account.cancelFlagOrder') }}</view>
-      <view v-if="flags.izDeposit" class="flag">{{ t('account.cancelFlagDeposit') }}</view>
-      <view v-if="flags.izHaveUnauditedUserTicket" class="flag">{{ t('account.cancelFlagTicket') }}</view>
-      <view v-if="canCancel" class="btn-primary danger" @click="step = 2">{{ t('account.cancelNext') }}</view>
-      <view v-else class="btn-ghost" @click="navigateBack">{{ t('common.confirm') }}</view>
+      <button
+        class="cancel_bottom_btn"
+        :style="cancelButtonStyle"
+        :disabled="!checkAgree"
+        @click="onCancel"
+      >
+        {{ t('account.cancelAction') }}
+      </button>
     </view>
-
-    <view class="card" v-else>
-      <view class="title">{{ t('account.cancelVerify') }}</view>
-      <view class="phone">{{ maskPhone }}</view>
-      <view class="row">
-        <input class="input flex" type="number" maxlength="6" v-model="smsCode" :placeholder="t('auth.codePlaceholder')" />
-        <view class="code-btn" @click="onSendCode">{{ countdown > 0 ? `${countdown}s` : t('auth.sendCode') }}</view>
-      </view>
-      <view class="btn-primary danger" @click="onSubmitCancel">{{ t('account.cancelConfirm') }}</view>
+    <view v-else class="cancel_bottom">
+      <button
+        v-if="!isSatisfy"
+        class="cancel_bottom_btn"
+        :style="confirmBtnStyle"
+        @click="navigateBack"
+      >
+        {{ t('account.cancelGotIt') }}
+      </button>
+      <button
+        v-else
+        class="cancel_bottom_btn"
+        :style="confirmBtnStyle"
+        @click="onConfirmCancel"
+      >
+        {{ t('account.cancelConfirmAction') }}
+      </button>
     </view>
   </view>
 </template>
@@ -42,21 +97,23 @@
 import { computed, ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
-import { queryCancelAccount, submitCancel } from '@/api/account'
-import { sendSmsCode } from '@/api/user'
-import { useAuth } from '@/features/auth/useAuth'
-import { useUserStore } from '@/stores/user'
+import { queryCancelAccount } from '@/api/account'
+import {
+  getBrandColor,
+  getButtonDisabledColor,
+  getButtonWhiteColor,
+} from '@/shared/config'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { phoneDesensitize } from '@/shared/phone'
+import { getIconCfg } from '@/shared/tenantSkin'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
-const { logout } = useAuth()
 const user = useUserStore()
 
-const step = ref(0)
-const agreed = ref(false)
-const canCancel = ref(false)
-const smsCode = ref('')
-const countdown = ref(0)
+const checkAgree = ref(false)
+const isConfirm = ref(false)
+const isSatisfy = ref(false)
 const flags = ref({
   izRecharge: false,
   izToPay: false,
@@ -64,20 +121,49 @@ const flags = ref({
   izHaveUnauditedUserTicket: false,
 })
 
-const maskPhone = computed(() => {
-  const p = String(user.userInfo.phone || '').replace(/^\+86-?/, '')
-  if (p.length < 7) return p || '-'
-  return `${p.slice(0, 3)}****${p.slice(-4)}`
+const checkIcon = computed(() => getIconCfg('checkbox') || getIconCfg('checked_square_round'))
+const uncheckIcon = computed(() => getIconCfg('invoiceUncheck'))
+const maskPhone = computed(() => phoneDesensitize(user.userInfo.phone))
+
+const checklist = computed(() => [
+  t('account.cancelCheck1'),
+  t('account.cancelCheck2'),
+  t('account.cancelCheck3'),
+  t('account.cancelCheck4'),
+  t('account.cancelCheck5'),
+])
+
+const clearItems = computed(() => [
+  t('account.cancelClear1'),
+  t('account.cancelClear2'),
+  t('account.cancelClear3'),
+  t('account.cancelClear4'),
+  t('account.cancelClear5'),
+  t('account.cancelClear6'),
+])
+
+const cancelButtonStyle = computed(() => {
+  const bg = checkAgree.value ? getBrandColor() : getButtonDisabledColor()
+  const color = checkAgree.value ? '#1E4A38' : getButtonWhiteColor()
+  return `background-color:${bg};border-color:${bg};color:${color};font-weight:bold;`
 })
 
-onShow(() => setNavTitle(t('account.cancelAccount')))
+const confirmBtnStyle = computed(() => {
+  const bg = getBrandColor()
+  return `background-color:${bg};border-color:${bg};color:#1E4A38;font-weight:bold;`
+})
+
+onShow(() => {
+  user.hydrateFromStorage()
+  setNavTitle(t('account.cancelAccount'))
+})
 
 function navigateBack() {
   navigate('back')
 }
 
-async function onPrecheck() {
-  if (!agreed.value) return
+async function onCancel() {
+  if (!checkAgree.value) return
   const res = await queryCancelAccount()
   if (!res.success || !res.data) return
   const data = res.data as {
@@ -87,52 +173,23 @@ async function onPrecheck() {
     izRecharge?: boolean
     izHaveUnauditedUserTicket?: boolean
   }
-  canCancel.value = Boolean(data.success)
+  isConfirm.value = true
+  isSatisfy.value = Boolean(data.success)
   flags.value = {
     izRecharge: Boolean(data.izRecharge),
     izToPay: Boolean(data.izToPay),
     izDeposit: Boolean(data.izDeposit),
     izHaveUnauditedUserTicket: Boolean(data.izHaveUnauditedUserTicket),
   }
-  step.value = 1
 }
 
-function normalizePhone(phone: string) {
-  const raw = String(phone || '').trim()
-  if (!raw) return raw
-  if (raw.startsWith('+')) return raw
-  return `+86-${raw.replace(/^86-?/, '')}`
-}
-
-async function onSendCode() {
-  if (countdown.value > 0) return
-  const phone = normalizePhone(String(user.userInfo.phone || ''))
-  if (!phone) return
-  const res = await sendSmsCode({ phone, scene: 3 })
-  if (!res.success) return
-  uni.showToast({ title: t('auth.codeSent'), icon: 'none' })
-  countdown.value = 60
-  const timer = setInterval(() => {
-    countdown.value -= 1
-    if (countdown.value <= 0) clearInterval(timer)
-  }, 1000)
-}
-
-function onSubmitCancel() {
-  if (smsCode.value.length < 6) {
-    uni.showToast({ title: t('auth.codePlaceholder'), icon: 'none' })
-    return
-  }
+function onConfirmCancel() {
   uni.showModal({
-    title: t('account.cancelAccount'),
-    content: t('account.cancelConfirm'),
-    success: async (r) => {
-      if (!r.confirm) return
-      const phone = normalizePhone(String(user.userInfo.phone || ''))
-      const res = await submitCancel({ code: smsCode.value, phone })
-      if (res.success) {
-        uni.showToast({ title: t('common.submitSuccess'), icon: 'success' })
-        setTimeout(() => logout(), 500)
+    title: t('account.cancelModalTitle'),
+    content: t('account.cancelModalContent'),
+    success: (res) => {
+      if (res.confirm) {
+        navigate('to', '/pages-sub/account/cancel/cancel-verify')
       }
     },
   })
@@ -140,71 +197,135 @@ function onSubmitCancel() {
 </script>
 
 <style scoped lang="scss">
-.title {
-  font-weight: 700;
-  margin-bottom: 16rpx;
+.page {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
 }
-.hint {
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 24rpx;
+.cancel_confirm {
+  margin-top: 80rpx;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+  padding-bottom: 280rpx;
 }
-.warn {
-  color: #ff8401;
+.confirm_title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #262626;
+  line-height: 56rpx;
 }
-.phone {
-  font-size: 32rpx;
-  font-weight: 700;
-  margin-bottom: 16rpx;
+.confirm_des {
+  font-size: 28rpx;
+  font-weight: 400;
+  color: #121212;
+  margin-top: 32rpx;
+  line-height: 54rpx;
+  margin-bottom: 32rpx;
 }
-.flag {
-  color: #666;
-  padding: 12rpx 0;
-  border-bottom: 1px solid #f0f0f0;
+.confirm_explain {
+  padding-right: 32rpx;
 }
-.check-row {
+.confirm_box {
   display: flex;
-  align-items: center;
-  gap: 12rpx;
-  margin-bottom: 28rpx;
-  color: #666;
-  font-size: 24rpx;
+  margin-bottom: 32rpx;
 }
-.check {
+.confirm_icon {
   width: 32rpx;
   height: 32rpx;
-  border: 2rpx solid #ccc;
-  border-radius: 6rpx;
+  background: #ff8401;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 22rpx;
+  text-align: center;
+  line-height: 32rpx;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  margin-top: 6rpx;
 }
-.check.on {
-  background: #3aa0e8;
-  border-color: #3aa0e8;
+.confirm_content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 44rpx;
 }
-.row {
+.confirm_num {
+  margin-top: 48rpx;
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #121212;
+}
+.confirm_des1 {
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #121212;
+  line-height: 44rpx;
+}
+.confirm_order {
+  margin-top: 40rpx;
+}
+.confirm_name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 12rpx;
+}
+.confirm_describe,
+.confirm_describes {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 40rpx;
+  margin-bottom: 12rpx;
+}
+.cancel_bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 32rpx 80rpx;
+  background: #fff;
+}
+.cancel_bottom_des {
   display: flex;
-  gap: 16rpx;
-  align-items: center;
-  margin-bottom: 28rpx;
+  align-items: flex-start;
+  margin-bottom: 24rpx;
 }
-.input {
-  background: #f5f6f8;
-  border-radius: 12rpx;
-  padding: 24rpx;
+.agree_icon {
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+  margin-top: 4rpx;
 }
-.flex {
-  flex: 1;
+.agree_fallback {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ccc;
+  box-sizing: border-box;
+  margin-right: 12rpx;
+  margin-top: 4rpx;
+  flex-shrink: 0;
+  &.on {
+    background: #3aa0e8;
+    border-color: #3aa0e8;
+  }
 }
-.code-btn {
-  color: #3aa0e8;
-  white-space: nowrap;
+.cancel_bottom_des_title {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 36rpx;
 }
-.danger {
-  background: #e34d59;
+.cancel_bottom_btn {
+  width: 100%;
+  height: 96rpx;
+  line-height: 96rpx;
+  border-radius: 32rpx;
+  font-size: 32rpx;
+  padding: 0;
 }
-.disabled {
-  opacity: 0.5;
-}
-.btn-ghost {
-  margin-top: 20rpx;
+button::after {
+  display: none;
 }
 </style>

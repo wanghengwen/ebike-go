@@ -1,89 +1,116 @@
 <template>
   <view class="home">
-    <view class="nav-bar" :style="{ paddingTop: statusBarPx + 'px' }">
-      <view class="me" @click="goProfile">
-        <image v-if="avatarUrl" class="me__img" :src="avatarUrl" mode="aspectFill" />
-        <view v-else class="me__fallback">
-          <text class="me__text">{{ avatarText }}</text>
-        </view>
+    <view class="nav-bar" :style="{ marginTop: statusBarPx + 'px' }">
+      <view
+        class="me"
+        :class="{ 'default-me': !userAvatar }"
+        @click="goProfile"
+      >
+        <image
+          v-if="userAvatar"
+          class="me__img"
+          :src="userAvatar"
+          mode="aspectFill"
+        />
+        <image
+          v-else-if="defaultAvatar"
+          class="me__img me__img--default"
+          :src="defaultAvatar"
+          mode="aspectFit"
+        />
       </view>
       <text class="brand">{{ brandName }}</text>
     </view>
 
-    <view class="map-wrap" @click="goMap">
-      <map
-        class="map"
-        id="homeMap"
-        show-location
-        :latitude="latitude"
-        :longitude="longitude"
-        :scale="17"
-        :markers="markers"
-        :polygons="polygons"
-        :polyline="polyline"
-        :enable-scroll="false"
-        :enable-zoom="false"
-        :enable-rotate="false"
-        :enable-overlooking="false"
-        @tap="goMap"
-        @markertap="goMap"
-      />
-    </view>
-
-    <view
-      v-if="creditTips.length || scrollerMsg.length"
-      class="scroll-tips"
-      :class="{ notice: isLimitRiding }"
+    <scroll-view
+      class="home-scroll"
+      scroll-y
+      :style="{ marginBottom: scanBarHeight }"
     >
-      <swiper class="scroll-tips__swiper" vertical autoplay circular :interval="3000" :duration="500">
-        <swiper-item v-for="(item, idx) in creditTips" :key="'c' + idx">
-          <view class="scroll-tips__row" @click="goCredit">
-            <image
-              v-if="notifyIcon"
-              class="scroll-tips__icon"
-              :src="isLimitRiding ? notifyIconWhite || notifyIcon : notifyIcon"
-              mode="widthFix"
-            />
-            <text class="scroll-tips__text">{{ item.title }}</text>
-            <image
-              v-if="arrowIcon"
-              class="scroll-tips__arrow"
-              :src="isLimitRiding ? arrowIconWhite || arrowIcon : arrowIcon"
-              mode="widthFix"
-            />
-          </view>
-        </swiper-item>
-        <swiper-item v-for="(item, idx) in scrollerMsg" :key="'s' + idx">
-          <view class="scroll-tips__row" @click="onNotice(item)">
-            <image v-if="notifyIcon" class="scroll-tips__icon" :src="notifyIcon" mode="widthFix" />
-            <text class="scroll-tips__text">{{ item.content || item.title || '' }}</text>
-            <image v-if="arrowIcon" class="scroll-tips__arrow" :src="arrowIcon" mode="widthFix" />
-          </view>
-        </swiper-item>
-      </swiper>
-    </view>
-
-    <!-- 底部：动态快捷入口 + 立即用车（贴底，避免中间大块留白） -->
-    <view class="bottom-panel" :style="{ paddingBottom: safeBottomPx + 'px' }">
-      <view v-if="shortcutList.length" class="shortcut-wrapper">
-        <view
-          v-for="(item, index) in shortcutList"
-          :key="index"
-          class="shortcut"
-          @click="onShortcut(item)"
-        >
-          <image class="shortcut-image" :src="item.icon" mode="aspectFit" />
-          <text class="shortcut-text">{{ item.name }}</text>
-        </view>
+      <view class="map-container" :style="{ height: mapHeight }">
+        <map
+          class="map"
+          id="homeMap"
+          show-location
+          :latitude="latitude"
+          :longitude="longitude"
+          :scale="17"
+          :markers="markers"
+          :polygons="polygons"
+          :polyline="polyline"
+          :enable-scroll="false"
+          :enable-zoom="false"
+          :enable-rotate="false"
+          :enable-overlooking="false"
+          @tap="goMap"
+          @markertap="goMap"
+        />
       </view>
 
       <view
-        class="dock__btn"
+        v-if="creditTips.length || scrollerMsg.length"
+        class="scroll-tips"
+        :class="{ notice: isLimitRiding }"
+        :style="scrollTipsStyle"
+      >
+        <swiper
+          class="scroll-tips__swiper"
+          vertical
+          autoplay
+          circular
+          :interval="3000"
+          :duration="500"
+        >
+          <swiper-item v-for="(item, idx) in creditTips" :key="'c' + idx">
+            <view class="scroll-tips__row" @click="goCredit">
+              <image
+                v-if="notifyIcon"
+                class="scroll-tips__icon"
+                :src="isLimitRiding ? notifyIconWhite || notifyIcon : notifyIcon"
+                mode="widthFix"
+              />
+              <text class="scroll-tips__text">{{ item.title }}</text>
+              <image
+                v-if="arrowIcon"
+                class="scroll-tips__arrow"
+                :src="isLimitRiding ? arrowIconWhite || arrowIcon : arrowIcon"
+                mode="widthFix"
+              />
+            </view>
+          </swiper-item>
+          <swiper-item v-for="(item, idx) in scrollerMsg" :key="'s' + idx">
+            <view class="scroll-tips__row" @click="onNotice(item)">
+              <image v-if="notifyIcon" class="scroll-tips__icon" :src="notifyIcon" mode="widthFix" />
+              <text class="scroll-tips__text">{{ item.content || item.title || '' }}</text>
+              <image v-if="arrowIcon" class="scroll-tips__arrow" :src="arrowIcon" mode="widthFix" />
+            </view>
+          </swiper-item>
+        </swiper>
+      </view>
+
+      <view v-if="shortcutList.length" class="shortcut-section">
+        <view class="shortcut-wrapper">
+          <view
+            v-for="(item, index) in shortcutList"
+            :key="index"
+            class="shortcut"
+            @click="onShortcut(item)"
+          >
+            <image class="shortcut-image" :src="item.icon" mode="aspectFit" />
+            <text class="shortcut-text">{{ item.name }}</text>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="scanBtn-wrapper" :style="{ height: scanBarHeight }">
+      <view
+        class="scanBtn"
         :class="{ 'is-disabled': isLimitRiding }"
-        :style="isLimitRiding ? disabledBtnStyle : brandBtnStyle"
+        :style="scanBtnStyle"
         @click="onScan"
       >
-        <image v-if="scanIcon" class="dock__scan-icon" :src="scanIcon" mode="widthFix" />
+        <image v-if="scanIcon" class="scanBtn__icon" :src="scanIcon" mode="widthFix" />
         <text>{{ t('ride.useBike') }}</text>
       </view>
     </view>
@@ -110,24 +137,28 @@
 import { computed, onMounted, ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
+import { getHomeNav } from '@/api/map'
+import { getPersonInfo } from '@/api/user'
+import { useHomeMap } from '@/features/map/useHomeMap'
+import { useScanGate } from '@/features/bike/useScanGate'
+import { useCreditLimit } from '@/features/credit/useCreditLimit'
+import { useGuidePopup } from '@/features/guide/useGuidePopup'
+import { openUserClickAction, openScrollerNotice } from '@/shared/openNotice'
+import { useUserStore } from '@/stores/user'
+import { useTempDataStore } from '@/stores/tempData'
+import {
+  getBrandColor,
+  getButtonDisabledColor,
+  getTenantConfig,
+} from '@/shared/config'
+import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
+import { navigate, setNavTitle } from '@/shared/navigate'
+import { storage } from '@/shared/storage'
+import { logger } from '@/shared/logger'
 import BizPopup from '@/widgets/BizPopup.vue'
 import OpsPopup from '@/widgets/OpsPopup.vue'
 import GuideSheet from '@/widgets/GuideSheet.vue'
 import PrivacyAuthorizePopup from '@/widgets/PrivacyAuthorizePopup.vue'
-import { useHomeMap } from '@/features/map/useHomeMap'
-import { useScanGate, consumeAutoScanUseBike } from '@/features/bike/useScanGate'
-import { useCreditLimit } from '@/features/credit/useCreditLimit'
-import { useGuidePopup } from '@/features/guide/useGuidePopup'
-import { useUserStore } from '@/stores/user'
-import { useTempDataStore } from '@/stores/tempData'
-import { getPersonInfo } from '@/api/user'
-import { getHomeNav } from '@/api/map'
-import { getBrandColor, getButtonDisabledColor, getButtonWhiteColor, getTenantConfig } from '@/shared/config'
-import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
-import { navigate, setNavTitle } from '@/shared/navigate'
-import { openScrollerNotice, openUserClickAction } from '@/shared/openNotice'
-import { storage } from '@/shared/storage'
-import { logger } from '@/shared/logger'
 
 type HomeShortcut = {
   name?: string
@@ -135,7 +166,7 @@ type HomeShortcut = {
   jumpPage?: {
     linkUrl?: string
     appId?: string
-    param?: unknown
+    param?: string
     linkTitle?: string
     chainType?: number
   }
@@ -168,26 +199,39 @@ const {
 const showUnpaid = ref(false)
 const statusBarPx = ref(20)
 const safeBottomPx = ref(0)
+/** Legacy mapHeight: windowHeight - 450；加大地图后改为减 380，快捷入口随之下移 */
+const mapHeight = ref('300px')
 const shortcutList = ref<HomeShortcut[]>([])
 
 const brandName = computed(() => getTenantConfig().name || t('brand.name'))
-const brandBtnStyle = computed(() => {
-  const c = getBrandColor()
-  return { backgroundColor: c, borderColor: c, color: getButtonWhiteColor() }
-})
-const disabledBtnStyle = computed(() => {
-  const c = getButtonDisabledColor()
-  return { backgroundColor: c, borderColor: c, color: getButtonWhiteColor() }
+
+/** Legacy scanButtonStyle: brand bg + #1E4A38 text */
+const scanBtnStyle = computed(() => {
+  const activeBg = getBrandColor()
+  const disabledBg = getButtonDisabledColor()
+  const isDisabled = isLimitRiding.value
+  return {
+    backgroundColor: isDisabled ? disabledBg : activeBg,
+    borderColor: isDisabled ? disabledBg : activeBg,
+    color: isDisabled ? '#ffffff' : '#1E4A38',
+  }
 })
 
-const avatarUrl = computed(() => {
-  const u = String(user.userInfo?.avatar || user.userInfo?.avatarUrl || '')
-  return u || getIconCfg('default_avatar') || ''
+const scrollTipsStyle = computed(() => {
+  if (isLimitRiding.value) return {}
+  const brand = getBrandColor() || '#AEC8A3'
+  return {
+    background: `linear-gradient(90deg, ${brand} 0%, #F0F5EE 100%)`,
+  }
 })
-const avatarText = computed(() => {
-  const name = String(user.userInfo?.nickName || user.userInfo?.phone || t('account.profile'))
-  return name.slice(0, 1)
-})
+
+/** Legacy scanBtn-wrapper: 212rpx with safe area, else 160rpx */
+const scanBarHeight = computed(() => (safeBottomPx.value > 0 ? '212rpx' : '160rpx'))
+
+const userAvatar = computed(() =>
+  String(user.userInfo?.avatar || user.userInfo?.avatarUrl || ''),
+)
+const defaultAvatar = computed(() => getIconCfg('default_avatar') || '')
 
 const notifyIcon = computed(() => getMapCfg('notify'))
 const notifyIconWhite = computed(() => getMapCfg('notifyWhite'))
@@ -195,7 +239,26 @@ const arrowIcon = computed(() => getMapCfg('iconRight'))
 const arrowIconWhite = computed(() => getMapCfg('iconRightWhite'))
 const scanIcon = computed(() => getMapCfg('iconScan'))
 
+function calcMapHeight() {
+  try {
+    const sys = uni.getSystemInfoSync()
+    statusBarPx.value = sys.statusBarHeight || 20
+    safeBottomPx.value = sys.safeAreaInsets?.bottom || 0
+    const h = (sys.windowHeight || 0) - 380
+    mapHeight.value = `${h > 300 ? h : 300}px`
+  } catch {
+    statusBarPx.value = 20
+    safeBottomPx.value = 0
+    mapHeight.value = '300px'
+  }
+}
+
+onMounted(() => {
+  calcMapHeight()
+})
+
 onShow(() => {
+  calcMapHeight()
   setNavTitle(brandName.value)
   user.hydrateFromStorage()
   void refreshMap({ keepSelection: true }).then(() => {
@@ -217,29 +280,8 @@ onShow(() => {
         }
         if (Number(profile.payState) === 7) showUnpaid.value = true
       })
-      .catch((e) => logger.warn('home personInfo soft fail', e))
+      .catch((e) => logger.warn('home getPersonInfo soft fail', e))
   }
-  if (consumeAutoScanUseBike()) {
-    setTimeout(() => {
-      void scanThenPrecycling(() => {
-        showUnpaid.value = true
-      })
-    }, 400)
-  }
-})
-
-onMounted(() => {
-  try {
-    const info = uni.getSystemInfoSync()
-    statusBarPx.value = info.statusBarHeight || 20
-    safeBottomPx.value = Number(
-      (info.safeAreaInsets as { bottom?: number } | undefined)?.bottom || 0,
-    )
-  } catch {
-    statusBarPx.value = 20
-  }
-  void refreshMap()
-  void loadHomeNav()
 })
 
 async function loadHomeNav() {
@@ -300,14 +342,14 @@ async function onScan() {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: #ffffff;
   overflow: hidden;
   box-sizing: border-box;
 }
 .nav-bar {
   width: 100%;
-  min-height: 60px;
-  background: #fff;
+  height: 60px;
+  background: #ffffff;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -315,48 +357,51 @@ async function onScan() {
   flex-shrink: 0;
   position: relative;
   box-sizing: border-box;
-  padding-bottom: 12rpx;
 }
 .me {
   position: absolute;
   left: 20rpx;
-  bottom: 10rpx;
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 11;
-  width: 80rpx;
-  height: 80rpx;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.19);
-  background: var(--brand-color, #3aa0e8);
+  background: #ffffff;
 }
-.me__img,
-.me__fallback {
-  width: 100%;
-  height: 100%;
-}
-.me__fallback {
+.me.default-me {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.me__text {
-  color: #fff;
-  font-weight: 700;
-  font-size: 28rpx;
+.me__img {
+  width: 100%;
+  height: 100%;
+}
+.me__img--default {
+  width: 55%;
+  height: 55%;
 }
 .brand {
-  font-size: 34rpx;
+  font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: #333333;
 }
-.map-wrap {
+.home-scroll {
   flex: 1;
   min-height: 0;
+  width: 100%;
+  background: #f4f5f7;
+  box-sizing: border-box;
+}
+.map-container {
+  background: #f4f5f7;
+  border: 5rpx solid #ffffff;
   margin: 20rpx;
-  border: 5rpx solid #fff;
   border-radius: 30rpx;
   overflow: hidden;
-  background: #f4f5f7;
   box-sizing: border-box;
 }
 .map {
@@ -365,12 +410,11 @@ async function onScan() {
 }
 .scroll-tips {
   width: 100%;
-  flex-shrink: 0;
   z-index: 11;
   padding: 0 30rpx;
   box-sizing: border-box;
   height: 80rpx;
-  background: linear-gradient(90deg, #c3deff 0%, #e3f1fa 100%);
+  background: linear-gradient(90deg, #aec8a3 0%, #f0f5ee 100%);
 }
 .scroll-tips.notice {
   background: #ff5936;
@@ -408,23 +452,19 @@ async function onScan() {
   flex-shrink: 0;
   margin-left: 8rpx;
 }
-.bottom-panel {
-  flex-shrink: 0;
+.shortcut-section {
   width: 100%;
-  background: #fff;
-  border-top-left-radius: 32rpx;
-  border-top-right-radius: 32rpx;
-  box-shadow: 0 -8rpx 24rpx rgba(0, 0, 0, 0.04);
-  padding-top: 8rpx;
+  background: #ffffff;
+  padding-top: 24rpx;
+  padding-bottom: 16rpx;
   box-sizing: border-box;
-  z-index: 13;
 }
 .shortcut-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 56rpx;
-  min-height: 146rpx;
+  height: 204rpx;
   box-sizing: border-box;
 }
 .shortcut {
@@ -435,38 +475,53 @@ async function onScan() {
   flex: 1;
 }
 .shortcut-image {
-  width: 88rpx;
-  height: 88rpx;
-  margin-top: 16rpx;
-  margin-bottom: 12rpx;
+  width: 106rpx;
+  height: 106rpx;
+  margin-top: 32rpx;
+  margin-bottom: 16rpx;
 }
 .shortcut-text {
   height: 34rpx;
   line-height: 34rpx;
   font-size: 24rpx;
   font-weight: 400;
-  color: #666;
-  margin-bottom: 8rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
 }
-.dock__btn {
-  width: calc(100% - 48rpx);
+.scanBtn-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: #ffffff;
+  border-top-left-radius: 32rpx;
+  border-top-right-radius: 32rpx;
+  display: flex;
+  flex-direction: column;
+  z-index: 13;
+  box-sizing: border-box;
+}
+.scanBtn {
   height: 96rpx;
-  margin: 16rpx 24rpx 24rpx;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   font-size: 34rpx;
+  margin-top: 32rpx;
+  margin-left: 24rpx;
+  margin-right: 24rpx;
   border-radius: 48rpx;
   box-sizing: border-box;
 }
-.dock__scan-icon {
+.scanBtn__icon {
   width: 40rpx;
   height: 40rpx;
   margin-right: 16rpx;
 }
-.dock__btn.is-disabled {
+.scanBtn.is-disabled {
   pointer-events: none;
 }
 </style>

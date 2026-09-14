@@ -69,6 +69,8 @@ export function unFrozenOrder(data: Record<string, unknown> = {}) {
     url: '/client/rent/unFrozenOrder',
     method: 'POST',
     data,
+    // Soft background call — missing location / no frozen order should not toast
+    showError: false,
   })
 }
 

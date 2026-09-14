@@ -353,8 +353,9 @@ export function useRideNav() {
     for (const p of data.noParkings || []) pushPoly(p.pointList, 2)
     fencePolygons.value = out
 
-    const stationIcon = getMapCfg('station') || getMapCfg('parking')
-    const forbidIcon = getMapCfg('noParking') || getMapCfg('forbid')
+    const stationIcon = getMapCfg('station') || getMapCfg('parking') || getMapCfg('searchStationIcon')
+    const forbidIcon =
+      getMapCfg('notAllowStation') || getMapCfg('noParking') || getMapCfg('forbid')
     const markers: ParkMarker[] = []
     ;(data.parkings || []).forEach((p, i) => {
       const lat = Number(p.centerLat ?? p.lat ?? p.latitude)

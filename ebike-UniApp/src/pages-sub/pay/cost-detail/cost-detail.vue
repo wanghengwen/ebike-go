@@ -335,15 +335,12 @@ function goBilling() {
 }
 
 function goTripMap() {
-  const traj = order.value?.deviceTrajectory
-  if (Array.isArray(traj) && traj.length) {
-    navigate(
-      'to',
-      `/pages-sub/ride/trip-map/trip-map?params=${encodeURIComponent(JSON.stringify(traj))}&orderId=${encodeURIComponent(orderId.value)}`,
-    )
-    return
-  }
-  navigate('to', `/pages-sub/ride/trip-map/trip-map?orderId=${encodeURIComponent(orderId.value)}`)
+  // Legacy: deviceTrajectory || [] 原样传入
+  const params = order.value?.deviceTrajectory || []
+  navigate(
+    'to',
+    `/pages-sub/ride/trip-map/trip-map?params=${encodeURIComponent(JSON.stringify(params))}`,
+  )
 }
 
 function goObjection() {

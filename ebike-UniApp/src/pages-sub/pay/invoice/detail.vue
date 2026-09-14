@@ -46,9 +46,13 @@ onLoad((q) => {
 function reopen() {
   const orderIds = detail.value.orderIds
   const money = Number(detail.value.amount || 0) / 100
+  const params = {
+    orderIds: orderIds || [],
+    money,
+  }
   navigate(
     'to',
-    `/pages-sub/pay/invoice/create?money=${money}&orderIds=${encodeURIComponent(JSON.stringify(orderIds || []))}`,
+    `/pages-sub/pay/invoice/apply?params=${encodeURIComponent(JSON.stringify(params))}`,
   )
 }
 </script>

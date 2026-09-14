@@ -66,9 +66,9 @@ onLoad(() => {
       title: t('auth.loginTitle'),
       content: t('error.unauthorized'),
       showCancel: false,
-      confirmText: t('auth.phoneLogin'),
+      confirmText: t('auth.loginNow'),
       success: (res) => {
-        if (res.confirm) navigate('redirectTo', '/pages/auth/quick-login')
+        if (res.confirm) navigate('redirect', '/pages/auth/quick-login')
       },
     })
     return

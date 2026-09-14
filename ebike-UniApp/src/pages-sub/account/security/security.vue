@@ -1,30 +1,22 @@
 <template>
+  <!-- Legacy accountSecurity -->
   <view class="page">
-    <view v-if="maskedName || maskedPhone" class="profile-head">
-      <view class="name">{{ maskedName || '-' }}</view>
-      <view class="phone">{{ maskedPhone || '-' }}</view>
-    </view>
-
-    <view class="cell-group">
-      <view class="cell-row" @click="go('/pages/auth/verified')">
-        <text>{{ t('auth.verifiedTitle') }}</text>
-        <image v-if="arrow" class="cell-row__arrow" :src="arrow" mode="aspectFit" />
+    <view class="container">
+      <view class="row">
+        <text class="row_text">{{ t('auth.verifiedTitle') }}</text>
+        <text class="row_content">{{ formatName }}</text>
       </view>
-      <view class="cell-line" />
-      <view class="cell-row" @click="go('/pages-sub/account/change-phone/change-phone')">
-        <text>{{ t('account.changePhone') }}</text>
-        <image v-if="arrow" class="cell-row__arrow" :src="arrow" mode="aspectFit" />
-      </view>
-      <view class="cell-line" />
-      <view class="cell-row" @click="go('/pages-sub/account/career/career')">
-        <text>{{ t('account.careerAuth') }}</text>
-        <image v-if="arrow" class="cell-row__arrow" :src="arrow" mode="aspectFit" />
+      <view class="line" />
+      <view class="row">
+        <text class="row_text">{{ t('account.mobileNumber') }}</text>
+        <text class="row_content">{{ maskedPhone }}</text>
       </view>
       <template v-if="!hideCancelAccount">
-        <view class="cell-line" />
-        <view class="cell-row" @click="go('/pages-sub/account/cancel/cancel')">
-          <text class="danger">{{ t('account.cancelAccount') }}</text>
-          <image v-if="arrow" class="cell-row__arrow" :src="arrow" mode="aspectFit" />
+        <view class="line" />
+        <view class="row" @click="goCancel">
+          <text class="row_text">{{ t('account.cancelAccount') }}</text>
+          <text class="row_content">{{ t('account.cancelAccountHint') }}</text>
+          <image v-if="arrow" class="image" :src="arrow" mode="aspectFit" />
         </view>
       </template>
     </view>
@@ -38,8 +30,9 @@ import { useI18n } from 'vue-i18n'
 import { getPersonInfo } from '@/api/user'
 import { getTenantConfig } from '@/shared/config'
 import { navigate, setNavTitle } from '@/shared/navigate'
-import { useUserStore } from '@/stores/user'
+import { phoneDesensitize } from '@/shared/phone'
 import { getMapCfg } from '@/shared/tenantSkin'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
 const user = useUserStore()
@@ -48,19 +41,17 @@ const hideCancelAccount = computed(
   () => Boolean(getTenantConfig().customSetting?.hideCancelAccount),
 )
 
-const maskedName = computed(() => {
+/** Legacy: new Array(len).join('*') + last char */
+const formatName = computed(() => {
   const info = user.userInfo as Record<string, unknown>
-  const raw = String(info.authName || info.realName || info.name || info.userName || '')
-  if (!raw) return ''
-  if (raw.length <= 1) return '*'
-  return `${raw[0]}${'*'.repeat(Math.max(raw.length - 1, 1))}`
+  const value = String(info.authName || '')
+  if (!value) return '--'
+  return `${'*'.repeat(Math.max(value.length - 1, 0))}${value.slice(-1)}`
 })
 
 const maskedPhone = computed(() => {
-  const p = String(user.userInfo.phone || '').replace(/^\+86-?/, '').replace(/\D/g, '')
-  if (!p) return ''
-  if (p.length < 7) return p
-  return `${p.slice(0, 3)}****${p.slice(-4)}`
+  const masked = phoneDesensitize(user.userInfo.phone)
+  return masked === '--' ? '--' : masked
 })
 
 onShow(() => setNavTitle(t('account.security')))
@@ -71,30 +62,47 @@ onMounted(async () => {
   if (res.success && res.data) user.setUserInfo(res.data as never)
 })
 
-function go(url: string) {
-  navigate('to', url)
+function goCancel() {
+  navigate('to', '/pages-sub/account/cancel/cancel')
 }
 </script>
 
 <style scoped lang="scss">
 .page {
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   background: #fff;
 }
-.profile-head {
-  padding: 48rpx 48rpx 16rpx;
+.container {
+  padding: 32rpx 48rpx 0;
 }
-.name {
-  font-size: 36rpx;
-  font-weight: 700;
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.image {
+  width: 32rpx;
+  height: 32rpx;
+  margin-left: 8rpx;
+  flex-shrink: 0;
+}
+.row_text {
+  font-size: 32rpx;
+  font-weight: 600;
   color: #333;
+  flex-shrink: 0;
 }
-.phone {
-  margin-top: 8rpx;
-  color: #888;
+.row_content {
+  flex: 1;
+  text-align: right;
   font-size: 28rpx;
+  color: #666;
+  margin-left: 24rpx;
 }
-.danger {
-  color: #e34d59;
+.line {
+  height: 2rpx;
+  margin: 48rpx 0 46rpx;
+  background: #f6f6f6;
 }
 </style>
