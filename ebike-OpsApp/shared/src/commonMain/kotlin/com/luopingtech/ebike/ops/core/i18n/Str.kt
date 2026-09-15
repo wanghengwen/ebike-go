@@ -572,6 +572,7 @@ enum class Str {
     TencentMapPins,
     NoVehicleCoords,
     SimulatorMapStatus,
+    AppleMapPins,
     MediaReadFailed,
     PhotoRequired,
     BindCurrentInfo,

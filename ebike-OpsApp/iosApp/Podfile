@@ -1,0 +1,32 @@
+# 腾讯地图 iOS SDK。闭源二进制 + 按 bundleId 绑定 Key，只能进宿主工程。
+# 工程本体由 xcodegen 从 project.yml 生成，所以顺序固定是：
+#   xcodegen generate && pod install && xcodebuild -workspace OpsAppHost.xcworkspace
+platform :ios, '18.0'
+
+target 'OpsAppHost' do
+  use_frameworks!
+  pod 'QMapKit', '~> 4.2.3.1.2'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.0'
+    end
+  end
+
+  # QMapKit.framework 是老式 fat framework（armv7 / i386 / x86_64 / arm64），
+  # 其中 arm64 是**设备** slice，没有 arm64 模拟器 slice —— Apple Silicon 上的
+  # 模拟器链接会直接失败。所以只在 iphoneos 下链接它，模拟器构建自动落到 MapKit
+  # （Swift 侧对应 `#if canImport(QMapKit) && !targetEnvironment(simulator)`）。
+  support = File.join(installer.sandbox.target_support_files_root, 'Pods-OpsAppHost')
+  Dir.glob(File.join(support, '*.xcconfig')).each do |path|
+    lines = File.readlines(path).map do |line|
+      next line unless line.start_with?('OTHER_LDFLAGS = ')
+      flags = line.sub('OTHER_LDFLAGS = ', '').strip
+      simulator_flags = flags.gsub('-framework "QMapKit"', '').squeeze(' ')
+      "OTHER_LDFLAGS = #{simulator_flags}\nOTHER_LDFLAGS[sdk=iphoneos*] = #{flags}\n"
+    end
+    File.write(path, lines.join)
+  end
+end

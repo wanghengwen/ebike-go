@@ -11,8 +11,11 @@ org.gradle.java.home=
 ops.tenant=renren
 ops.mode=release
 
-# 腾讯地图 Key（写入 AndroidManifest TencentMapSDK；有 Key 且 provider 为 none/tencent 时启用真图）
-# renren 默认可用 flavor 中的 Key；包名需与 applicationId 一致（renren=com.renren.inspections）
+# 腾讯地图 Key（写入 AndroidManifest TencentMapSDK / iOS Info.plist OpsTencentMapKey；
+# 有 Key 且 provider 为 none/tencent 时启用真图）。
+# renren 默认用 config 里的 Key；包名/Bundle ID 需与控制台登记一致
+# （renren Android=com.renren.inspections，iOS 同 iosBundleId）。
+# iOS：改完后跑 iosApp/sync_tenant.sh（或 _build_ios.sh，构建前会自动跑）。
 ops.map.tencentKey=
 
 # 签名配置。开源仓库不提供签名库，release 构建需自备。

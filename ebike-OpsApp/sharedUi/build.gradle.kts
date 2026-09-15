@@ -25,6 +25,9 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "SharedUi"
             isStatic = true
+            // iOS 宿主只链这一个 framework：界面签名里到处是 OpsApp，
+            // 不导出 :shared 的话 Swift 那边拿不到类型，还得再链一个 Shared。
+            export(project(":shared"))
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -89,7 +90,13 @@ fun H5Screen(
     val url = remember(kind, language) { app.resolveH5ScreenUrl(kind) }
     val host = remember { WebViewHost() }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    // iOS 宿主是全屏 Compose（ContentView 里 ignoresSafeArea），不留这层内边距
+    // 标题栏会压在状态栏上；Android 非 edge-to-edge 下这里的 inset 是 0，加了无副作用。
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding(),
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

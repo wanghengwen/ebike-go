@@ -2,7 +2,8 @@ package com.luopingtech.ebike.ops.ui.icons
 
 /**
  * 跨端图标键。commonMain 里不许碰 `R.drawable` / `@DrawableRes`；
- * Android 在 actual 里映射到资源，iOS 先给占位色块，有 Mac 再补真图。
+ * 两端的 actual 各自把它映射到同一套 drawable 文件名：Android 走 `res/drawable-xxhdpi`，
+ * iOS 走 app bundle 里的同名位图（见 iosApp/OpsAppHost/Media）。
  */
 enum class OpsIcon {
     // —— 工作台脚手架自用 ——
@@ -50,6 +51,11 @@ enum class OpsIcon {
     AnalysisStation,
     AnalysisReturnBike,
     AnalysisVehicleDistribution,
+
+    // —— 扫码屏 ——
+    ScanManual,
+    TorchOn,
+    TorchOff,
 
     // —— 任务中心卡片 ——
     TaskChangeBattery,

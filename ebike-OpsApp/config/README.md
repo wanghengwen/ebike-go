@@ -100,3 +100,15 @@ ops.map.tencentKey=你的Key
 
 Android 侧：`TextureMapView` + 车辆 Marker（低电橙 / 骑行绿 / 选中青），与遗留相同依赖坐标 `com.tencent.map:tencent-map-vector-sdk:4.5.12`。
 
+iOS 侧与 Android 共用同一份 `local.properties` / `config/{tenant}_{mode}.json`：
+
+```bash
+# 在仓库根目录（Mac）
+bash iosApp/sync_tenant.sh
+# 写出 iosApp/OpsAppHost/tenant.json，并改写 project.yml 的
+# Bundle ID / 显示名 / OpsTencentMapKey
+# （Bundle ID = app.iosBundleId，Key = map.tencentKey 或 ops.map.tencentKey）
+```
+
+`_build_ios.sh` 构建前会自动跑同步。真机链接 `QMapKit`；模拟器没有 SDK 的 arm64 slice，自动降级 MapKit。
+

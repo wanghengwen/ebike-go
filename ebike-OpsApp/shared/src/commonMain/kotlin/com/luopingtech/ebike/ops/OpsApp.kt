@@ -926,6 +926,11 @@ class OpsApp(
             locationTracker = locationTracker,
         )
 
+        /**
+         * Swift/ObjC 入口。Kotlin 默认参数不会导出到 ObjC，宿主不能写 `demo()`。
+         */
+        fun demoHost(): OpsApp = demo()
+
         fun create(
             config: TenantConfig,
             logger: OpsLogger = StdoutLogger,

@@ -1,0 +1,25 @@
+flowchart TB
+  subgraph Shell["① 薄壳 androidApp / iosApp（占比最小）"]
+    H1["启动 · 权限 · 生命周期"]
+    H2["注入 地图/蓝牙/扫码/定位/上传 的真实实现"]
+  end
+  subgraph CMP["② sharedUi · Compose Multiplatform（界面主体）"]
+    U1["登录 · 工作台 · 任务 · 仓库 · 报修 …"]
+    U2["H5Screen 容器"]
+  end
+  subgraph Core["③ shared · Kotlin Multiplatform（业务内核）"]
+    F["Feature 状态流"]
+    Dom["Domain 权限 · 状态机 · 策略"]
+    Data["API · Repository"]
+    I18n["OpsI18n · Str · Catalog"]
+  end
+  subgraph Web["④ webH5"]
+    D1["运营大屏"]
+    D2["营收大屏"]
+  end
+  API["业务网关"]
+  Shell --> CMP
+  CMP --> Core
+  U2 --> Web
+  Data --> API
+  H2 -.->|"实现共享层定义的接口"| Core

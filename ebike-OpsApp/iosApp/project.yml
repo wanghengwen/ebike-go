@@ -1,20 +1,23 @@
 # XcodeGen spec — generate the Xcode project on a Mac:
 #   brew install xcodegen
-#   cd iosApp && xcodegen generate
+#   cd iosApp && xcodegen generate && pod install
 #
-# Before building the app, produce Shared.framework (example: simulator arm64):
-#   cd ..
-#   ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
-# Framework output (typical):
-#   shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework
+# Before building the app, produce SharedUi.framework for the destination you run:
+#   ./gradlew :sharedUi:linkDebugFrameworkIosSimulatorArm64   # simulator
+#   ./gradlew :sharedUi:linkDebugFrameworkIosArm64            # device
 #
-# Then open OpsAppHost.xcodeproj and run on a simulator.
+# SharedUi exports :shared, so `import SharedUi` also brings in OpsApp and the
+# feature/domain types — there is no second framework to link.
+#
+# CocoaPods (Tencent map SDK) is integrated on top, so build the **workspace**:
+#   open OpsAppHost.xcworkspace
 
 name: OpsAppHost
 options:
   bundleIdPrefix: com.luopingtech.ebike.ops
+  # Match Kotlin/Native / Xcode 26 default (K/N currently emits 18.5 objects).
   deploymentTarget:
-    iOS: "16.0"
+    iOS: "18.0"
   createIntermediateGroups: true
 settings:
   base:
@@ -24,21 +27,109 @@ targets:
   OpsAppHost:
     type: application
     platform: iOS
+    # 跟 Android 共用 local.properties 的 ops.tenant / ops.mode：
+    # iosApp/sync_tenant.sh 写出 OpsAppHost/tenant.json，并改写下方三个占位值。
     sources:
-      - OpsAppHost
+      - path: OpsAppHost
+        excludes:
+          - Media
+          - tenant.json
+      # 图标位图直接沿用 Android 的 drawable-xxhdpi 文件名，平铺进 bundle 根目录，
+      # 由 sharedUi 的 painterResource(iOS) 按同一套名字去取（见 OpsIconPainter.ios.kt）。
+      - path: OpsAppHost/Media
+        buildPhase: resources
+      # 与 Android assets/tenant.json 同源；createBundleIosOpsApp() 启动时读取。
+      - path: OpsAppHost/tenant.json
+        buildPhase: resources
+        optional: true
+    # 手写 plist 而不是 GENERATE_INFOPLIST_FILE：Compose 需要
+    # CADisableMinimumFrameDurationOnPhone，而 INFOPLIST_KEY_ 只认 Apple 的白名单键。
+    info:
+      path: OpsAppHost/Info.plist
+      properties:
+        # SYNC:OPS_DISPLAY_NAME
+        CFBundleDisplayName: 人人运维
+        # 少了这条 ComposeUIViewController 会在启动时直接抛异常（高刷屏降级保护）。
+        CADisableMinimumFrameDurationOnPhone: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # 权限文案会原样显示在系统弹窗里，改动等于改 UI。
+        # 扫码取景框 / 故障上报拍照 → 相机；相册选图；轨迹上报与定位车辆 → 定位。
+        NSCameraUsageDescription: 扫描车码 / 中控码与现场拍照需要使用相机
+        NSPhotoLibraryUsageDescription: 上报故障时需要从相册选择照片
+        NSLocationWhenInUseUsageDescription: 上报运维轨迹与定位车辆需要获取您的位置
+        # Android 的 BuildConfig.TENCENT_MAP_KEY：tenant.json 缺 Key 时作回退。
+        # SYNC:OPS_TENCENT_MAP_KEY
+        OpsTencentMapKey: J4BBZ-NS3CU-AVNVH-GUIBH-ZEVEJ-2SBVO
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.luopingtech.ebike.ops.demo
-        INFOPLIST_GENERATION: YES
+        # 必须跟腾讯控制台登记的 Bundle ID 一致，否则 Key 鉴权失败（空白图）。
+        # sync_tenant.sh 从租户配置的 iosBundleId 改写这一行。
+        # SYNC:OPS_IOS_BUNDLE_ID
+        PRODUCT_BUNDLE_IDENTIFIER: com.renren.inspections
         PRODUCT_NAME: OpsAppHost
-        FRAMEWORK_SEARCH_PATHS:
-          - "$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework"
-          - "$(SRCROOT)/../shared/build/bin/iosArm64/debugFramework"
+        # Xcode 16+ 默认把 Debug 代码放进 OpsAppHost.debug.dylib（为 Previews 服务）。
+        # 那种布局下 Compose 的 PlistSanityCheck 读不到 app 的 Info.plist，
+        # 会误判 CADisableMinimumFrameDurationOnPhone 缺失并在启动时抛异常。
+        ENABLE_DEBUG_DYLIB: NO
+        # Kotlin/Native 的输出按 target+配置分目录。
+        # Release 必须搜 releaseFramework，否则会链到带调试符号的 debug 产物。
+        # Xcode 没有 CONFIGURATION.lowercased，只能按 configs 分开写。
+      configs:
+        Debug:
+          FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosSimulatorArm64/debugFramework"
+          FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosArm64/debugFramework"
+        Release:
+          FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosSimulatorArm64/releaseFramework"
+          FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosArm64/releaseFramework"
         OTHER_LDFLAGS:
+          - "$(inherited)"
           - "-framework"
-          - "Shared"
+          - "SharedUi"
+        # QMapKit 没有 modulemap，只能靠 bridging header 引入（见头文件里的说明）。
+        SWIFT_OBJC_BRIDGING_HEADER: OpsAppHost/OpsAppHost-Bridging-Header.h
+        # 腾讯地图只在真机构建时启用：SDK 没有 arm64 模拟器 slice。
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos*]: "$(inherited) OPS_TENCENT_MAP"
         ENABLE_USER_SCRIPT_SANDBOXING: NO
+        ONLY_ACTIVE_ARCH: YES
+        # Xcode 默认把 bundle 里的 PNG 压成 Apple 私有的 CgBI 变体，
+        # Skia（Compose 的解码器）读不了那种格式 —— 图标会静默变成空白，
+        # 只有 webp 那几个能显示。资源要给 Kotlin 侧读就必须关掉这层转换。
+        COMPRESS_PNG_FILES: NO
+        STRIP_PNG_TEXT: NO
+  # Compose 的界面对 XCUITest 只是一张画布（没有 UIKit 控件树），所以这个 target
+  # 靠归一化坐标点击底部 tab。它存在的意义是能在无人值守下走一遍主流程并留下截图，
+  # 模拟器上开辅助功能点 Simulator 窗口那条路在 ssh 会话里是走不通的。
+  OpsAppHostUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - OpsAppHostUITests
     dependencies:
-      - framework: ../shared/build/bin/iosSimulatorArm64/debugFramework/Shared.framework
-        embed: true
-        codeSign: true
+      - target: OpsAppHost
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.luopingtech.ebike.ops.demo.uitests
+        TEST_TARGET_NAME: OpsAppHost
+        ONLY_ACTIVE_ARCH: YES
+schemes:
+  OpsAppHost:
+    build:
+      targets:
+        OpsAppHost: all
+        OpsAppHostUITests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - OpsAppHostUITests

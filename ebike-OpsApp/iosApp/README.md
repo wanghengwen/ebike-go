@@ -1,29 +1,39 @@
 # iosApp
 
-SwiftUI host that consumes KMP `Shared.framework` from `:shared`.
+SwiftUI host that runs the shared Compose Multiplatform UI from `:sharedUi`.
+Swift code here is 30 lines: it links `SharedUi.framework`, builds `OpsApp`, and
+hands a `UIViewController` to SwiftUI. Every screen comes from `commonMain`.
 
-## Status (2026-09-11)
+## Status (2026-09-14)
 
 | Piece | State | Blocker |
 |-------|--------|---------|
-| SwiftUI scaffold (`OpsAppHost`) | Ready (source + XcodeGen spec) | — |
-| `Shared.framework` link | Build **on macOS** via Gradle | Windows CI cannot link iOS frameworks |
-| Login / task / map shell parity | Not started | Needs Mac + SKIE (or suspend wrappers) + Compose-equivalent SwiftUI |
-| Camera `CodeScanner` | Android wired | iOS AVFoundation TBD |
+| Shared UI entry (`OpsAppViewController`) | Written in `sharedUi/iosMain` | Needs a Mac to compile/link |
+| Login / service area / 4 tabs / scan shell | Shared (`ui/shell`, commonMain) | — |
+| `SharedUi.framework` link | Build **on macOS** via Gradle | Windows cannot link Apple targets |
+| Camera `OpsScanPreview` | Android wired | iOS AVFoundation TBD (falls back to a visible notice) |
+| Map `OpsMapRenderer` | Tencent on Android | iOS SDK + keys TBD (falls back to `SimulatorMapRenderer`) |
+| `PlatformWebView` (H5 screens) | Android WebView | iOS `WKWebView` TBD |
+| Toast `LocalOpsToast` | Android Toast | iOS HUD TBD (no-op default) |
 | Keychain `SecureStore` | In-memory on iOS (`createSecureStore`) | Keychain helper TBD |
-| Location / map | Simulator / unsupported | CoreLocation + map SDK keys |
-| BLE | `SimulatorBleTransport` / `UnavailableBleTransport` | Same closed-source SDK wall as Android |
+| Location / BLE | Simulator / unsupported | CoreLocation + the same closed-source SDK wall as Android |
+
+Everything in the "iOS TBD" rows has a contract in `commonMain` with a default
+implementation, so the app composes and navigates without them — an unwired
+capability shows a placeholder instead of crashing.
 
 ## What is intentionally not claimed
 
-Full field-ops parity with Android Compose is **blocked on a Mac build machine** and private BLE/map binaries. This folder proves linkage and documents the remaining host work; it is not a shipping iOS client.
+This has never been compiled: Apple targets need a macOS host. The shared UI is
+verified by `:sharedUi:compileCommonMainKotlinMetadata` (which rejects any
+platform-specific API in `commonMain`), not by an iOS build.
 
 ## Build (macOS)
 
 ```bash
 # 1) Framework (pick the target that matches your run destination)
-./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
-# device: ./gradlew :shared:linkDebugFrameworkIosArm64
+./gradlew :sharedUi:linkDebugFrameworkIosSimulatorArm64
+# device: ./gradlew :sharedUi:linkDebugFrameworkIosArm64
 
 # 2) Xcode project
 cd iosApp
@@ -32,20 +42,18 @@ xcodegen generate
 open OpsAppHost.xcodeproj
 ```
 
-If the framework path for device vs simulator differs, adjust `FRAMEWORK_SEARCH_PATHS`
-in `project.yml` or use a fat/XCFramework script later in CI.
+`SharedUi` exports `:shared`, so `import SharedUi` also brings in `OpsApp` and
+the feature/domain types; there is no second framework to link. If device and
+simulator paths differ, adjust `FRAMEWORK_SEARCH_PATHS` in `project.yml` or move
+to an XCFramework in CI.
 
-## Host roadmap (when Mac is available)
+## Host roadmap (when a Mac is available)
 
-1. SKIE or thin completion wrappers for `StateFlow` / suspend features
-2. SwiftUI shell mirroring Android tabs: Map · Tasks · Scan · Workbench
-3. Wire `AuthFeature` → service area → task features (same shared APIs as Android)
-4. `AVFoundation` scanner + Keychain `SecureStore` + CoreLocation
-5. Inject real `BleTransport` only from a private module (see `docs/BLE.md`)
-
-## What the host proves today
-
-- `OpsApp.demo()` starts
-- Config / version / demo-mode labels render from Shared
+1. Build once, fix whatever Kotlin/Native interop the Windows box could not check
+2. `AVFoundation` scanner → provide `LocalOpsScanPreview` (unlocks scan + field ops)
+3. Map renderer → provide `LocalOpsMapRenderer` (unlocks the map tab and 4 map screens)
+4. `WKWebView` → `PlatformWebView` actual (unlocks every H5 management screen)
+5. Keychain `SecureStore`, CoreLocation tracker, HUD for `LocalOpsToast`
+6. Inject a real `BleTransport` only from a private module (see `docs/BLE.md`)
 
 Do not commit private BLE frameworks or map API keys here.

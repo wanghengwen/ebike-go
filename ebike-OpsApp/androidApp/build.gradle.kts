@@ -53,6 +53,10 @@ android {
         buildConfigField("String", "OPS_TENANT", "\"${opsTenant.replace("\"", "\\\"")}\"")
         buildConfigField("String", "OPS_MODE", "\"${opsMode.replace("\"", "\\\"")}\"")
         buildConfigField("String", "OPS_DISPLAY_NAME", "\"${configDisplayName.replace("\"", "\\\"")}\"")
+        // 真机只跑 ARM；腾讯地图等 AAR 自带 x86/x86_64，不滤掉会进包、包体变大。
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildFeatures {

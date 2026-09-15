@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg width="1345" height="780" viewBox="0 0 1345 780" xmlns="http://www.w3.org/2000/svg"
+     font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f3e46"/>
+    </marker>
+    <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8080"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1345" height="780" fill="#ffffff"/>
+
+  <!-- ① 薄壳 -->
+  <rect x="230" y="40" width="740" height="150" rx="14" fill="#f7fbfb" stroke="#0f8080" stroke-width="2"/>
+  <text x="600" y="74" text-anchor="middle" font-size="20" font-weight="700" fill="#20303a">① 薄壳　androidApp / iosApp</text>
+  <text x="600" y="96" text-anchor="middle" font-size="13" fill="#6c7f88">代码占比最小，不写任何业务规则</text>
+  <rect x="260" y="110" width="330" height="58" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="425" y="145" text-anchor="middle" font-size="16" fill="#20303a">启动 · 权限 · 生命周期</text>
+  <rect x="610" y="110" width="330" height="58" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="775" y="134" text-anchor="middle" font-size="16" fill="#20303a">注入 地图 / 蓝牙 / 扫码</text>
+  <text x="775" y="156" text-anchor="middle" font-size="16" fill="#20303a">定位 / 上传 的真实实现</text>
+
+  <line x1="600" y1="190" x2="600" y2="228" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ② sharedUi -->
+  <rect x="230" y="230" width="740" height="150" rx="14" fill="#f7fbfb" stroke="#0f8080" stroke-width="2"/>
+  <text x="600" y="264" text-anchor="middle" font-size="20" font-weight="700" fill="#20303a">② sharedUi　Compose Multiplatform</text>
+  <text x="600" y="286" text-anchor="middle" font-size="13" fill="#6c7f88">界面主体，双端共用同一份代码</text>
+  <rect x="260" y="300" width="330" height="58" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="425" y="335" text-anchor="middle" font-size="16" fill="#20303a">登录 · 工作台 · 任务 · 仓库 · 报修 …</text>
+  <rect x="610" y="300" width="330" height="58" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="775" y="335" text-anchor="middle" font-size="16" fill="#20303a">H5Screen 容器</text>
+
+  <line x1="600" y1="380" x2="600" y2="418" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- ③ shared -->
+  <rect x="230" y="420" width="740" height="160" rx="14" fill="#f7fbfb" stroke="#0f8080" stroke-width="2"/>
+  <text x="600" y="454" text-anchor="middle" font-size="20" font-weight="700" fill="#20303a">③ shared　Kotlin Multiplatform</text>
+  <text x="600" y="476" text-anchor="middle" font-size="13" fill="#6c7f88">业务内核，与 UI 解耦、可单测</text>
+  <rect x="260" y="492" width="162" height="66" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="341" y="519" text-anchor="middle" font-size="15" fill="#20303a">Feature</text>
+  <text x="341" y="540" text-anchor="middle" font-size="14" fill="#5b6d76">状态流</text>
+  <rect x="432" y="492" width="162" height="66" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="513" y="519" text-anchor="middle" font-size="15" fill="#20303a">Domain</text>
+  <text x="513" y="540" text-anchor="middle" font-size="14" fill="#5b6d76">权限 · 状态机 · 策略</text>
+  <rect x="604" y="492" width="162" height="66" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="685" y="519" text-anchor="middle" font-size="15" fill="#20303a">Data</text>
+  <text x="685" y="540" text-anchor="middle" font-size="14" fill="#5b6d76">API · Repository</text>
+  <rect x="776" y="492" width="162" height="66" rx="10" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="857" y="519" text-anchor="middle" font-size="15" fill="#20303a">i18n</text>
+  <text x="857" y="540" text-anchor="middle" font-size="14" fill="#5b6d76">OpsI18n · Str · Catalog</text>
+
+  <line x1="600" y1="580" x2="600" y2="618" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- 业务网关 -->
+  <rect x="420" y="620" width="360" height="62" rx="12" fill="#eef4f5" stroke="#2f3e46" stroke-width="2"/>
+  <text x="600" y="658" text-anchor="middle" font-size="18" font-weight="600" fill="#20303a">业务网关（后端 API）</text>
+
+  <!-- ④ webH5 -->
+  <rect x="1060" y="230" width="250" height="150" rx="14" fill="#f7fbfb" stroke="#2f3e46" stroke-width="2"/>
+  <text x="1185" y="266" text-anchor="middle" font-size="20" font-weight="700" fill="#20303a">④ webH5</text>
+  <rect x="1088" y="286" width="194" height="40" rx="9" fill="#ffffff" stroke="#a8b6bd" stroke-width="1.5"/>
+  <text x="1185" y="312" text-anchor="middle" font-size="15" fill="#20303a">运营大屏</text>
+  <rect x="1088" y="332" width="194" height="40" rx="9" fill="#ffffff" stroke="#a8b6bd" stroke-width="1.5"/>
+  <text x="1185" y="358" text-anchor="middle" font-size="15" fill="#20303a">营收大屏</text>
+
+  <line x1="972" y1="329" x2="1058" y2="329" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="1015" y="317" text-anchor="middle" font-size="13" fill="#5b6d76">WebView</text>
+
+  <!-- 虚线：薄壳向下填充 shared 定义的接口 -->
+  <path d="M 230 139 L 150 139 L 150 525 L 228 525" fill="none" stroke="#0f8080" stroke-width="2"
+        stroke-dasharray="7 6" marker-end="url(#ahd)"/>
+  <text x="136" y="332" text-anchor="middle" font-size="15" fill="#0f8080"
+        transform="rotate(-90 136 332)">实现 ③ 定义的平台接口</text>
+
+  <!-- 图例 -->
+  <rect x="230" y="712" width="1080" height="46" rx="10" fill="#fbfcfc" stroke="#dfe6e9" stroke-width="1.5"/>
+  <line x1="256" y1="735" x2="306" y2="735" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="318" y="740" font-size="14" fill="#3f5058">实线：依赖 / 调用方向（上层依赖下层）</text>
+  <line x1="700" y1="735" x2="750" y2="735" stroke="#0f8080" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#ahd)"/>
+  <text x="762" y="740" font-size="14" fill="#3f5058">虚线：薄壳把真实 SDK 填进共享层挖好的接口，而不是被共享层调用</text>
+</svg>
+</body>
+</html>

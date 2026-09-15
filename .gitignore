@@ -55,6 +55,7 @@ ebike-OpsApp/config/*_release.json
 ebike-OpsApp/config/*_debug.json
 !ebike-OpsApp/config/demo_release.json
 ebike-OpsApp/androidApp/src/main/assets/tenant.json
+ebike-OpsApp/iosApp/OpsAppHost/tenant.json
 *.jks
 *.keystore
 *.p12
