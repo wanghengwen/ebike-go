@@ -87,7 +87,8 @@ npm run build:mp-weixin -- --env=xiaolongyu --mode=release
 ```text
 ebike-UniApp/
   config/                 多租户发布包 config/{env}_{mode}.json（正式密钥勿入库）
-  scripts/                tenant import/merge、run-build、分包 JS 搬迁
+  scripts/                tenant import/merge、run-build、android 离线同步
+  android-offline/        Android Studio 离线打包（SDK 解压至此，见其 README）
   tenants/                local.secrets.example（可选本机覆盖）
   src/
     pages/                主包页面
@@ -123,7 +124,65 @@ ebike-UniApp/
 
 详见 `config/README.md`。`tenants/local.secrets.json` 仅可选本机覆盖，一般不需要。
 
-## Android / iOS
+## Android / iOS（离线打包）
 
-`manifest.json` 已启用 Maps / Payment / Bluetooth / Camera / Geolocation。  
-包名前缀建议 `com.luopingtech.ebike.*`。真机冒烟：定位、扫码、BLE、支付。
+`manifest.json` 已启用 Maps / Payment / Bluetooth / Camera / Geolocation / Barcode。  
+默认包名：`com.luopingtech.ebike.demo`。
+
+**推荐：Android Studio 纯离线打包**（本机已装 Studio 时）：
+
+1. 下载与 CLI 匹配的离线 SDK（HBuilderX **5.24.2026081301**）到 `android-offline/sdk-download/`，然后：
+
+```bash
+npm run android:extract-sdk
+npm run android:sync -- --build --env=demo --mode=release
+```
+
+2. 双击 `android-offline/open-android-studio.bat`，或手动用 Android Studio 打开 `android-offline/HBuilder-Integrate-AS`  
+3. Gradle Sync 后运行 `simpleDemo`
+
+详见 [android-offline/README.md](android-offline/README.md)。
+
+多端差异（条件编译隔离，互不影响）：
+
+- 微信小程序：一键登录 + JSAPI 充值/购卡  
+- App：手机号登录；行程结清走钱包余额；在线充值待后端 App 通道就绪  
+
+真机冒烟：短信登录、定位、扫码、BLE、还车、钱包扣款。
+
+## RiderApp WebView（h5-native）
+
+同一套代码用 **运行时** `isNative()` 分支，**不要**用 `#ifdef` 拆掉小程序路径。
+
+完整步骤见 **[docs/DEPLOY-H5.md](docs/DEPLOY-H5.md)**。
+
+```bash
+npm run build:h5:renren
+# 产物：dist/build/h5/  → 部署到 HTTPS CDN
+# Rider 租户 config 写 h5.baseUrl，例如 https://cdn.example.com/h5/renren/index.html
+```
+
+现有 `build:h5` 已够 Rider `H5Screen` 加载，不必再加 `build:h5-native` 脚本。
+
+桥入口：`src/shared/nativeHost.ts`
+
+| 方法 | 说明 |
+| --- | --- |
+| `request` | 原生 `SignedApiClient` 签名代理；只允许 `/client/**`，拒绝 `/oauth/token` |
+| `getProfile` | 展示字段，无 token |
+| `pay` | 返回 `UNSUPPORTED`（Rider P5 未做） |
+| `scanCode` / `capturePhoto` / `currentLocation` / `openNavigation` | 原生能力 |
+| `navigate` / `close` / `setTitle` / `toast` | 容器；登录跳转回原生登录 |
+| `getLanguage` / `setLanguage` | 与 Rider `RiderI18n` 同步 |
+
+探测：Android `window.__riderNative`；iOS `webkit.messageHandlers.riderNative`。
+
+### 语言回写
+
+设置页（H5）切换语言：`setLocale` + `nativeHost.setLanguage`。  
+下次打开：`App.vue` → `syncFromNativeHost()` 调 `getLanguage()` 覆盖 vue-i18n。  
+小程序仍只有 zh-CN，设置页不显示语言行（`SUPPORTED_LOCALES.length === 1`）。
+
+### 安全
+
+`signSecret` / `businessSecret` / accessToken **不会**出现在 H5。登录态在 native 下用 `getProfile` + `loginInfo.nativeHost` 标记，storage 写入会剥掉 token。

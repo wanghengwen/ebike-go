@@ -1,3 +1,5 @@
+import { isNative, sanitizeLoginInfo } from '@/shared/nativeHost'
+
 const PREFIX = 'ebike_'
 
 /**
@@ -21,7 +23,11 @@ export const storage = {
         trimmed.startsWith('"')
       ) {
         try {
-          return JSON.parse(trimmed) as T
+          const parsed = JSON.parse(trimmed) as T
+          if (isNative() && key === 'loginInfo') {
+            return sanitizeLoginInfo(parsed) as T
+          }
+          return parsed
         } catch {
           return raw as unknown as T
         }
@@ -40,7 +46,20 @@ export const storage = {
     }
   },
   set(key: string, value: unknown) {
-    uni.setStorageSync(PREFIX + key, JSON.stringify(value))
+    let next = value
+    if (isNative() && key === 'loginInfo') {
+      const src =
+        value && typeof value === 'object' && !Array.isArray(value)
+          ? (value as Record<string, unknown>)
+          : {}
+      const sanitized = sanitizeLoginInfo(value)
+      // 显式 nativeHost=false 表示未登录；省略时默认 true（宿主写入登录态）
+      const flagged = Object.prototype.hasOwnProperty.call(src, 'nativeHost')
+        ? Boolean(src.nativeHost)
+        : true
+      next = { ...sanitized, nativeHost: flagged }
+    }
+    uni.setStorageSync(PREFIX + key, JSON.stringify(next))
   },
   remove(key: string) {
     uni.removeStorageSync(PREFIX + key)

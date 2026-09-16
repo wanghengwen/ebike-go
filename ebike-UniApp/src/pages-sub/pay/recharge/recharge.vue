@@ -270,7 +270,8 @@ async function onPay() {
 
 onMounted(async () => {
   loading.value = true
-  const sid = serviceId.value
+  const { ensureServiceId } = await import('@/shared/ensureServiceId')
+  const sid = await ensureServiceId()
   try {
     const [packages, cfg, scope, useCar] = await Promise.all([
       getRechargeList(sid ? { serviceId: sid } : {}),

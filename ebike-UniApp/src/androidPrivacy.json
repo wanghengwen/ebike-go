@@ -1,0 +1,39 @@
+{
+  "version": "1",
+  "prompt": "为了向您提供找车、扫码开锁、骑行导航与支付等服务，本应用需要申请定位、相机、蓝牙、网络等权限。请您仔细阅读并同意用户协议与隐私政策后再使用。",
+  "title": "服务协议和隐私政策",
+  "message": "请您认真阅读并了解《用户协议》和《隐私政策》，点击同意即表示您已阅读并同意全部条款。",
+  "buttonAccept": "同意并继续",
+  "buttonRefuse": "暂不使用",
+  "second": {
+    "title": "温馨提示",
+    "message": "需同意协议后才能使用完整功能。若不同意，将无法继续使用本应用。",
+    "buttonAccept": "同意并继续",
+    "buttonRefuse": "退出应用"
+  },
+  "styles": {
+    "backgroundColor": "#ffffff",
+    "borderRadius": "8px",
+    "title": {
+      "color": "#1a1a1a"
+    },
+    "buttonAccept": {
+      "color": "#ffffff",
+      "backgroundColor": "#3AA0E8"
+    },
+    "buttonRefuse": {
+      "color": "#666666"
+    }
+  },
+  "hrefLoader": "system",
+  "privacyItems": [
+    {
+      "url": "https://ebike.luopingtech.com/miniapp/html/user_protocol.html",
+      "title": "用户协议"
+    },
+    {
+      "url": "https://ebike.luopingtech.com/miniapp/html/privicyProtocol.html",
+      "title": "隐私政策"
+    }
+  ]
+}

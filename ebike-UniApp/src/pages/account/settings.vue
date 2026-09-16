@@ -23,6 +23,13 @@
         <text class="question-item-label">{{ t('account.about') }}</text>
         <image v-if="arrow" class="image" :src="arrow" mode="aspectFit" />
       </view>
+      <template v-if="canSwitchLanguage">
+        <view class="line" />
+        <view class="question-item" @click="onToggleLanguage">
+          <text class="question-item-label">{{ t('common.language') }}</text>
+          <text class="question-item-label">{{ languageLabel }}</text>
+        </view>
+      </template>
     </view>
 
     <view v-if="user.isLoggedIn" class="logout-btn">
@@ -42,6 +49,8 @@ import { useAuth } from '@/features/auth/useAuth'
 import { getBrandColor } from '@/shared/config'
 import { navigate, setNavTitle } from '@/shared/navigate'
 import { getMapCfg } from '@/shared/tenantSkin'
+import { SUPPORTED_LOCALES, setLocale, getAcceptLanguage, type AppLocale } from '@/locales'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 
 const { t } = useI18n()
 const user = useUserStore()
@@ -53,10 +62,26 @@ const logoutButtonStyle = computed(() => {
   return `background-color:${bg};border-color:${bg};color:#1E4A38;font-weight:bold;`
 })
 
+const canSwitchLanguage = SUPPORTED_LOCALES.length > 1
+const languageLabel = computed(() =>
+  getAcceptLanguage().toLowerCase().startsWith('en') ? t('common.enUS') : t('common.zhCN'),
+)
+
 onShow(() => {
   user.hydrateFromStorage()
   setNavTitle(t('common.settings'))
 })
+
+async function onToggleLanguage() {
+  const cur = getAcceptLanguage()
+  const next = (cur.toLowerCase().startsWith('en') ? 'zh-CN' : 'en-US') as AppLocale
+  if (!(SUPPORTED_LOCALES as readonly string[]).includes(next)) return
+  setLocale(next)
+  if (isNative()) {
+    await nativeHost()?.setLanguage(next)
+  }
+  setNavTitle(t('common.settings'))
+}
 
 function goSecurity() {
   navigate('to', '/pages-sub/account/security/security')

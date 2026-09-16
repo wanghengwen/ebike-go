@@ -43,8 +43,8 @@ import { computed, ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { getMsgList } from '@/api/message'
-import { navigate, setNavTitle } from '@/shared/navigate'
-import { storage } from '@/shared/storage'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
+import { ensureLoggedIn } from '@/shared/ensureLoggedIn'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 
 const { t } = useI18n()
@@ -59,16 +59,15 @@ const hasMore = computed(() => !total.value || list.value.length < total.value)
 
 onShow(() => setNavTitle(t('account.messages')))
 
-onLoad(() => {
-  const token = storage.get<Record<string, unknown>>('loginInfo', {})?.accessToken
-  if (!token) {
+onLoad(async () => {
+  if (!(await ensureLoggedIn())) {
     uni.showModal({
       title: t('auth.loginTitle'),
-      content: t('error.unauthorized'),
+      content: t('account.needLogin'),
       showCancel: false,
       confirmText: t('auth.loginNow'),
       success: (res) => {
-        if (res.confirm) navigate('redirect', '/pages/auth/quick-login')
+        if (res.confirm) navigate('redirect', getLoginPath())
       },
     })
     return

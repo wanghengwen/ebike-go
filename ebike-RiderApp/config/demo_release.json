@@ -1,0 +1,63 @@
+{
+  "name": "Demo Rider",
+  "alias": "demo",
+  "description": "public demo tenant, no credentials included",
+  "tenantId": "",
+  "app": {
+    "androidApplicationId": "com.luopingtech.ebike.rider.demo",
+    "iosBundleId": "com.luopingtech.ebike.rider.demo",
+    "displayName": "Demo Rider"
+  },
+  "api": {
+    "baseUrl": "",
+    "logUploadUrl": ""
+  },
+  "auth": {
+    "businessSecret": "",
+    "signSecret": ""
+  },
+  "map": {
+    "provider": "simulator",
+    "tencentKey": "",
+    "googleKey": ""
+  },
+  "push": {
+    "provider": "none",
+    "appKey": ""
+  },
+  "ble": {
+    "transport": "simulator",
+    "defaultToken": []
+  },
+  "features": {
+    "bleTransport": "simulator",
+    "mapProvider": "simulator",
+    "push": false,
+    "backgroundLocation": false,
+    "overseas": false
+  },
+  "branding": {
+    "primaryColor": "#3AA0E8",
+    "primaryMutedColor": "",
+    "onPrimaryColor": "#FFFFFF",
+    "lightTextColor": "#282828",
+    "navigationBarTextColor": "#282828",
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "disabledColor": "#CCCCCC",
+    "textColorPrimary": "#333333",
+    "textColorSecondary": "#666666",
+    "textColorTertiary": "#999999",
+    "pageBackgroundColor": "#FFFFFF",
+    "dividerColor": "#D7D7D7",
+    "chipBackgroundColor": "#F4F4F4",
+    "tabUnselectedColor": "#242936",
+    "logo": ""
+  },
+  "documents": {
+    "privacyPolicy": "",
+    "userAgreement": ""
+  },
+  "h5": {
+    "baseUrl": ""
+  }
+}

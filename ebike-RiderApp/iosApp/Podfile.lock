@@ -1,0 +1,16 @@
+PODS:
+  - QMapKit (4.2.3.1.2)
+
+DEPENDENCIES:
+  - QMapKit (~> 4.2.3.1.2)
+
+SPEC REPOS:
+  trunk:
+    - QMapKit
+
+SPEC CHECKSUMS:
+  QMapKit: cc9bd88b01fba9927208bb3cf2b605456a8a108d
+
+PODFILE CHECKSUM: 6825d50735ea4ceeb6a295452dab7b98e6aeeb9c
+
+COCOAPODS: 1.17.0

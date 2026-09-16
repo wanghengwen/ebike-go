@@ -3,6 +3,7 @@
   <view class="page">
     <map
       class="map"
+      :provider="mapProvider()"
       :latitude="latitude"
       :longitude="longitude"
       :scale="18"
@@ -21,6 +22,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { getMapCfg, getIconCfg } from '@/shared/tenantSkin'
 import { setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 
 const { t } = useI18n()
 

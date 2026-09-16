@@ -129,6 +129,7 @@ import { useTempDataStore } from '@/stores/tempData'
 import { getBrandColor } from '@/shared/config'
 import { getIconCfg } from '@/shared/tenantSkin'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { ensureServiceId } from '@/shared/ensureServiceId'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 
@@ -207,7 +208,7 @@ async function loadPayScoreConfig(sid: string) {
 
 onMounted(async () => {
   user.hydrateFromStorage()
-  const sid = storage.get('serviceId', '')
+  const sid = await ensureServiceId()
   const [wallet, profile, cfg, record] = await Promise.all([
     getWalletInfo(),
     getPersonInfo(),

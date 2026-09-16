@@ -13,6 +13,7 @@ import { useI18n } from 'vue-i18n'
 import { useScanGate } from '@/features/bike/useScanGate'
 import { useUserStore } from '@/stores/user'
 import { getTenantConfig } from '@/shared/config'
+import { isNative } from '@/shared/nativeHost'
 import { navigate } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
@@ -68,6 +69,12 @@ onMounted(() => {
   user.hydrateFromStorage()
   brandName.value = getTenantConfig().name || t('brand.name')
   launchBg.value = getTenantConfig().customSetting?.launchBg || ''
+
+  // Rider WebView：入口 hash 已由原生指定，勿再 reLaunch 首页，否则会污染返回栈。
+  if (isNative()) {
+    jumped = true
+    return
+  }
 
   const rawQ = readEnterQ()
   if (rawQ) {

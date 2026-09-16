@@ -1,7 +1,7 @@
 <template>
-  <view class="pages">
+  <view class="pages" :class="{ 'is-native-host': nativeHosted }">
     <image
-      v-if="navBackIcon"
+      v-if="showNavBack"
       class="nav-back"
       :src="navBackIcon"
       :style="{ top: `${navBackPos}px` }"
@@ -177,7 +177,9 @@ import { checkVerifyAndGo } from '@/features/auth/checkVerifyAndGo'
 import { ensureLocationAuthorized } from '@/features/map/ensureLocationAuth'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 import { getTenantConfig } from '@/shared/config'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
+import { ensureLoggedIn } from '@/shared/ensureLoggedIn'
+import { isNative } from '@/shared/nativeHost'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 import { phoneDesensitize } from '@/shared/phone'
@@ -231,6 +233,9 @@ const verifyBgStyle = computed(() =>
 const navBackIcon = computed(
   () => String(getTenantConfig().customSetting?.navBackIcon || '') || getMapCfg('iconBack') || '',
 )
+/** Rider 原生容器已有「后退」，宿主内不再叠一层页内返回。 */
+const showNavBack = computed(() => Boolean(navBackIcon.value) && !isNative())
+const nativeHosted = ref(isNative())
 const arrowRound = computed(() => getMapCfg('iconRightRound'))
 const iconTrips = computed(() => getIconCfg('newUserInfoRoute'))
 const iconMsg = computed(() => getIconCfg('newUserInfoMessage'))
@@ -281,6 +286,14 @@ const qualGot = computed(() => {
 })
 
 onMounted(() => {
+  nativeHosted.value = isNative()
+  // 桥注入可能略晚于首屏
+  setTimeout(() => {
+    nativeHosted.value = isNative()
+  }, 50)
+  setTimeout(() => {
+    nativeHosted.value = isNative()
+  }, 300)
   try {
     const menu = uni.getMenuButtonBoundingClientRect?.()
     if (menu?.top != null && menu?.height != null) {
@@ -296,8 +309,8 @@ onMounted(() => {
 
 onShow(async () => {
   setNavTitle(t('account.profile'))
-  user.hydrateFromStorage()
-  if (!user.isLoggedIn) {
+  const loggedIn = await ensureLoggedIn()
+  if (!loggedIn) {
     unread.value = 0
     ridingCardCount.value = 0
     izOpenInvoice.value = false
@@ -361,7 +374,7 @@ function navBack() {
 }
 
 function goLogin() {
-  navigate('to', '/pages/auth/quick-login')
+  navigate('to', getLoginPath())
 }
 
 function changeAvatar() {
@@ -397,8 +410,8 @@ function changeAvatar() {
   })
 }
 
-function requireLogin(): boolean {
-  if (user.isLoggedIn) return true
+async function requireLogin(): Promise<boolean> {
+  if (await ensureLoggedIn()) return true
   uni.showToast({ title: t('account.needLogin'), icon: 'none' })
   setTimeout(() => goLogin(), 400)
   return false
@@ -408,13 +421,13 @@ function go(url: string) {
   navigate('to', url)
 }
 
-function goGuarded(url: string) {
-  if (!requireLogin()) return
+async function goGuarded(url: string) {
+  if (!(await requireLogin())) return
   navigate('to', url)
 }
 
 async function onQualClick() {
-  if (!requireLogin()) return
+  if (!(await requireLogin())) return
   const loc = await ensureLocationAuthorized()
   if (!loc.ok) return
   if (careerEnable.value) {
@@ -424,11 +437,11 @@ async function onQualClick() {
 
 function onInvoiceClick() {
   if (!izOpenInvoice.value) return
-  goGuarded('/pages-sub/pay/invoice/list')
+  void goGuarded('/pages-sub/pay/invoice/list')
 }
 
-function goCards() {
-  if (!requireLogin()) return
+async function goCards() {
+  if (!(await requireLogin())) return
   if (ridingCardCount.value <= 0) {
     navigate('to', '/pages-sub/account/card-shop/shop')
     return
@@ -436,13 +449,13 @@ function goCards() {
   navigate('to', '/pages-sub/account/cards/cards')
 }
 
-function goWallet() {
-  if (!requireLogin()) return
+async function goWallet() {
+  if (!(await requireLogin())) return
   navigate('to', '/pages-sub/pay/wallet/wallet')
 }
 
-function goVerified() {
-  if (!requireLogin()) return
+async function goVerified() {
+  if (!(await requireLogin())) return
   const info = user.userInfo as Record<string, unknown>
   if (info.izAuth === true || info.realNameStatus === 1 || info.authState === 3) return
   void checkVerifyAndGo()
@@ -454,6 +467,24 @@ function goVerified() {
   width: 100vw;
   height: 100vh;
   position: relative;
+}
+/*
+ * 原生宿主专属：微信小程序不会加 is-native-host，布局保持原样。
+ * 只压缩「胶囊/页内返回」那一段顶空白（172rpx → 48rpx），
+ * top_container 同步减去同量高度（600→476），仍用固定高，
+ * 否则 height:auto 会被下方 .my-property 的 margin-top:-54rpx 盖住快捷入口文字。
+ */
+.pages.is-native-host {
+  .nav-back {
+    display: none !important;
+  }
+  .info {
+    padding-top: 48rpx !important;
+  }
+  .top_container {
+    /* 476rpx + 48rpx（≈24px），拉开快捷入口与「我的资产」间距 */
+    height: 524rpx;
+  }
 }
 .nav-back {
   position: absolute;

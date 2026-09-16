@@ -13,9 +13,8 @@ export type TenantConfig = {
   qrDomain?: string[]
   appId?: string
   /**
-   * Auth knobs for parity with existing backend grant types.
-   * wechatGrantType: e.g. wechat_miniapp | yudaoxing_app
-   * wechatPartnerCode: sent as yudaoxingCode when backend still expects that field
+   * Auth knobs for WeChat mini-program login.
+   * wechatGrantType: e.g. wechat_miniapp
    */
   auth?: {
     wechatGrantType?: string
@@ -92,5 +91,7 @@ export type TenantConfig = {
   appPlus?: {
     androidPackage?: string
     iosBundleId?: string
+    /** Amap key for App map module (merged into manifest sdkConfigs.maps) */
+    amapKey?: string
   }
 }

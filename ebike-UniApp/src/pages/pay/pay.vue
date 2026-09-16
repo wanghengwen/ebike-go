@@ -254,13 +254,8 @@
           <view class="wallet-pwd__title">
             {{ t('pay.waitPay') }} {{ formatMoney(waitPayMoney) }}{{ t('pay.yuan') }}
           </view>
-          <input
-            class="input"
-            password
-            v-model="walletPwd"
-            :placeholder="t('pay.walletPwdPlaceholder')"
-            maxlength="6"
-          />
+          <text class="wallet-pwd__hint">{{ t('pay.needRechargeBalance', { m: formatMoney(waitPayMoney) }) }}</text>
+          <view class="wallet-pwd__link" @click="goRecharge">{{ t('pay.goRecharge') }} ›</view>
         </view>
       </template>
     </scroll-view>
@@ -344,7 +339,6 @@ const { showPopup, currPopup, showEndTripPopup, onPopupClose } = useGuidePopup()
 const loading = ref(false)
 const paying = ref(false)
 const detail = ref<Record<string, unknown>>({})
-const walletPwd = ref('')
 const frozenTime = ref(0)
 const cutRemainMs = ref(0)
 const isTempFrozen = ref(false)
@@ -726,7 +720,7 @@ async function onPay() {
   if (!ok) return
   paying.value = true
   try {
-    const res = await settleLastOrder(detail.value, { walletPwd: walletPwd.value })
+    const res = await settleLastOrder(detail.value)
     if (res.success) {
       temp.resetRide()
       stopFrozenTimers()
@@ -736,8 +730,15 @@ async function onPay() {
       setTimeout(measureDock, 100)
       return
     }
-    if (res.code === 'NEED_WALLET_PWD') {
-      uni.showToast({ title: res.msg || t('pay.needWalletPwd'), icon: 'none' })
+    if (res.code === 'NEED_RECHARGE') {
+      uni.showModal({
+        title: t('pay.title'),
+        content: res.msg || t('pay.needRechargeBalance', { m: formatMoney(waitPayMoney.value) }),
+        confirmText: t('pay.goRecharge'),
+        success: (r) => {
+          if (r.confirm) goRecharge()
+        },
+      })
       return
     }
     if (res.code && Number(res.code) === 15043) {
@@ -761,6 +762,15 @@ async function onPay() {
 
 function goHome() {
   navigate('reLaunch', '/pages/home/home')
+}
+
+function goRecharge() {
+  // #ifdef APP-PLUS
+  uni.showToast({ title: t('pay.appChannelUnsupported'), icon: 'none' })
+  // #endif
+  // #ifndef APP-PLUS
+  navigate('to', '/pages-sub/pay/recharge/recharge')
+  // #endif
 }
 
 function goRedTips() {
@@ -1060,6 +1070,19 @@ function goBillingRules() {
 .wallet-pwd__title {
   font-weight: 700;
   margin-bottom: 16rpx;
+}
+
+.wallet-pwd__hint {
+  display: block;
+  color: #666;
+  font-size: 26rpx;
+  line-height: 1.5;
+}
+
+.wallet-pwd__link {
+  margin-top: 16rpx;
+  color: #3aa0e8;
+  font-size: 28rpx;
 }
 
 .input {

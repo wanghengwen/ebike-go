@@ -3,6 +3,7 @@
     <map
       id="parkSearchMap"
       class="map"
+      :provider="mapProvider()"
       :latitude="latitude"
       :longitude="longitude"
       :scale="16"
@@ -62,6 +63,7 @@ import { useTempDataStore } from '@/stores/tempData'
 import { getMapCfg } from '@/shared/tenantSkin'
 import { openThirdPartyMap } from '@/shared/openMapApp'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 import { logger } from '@/shared/logger'
 
 const { t } = useI18n()

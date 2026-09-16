@@ -9,6 +9,7 @@ import { uniLoginCode } from '@/features/auth/useAuth'
 import { invokePayment, normalizeWxPayParams } from '@/vendor/pay/invokePayment'
 import type { ApiResult } from '@/shared/request'
 import { logger } from '@/shared/logger'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 
 export type PayChannelType = 'BAOFU_WXLITE' | 'WXLITE' | 'UMS_WXLITE' | 'UNION_WXLITE' | string
 
@@ -136,15 +137,41 @@ export function usePay() {
 
   /**
    * Create channel pay (+ optional WeChat requestPayment).
-   * Matches legacy payMixins for BAOFU_WXLITE | WXLITE | UMS_WXLITE | UNION_WXLITE.
+   * Mini program: BAOFU_WXLITE | WXLITE | UMS_WXLITE | UNION_WXLITE.
+   * App: native WeChat/Alipay cashier not wired yet — block with clear message.
    */
   async function payMoney(opts: PayMoneyOptions): Promise<ApiResult & { paid?: boolean }> {
+    if (isNative()) {
+      const host = nativeHost()
+      const raw = host
+        ? await host.pay({
+            sale_type: opts.sale_type,
+            sale_info: opts.sale_info,
+            order: opts.order,
+            channel_type: opts.channel_type,
+          })
+        : {}
+      const msg = String(raw.msg || t('pay.nativeUnsupported'))
+      uni.showToast({ title: msg, icon: 'none' })
+      return {
+        success: false,
+        code: String(raw.code || 'UNSUPPORTED'),
+        msg,
+        paid: false,
+      }
+    }
+
     const showLoading = opts.showLoading !== false
     if (showLoading) {
       uni.showLoading({ title: t('pay.payNow'), mask: true })
     }
 
     try {
+      // #ifdef APP-PLUS
+      return { success: false, code: 'APP_CHANNEL_UNSUPPORTED', msg: t('pay.appChannelUnsupported'), paid: false }
+      // #endif
+
+      // #ifndef APP-PLUS
       if (!opts.sale_type) {
         return { success: false, msg: '售卖类型错误', paid: false }
       }
@@ -180,6 +207,7 @@ export function usePay() {
 
       const payRes = await invokePayment('wxpay', payParams, { pin: userPin() })
       return { success: payRes.success, data: payRes.data ?? created.data, paid: payRes.success }
+      // #endif
     } finally {
       if (showLoading) {
         try {
@@ -220,11 +248,9 @@ export function usePay() {
     totalFee: number
     saleInfo?: Record<string, unknown>
     extra?: Record<string, unknown>
-    walletPwd?: string
     channelType?: PayChannelType
     invokeWx?: boolean
   }) {
-    const pwd = String(opts.walletPwd || '').trim()
     return payMoney({
       sale_type: opts.saleType,
       channel_type: opts.channelType,
@@ -235,19 +261,13 @@ export function usePay() {
       },
       order: {
         ...(opts.extra || {}),
-        ...(pwd
-          ? {
-              walletPwd: pwd,
-              wallet_pwd: pwd,
-            }
-          : {}),
       },
     })
   }
 
   /**
-   * Legacy waitPayMoney: present cannot cover penalty; apply modify* adjustments.
-   * Returns fen to still pay via channel / wallet password.
+   * waitPayMoney: present cannot cover penalty; apply modify* adjustments.
+   * Returns fen still owed after wallet buckets (recharge/present).
    */
   function calcWaitPayMoney(detail: Record<string, unknown>): number {
     if (detail.payCost == null && detail.cost == null) return 0
@@ -262,7 +282,6 @@ export function usePay() {
     const finalPenalty = penalty - modifyDispatchCost - modifyHelmetPenalty
     const penaltyCost = finalPenalty > recharge ? finalPenalty - recharge : 0
     const rechargeRemain = recharge - finalPenalty
-    // Legacy formula uses modifyPayCost only in logs; riding cost = payCost - finalPenalty - present - remain
     void modifyPayCost
     payCost = payCost - finalPenalty
     const ridingCost = payCost - present - (finalPenalty > recharge ? 0 : rechargeRemain)
@@ -271,16 +290,12 @@ export function usePay() {
   }
 
   /**
-   * Settle last ride order (align legacy pay.vue):
+   * Settle last ride order:
    * payCost===0 → closeOrder
    * waitPayMoney===0 && payCost>0 → deductWallet
-   * waitPayMoney>0 → YUDAOXING_WALLET + YUDAOXING_APP (wallet pwd), no WeChat JSAPI
+   * waitPayMoney>0 → need recharge first (no custom wallet-pwd channel)
    */
-  async function settleLastOrder(
-    detail: Record<string, unknown>,
-    opts: { walletPwd?: string } = {},
-  ) {
-    // Refresh order before settle like legacy getOrderInfo(true)
+  async function settleLastOrder(detail: Record<string, unknown>) {
     const fresh = await loadLastOrder()
     const d = (fresh.success && fresh.data ? fresh.data : detail) as Record<string, unknown>
     const cost = Number(d.payCost ?? d.cost ?? 0)
@@ -299,28 +314,11 @@ export function usePay() {
       return payByWallet({})
     }
 
-    const pwd = String(opts.walletPwd || '').trim()
-    if (pwd.length < 5) {
-      return { success: false, code: 'NEED_WALLET_PWD', msg: t('pay.needWalletPwd') }
+    return {
+      success: false,
+      code: 'NEED_RECHARGE',
+      msg: t('pay.needRechargeBalance', { m: fenToYuan(waitPayMoney) }),
     }
-
-    return payMoney({
-      sale_type: 'YUDAOXING_WALLET',
-      channel_type: 'YUDAOXING_APP',
-      sale_info: {
-        total_fee: waitPayMoney,
-        orderId,
-        active_id: 0,
-      },
-      order: {
-        amount: String(waitPayMoney),
-        source: 4,
-        walletPwd: pwd,
-        wallet_pwd: pwd,
-      },
-      // Legacy payMixins does not invoke uni.requestPayment for this channel
-      invokeWx: false,
-    })
   }
 
   /** Prefer payMoney / payByWallet / closeZeroOrder / settleLastOrder */
@@ -367,7 +365,6 @@ export async function createChannelPay(opts: {
   totalFee: number
   saleInfo?: Record<string, unknown>
   extra?: Record<string, unknown>
-  walletPwd?: string
   channelType?: PayChannelType
   invokeWx?: boolean
 }) {

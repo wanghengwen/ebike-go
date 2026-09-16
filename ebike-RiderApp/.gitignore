@@ -1,0 +1,39 @@
+# Gradle / Kotlin 构建产物
+.gradle/
+.kotlin/
+build/
+**/build/
+*.log
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# 本机构建参数：含 sdk.dir / 签名口令，不入库
+local.properties
+!local.properties.example
+
+# 租户配置含密钥，只保留 _defaults 与 demo 入库
+config/*_release.json
+config/*_debug.json
+!config/demo_release.json
+
+# 构建期由 config/{tenant}_{mode}.json 合成，不入库
+androidApp/src/main/assets/tenant.json
+iosApp/RiderAppHost/tenant.json
+
+# 签名材料
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+
+# iOS：Pods / 用户态不入库；.xcodeproj / .xcworkspace / Podfile.lock 入库，方便直接开 Xcode
+iosApp/Pods/
+iosApp/**/xcuserdata/
+iosApp/**/*.xcuserdatad
+iosApp/**/.DS_Store
+iosApp/**/._*

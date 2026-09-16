@@ -18,6 +18,8 @@ export type LoginInfo = {
   tokenType?: string
   expiresIn?: number
   openid?: string
+  /** Rider WebView：已登录但无 token（token 只在原生侧）。 */
+  nativeHost?: boolean
 }
 
 export const useUserStore = defineStore('user', {
@@ -26,7 +28,7 @@ export const useUserStore = defineStore('user', {
     loginInfo: {} as LoginInfo,
   }),
   getters: {
-    isLoggedIn: (s) => Boolean(s.loginInfo.accessToken),
+    isLoggedIn: (s) => Boolean(s.loginInfo.accessToken || s.loginInfo.nativeHost),
   },
   actions: {
     hydrateFromStorage() {

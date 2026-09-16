@@ -41,7 +41,7 @@ import { submitCancel } from '@/api/account'
 import { sendSmsCode } from '@/api/user'
 import { useAuth } from '@/features/auth/useAuth'
 import { getBrandColor } from '@/shared/config'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
 import { phoneDesensitize } from '@/shared/phone'
 import { useUserStore } from '@/stores/user'
 
@@ -106,7 +106,7 @@ async function onSubmit() {
         showCancel: false,
         success: () => {
           logout()
-          navigate('reLaunch', '/pages/auth/quick-login')
+          navigate('reLaunch', getLoginPath())
         },
       })
       return

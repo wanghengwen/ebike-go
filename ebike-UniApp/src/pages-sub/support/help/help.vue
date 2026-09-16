@@ -57,12 +57,12 @@
 import { computed, ref } from 'vue'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
-import { getFaqByServiceId, getAllService, getApplyStationConfig, getCustomerService } from '@/api/service'
+import { getFaqByServiceId, getApplyStationConfig, getCustomerService } from '@/api/service'
 import { getConfigBaseItem } from '@/api/user'
-import { getServiceByPoi } from '@/api/map'
-import { useMapLocation } from '@/features/map/useMapLocation'
 import { openProtocol } from '@/shared/protocol'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
+import { ensureLoggedIn } from '@/shared/ensureLoggedIn'
+import { ensureServiceId } from '@/shared/ensureServiceId'
 import { storage } from '@/shared/storage'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 import { getBrandColor, getButtonWhiteColor } from '@/shared/config'
@@ -70,7 +70,6 @@ import { useTempDataStore } from '@/stores/tempData'
 
 const { t } = useI18n()
 const temp = useTempDataStore()
-const { locate } = useMapLocation()
 
 const carId = ref('')
 const showRepair = ref(true)
@@ -109,15 +108,14 @@ onShow(() => setNavTitle(t('account.help')))
 
 onLoad(async (q) => {
   carId.value = String(q?.carId || '')
-  const token = storage.get<Record<string, unknown>>('loginInfo', {})?.accessToken
-  if (!token) {
+  if (!(await ensureLoggedIn())) {
     uni.showModal({
       title: t('auth.loginTitle'),
       content: t('account.needLogin'),
       showCancel: false,
       confirmText: t('auth.loginNow'),
       success: (res) => {
-        if (res.confirm) navigate('redirect', '/pages/auth/quick-login')
+        if (res.confirm) navigate('redirect', getLoginPath())
       },
     })
     return
@@ -140,20 +138,8 @@ async function loadCsConfig() {
 }
 
 async function resolveServiceId(): Promise<string | undefined> {
-  const cached = storage.get<string>('serviceId', '')
-  if (cached) return cached
-  const loc = temp.location || (await locate())
-  if (loc) {
-    const service = await getServiceByPoi({ lat: loc.latitude, lng: loc.longitude })
-    const id = (service.data as { id?: string } | undefined)?.id
-    if (id) {
-      storage.set('serviceId', id)
-      return id
-    }
-  }
-  const all = await getAllService()
-  const rows = (Array.isArray(all.data) ? all.data : []) as Array<Record<string, unknown>>
-  return rows[0]?.id ? String(rows[0].id) : undefined
+  const id = await ensureServiceId()
+  return id || undefined
 }
 
 async function loadRepairFlag() {

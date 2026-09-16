@@ -40,7 +40,7 @@ import { onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { userAddVoucher } from '@/api/voucher'
 import BizPopup from '@/widgets/BizPopup.vue'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { useUserStore } from '@/stores/user'
 
@@ -88,7 +88,7 @@ async function onSubmit() {
       showCancel: false,
       confirmText: t('auth.loginNow'),
       success: (r) => {
-        if (r.confirm) navigate('redirect', '/pages/auth/quick-login')
+        if (r.confirm) navigate('redirect', getLoginPath())
       },
     })
     return

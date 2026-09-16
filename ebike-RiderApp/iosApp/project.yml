@@ -1,0 +1,120 @@
+# XcodeGen 规格（可选再生）：日常开发直接打开已入库的
+#   RiderAppHost.xcworkspace
+# 结构变更时：
+#   brew install xcodegen
+#   cd iosApp && xcodegen generate && pod install
+#
+# 构建 App 之前先出对应目标的 SharedUi.framework：
+#   ./gradlew :sharedUi:linkDebugFrameworkIosSimulatorArm64   # 模拟器
+#   ./gradlew :sharedUi:linkDebugFrameworkIosArm64            # 真机
+# 或：bash iosApp/bootstrap.sh [sim|device]
+#
+# SharedUi export 了 :shared，所以 `import SharedUi` 一并带进 RiderApp 与各业务类型，
+# 不需要再链第二个 framework。
+#
+# 已接 QMapKit：打开 RiderAppHost.xcworkspace；本地执行 pod install。
+# 模拟器不链 QMapKit（无 arm64 sim slice），真机才启用 RIDER_TENCENT_MAP。
+name: RiderAppHost
+options:
+  bundleIdPrefix: com.luopingtech.ebike.rider
+  # 跟 Kotlin/Native / Xcode 26 的默认值对齐（K/N 目前发 18.5 的 object）。
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1,2"
+targets:
+  RiderAppHost:
+    type: application
+    platform: iOS
+    # 跟 Android 共用 local.properties 的 rider.tenant / rider.mode：
+    # iosApp/sync_tenant.sh 写出 RiderAppHost/tenant.json，并改写下面带 SYNC: 标记的值。
+    sources:
+      - path: RiderAppHost
+        excludes:
+          - tenant.json
+      # 与 Android assets/tenant.json 同源；createBundleIosRiderApp() 启动时读取。
+      - path: RiderAppHost/tenant.json
+        buildPhase: resources
+        optional: true
+    # 手写 plist 而不是 GENERATE_INFOPLIST_FILE：Compose 需要
+    # CADisableMinimumFrameDurationOnPhone，而 INFOPLIST_KEY_ 只认 Apple 的白名单键。
+    info:
+      path: RiderAppHost/Info.plist
+      properties:
+        # SYNC:RIDER_DISPLAY_NAME
+        CFBundleDisplayName: 共享骑行
+        # 少了这条 ComposeUIViewController 会在启动时直接抛异常（高刷屏降级保护）。
+        CADisableMinimumFrameDurationOnPhone: true
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        # P4 骑行：锁屏 / 切到导航时仍要收 GPS，否则计费时长和还车围栏判定会断档。
+        # 少了这条，CoreLocationTracker 里的 allowsBackgroundLocationUpdates 会直接抛异常
+        # （Apple 的显式约束），所以两处必须一起改。
+        UIBackgroundModes:
+          - location
+        # 权限文案会原样显示在系统弹窗里，改动等于改 UI。
+        NSCameraUsageDescription: 扫描车身二维码开锁需要使用相机
+        # 只申请 whenInUse：配合 UIBackgroundModes.location，骑行中系统显示蓝色状态条，
+        # 熄屏也能持续定位，不必要求 always。文案要说清「骑行过程中」这个时间范围。
+        NSLocationWhenInUseUsageDescription: 查找附近车辆、骑行计费与判定还车区域需要获取您的位置；骑行过程中会在后台持续定位
+        NSBluetoothAlwaysUsageDescription: 近距离蓝牙开锁需要访问蓝牙
+        # Android 的 BuildConfig.TENCENT_MAP_KEY：tenant.json 缺 Key 时作回退。
+        # SYNC:RIDER_TENCENT_MAP_KEY
+        RiderTencentMapKey: J4BBZ-NS3CU-AVNVH-GUIBH-ZEVEJ-2SBVO
+    settings:
+      base:
+        # 必须跟地图 / 推送控制台登记的 Bundle ID 一致。
+        # sync_tenant.sh 从租户配置的 iosBundleId 改写这一行。
+        # SYNC:RIDER_IOS_BUNDLE_ID
+        PRODUCT_BUNDLE_IDENTIFIER: com.luopingtech.ebike.rider.demo
+        PRODUCT_NAME: RiderAppHost
+        # Xcode 16+ 默认把 Debug 代码放进 RiderAppHost.debug.dylib（为 Previews 服务）。
+        # 那种布局下 Compose 的 PlistSanityCheck 读不到 app 的 Info.plist，
+        # 会误判 CADisableMinimumFrameDurationOnPhone 缺失并在启动时抛异常。
+        ENABLE_DEBUG_DYLIB: NO
+        # QMapKit 之类没有 modulemap 的闭源 SDK 只能靠 bridging header 引入。
+        SWIFT_OBJC_BRIDGING_HEADER: RiderAppHost/RiderAppHost-Bridging-Header.h
+        # 腾讯地图只在真机构建时启用：SDK 没有 arm64 模拟器 slice。
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS[sdk=iphoneos*]: "$(inherited) RIDER_TENCENT_MAP"
+        ENABLE_USER_SCRIPT_SANDBOXING: NO
+        ONLY_ACTIVE_ARCH: YES
+        # Xcode 默认把 bundle 里的 PNG 压成 Apple 私有的 CgBI 变体，
+        # Skia（Compose 的解码器）读不了那种格式 —— 图标会静默变成空白。
+        COMPRESS_PNG_FILES: NO
+        STRIP_PNG_TEXT: NO
+        OTHER_LDFLAGS:
+          - "$(inherited)"
+          - "-framework"
+          - "SharedUi"
+      # Kotlin/Native 的输出按 target+配置分目录，Release 必须搜 releaseFramework，
+      # 否则会链到带调试符号的 debug 产物。Xcode 没有 CONFIGURATION.lowercased，
+      # 只能按 configs 分开写。
+      configs:
+        Debug:
+          # Debug 优先；若只编过 Release，回退到 releaseFramework，避免 Xcode 报 No such module SharedUi。
+          FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosSimulatorArm64/debugFramework"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosSimulatorArm64/releaseFramework"
+          FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosArm64/debugFramework"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosArm64/releaseFramework"
+        Release:
+          FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosSimulatorArm64/releaseFramework"
+          FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]:
+            - "$(inherited)"
+            - "$(SRCROOT)/../sharedUi/build/bin/iosArm64/releaseFramework"
+schemes:
+  RiderAppHost:
+    build:
+      targets:
+        RiderAppHost: all
+    run:
+      config: Debug

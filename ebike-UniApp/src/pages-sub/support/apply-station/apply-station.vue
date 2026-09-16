@@ -3,6 +3,7 @@
     <map
       id="applyStationMap"
       class="map"
+      :provider="mapProvider()"
       :latitude="latitude"
       :longitude="longitude"
       :scale="16"
@@ -57,6 +58,7 @@ import { buildFencePolygons, type MapMarker, type MapPolygon } from '@/features/
 import { resolveAddress } from '@/shared/format'
 import { getMapCfg } from '@/shared/tenantSkin'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 

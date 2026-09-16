@@ -5,6 +5,7 @@
         id="rideMap"
         class="ride-map"
         show-location
+        :provider="mapProvider()"
         :latitude="mapLat"
         :longitude="mapLng"
         :scale="17"
@@ -299,6 +300,7 @@ import {
 } from '@/shared/tenantSkin'
 import { openThirdPartyMap } from '@/shared/openMapApp'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 import { t as i18nT } from '@/locales'

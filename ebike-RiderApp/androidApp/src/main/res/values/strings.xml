@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">共享骑行</string>
+
+    <!-- P4 骑行前台定位服务。通知栏文案是用户唯一能看到「为什么这个 APP 在后台用定位」
+         的地方，写清楚状态而不是「定位运行中」这种技术术语。 -->
+    <string name="track_location_channel_name">骑行定位</string>
+    <string name="track_location_channel_desc">骑行过程中持续定位，用于计费与还车判定</string>
+    <string name="track_location_title">骑行中</string>
+    <string name="track_location_text">正在记录行程，点击返回骑行页</string>
+</resources>

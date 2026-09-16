@@ -1,4 +1,4 @@
-import { navigate } from '@/shared/navigate'
+import { getLoginPath, navigate } from '@/shared/navigate'
 import { useUserStore } from '@/stores/user'
 import { mapLegacyRedEnvelopePath } from '@/features/bike/redEnvelope'
 import { mapLegacyPagePath } from '@/shared/mapLegacyPath'
@@ -26,7 +26,7 @@ function ensureLogin(): boolean {
     showCancel: false,
     confirmText: t('auth.loginTitle'),
     success: (r) => {
-      if (r.confirm) navigate('to', '/pages/auth/quick-login')
+      if (r.confirm) navigate('to', getLoginPath())
     },
   })
   return false

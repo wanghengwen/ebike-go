@@ -75,8 +75,8 @@ export async function refreshCreditLimit(opts: {
     clearLimitRiding()
     return null
   }
-  const login = storage.get<{ accessToken?: string }>('loginInfo', {}) || {}
-  if (!login.accessToken) {
+  const login = storage.get<{ accessToken?: string; nativeHost?: boolean }>('loginInfo', {}) || {}
+  if (!login.accessToken && !login.nativeHost) {
     clearLimitRiding()
     return null
   }

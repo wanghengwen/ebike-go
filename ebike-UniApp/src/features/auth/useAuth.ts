@@ -2,6 +2,7 @@ import { loginByPassword, getPersonInfo, sendSmsCode, getOpenIdByJsCode } from '
 import { useUserStore } from '@/stores/user'
 import { t } from '@/locales'
 import { navigate } from '@/shared/navigate'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 import { getTenantConfig } from '@/shared/config'
 import { logger } from '@/shared/logger'
 
@@ -50,12 +51,13 @@ export function useAuth() {
         })
         return res
       }
-      // Temporary save, then backfill openid like legacy SMS login
       user.setLoginInfo(res.data as never)
+      // #ifdef MP-WEIXIN
       const openId = await ensureOpenId()
       if (openId) {
         user.setLoginInfo({ ...(res.data as object), openid: openId } as never)
       }
+      // #endif
       const profile = await getPersonInfo()
       if (profile.success && profile.data) user.setUserInfo(profile.data as never)
       if (!opts.skipNavigate) navigate('reLaunch', '/pages/home/home')
@@ -65,10 +67,7 @@ export function useAuth() {
     }
   }
 
-  /**
-   * WeChat mini-program one-tap phone login.
-   * grant_type / partner code come from tenant.auth (backend may still use yudaoxing_app).
-   */
+  /** WeChat mini-program one-tap phone login. */
   async function loginWithWechatPhone(detail: {
     encryptedData?: string
     iv?: string
@@ -87,10 +86,6 @@ export function useAuth() {
         iv: detail.iv,
       }
       if (detail.code) params.phoneCode = detail.code
-      // Legacy backend field name retained when partner code is configured
-      if (tenant.auth?.wechatPartnerCode) {
-        params.yudaoxingCode = tenant.auth.wechatPartnerCode
-      }
       const res = await loginByPassword(params)
       if (!res.success || !res.data) {
         const banned = res.code && Number(res.code) === 15012
@@ -126,6 +121,10 @@ export function useAuth() {
 
   function logout() {
     user.logout()
+    if (isNative()) {
+      nativeHost()?.navigate({ type: 'reLaunch', url: 'login' })
+      return
+    }
     // Match legacy setUserLogout: clear session; land on home
     navigate('reLaunch', '/pages/home/home')
   }

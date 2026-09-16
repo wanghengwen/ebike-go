@@ -207,14 +207,8 @@
           <view v-else class="sheet__empty">{{ t('common.empty') }}</view>
         </view>
         <view class="sheet__section">
-          <view class="sheet__label">{{ t('pay.walletPwd') }}</view>
-          <input
-            class="sheet__input"
-            password
-            maxlength="6"
-            v-model="walletPwd"
-            :placeholder="t('pay.walletPwd6')"
-          />
+          <view class="sheet__label">{{ t('pay.payChannel') }}</view>
+          <text class="sheet__channel">{{ t('pay.wechatPay') }}</text>
         </view>
         <view class="sheet__actions">
           <view class="btn-ghost" @click="showDetail = false">{{ t('common.cancel') }}</view>
@@ -243,7 +237,7 @@ import { ridingConfigGetRule } from '@/api/card'
 import { createChannelPay, fenToYuan } from '@/features/pay/usePay'
 import { checkPayCertification } from '@/features/pay/checkPayCertification'
 import { openJumpAction } from '@/shared/openNotice'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { useUserStore } from '@/stores/user'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
@@ -265,7 +259,6 @@ const activityList = ref<ActivityBlock[]>([])
 const serviceId = ref('')
 const showDetail = ref(false)
 const selectedCard = ref<Record<string, unknown>>({})
-const walletPwd = ref('')
 const paying = ref(false)
 const ruleUrl = ref('')
 const nowTs = ref(Date.now())
@@ -322,7 +315,7 @@ function ensureLogin(): boolean {
     showCancel: false,
     confirmText: t('auth.loginTitle'),
     success: (r) => {
-      if (r.confirm) navigate('redirect', '/pages/auth/quick-login')
+      if (r.confirm) navigate('redirect', getLoginPath())
     },
   })
   return false
@@ -521,7 +514,6 @@ async function openCardDetail(riding: Record<string, unknown>) {
   const ok = await checkPayCertification()
   if (!ok) return
   selectedCard.value = riding
-  walletPwd.value = ''
   showDetail.value = true
 }
 
@@ -536,14 +528,6 @@ function openRule() {
 async function onBuyCard() {
   const item = selectedCard.value
   if (!item || !Object.keys(item).length) return
-  if (!walletPwd.value) {
-    uni.showToast({ title: t('pay.needWalletPwd'), icon: 'none' })
-    return
-  }
-  if (walletPwd.value.length !== 6) {
-    uni.showToast({ title: t('pay.walletPwd6'), icon: 'none' })
-    return
-  }
   if (paying.value) return
   paying.value = true
   try {
@@ -552,9 +536,6 @@ async function onBuyCard() {
     const res = await createChannelPay({
       saleType: 'RIDING_CARD',
       totalFee: cost,
-      channelType: 'YUDAOXING_APP',
-      invokeWx: false,
-      walletPwd: walletPwd.value,
       saleInfo: {
         total_fee: cost,
         riding_card_id: id,

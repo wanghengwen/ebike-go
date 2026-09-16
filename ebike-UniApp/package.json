@@ -13,10 +13,13 @@
     "dev:app-android": "uni -p app-android",
     "dev:app-ios": "uni -p app-ios",
     "build:h5": "node scripts/run-build.mjs h5",
+    "build:h5:renren": "node scripts/run-build.mjs h5 --env=renren --mode=release",
     "build:mp-weixin": "node scripts/run-build.mjs mp-weixin",
     "build:app": "node scripts/run-build.mjs app",
     "build:app-android": "node scripts/run-build.mjs app-android",
     "build:app-ios": "node scripts/run-build.mjs app-ios",
+    "android:sync": "node scripts/sync-android-offline.mjs",
+    "android:extract-sdk": "node scripts/extract-android-sdk.mjs",
     "tenant:import": "node scripts/import-legacy-config.mjs",
     "tenant:merge": "node scripts/merge-tenant.mjs"
   },

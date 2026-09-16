@@ -54,7 +54,7 @@ import { checkPayCertification } from '@/features/pay/checkPayCertification'
 import { useUserStore } from '@/stores/user'
 import { getBrandColor } from '@/shared/config'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 import FoldCard from '@/widgets/FoldCard.vue'
@@ -91,7 +91,7 @@ function requireLogin(): boolean {
     showCancel: false,
     confirmText: t('auth.loginNow'),
     success: (r) => {
-      if (r.confirm) navigate('redirect', '/pages/auth/quick-login')
+      if (r.confirm) navigate('redirect', getLoginPath())
     },
   })
   return false

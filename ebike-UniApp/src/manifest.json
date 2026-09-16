@@ -25,6 +25,7 @@
     },
     "distribute": {
       "android": {
+        "packagename": "com.luopingtech.ebike.demo",
         "permissions": [
           "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>",
           "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>",
@@ -61,6 +62,22 @@
         },
         "idfa": false
       },
+      "icons": {
+        "android": {
+          "hdpi": "static/app-icons/android/hdpi.png",
+          "xhdpi": "static/app-icons/android/xhdpi.png",
+          "xxhdpi": "static/app-icons/android/xxhdpi.png",
+          "xxxhdpi": "static/app-icons/android/xxxhdpi.png"
+        }
+      },
+      "splashscreen": {
+        "androidStyle": "common",
+        "android": {
+          "hdpi": "static/app-icons/splash/android-hdpi.png",
+          "xhdpi": "static/app-icons/splash/android-xhdpi.png",
+          "xxhdpi": "static/app-icons/splash/android-xxhdpi.png"
+        }
+      },
       "sdkConfigs": {
         "maps": {},
         "payment": {
@@ -94,7 +111,7 @@
     ]
   },
   "h5": {
-    "title": "ebike-UniApp",
+    "title": "伴我出行",
     "router": {
       "mode": "hash",
       "base": "./"

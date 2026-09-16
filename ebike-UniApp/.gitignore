@@ -35,3 +35,12 @@ config/*_release.json
 # WeChat / HBuilder local
 project.private.config.json
 .hbuilderx
+
+# Android offline SDK (large binaries; keep README only)
+android-offline/HBuilder-Integrate-AS/
+android-offline/HBuilder-Hello/
+android-offline/SDK/
+android-offline/UniPlugin-Hello-AS/
+android-offline/*.zip
+android-offline/*.7z
+android-offline/sdk-download/

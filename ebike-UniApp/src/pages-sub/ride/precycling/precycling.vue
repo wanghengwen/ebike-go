@@ -4,6 +4,7 @@
       id="precyclingMap"
       class="map"
       show-location
+      :provider="mapProvider()"
       :latitude="latitude"
       :longitude="longitude"
       :scale="17"
@@ -158,6 +159,7 @@ import { usePrecyclingMap, type ActivityEntrance } from '@/features/map/usePrecy
 import { useTempDataStore } from '@/stores/tempData'
 import { getBillingConfig } from '@/api/map'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 import { getTenantConfig } from '@/shared/config'

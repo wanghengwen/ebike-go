@@ -1,0 +1,31 @@
+{
+  "_comment": "构建时由 gradle syncTenantConfig 从 config/{tenant}_{mode}.json 写出 tenant.json。想手工联调就照这份填好改名成 tenant.json，密钥不要入库。",
+  "name": "Local Rider",
+  "alias": "local",
+  "tenantId": "",
+  "app": {
+    "androidApplicationId": "com.luopingtech.ebike.rider.demo",
+    "iosBundleId": "com.luopingtech.ebike.rider.demo",
+    "displayName": "Local Rider"
+  },
+  "api": {
+    "baseUrl": "",
+    "logUploadUrl": ""
+  },
+  "auth": {
+    "businessSecret": "",
+    "signSecret": ""
+  },
+  "map": {
+    "provider": "none",
+    "tencentKey": "",
+    "googleKey": ""
+  },
+  "features": {
+    "bleTransport": "simulator",
+    "mapProvider": "none",
+    "push": false,
+    "backgroundLocation": false,
+    "overseas": false
+  }
+}

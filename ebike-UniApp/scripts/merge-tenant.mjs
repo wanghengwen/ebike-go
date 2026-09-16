@@ -152,8 +152,38 @@ if (fs.existsSync(manifestPath)) {
       downloadFile: merged.networkTimeout.downloadFile || 60000,
     }
   }
+
+  // App-plus: package name + Amap key from tenant / local.secrets
+  if (!manifest['app-plus']) manifest['app-plus'] = {}
+  if (!manifest['app-plus'].distribute) manifest['app-plus'].distribute = {}
+  if (!manifest['app-plus'].distribute.android) manifest['app-plus'].distribute.android = {}
+  const androidPkg = merged.appPlus?.androidPackage
+  if (androidPkg) {
+    manifest['app-plus'].distribute.android.packagename = androidPkg
+  }
+  if (!manifest['app-plus'].distribute.sdkConfigs) manifest['app-plus'].distribute.sdkConfigs = {}
+  const amapKey = merged.appPlus?.amapKey
+  if (amapKey) {
+    manifest['app-plus'].distribute.sdkConfigs.maps = {
+      amap: {
+        name: 'amap',
+        appkey_android: amapKey,
+        appkey_ios: amapKey,
+      },
+    }
+  }
+
+  // H5：标题跟租户；router.base 固定相对路径，方便挂到任意 CDN 子目录 / Rider WebView。
+  if (!manifest.h5) manifest.h5 = {}
+  if (merged.name) manifest.h5.title = merged.name
+  if (!manifest.h5.router) manifest.h5.router = {}
+  manifest.h5.router.mode = 'hash'
+  manifest.h5.router.base = './'
+
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
-  console.log(`[tenant:merge] patched manifest.json appid=${appid || '(unchanged)'}`)
+  console.log(
+    `[tenant:merge] patched manifest.json appid=${appid || '(unchanged)'} androidPkg=${androidPkg || '(unchanged)'} h5.title=${manifest.h5.title || ''}`,
+  )
 }
 
 // --- patch pages.json globalStyle ---

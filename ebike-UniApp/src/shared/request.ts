@@ -4,6 +4,8 @@ import encBase64 from 'crypto-js/enc-base64'
 import { getAcceptLanguage, t } from '@/locales'
 import { getApiBaseUrl, getTenantConfig } from '@/shared/config'
 import { logger } from '@/shared/logger'
+import { getLoginPath } from '@/shared/navigate'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 import { storage } from '@/shared/storage'
 
 export type RequestConfig = {
@@ -44,6 +46,13 @@ let pending: Array<{
 }> = []
 
 function platformTag(): string {
+  if (isNative()) {
+    try {
+      return nativeHost()?.platform() || 'android'
+    } catch {
+      return 'android'
+    }
+  }
   // Legacy generateAjaxParams always sent platform: 'wechat'
   return 'wechat'
 }
@@ -127,12 +136,16 @@ function clearSession(keepServiceId = false) {
 
 function forceRelogin(msg?: string, keepServiceId = false) {
   clearSession(keepServiceId)
+  if (isNative()) {
+    nativeHost()?.navigate({ type: 'reLaunch', url: 'login' })
+    return
+  }
   uni.showModal({
     title: t('error.unauthorized'),
     content: msg || t('error.unauthorized'),
     showCancel: false,
     success: () => {
-      uni.reLaunch({ url: '/pages/auth/quick-login' })
+      uni.reLaunch({ url: getLoginPath() })
     },
   })
 }
@@ -211,7 +224,47 @@ function showBizError(config: RequestConfig, res: ApiResult) {
   })
 }
 
+async function nativeBridgeRequest<T = unknown>(config: RequestConfig): Promise<ApiResult<T>> {
+  const host = nativeHost()
+  if (!host) {
+    return { success: false, code: 'NATIVE', msg: t('common.networkError') }
+  }
+  try {
+    const raw = (await host.request({
+      url: config.url,
+      method: config.method || 'POST',
+      data:
+        config.data && typeof config.data === 'object' && !Array.isArray(config.data)
+          ? (config.data as Record<string, unknown>)
+          : {},
+      header: config.header,
+      auth: config.auth,
+    })) as ApiResult<T>
+    const res: ApiResult<T> = {
+      success: Boolean(raw?.success),
+      code: raw?.code,
+      msg: raw?.msg,
+      data: raw?.data as T,
+    }
+    if (res.code === '00015' || res.code === 'UNAUTHORIZED') {
+      forceRelogin(res.msg)
+      return res
+    }
+    if (!res.success) showBizError(config, res)
+    return res
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : t('common.networkError')
+    if (config.showError !== false) {
+      uni.showToast({ title: msg, icon: 'none' })
+    }
+    return { success: false, code: 'NETWORK', msg }
+  }
+}
+
 export async function request<T = unknown>(config: RequestConfig): Promise<ApiResult<T>> {
+  if (isNative()) {
+    return nativeBridgeRequest<T>(config)
+  }
   const res = await rawRequest<T>(config)
 
   // Refresh token itself failed while logged in → force logout

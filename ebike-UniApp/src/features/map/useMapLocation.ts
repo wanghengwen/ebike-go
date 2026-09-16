@@ -1,4 +1,5 @@
 import { getNearBike, getServiceByPoi } from '@/api/map'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 import { useTempDataStore } from '@/stores/tempData'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
@@ -7,6 +8,19 @@ export function useMapLocation() {
   const temp = useTempDataStore()
 
   async function locate(): Promise<{ latitude: number; longitude: number } | null> {
+    if (isNative()) {
+      try {
+        const loc = await nativeHost()?.currentLocation()
+        const lat = Number(loc?.latitude)
+        const lng = Number(loc?.longitude)
+        if (Number.isFinite(lat) && Number.isFinite(lng)) {
+          temp.setLocation(lat, lng)
+          return { latitude: lat, longitude: lng }
+        }
+      } catch (e) {
+        logger.warn('native locate fail', e)
+      }
+    }
     return new Promise((resolve) => {
       uni.getLocation({
         type: 'gcj02',

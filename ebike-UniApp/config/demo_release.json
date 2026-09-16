@@ -31,6 +31,7 @@
   },
   "appPlus": {
     "androidPackage": "com.luopingtech.ebike.demo",
-    "iosBundleId": "com.luopingtech.ebike.demo"
+    "iosBundleId": "com.luopingtech.ebike.demo",
+    "amapKey": ""
   }
 }

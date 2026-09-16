@@ -1,0 +1,28 @@
+# 本机构建参数模板。复制为 local.properties 后填写，local.properties 不入库。
+
+# Android SDK 位置
+sdk.dir=
+
+# Gradle JVM。留空则走 gradle/gradle-daemon-jvm.properties 的 toolchainVersion（25）。
+org.gradle.java.home=
+
+# 构建使用的租户配置：config/{tenant}_{mode}.json
+# 联调人人骑行网关请用 renren（见 config/README.md）；demo 无密钥。
+rider.tenant=renren
+rider.mode=release
+
+# 腾讯地图 Key（写进 AndroidManifest TencentMapSDK / iOS Info.plist RiderTencentMapKey）。
+# 该 Key 在 provider 为 none/tencent 时启用真图。
+# 包名 / Bundle ID 需与控制台登记一致。
+rider.map.tencentKey=
+
+# 签名配置。开源仓库不提供签名库，release 构建需自备。
+rider.signing.storeFile=
+rider.signing.storePassword=
+rider.signing.keyAlias=
+rider.signing.keyPassword=
+
+# 私有蓝牙 SDK 仓库（自备）。留空时使用 ble-simulator 模拟实现。
+rider.ble.mavenUrl=
+rider.ble.mavenUser=
+rider.ble.mavenPassword=

@@ -2,7 +2,7 @@ import { getPersonInfo } from '@/api/user'
 import { useUserStore } from '@/stores/user'
 import { useTempDataStore } from '@/stores/tempData'
 import { useFaceCheck } from '@/features/auth/useFaceCheck'
-import { navigate } from '@/shared/navigate'
+import { getLoginPath, navigate } from '@/shared/navigate'
 import { logger } from '@/shared/logger'
 import { storage } from '@/shared/storage'
 import { readLimitRiding, readCreditLimitInfo, creditTipTitle } from '@/features/credit/useCreditLimit'
@@ -231,13 +231,13 @@ export function useScanGate() {
   async function ensureCanScan(opts: { skipVerified?: boolean } = {}): Promise<ScanGateResult> {
     user.hydrateFromStorage()
     if (!user.isLoggedIn || !user.userInfo?.pin) {
-      navigate('to', '/pages/auth/quick-login')
+      navigate('to', getLoginPath())
       return { ok: false, reason: 'login' }
     }
 
     const profile = await refreshProfile()
     if (!profile.pin && !user.userInfo.pin) {
-      navigate('to', '/pages/auth/quick-login')
+      navigate('to', getLoginPath())
       return { ok: false, reason: 'login' }
     }
 

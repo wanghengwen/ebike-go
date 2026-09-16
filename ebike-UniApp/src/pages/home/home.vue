@@ -32,6 +32,7 @@
           class="map"
           id="homeMap"
           show-location
+          :provider="mapProvider()"
           :latitude="latitude"
           :longitude="longitude"
           :scale="17"
@@ -153,6 +154,7 @@ import {
 } from '@/shared/config'
 import { getIconCfg, getMapCfg } from '@/shared/tenantSkin'
 import { navigate, setNavTitle } from '@/shared/navigate'
+import { mapProvider } from '@/shared/mapProvider'
 import { storage } from '@/shared/storage'
 import { logger } from '@/shared/logger'
 import BizPopup from '@/widgets/BizPopup.vue'

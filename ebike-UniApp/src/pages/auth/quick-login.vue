@@ -65,7 +65,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuth } from '@/features/auth/useAuth'
 import { getBrandColor, getButtonWhiteColor, getTenantConfig } from '@/shared/config'
 import { getIconCfg } from '@/shared/tenantSkin'
-import { setNavTitle } from '@/shared/navigate'
+import { navigate, setNavTitle } from '@/shared/navigate'
 import { openProtocol } from '@/shared/protocol'
 
 const { t } = useI18n()
@@ -119,7 +119,7 @@ function onNonWxLogin() {
     onNeedAgree()
     return
   }
-  uni.showToast({ title: t('auth.wxOnlyLogin'), icon: 'none' })
+  navigate('to', '/pages/auth/phone-login')
 }
 
 async function onWxPhone(e: {

@@ -5,6 +5,7 @@
       class="map"
       id="fullMap"
       show-location
+      :provider="mapProvider()"
       :latitude="latitude"
       :longitude="longitude"
       :scale="16"
@@ -15,7 +16,12 @@
       @callouttap="onCalloutTap"
       @tap="onMapTap"
     >
-      <cover-view class="back" :style="{ top: statusBarPx + 12 + 'px' }" @tap="goBack">
+      <cover-view
+        v-if="showPageBack"
+        class="back"
+        :style="{ top: statusBarPx + 12 + 'px' }"
+        @tap="goBack"
+      >
         <cover-image v-if="backIcon" class="back__img" :src="backIcon" />
       </cover-view>
 
@@ -98,6 +104,8 @@ import { useTempDataStore } from '@/stores/tempData'
 import { useUserStore } from '@/stores/user'
 import { getPersonInfo } from '@/api/user'
 import { navigate } from '@/shared/navigate'
+import { isNative } from '@/shared/nativeHost'
+import { mapProvider } from '@/shared/mapProvider'
 import { openThirdPartyMap } from '@/shared/openMapApp'
 import { logger } from '@/shared/logger'
 import { isRedEnvelopeBike, redEnvelopeActivityId } from '@/features/bike/redEnvelope'
@@ -158,6 +166,8 @@ const backIcon = computed(
     getMapCfg('iconBack') ||
     String(getTenantConfig().customSetting?.navBackIcon || ''),
 )
+/** 原生宿主用容器顶栏后退，地图页不再叠 cover-view 返回。 */
+const showPageBack = computed(() => !isNative())
 const locateIcon = computed(() => getMapCfg('sideGetLocation'))
 
 const batteryText = computed(() => {

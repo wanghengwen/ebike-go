@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rider</string>
+
+    <string name="track_location_channel_name">Ride location</string>
+    <string name="track_location_channel_desc">Keeps locating while you ride, for billing and return checks</string>
+    <string name="track_location_title">Riding</string>
+    <string name="track_location_text">Recording your trip — tap to return to the ride screen</string>
+</resources>

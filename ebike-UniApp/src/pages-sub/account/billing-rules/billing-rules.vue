@@ -128,7 +128,7 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import { useI18n } from 'vue-i18n'
 import { getBillingConfig } from '@/api/map'
 import { getTenantConfig } from '@/shared/config'
-import { navigate, setNavTitle } from '@/shared/navigate'
+import { getLoginPath, navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { getIconCfg } from '@/shared/tenantSkin'
 import { useUserStore } from '@/stores/user'
@@ -220,7 +220,7 @@ onLoad(async (q) => {
       showCancel: false,
       confirmText: t('account.goLogin'),
       success: (res) => {
-        if (res.confirm) navigate('redirectTo', '/pages/auth/quick-login')
+        if (res.confirm) navigate('redirect', getLoginPath())
       },
     })
     return
