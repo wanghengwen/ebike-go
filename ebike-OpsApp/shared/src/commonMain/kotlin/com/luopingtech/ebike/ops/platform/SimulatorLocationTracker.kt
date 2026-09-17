@@ -25,6 +25,8 @@ class SimulatorLocationTracker(
 
     override suspend fun currentLocation(): OpsResult<GeoPoint> = OpsResult.Ok(peekNext())
 
+    override fun lastKnownOrNull(): GeoPoint? = peekNext()
+
     override fun track(): Flow<GeoPoint> = flow {
         while (coroutineContext.isActive) {
             if (running) {

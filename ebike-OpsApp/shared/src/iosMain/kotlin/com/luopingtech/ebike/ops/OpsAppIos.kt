@@ -11,6 +11,7 @@ import com.luopingtech.ebike.ops.platform.IosPhotoCapture
 import com.luopingtech.ebike.ops.platform.IosReverseGeocoder
 import com.luopingtech.ebike.ops.platform.SecureStore
 import com.luopingtech.ebike.ops.platform.SimulatorLocationTracker
+import com.luopingtech.ebike.ops.platform.createDeviceInfo
 import com.luopingtech.ebike.ops.platform.createSecureStore
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -35,9 +36,13 @@ fun createIosOpsApp(config: TenantConfig): OpsApp {
     val merged = mergeMapKey(config, infoPlistTencentKey())
     val secureStore = createSecureStore()
     val demo = merged.api.baseUrl.isBlank()
+    val versionName = (NSBundle.mainBundle.objectForInfoDictionaryKey("CFBundleShortVersionString") as? String)
+        .orEmpty()
+        .ifBlank { "1.0.0" }
     val app = OpsApp.create(
         config = merged,
         secureStore = secureStore,
+        deviceInfo = createDeviceInfo(appVersion = versionName),
         codeScanner = IosCodeScanner(),
         photoCapture = IosPhotoCapture(),
         // demo（baseUrl 为空）用模拟轨迹：模拟器默认没有 GPS，

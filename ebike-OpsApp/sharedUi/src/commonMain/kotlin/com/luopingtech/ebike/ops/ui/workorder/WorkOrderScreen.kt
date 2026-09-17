@@ -56,6 +56,13 @@ fun WorkOrderScreen(
         feature.load(currentArea)
     }
 
+    fun closePage() {
+        feature.clear()
+        onClose()
+    }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = ::closePage)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -68,10 +75,7 @@ fun WorkOrderScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(title, style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = {
-                feature.clear()
-                onClose()
-            }) { Text(t(Str.Back)) }
+            TextButton(onClick = ::closePage) { Text(t(Str.Back)) }
         }
         Text(
             text = t(Str.WorkOrderHint),

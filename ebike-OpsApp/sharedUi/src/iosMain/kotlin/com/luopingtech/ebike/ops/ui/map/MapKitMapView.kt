@@ -20,6 +20,7 @@ import com.luopingtech.ebike.ops.domain.model.TrackPoint
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.allocArray
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.get
@@ -27,6 +28,7 @@ import kotlinx.cinterop.memScoped
 import kotlinx.cinterop.useContents
 import platform.CoreLocation.CLLocationCoordinate2D
 import platform.CoreLocation.CLLocationCoordinate2DMake
+import platform.Foundation.NSSelectorFromString
 import platform.MapKit.MKAnnotationProtocol
 import platform.MapKit.MKAnnotationView
 import platform.MapKit.MKClusterAnnotation
@@ -47,6 +49,9 @@ import platform.MapKit.addOverlay
 import platform.MapKit.overlays
 import platform.MapKit.removeOverlays
 import platform.UIKit.UIColor
+import platform.UIKit.UIGestureRecognizerStateEnded
+import platform.UIKit.UITapGestureRecognizer
+import platform.UIKit.addGestureRecognizer
 import platform.UIKit.systemBlueColor
 import platform.UIKit.systemGreenColor
 import platform.UIKit.systemOrangeColor
@@ -88,6 +93,12 @@ private fun MapKitMapView(spec: OpsMapSpec, modifier: Modifier) {
     // 回调每次重组都可能换实例，delegate 只持最新的一份。
     delegate.onSelectCar = spec.onSelectCarId
     delegate.onSelectCluster = spec.onSelectCluster
+    delegate.onMapTap = spec.onMapTap
+    delegate.onCameraIdle = spec.onCameraIdle
+    delegate.onCameraMove = spec.onCameraMove
+    delegate.onScreenToLatLng = spec.onScreenToLatLng
+    delegate.onBatchScreenToLatLng = spec.onBatchScreenToLatLng
+    delegate.onLatLngToScreen = spec.onLatLngToScreen
     delegate.clusterOverview = spec.clusterOverview
 
     Box(modifier = modifier) {
@@ -98,10 +109,30 @@ private fun MapKitMapView(spec: OpsMapSpec, modifier: Modifier) {
                     setShowsCompass(true)
                     setShowsScale(true)
                     setPitchEnabled(false)
+                    delegate.attachMapTap(this)
                 }
             },
             modifier = Modifier.fillMaxSize(),
-            update = { map -> sync.apply(map, spec) },
+            update = { map ->
+                sync.apply(map, spec)
+                if (spec.screenToLatLngNonce > 0) {
+                    delegate.convertScreenToLatLng(map, spec.screenPickX, spec.screenPickY, spec.screenToLatLngNonce)
+                }
+                if (spec.batchScreenToLatLngNonce > 0 && spec.batchScreenPoints.isNotEmpty()) {
+                    delegate.convertBatchScreenToLatLng(
+                        map,
+                        spec.batchScreenPoints,
+                        spec.batchScreenToLatLngNonce,
+                    )
+                }
+                if (spec.latLngToScreenNonce > 0) {
+                    delegate.convertLatLngToScreen(
+                        map,
+                        spec.latLngToScreenPoints,
+                        spec.latLngToScreenNonce,
+                    )
+                }
+            },
         )
         if (spec.showStatusOverlay) {
             Text(
@@ -236,7 +267,7 @@ private class MapSyncState {
         val valid = spec.pins.filter { it.lat != 0.0 || it.lng != 0.0 }
         val fitKey = valid.joinToString("|") { "${it.id}:${it.lat},${it.lng}" } +
             "|f${spec.fencePolygons.size}|t${spec.trackPoints.size}|n${spec.fitNonce}"
-        if (valid.isNotEmpty() && fitKey != cameraFittedFor) {
+        if (spec.autoFitOnPins && valid.isNotEmpty() && fitKey != cameraFittedFor) {
             cameraFittedFor = fitKey
             cameraSelectedCarId = spec.selectedCarId
             if (valid.size == 1 && spec.fencePolygons.isEmpty() && spec.trackPoints.isEmpty()) {
@@ -327,11 +358,101 @@ private class MapSyncState {
     }
 }
 
-@OptIn(ExperimentalForeignApi::class)
+@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 private class OpsMapDelegate : NSObject(), MKMapViewDelegateProtocol {
     var onSelectCar: (String) -> Unit = {}
     var onSelectCluster: (List<String>) -> Unit = {}
+    var onMapTap: ((lat: Double, lng: Double) -> Unit)? = null
+    var onCameraIdle: ((lat: Double, lng: Double) -> Unit)? = null
+    var onCameraMove: ((lat: Double, lng: Double) -> Unit)? = null
+    var onScreenToLatLng: ((lat: Double, lng: Double) -> Unit)? = null
+    var onBatchScreenToLatLng: ((List<Pair<Double, Double>>) -> Unit)? = null
+    var onLatLngToScreen: ((List<Pair<Float, Float>>) -> Unit)? = null
     var clusterOverview: Boolean = true
+    private var mapView: MKMapView? = null
+    private var lastScreenPickNonce = -1
+    private var lastBatchPickNonce = -1
+    private var lastLatLngToScreenNonce = -1
+
+    fun convertScreenToLatLng(map: MKMapView, x: Float, y: Float, nonce: Int) {
+        if (nonce == lastScreenPickNonce || nonce <= 0) return
+        lastScreenPickNonce = nonce
+        val cb = onScreenToLatLng ?: return
+        val point = platform.CoreGraphics.CGPointMake(x.toDouble(), y.toDouble())
+        val coord = map.convertPoint(point, toCoordinateFromView = map)
+        coord.useContents { cb(latitude, longitude) }
+    }
+
+    fun convertBatchScreenToLatLng(
+        map: MKMapView,
+        points: List<Pair<Float, Float>>,
+        nonce: Int,
+    ) {
+        if (nonce == lastBatchPickNonce || nonce <= 0 || points.isEmpty()) return
+        lastBatchPickNonce = nonce
+        val cb = onBatchScreenToLatLng ?: return
+        val mapped = points.map { (x, y) ->
+            val point = platform.CoreGraphics.CGPointMake(x.toDouble(), y.toDouble())
+            val coord = map.convertPoint(point, toCoordinateFromView = map)
+            coord.useContents { latitude to longitude }
+        }
+        cb(mapped)
+    }
+
+    fun convertLatLngToScreen(
+        map: MKMapView,
+        points: List<Pair<Double, Double>>,
+        nonce: Int,
+    ) {
+        if (nonce == lastLatLngToScreenNonce || nonce <= 0) return
+        lastLatLngToScreenNonce = nonce
+        val cb = onLatLngToScreen ?: return
+        val mapped = points.map { (lat, lng) ->
+            val coord = platform.CoreLocation.CLLocationCoordinate2DMake(lat, lng)
+            val point = map.convertCoordinate(coord, toPointToView = map)
+            point.useContents { x.toFloat() to y.toFloat() }
+        }
+        cb(mapped)
+    }
+
+    fun attachMapTap(map: MKMapView) {
+        if (mapView === map) return
+        mapView = map
+        val tap = UITapGestureRecognizer(
+            target = this,
+            action = NSSelectorFromString("handleMapTap:"),
+        )
+        tap.cancelsTouchesInView = false
+        map.addGestureRecognizer(tap)
+    }
+
+    @ObjCAction
+    fun handleMapTap(sender: UITapGestureRecognizer) {
+        val map = mapView ?: return
+        val tap = onMapTap ?: return
+        if (sender.state != UIGestureRecognizerStateEnded) return
+        val point = sender.locationInView(map)
+        val hit = map.hitTest(point, withEvent = null)
+        if (hit is MKAnnotationView) return
+        val coord = map.convertPoint(point, toCoordinateFromView = map)
+        coord.useContents { tap(latitude, longitude) }
+    }
+
+    override fun mapView(
+        mapView: MKMapView,
+        regionDidChangeAnimated: Boolean,
+    ) {
+        val idle = onCameraIdle ?: return
+        val center = mapView.centerCoordinate
+        center.useContents { idle(latitude, longitude) }
+    }
+
+    override fun mapViewDidChangeVisibleRegion(mapView: MKMapView) {
+        // 对齐原版 ON_MOVE：拖图过程中持续重投影选点顶点
+        val move = onCameraMove ?: return
+        val center = mapView.centerCoordinate
+        center.useContents { move(latitude, longitude) }
+    }
 
     override fun mapView(
         mapView: MKMapView,
@@ -373,11 +494,46 @@ private class OpsMapDelegate : NSObject(), MKMapViewDelegateProtocol {
                 val ids = annotation.memberAnnotations
                     .filterIsInstance<OpsPinAnnotation>()
                     .flatMap { it.pin.carIds() }
-                if (ids.isNotEmpty()) onSelectCluster(ids)
+                val latDelta = mapView.region.useContents { span.latitudeDelta }
+                // ~zoom 16：视野更近才进车辆列表，否则先放大一级（对齐 handleClusterClick）。
+                if (latDelta > 0.012) {
+                    mapView.deselectAnnotation(annotation, animated = false)
+                    val centerLat = annotation.coordinate.useContents { latitude }
+                    val centerLng = annotation.coordinate.useContents { longitude }
+                    val next = mapView.region.useContents {
+                        regionOf(
+                            centerLat = centerLat,
+                            centerLng = centerLng,
+                            latDelta = (span.latitudeDelta * 0.5).coerceIn(0.0008, 60.0),
+                            lngDelta = (span.longitudeDelta * 0.5).coerceIn(0.0008, 60.0),
+                        )
+                    }
+                    mapView.setRegion(next, animated = true)
+                } else if (ids.isNotEmpty()) {
+                    onSelectCluster(ids)
+                }
             }
             is OpsPinAnnotation -> {
                 val pin = annotation.pin
-                if (pin.isCluster) onSelectCluster(pin.carIds()) else onSelectCar(pin.id)
+                if (pin.isCluster) {
+                    val latDelta = mapView.region.useContents { span.latitudeDelta }
+                    if (latDelta > 0.012) {
+                        mapView.deselectAnnotation(annotation, animated = false)
+                        val next = mapView.region.useContents {
+                            regionOf(
+                                centerLat = pin.lat,
+                                centerLng = pin.lng,
+                                latDelta = (span.latitudeDelta * 0.5).coerceIn(0.0008, 60.0),
+                                lngDelta = (span.longitudeDelta * 0.5).coerceIn(0.0008, 60.0),
+                            )
+                        }
+                        mapView.setRegion(next, animated = true)
+                    } else {
+                        onSelectCluster(pin.carIds())
+                    }
+                } else {
+                    onSelectCar(pin.id)
+                }
             }
             else -> Unit
         }
@@ -393,7 +549,8 @@ private class OpsMapDelegate : NSObject(), MKMapViewDelegateProtocol {
             fillColor = UIColor.systemBlueColor.colorWithAlphaComponent(0.12)
         }
         is MKPolyline -> MKPolylineRenderer(polyline = rendererForOverlay).apply {
-            strokeColor = UIColor.systemOrangeColor
+            // 对齐 TrackDataHelp：0xff0BB774
+            strokeColor = UIColor.colorWithRed(11.0 / 255.0, green = 183.0 / 255.0, blue = 116.0 / 255.0, alpha = 1.0)
             lineWidth = 4.0
         }
         else -> MKOverlayRenderer(overlay = rendererForOverlay)

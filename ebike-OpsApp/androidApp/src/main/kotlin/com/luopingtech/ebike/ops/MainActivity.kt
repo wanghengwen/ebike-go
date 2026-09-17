@@ -4,10 +4,18 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.luopingtech.ebike.ops.domain.model.Vehicle
+import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
 import com.luopingtech.ebike.ops.platform.ActivityCodeScanner
 import com.luopingtech.ebike.ops.platform.ActivityPhotoCapture
 import com.luopingtech.ebike.ops.platform.rememberTrackPermissionGate
@@ -19,6 +27,9 @@ import com.luopingtech.ebike.ops.ui.permission.LocalOpsTrackPermissionGate
 import com.luopingtech.ebike.ops.ui.scan.LocalOpsScanPreview
 import com.luopingtech.ebike.ops.ui.shell.OpsAppRoot
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
+import com.luopingtech.ebike.ops.ui.vehicle.LocalOpenVehicleDetail
+import com.luopingtech.ebike.ops.ui.vehicle.OpenVehicleDetail
+import com.luopingtech.ebike.ops.ui.vehicle.VehicleDetailScreen
 
 /**
  * Android 宿主。界面一行都不在这里：登录、四个 Tab、扫码屏全在 :sharedUi 的 [OpsAppRoot]，
@@ -41,6 +52,13 @@ class MainActivity : ComponentActivity() {
         host.photoCaptureBridge.bind(activityPhotoCapture)
         setContent {
             OpsTheme(branding = app.config.branding) {
+                val homeState by app.homeFeature.state.collectAsState()
+                var detailVehicle by remember { mutableStateOf<Vehicle?>(null) }
+                var detailServiceAreaId by remember { mutableStateOf<String?>(null) }
+                val permissions = remember(homeState.session?.permissionCodes, app.isDemoMode) {
+                    if (app.isDemoMode) OpsPermissions.demoFull()
+                    else OpsPermissions.fromCodes(homeState.session?.permissionCodes.orEmpty())
+                }
                 CompositionLocalProvider(
                     LocalOpsMapRenderer provides opsMapRendererFor(app),
                     LocalOpsScanPreview provides AndroidScanPreview,
@@ -48,9 +66,30 @@ class MainActivity : ComponentActivity() {
                     LocalOpsToast provides { message: String ->
                         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                     },
+                    LocalOpenVehicleDetail provides OpenVehicleDetail { vehicle, serviceAreaId ->
+                        detailVehicle = vehicle
+                        detailServiceAreaId = serviceAreaId
+                    },
                 ) {
-                    Surface(modifier = Modifier.fillMaxSize()) {
-                        OpsAppRoot(app)
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Surface(modifier = Modifier.fillMaxSize()) {
+                            OpsAppRoot(app)
+                        }
+                        detailVehicle?.let { vehicle ->
+                            VehicleDetailScreen(
+                                app = app,
+                                vehicle = vehicle,
+                                serviceAreaId = detailServiceAreaId,
+                                permissions = permissions,
+                                mapReady = homeState.mapReady,
+                                mapProviderKind = homeState.mapProviderKind,
+                                onClose = {
+                                    detailVehicle = null
+                                    detailServiceAreaId = null
+                                },
+                                modifier = Modifier.fillMaxSize(),
+                            )
+                        }
                     }
                 }
             }

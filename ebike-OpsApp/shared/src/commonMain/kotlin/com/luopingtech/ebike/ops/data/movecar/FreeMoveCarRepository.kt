@@ -13,6 +13,7 @@ interface FreeMoveCarRepository {
     suspend fun list(serviceId: String): OpsResult<List<FreeMoveCar>>
     suspend fun finish(
         carIds: List<String>,
+        serviceId: String,
         phone: String,
         pictures: List<String> = emptyList(),
         remark: String? = null,
@@ -44,8 +45,13 @@ class FreeMoveCarRepositoryImpl(
     ): OpsResult<List<FreeMoveCar>> {
         if (demoMode || api == null) {
             val added = carIds.map { id ->
-                FreeMoveCar(carId = id, imei = "86${id.hashCode().toUInt().toString().padStart(13, '0').take(13)}", restBattery = 55, state = 1)
-                    .also { demoCars[it.carId] = it }
+                FreeMoveCar(
+                    carId = id,
+                    imei = "86${id.hashCode().toUInt().toString().padStart(13, '0').take(13)}",
+                    restBattery = 55,
+                    state = FreeMoveCar.STATE_OPERATION,
+                    izFinish = false,
+                ).also { demoCars[it.carId] = it }
             }
             return OpsResult.Ok(added)
         }
@@ -56,7 +62,13 @@ class FreeMoveCarRepositoryImpl(
         if (demoMode || api == null) {
             if (demoCars.isEmpty()) {
                 // Seed one demo vehicle so UI is not empty after login.
-                val seed = FreeMoveCar(carId = "D${serviceId}-002", imei = "860000000000002", restBattery = 48, state = 1)
+                val seed = FreeMoveCar(
+                    carId = "D${serviceId}-002",
+                    imei = "860000000000002",
+                    restBattery = 48,
+                    state = FreeMoveCar.STATE_OPERATION,
+                    izFinish = false,
+                )
                 demoCars[seed.carId] = seed
             }
             return OpsResult.Ok(demoCars.values.toList())
@@ -66,6 +78,7 @@ class FreeMoveCarRepositoryImpl(
 
     override suspend fun finish(
         carIds: List<String>,
+        serviceId: String,
         phone: String,
         pictures: List<String>,
         remark: String?,
@@ -79,7 +92,7 @@ class FreeMoveCarRepositoryImpl(
             carIds.forEach { demoCars.remove(it) }
             return OpsResult.Ok(Unit)
         }
-        return api.finish(carIds, phone, pictures, remark, teamWorkers)
+        return api.finish(carIds, serviceId, phone, pictures, remark, teamWorkers)
     }
 
     override suspend fun remove(carId: String, serviceId: String): OpsResult<Unit> {

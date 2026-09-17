@@ -45,11 +45,14 @@ import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.i18n.Strings
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * 页内嵌扫码预览。CameraX + ML Kit，生命周期跟 [LocalLifecycleOwner]。
  *
- * [onCode] 每识别到一次非空 raw 回调一次；调用方负责去重与业务节流。
+ * [onCode] 识别到有效码时回调；同一内容在 [sameCodeCooldownMs] 内不会重复回调，
+ * 避免镜头未移开时连着触发（对齐遗留 preScanResult 去重思路）。
  * [torchOn] 控制闪光灯；[enabled]=false 时跳过分析（处理上一码期间）。
  */
 @Composable
@@ -58,6 +61,8 @@ fun OpsCameraScanPreview(
     modifier: Modifier = Modifier,
     torchOn: Boolean = false,
     enabled: Boolean = true,
+    /** 同一扫码结果冷却时间；换码可立即回调。 */
+    sameCodeCooldownMs: Long = 3_000L,
 ) {
     val context = LocalContext.current
     var permissionGranted by remember {
@@ -69,6 +74,13 @@ fun OpsCameraScanPreview(
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { granted -> permissionGranted = granted }
+
+    // 对齐遗留：进入扫码页后若尚未授权，立即弹出系统相机权限框（不必先点文案按钮）。
+    LaunchedEffect(Unit) {
+        if (!permissionGranted) {
+            permissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
 
     if (!permissionGranted) {
         Box(
@@ -88,6 +100,9 @@ fun OpsCameraScanPreview(
     var previewReady by remember { mutableStateOf(false) }
     val analysisEnabled = remember { AtomicBoolean(enabled) }
     val latestOnCode by rememberUpdatedState(onCode)
+    val lastEmittedRaw = remember { AtomicReference("") }
+    val lastEmittedAtMs = remember { AtomicLong(0L) }
+    val cooldownMs = rememberUpdatedState(sameCodeCooldownMs)
 
     LaunchedEffect(enabled) { analysisEnabled.set(enabled) }
     LaunchedEffect(torchOn, camera) {
@@ -155,7 +170,15 @@ fun OpsCameraScanPreview(
                                     .asSequence()
                                     .mapNotNull { it.rawValue?.trim()?.takeIf(String::isNotEmpty) }
                                     .firstOrNull()
-                                if (raw != null) latestOnCode(raw)
+                                    ?: return@addOnSuccessListener
+                                val now = System.currentTimeMillis()
+                                val prev = lastEmittedRaw.get()
+                                val elapsed = now - lastEmittedAtMs.get()
+                                // 同一码在冷却期内忽略；换码可立即上报。
+                                if (raw == prev && elapsed < cooldownMs.value) return@addOnSuccessListener
+                                lastEmittedRaw.set(raw)
+                                lastEmittedAtMs.set(now)
+                                latestOnCode(raw)
                             }
                             .addOnCompleteListener { imageProxy.close() }
                     }

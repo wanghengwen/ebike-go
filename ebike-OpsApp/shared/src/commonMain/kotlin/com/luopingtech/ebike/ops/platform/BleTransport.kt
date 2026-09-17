@@ -92,6 +92,7 @@ sealed class BleCommand {
     data class CloseHelmetLock(val vehicleId: String) : BleCommand()
     data class OpenBackWheelLock(val vehicleId: String) : BleCommand()
     data class CloseBackWheelLock(val vehicleId: String) : BleCommand()
+    data class Restart(val vehicleId: String) : BleCommand()
     data class Raw(val payload: ByteArray) : BleCommand() {
         override fun equals(other: Any?): Boolean =
             other is Raw && payload.contentEquals(other.payload)

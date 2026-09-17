@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.OpsApp
 import com.luopingtech.ebike.ops.core.i18n.Str
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import kotlinx.coroutines.launch
 
@@ -51,6 +53,10 @@ fun FieldChangeBatteryScreen(
     app: OpsApp,
     onClose: () -> Unit,
     onHelp: () -> Unit = {},
+    /** Legacy ReplaceBatteryActivity1 intent carId. */
+    initialCarId: String? = null,
+    /** Legacy: enter page then openBatteryBox() immediately. */
+    autoOpenBox: Boolean = false,
     scanPreview: @Composable (
         modifier: Modifier,
         torchOn: Boolean,
@@ -72,6 +78,17 @@ fun FieldChangeBatteryScreen(
         onDispose { app.fieldChangeBatteryFeature.clear() }
     }
 
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onClose)
+
+    LaunchedEffect(initialCarId, autoOpenBox) {
+        val carId = initialCarId?.trim().orEmpty()
+        if (carId.isBlank()) return@LaunchedEffect
+        app.fieldChangeBatteryFeature.setCarInput(carId)
+        if (autoOpenBox) {
+            app.fieldChangeBatteryFeature.openBatteryBox()
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Box(
             modifier = Modifier
@@ -80,14 +97,9 @@ fun FieldChangeBatteryScreen(
                 .statusBarsPadding()
                 .padding(horizontal = 8.dp, vertical = 10.dp),
         ) {
-            Text(
-                text = "‹",
-                color = colors.onPrimary,
-                fontSize = 28.sp,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clickable(onClick = onClose)
-                    .padding(4.dp),
+            OpsBackChevron(
+                onClick = onClose,
+                modifier = Modifier.align(Alignment.CenterStart),
             )
             Text(
                 text = t(Str.ChangeBatteryTool),
@@ -236,3 +248,4 @@ internal fun CheckboxMark(checked: Boolean) {
         }
     }
 }
+

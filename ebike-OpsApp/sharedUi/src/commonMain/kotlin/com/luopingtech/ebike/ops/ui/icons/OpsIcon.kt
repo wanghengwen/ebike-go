@@ -62,4 +62,82 @@ enum class OpsIcon {
     TaskMoveBike,
     TaskInspection,
     TaskRepair,
+
+    // —— 首页右侧筛选 ——
+    FilterDrawerOpen,
+    FilterDrawerClose,
+
+    // —— 报修 / 标记 ——
+    VehicleRepairV1,
+    VehicleRepairV2,
+    VehicleRepairV3,
+    PhotoReplaceHolder,
+    PhotoDelete,
+    VehicleAddIc,
+
+    // —— 通用导航 / 切换 ——
+    ChevronLeft,
+    CommonSwitch,
+
+    // —— 围栏浏览 / 地图侧栏 ——
+    MapMore,
+    MapMoreSelected,
+    MapLocation,
+    MapLocationSelected,
+    MapExplain,
+    MapSatellite,
+    MapSatelliteSelected,
+    IconParking,
+    IconNoParking,
+    ArrowDownBlack,
+    ArrowUpBlue,
+    CommonAble,
+    CommonUnable,
+    CommonDelete,
+    BtnClose,
+    FenceUndoAble,
+    FenceUndoDisable,
+    SelectMapPoint,
+    MapCenterPoint,
+    FenceAngleAble,
+    FenceAngleDisable,
+    FenceEditParams,
+    FenceModifySize,
+    FenceTabPatch,
+    FenceTabPoint,
+
+    // —— 首页地图工具 ——
+    HomeRefresh,
+    HomeDetail,
+    HomeDetailSelected,
+    HomeFence,
+    HomeFenceSelected,
+    HomeSwitch,
+    HomeSwitchSelected,
+
+    // —— 底部 Tab ——
+    TabMap,
+    TabMapSelected,
+    TabTask,
+    TabTaskSelected,
+    TabScan,
+    TabAnalysis,
+    TabAnalysisSelected,
+    TabMine,
+    TabMineSelected,
+
+    // —— 车辆检测（legacy VehicleDetect）——
+    DetectScan,
+    DetectSwitchAcc,
+    DetectSwitchDefend,
+    DetectSwitchBattery,
+    DetectSwitchHelmet,
+    DetectSwitchWheel,
+    DetectLocation,
+    DetectOverload,
+    DetectArrow,
+    DetectRing,
+    DetectRefresh,
+    DetectReboot,
+    BindClear,
 }

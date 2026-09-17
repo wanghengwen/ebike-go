@@ -52,10 +52,12 @@ class VehicleTagApi(
     private val pinProvider: () -> String = { "" },
 ) {
     suspend fun listTypes(serviceId: String): OpsResult<List<VehicleTagType>> {
-        val body = bodyJson("/business/ebike-management/carTag/type/list", serviceId)
+        // Align with ManagerApp ApiVehicleTagService.getTagTypeList
+        val path = "/business/ebike-management/carTag/type/list"
+        val body = bodyJson(path, serviceId)
         return when (
             val result = signedApi.post(
-                path = "business/ebike-management/carTag/type/list",
+                path = path,
                 bodyJson = body,
                 deserializer = ListSerializer(VehicleTagTypeDto.serializer()),
             )
@@ -79,7 +81,7 @@ class VehicleTagApi(
         }
         return when (
             val result = signedApi.post(
-                path = "business/ebike-management/carTag/record/page",
+                path = "/business/ebike-management/carTag/record/page",
                 bodyJson = body,
                 deserializer = VehicleTagPageDto.serializer(),
             )
@@ -136,7 +138,7 @@ class VehicleTagApi(
             fields["pin"] = pin
         }
         return signedApi.postMultipartUnit(
-            path = "business/ebike-management/carTag/record/add",
+            path = "/business/ebike-management/carTag/record/add",
             fields = fields,
         )
     }
@@ -159,7 +161,7 @@ class VehicleTagApi(
             }
         }
         return signedApi.postUnit(
-            path = "business/ebike-management/carTag/record/del",
+            path = "/business/ebike-management/carTag/record/del",
             bodyJson = body,
         )
     }
@@ -171,6 +173,7 @@ class VehicleTagApi(
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            serviceId.toLongOrNull()?.let { put("serviceId", it) } ?: put("serviceId", serviceId)
+            // ManagerApp puts AppConfig.SERVICE_ID as String — keep the same type.
+            put("serviceId", serviceId)
         }
 }

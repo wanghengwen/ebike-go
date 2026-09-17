@@ -1,7 +1,9 @@
 package com.luopingtech.ebike.ops.data.vehicle
 
+import com.luopingtech.ebike.ops.data.analysis.FlexibleBooleanSerializer
 import com.luopingtech.ebike.ops.domain.model.MapPin
 import com.luopingtech.ebike.ops.domain.model.Vehicle
+import com.luopingtech.ebike.ops.domain.model.homeMapPinIcon
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -29,19 +31,28 @@ data class VehicleDto(
     val helmetMac: String? = null,
     val forParkName: String? = null,
     val noParkName: String? = null,
+    /** Legacy VehicleModel uses Int 0/1; production also returns 0/1. */
+    @Serializable(with = FlexibleBooleanSerializer::class)
     val isOutofServAera: Boolean? = null,
+    @Serializable(with = FlexibleBooleanSerializer::class)
     val isFenceEnable: Boolean? = null,
     val totalMiles: Double? = null,
     val serviceName: String? = null,
     val model: String? = null,
+    @Serializable(with = FlexibleBooleanSerializer::class)
     val izHaveOverload: Boolean? = null,
     val acc: Int? = null,
     val defend: Int? = null,
+    @Serializable(with = FlexibleNullableEpochMsSerializer::class)
     val timestamp: Long? = null,
     @Serializable(with = FlexibleEpochMsSerializer::class)
     val lockTime: Long = 0L,
     @Serializable(with = FlexibleEpochMsSerializer::class)
     val unlockTime: Long = 0L,
+    val version: String? = null,
+    val gsmSignal: Int? = null,
+    val headingAngle: Int? = null,
+    val helmetBind: Int? = null,
 ) {
     fun toDomain(): Vehicle {
         val batteryFromRest = restBattery ?: 0
@@ -75,9 +86,13 @@ data class VehicleDto(
             izHaveOverload = izHaveOverload == true,
             acc = acc,
             defend = defend,
-            timestamp = timestamp,
-            lockTimeMs = lockTime,
-            unlockTimeMs = unlockTime,
+            timestamp = normalizeEpochMsOrNull(timestamp),
+            lockTimeMs = normalizeEpochMs(lockTime).takeIf { lockTime > 0 } ?: lockTime,
+            unlockTimeMs = normalizeEpochMs(unlockTime).takeIf { unlockTime > 0 } ?: unlockTime,
+            version = version.orEmpty(),
+            gsmSignal = gsmSignal,
+            headingAngle = headingAngle ?: -1,
+            helmetBind = helmetBind,
         )
     }
 }
@@ -92,4 +107,5 @@ fun Vehicle.toMapPin(): MapPin = MapPin(
     ridingState = ridingState,
     memberCount = 1,
     memberIds = listOf(carId),
+    icon = homeMapPinIcon(),
 )

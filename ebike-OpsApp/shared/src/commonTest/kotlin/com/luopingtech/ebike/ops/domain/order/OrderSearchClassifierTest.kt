@@ -38,8 +38,10 @@ class OrderFormatTest {
         assertEquals("3.50", OrderFormat.yuan(350))
         assertEquals("0.00", OrderFormat.yuan(0))
         assertEquals("3.50 元", OrderFormat.yuanWithUnit(350))
-        // 位数 ≤10 按秒：1500 秒 = 25 分
-        assertEquals("25分", OrderFormat.duration("1500"))
+        // 对齐 TimeStampUtils.timestampFormat：毫秒。1200000ms = 20 分
+        assertEquals("20分", OrderFormat.duration("1200000"))
+        assertEquals("25分", OrderFormat.duration("1500000"))
+        assertEquals("1秒", OrderFormat.duration("1500"))
         assertEquals("2.30公里", OrderFormat.distance(2300))
         assertEquals("230米", OrderFormat.distance(230))
     }
@@ -47,7 +49,7 @@ class OrderFormatTest {
     @Test
     fun labels_follow_language() {
         Strings.install(OpsI18n.fallback(OpsLanguage.EN))
-        assertEquals("25m", OrderFormat.duration("1500"))
+        assertEquals("25m", OrderFormat.duration("1500000"))
         assertEquals("2.30 km", OrderFormat.distance(2300))
         assertEquals("Paid", OrderFormat.payStateLabel(OrderPayStates.Paid))
         assertEquals("3.50 CNY", OrderFormat.yuanWithUnit(350))

@@ -3,13 +3,13 @@ package com.luopingtech.ebike.ops.ui.map
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.UIKitView
 import com.luopingtech.ebike.ops.OpsApp
-import com.luopingtech.ebike.ops.domain.map.MapClusterer
-import com.luopingtech.ebike.ops.domain.map.MapProjection
 import com.luopingtech.ebike.ops.domain.model.FencePolygon
 import com.luopingtech.ebike.ops.domain.model.MapPin
+import com.luopingtech.ebike.ops.domain.model.legacyDrawableName
 import com.luopingtech.ebike.ops.platform.MapProviderKind
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIView
@@ -68,6 +68,8 @@ class IosHostMapPin(
     val memberIds: List<String>,
     /** 还车散点图用：异常点。 */
     val abnormal: Boolean = false,
+    /** Legacy drawable name, e.g. icon_vehicle_ready. */
+    val iconName: String = "ico_vehicle_normal",
 )
 
 class IosHostMapFence(
@@ -111,10 +113,12 @@ class HostedOpsMapRenderer(
 
     @Composable
     override fun Pins(spec: OpsMapSpec, modifier: Modifier) {
+        val onSelectCarId = rememberUpdatedState(spec.onSelectCarId)
+        val onSelectCluster = rememberUpdatedState(spec.onSelectCluster)
         val hosted = remember(factory) {
             factory.createPinsView(
-                onSelectCarId = { spec.onSelectCarId(it) },
-                onSelectCluster = { spec.onSelectCluster(it) },
+                onSelectCarId = { onSelectCarId.value(it) },
+                onSelectCluster = { onSelectCluster.value(it) },
             )
         }
         DisposableEffect(hosted) { onDispose { hosted.dispose() } }
@@ -157,16 +161,9 @@ fun opsMapRendererForIos(app: OpsApp): OpsMapRenderer {
 }
 
 private fun OpsMapSpec.toHostUpdate(): IosHostMapUpdate {
-    // 聚合放在 Kotlin 侧：腾讯 iOS SDK 没有内建聚合，而这套阈值已经在 Android
-    // 和画布实现上验证过，没必要让宿主再实现一遍（也就不会两端手感不一致）。
-    val markers = if (!clusterOverview || pins.size <= 4) {
-        pins
-    } else {
-        val bounds = MapProjection.boundsOf(pins)
-        MapClusterer.cluster(pins, MapClusterer.suggestedCellDegrees(bounds, targetCells = 5))
-    }
+    // 传原始车点，由宿主按当前 zoom 网格聚合（对齐 Android cellDegreesForZoom）。
     return IosHostMapUpdate(
-        pins = markers.map { it.toHostPin() },
+        pins = pins.map { it.toHostPin() },
         selectedCarId = selectedCarId,
         clusterOverview = clusterOverview,
         fences = fencePolygons.map { it.toHostFence() },
@@ -224,6 +221,7 @@ private fun MapPin.toHostPin() = IosHostMapPin(
     ridingState = ridingState ?: -1,
     memberCount = memberCount,
     memberIds = memberIds,
+    iconName = icon.legacyDrawableName(),
 )
 
 private fun FencePolygon.toHostFence() = IosHostMapFence(

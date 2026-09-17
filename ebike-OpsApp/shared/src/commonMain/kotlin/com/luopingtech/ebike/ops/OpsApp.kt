@@ -6,6 +6,7 @@ import com.luopingtech.ebike.ops.core.config.TenantConfig
 import com.luopingtech.ebike.ops.core.i18n.OpsI18n
 import com.luopingtech.ebike.ops.core.logging.OpsLogger
 import com.luopingtech.ebike.ops.core.logging.StdoutLogger
+import com.luopingtech.ebike.ops.core.network.CommonRequestBody
 import com.luopingtech.ebike.ops.core.network.HttpClientFactory
 import com.luopingtech.ebike.ops.core.network.NetworkSession
 import com.luopingtech.ebike.ops.core.network.RequestAuth
@@ -72,6 +73,9 @@ import com.luopingtech.ebike.ops.data.movecar.FreeMoveCarRepositoryImpl
 import com.luopingtech.ebike.ops.data.staff.ServiceUserApi
 import com.luopingtech.ebike.ops.data.staff.ServiceUserRepository
 import com.luopingtech.ebike.ops.data.staff.ServiceUserRepositoryImpl
+import com.luopingtech.ebike.ops.data.staff.StaffManagementApi
+import com.luopingtech.ebike.ops.data.staff.StaffManagementRepository
+import com.luopingtech.ebike.ops.data.staff.StaffManagementRepositoryImpl
 import com.luopingtech.ebike.ops.data.warehouse.WarehouseApi
 import com.luopingtech.ebike.ops.data.warehouse.WarehouseRepository
 import com.luopingtech.ebike.ops.data.warehouse.WarehouseRepositoryImpl
@@ -110,7 +114,9 @@ import com.luopingtech.ebike.ops.feature.order.OrderQueryFeature
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryApi
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepository
 import com.luopingtech.ebike.ops.data.trajectory.TrajectoryRepositoryImpl
+import com.luopingtech.ebike.ops.data.vehicle.VehicleHistoryApi
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleDetailMapFeature
+import com.luopingtech.ebike.ops.feature.vehicle.VehicleHistoryFeature
 import com.luopingtech.ebike.ops.feature.vehicle.VehicleFeature
 import com.luopingtech.ebike.ops.feature.analysis.VehicleConditionDistributionFeature
 import com.luopingtech.ebike.ops.feature.analysis.OfflineOpsFeature
@@ -123,7 +129,9 @@ import com.luopingtech.ebike.ops.feature.admin.ObjectionOrderFeature
 import com.luopingtech.ebike.ops.feature.admin.OperationLogFeature
 import com.luopingtech.ebike.ops.feature.admin.ProfessionAuditFeature
 import com.luopingtech.ebike.ops.feature.fence.FenceBrowseFeature
+import com.luopingtech.ebike.ops.feature.fence.FenceEditFeature
 import com.luopingtech.ebike.ops.feature.staff.StaffDirectoryFeature
+import com.luopingtech.ebike.ops.feature.staff.StaffManageFeature
 import com.luopingtech.ebike.ops.feature.tag.VehicleTagFeature
 import com.luopingtech.ebike.ops.feature.tools.BluetoothRadarFeature
 import com.luopingtech.ebike.ops.feature.tools.OpsSettingFeature
@@ -203,6 +211,11 @@ class OpsApp(
     /** Override device language detection; null follows the platform locale. */
     systemLanguage: String? = null,
 ) {
+    init {
+        // Legacy ParamsUtil: every signed body carries last-known lat/lng when available.
+        CommonRequestBody.locationSnapshot = { locationTracker.lastKnownOrNull() }
+    }
+
     val bleTransport: BleTransport = BleTransportFactory.fromConfig(config, bleTransportOverride)
 
     val i18n: OpsI18n = OpsI18n.fromStore(secureStore, systemLanguage)
@@ -258,6 +271,7 @@ class OpsApp(
             client = httpClient,
             requestAuth = requestAuth,
             json = httpClientFactory.json,
+            baseUrl = config.api.baseUrl,
             sessionProvider = {
                 val session = authRepository.currentSession()
                 NetworkSession(accessToken = session?.accessToken.orEmpty())
@@ -411,7 +425,14 @@ class OpsApp(
         )
     }
     val fenceRepository: FenceRepository = FenceRepositoryImpl(demoMode = demoMode, api = fenceApi)
-    val fenceBrowseFeature: FenceBrowseFeature = FenceBrowseFeature(repository = fenceRepository)
+    val fenceBrowseFeature: FenceBrowseFeature = FenceBrowseFeature(
+        repository = fenceRepository,
+        loadTags = { stationAnalysisRepository.tags() },
+    )
+    val fenceEditFeature: FenceEditFeature = FenceEditFeature(
+        repository = fenceRepository,
+        reverseGeocoder = reverseGeocoder,
+    )
 
     private val orderApi: OrderApi? = signedApiClient?.let { client ->
         OrderApi(
@@ -455,6 +476,19 @@ class OpsApp(
         trajectoryRepository = trajectoryRepository,
         reverseGeocoder = reverseGeocoder,
         geoApi = geoApi,
+        demoMode = demoMode,
+    )
+
+    private val vehicleHistoryApi: VehicleHistoryApi? = signedApiClient?.let { client ->
+        VehicleHistoryApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val vehicleHistoryFeature: VehicleHistoryFeature = VehicleHistoryFeature(
+        api = vehicleHistoryApi,
         demoMode = demoMode,
     )
 
@@ -679,8 +713,28 @@ class OpsApp(
     )
     val staffDirectoryFeature: StaffDirectoryFeature = StaffDirectoryFeature(serviceUserRepository)
 
+    private val staffManagementApi: StaffManagementApi? = signedApiClient?.let { client ->
+        StaffManagementApi(
+            signedApi = client,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = deviceIdProvider,
+        )
+    }
+    val staffManagementRepository: StaffManagementRepository = StaffManagementRepositoryImpl(
+        demoMode = demoMode,
+        api = staffManagementApi,
+    )
+    val staffManageFeature: StaffManageFeature = StaffManageFeature(
+        repository = staffManagementRepository,
+        tenantIdProvider = tenantIdProvider,
+        currentUserIdProvider = { authRepository.currentSession()?.userId.orEmpty() },
+        izRootProvider = { authRepository.currentSession()?.izRoot == true },
+    )
+
     val freeMoveCarFeature: FreeMoveCarFeature = FreeMoveCarFeature(
         repository = freeMoveCarRepository,
+        vehicleRepository = vehicleRepository,
         serviceUserRepository = serviceUserRepository,
         mediaUploader = this.mediaUploader,
         phoneProvider = { authRepository.currentSession()?.phone.orEmpty() },
@@ -889,6 +943,17 @@ class OpsApp(
     )
 
     val isDemoMode: Boolean get() = demoMode
+
+    /** Legacy SettingActivity 性能模式（地图聚合策略）。 */
+    fun isMapPerformanceMode(): Boolean =
+        secureStore.getString(SecureStore.KEY_MAP_PERFORMANCE_MODE) == "1"
+
+    fun setMapPerformanceMode(enabled: Boolean) {
+        secureStore.putString(
+            SecureStore.KEY_MAP_PERFORMANCE_MODE,
+            if (enabled) "1" else "0",
+        )
+    }
 
     /** Resolve tenant-configured H5 dashboard URL (null if blank / disabled). */
     fun resolveH5ScreenUrl(kind: H5ScreenKind): String? =

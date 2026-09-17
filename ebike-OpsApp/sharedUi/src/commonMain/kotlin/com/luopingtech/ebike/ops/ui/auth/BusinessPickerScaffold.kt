@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.domain.model.BusinessTenant
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 import com.luopingtech.ebike.ops.ui.text.labelComparator
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import kotlinx.coroutines.launch
@@ -69,6 +70,8 @@ fun BusinessPickerScaffold(
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -86,18 +89,9 @@ fun BusinessPickerScaffold(
                         .fillMaxWidth()
                         .height(48.dp),
                 ) {
-                    Text(
-                        text = "‹",
-                        color = colors.onPrimary,
-                        fontSize = 28.sp,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = onBack,
-                            )
-                            .padding(horizontal = 16.dp),
+                    OpsBackChevron(
+                        onClick = onBack,
+                        modifier = Modifier.align(Alignment.CenterStart),
                     )
                     Text(
                         text = title,
@@ -269,3 +263,4 @@ private fun flatIndexOfSection(
     }
     return -1
 }
+

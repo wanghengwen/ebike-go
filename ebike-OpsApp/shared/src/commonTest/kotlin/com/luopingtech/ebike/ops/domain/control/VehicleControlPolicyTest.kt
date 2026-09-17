@@ -45,4 +45,28 @@ class VehicleControlPolicyTest {
         )
         assertTrue(result.isOk)
     }
+
+    @Test
+    fun networkPreferred_fallsBackToBleWhenNetworkFails() = runBlocking {
+        val ble = SimulatorBleTransport()
+        ble.connect("SIM-VEHICLE-001")
+        val policy = VehicleControlPolicy(
+            ble = ble,
+            network = object : NetworkVehicleControl {
+                override suspend fun execute(
+                    vehicleId: String,
+                    action: VehicleAction,
+                    imei: String,
+                ): OpsResult<Unit> = OpsResult.Err(
+                    com.luopingtech.ebike.ops.core.result.OpsError.business("NET", "down"),
+                )
+            },
+        )
+        val result = policy.execute(
+            vehicleId = "SIM-VEHICLE-001",
+            action = VehicleAction.Restart,
+            channel = ControlChannel.NetworkPreferred,
+        )
+        assertTrue(result.isOk)
+    }
 }

@@ -1,8 +1,10 @@
 package com.luopingtech.ebike.ops.ui.report
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -12,10 +14,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -31,13 +35,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.luopingtech.ebike.ops.OpsApp
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.result.OpsResult
 import com.luopingtech.ebike.ops.domain.model.RepairType
 import com.luopingtech.ebike.ops.domain.report.RepairBodyParts
 import com.luopingtech.ebike.ops.feature.report.ReportPage
+import com.luopingtech.ebike.ops.ui.analysis.VcdTopBar
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
+import com.luopingtech.ebike.ops.ui.media.LocalPathImage
 import kotlinx.coroutines.launch
 
 @Composable
@@ -53,52 +64,59 @@ fun FaultReportScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
+            .background(Color.White),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(t(Str.FaultReportTitle), style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = {
-                app.faultReportFeature.clear()
-                onClose()
-            }) { Text(t(Str.Close)) }
-        }
-
-        when (state.page) {
-            ReportPage.Hub -> {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text(
-                        text = t(Str.FaultReportHint),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    state.message?.let {
-                        Text(it, color = MaterialTheme.colorScheme.primary)
+        VcdTopBar(
+            title = t(Str.FaultReportTitle),
+            onBack = {
+                when (state.page) {
+                    ReportPage.Submit, ReportPage.Hub -> {
+                        app.faultReportFeature.clear()
+                        onClose()
                     }
-                    Button(
-                        onClick = {
-                            app.faultReportFeature.openSubmit()
-                            scope.launch { app.faultReportFeature.ensureRepairTypes() }
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                    ) { Text(t(Str.NewFaultReport)) }
-                    Button(
-                        onClick = { scope.launch { app.faultReportFeature.openHistory() } },
-                        modifier = Modifier.fillMaxWidth(),
-                    ) { Text(t(Str.MyReports)) }
+                    ReportPage.History -> app.faultReportFeature.openHub()
+                    ReportPage.Detail -> scope.launch { app.faultReportFeature.openHistory() }
                 }
+            },
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+        ) {
+            when (state.page) {
+                ReportPage.Hub -> {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Text(
+                            text = t(Str.FaultReportHint),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        state.message?.let {
+                            Text(it, color = MaterialTheme.colorScheme.primary)
+                        }
+                        Button(
+                            onClick = {
+                                app.faultReportFeature.openSubmit()
+                                scope.launch { app.faultReportFeature.ensureRepairTypes() }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(t(Str.NewFaultReport)) }
+                        Button(
+                            onClick = { scope.launch { app.faultReportFeature.openHistory() } },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) { Text(t(Str.MyReports)) }
+                    }
+                }
+                ReportPage.Submit -> SubmitPane(app)
+                ReportPage.History -> HistoryPane(app)
+                ReportPage.Detail -> DetailPane(app)
             }
-            ReportPage.Submit -> SubmitPane(app)
-            ReportPage.History -> HistoryPane(app)
-            ReportPage.Detail -> DetailPane(app)
-        }
 
-        state.errorMessage?.let {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(it, color = MaterialTheme.colorScheme.error)
+            state.errorMessage?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(it, color = MaterialTheme.colorScheme.error)
+            }
         }
     }
 }
@@ -134,7 +152,6 @@ private fun SubmitPane(app: OpsApp) {
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        TextButton(onClick = { app.faultReportFeature.openHub() }) { Text("← ${t(Str.Back)}") }
         OutlinedTextField(
             value = state.carId,
             onValueChange = {
@@ -171,6 +188,7 @@ private fun SubmitPane(app: OpsApp) {
         RepairTypePartPicker(
             types = state.repairTypes,
             selectedIds = state.selectedTypeIds,
+            vehicleModel = state.vehicleModel,
             onToggle = { app.faultReportFeature.toggleType(it) },
             otherTitle = t(Str.FaultOtherTypes),
         )
@@ -198,42 +216,23 @@ private fun SubmitPane(app: OpsApp) {
             text = t(Str.PhotosRequired),
             style = MaterialTheme.typography.labelLarge,
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Button(
-                onClick = { addPhoto { app.photoCapture.takePhoto("fault") } },
-                modifier = Modifier.weight(1f),
-            ) { Text(t(Str.Camera)) }
-            Button(
-                onClick = { addPhoto { app.photoCapture.pickFromGallery() } },
-                modifier = Modifier.weight(1f),
-            ) { Text(t(Str.Album)) }
-            if (app.isDemoMode) {
-                Button(
-                    onClick = { app.faultReportFeature.addDemoPhoto() },
-                    modifier = Modifier.weight(1f),
-                ) { Text(t(Str.DemoPhoto)) }
-            }
-        }
+        FaultPhotoGrid(
+            photos = state.photoUrls,
+            canAdd = state.photoUrls.size < 3,
+            onAddCamera = { addPhoto { app.photoCapture.takePhoto("fault") } },
+            onAddAlbum = { addPhoto { app.photoCapture.pickFromGallery() } },
+            onAddDemo = if (app.isDemoMode) {
+                { app.faultReportFeature.addDemoPhoto() }
+            } else {
+                null
+            },
+            onRemove = { app.faultReportFeature.removePhoto(it) },
+            demoLabel = t(Str.DemoPhoto),
+            cameraLabel = t(Str.Camera),
+            albumLabel = t(Str.Album),
+        )
         photoHint?.let {
             Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
-        }
-        state.photoUrls.forEach { url ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = url.substringAfterLast('/').ifBlank { url }.take(48),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.weight(1f),
-                )
-                TextButton(onClick = { app.faultReportFeature.removePhoto(url) }) {
-                    Text(t(Str.Remove))
-                }
-            }
         }
         Button(
             onClick = { scope.launch { app.faultReportFeature.submit() } },
@@ -319,6 +318,7 @@ private fun DetailPane(app: OpsApp) {
 private fun RepairTypePartPicker(
     types: List<RepairType>,
     selectedIds: Set<String>,
+    vehicleModel: String,
     onToggle: (String) -> Unit,
     otherTitle: String,
 ) {
@@ -333,46 +333,57 @@ private fun RepairTypePartPicker(
     }
     val bodyIds = (leftTypes + rightTypes).map { it.id }.toSet()
     val others = types.filter { it.id !in bodyIds && it.id !in RepairBodyParts.allIds }
+    val bodyIcon = when (vehicleModel.trim()) {
+        "0" -> OpsIcon.VehicleRepairV1
+        "2" -> OpsIcon.VehicleRepairV3
+        else -> OpsIcon.VehicleRepairV2
+    }
+    // Legacy VehicleRepairPartView: image 214×264dp, cellHeight = 264/7
+    val cellHeight = (264f / 7f).dp
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.Top,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 15.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalAlignment = Alignment.End,
         ) {
             leftTypes.forEach { type ->
-                FilterChip(
+                RepairPartRow(
+                    name = type.name,
                     selected = type.id in selectedIds,
-                    onClick = { onToggle(type.id) },
-                    label = { Text(type.name) },
+                    checkboxOnEnd = true,
+                    modifier = Modifier
+                        .height(cellHeight)
+                        .padding(end = 4.dp),
+                    onToggle = { onToggle(type.id) },
                 )
             }
         }
-        Column(
+        Image(
+            painter = painterResource(bodyIcon),
+            contentDescription = null,
             modifier = Modifier
-                .width(56.dp)
-                .padding(top = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "VEH",
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+                .width(214.dp)
+                .height(264.dp),
+            contentScale = ContentScale.Fit,
+        )
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
-            horizontalAlignment = Alignment.End,
+            horizontalAlignment = Alignment.Start,
         ) {
             rightTypes.forEach { type ->
-                FilterChip(
+                RepairPartRow(
+                    name = type.name,
                     selected = type.id in selectedIds,
-                    onClick = { onToggle(type.id) },
-                    label = { Text(type.name) },
+                    checkboxOnEnd = false,
+                    modifier = Modifier
+                        .height(cellHeight)
+                        .padding(start = 4.dp),
+                    onToggle = { onToggle(type.id) },
                 )
             }
         }
@@ -400,6 +411,115 @@ private fun RepairTypePartPicker(
                     onClick = { onToggle(type.id) },
                     label = { Text(type.name) },
                 )
+            }
+        }
+    }
+}
+
+/** Aligns with adapter_vehicle_part_left/right_item: label + 24dp checkbox. */
+@Composable
+private fun RepairPartRow(
+    name: String,
+    selected: Boolean,
+    checkboxOnEnd: Boolean,
+    modifier: Modifier = Modifier,
+    onToggle: () -> Unit,
+) {
+    Row(
+        modifier = modifier.clickable(onClick = onToggle),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = if (checkboxOnEnd) Arrangement.End else Arrangement.Start,
+    ) {
+        if (!checkboxOnEnd) {
+            Checkbox(
+                checked = selected,
+                onCheckedChange = null,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        if (checkboxOnEnd) {
+            Checkbox(
+                checked = selected,
+                onCheckedChange = null,
+                modifier = Modifier.size(24.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun FaultPhotoGrid(
+    photos: List<String>,
+    canAdd: Boolean,
+    onAddCamera: () -> Unit,
+    onAddAlbum: () -> Unit,
+    onAddDemo: (() -> Unit)?,
+    onRemove: (String) -> Unit,
+    demoLabel: String,
+    cameraLabel: String,
+    albumLabel: String,
+) {
+    var showPicker by remember { mutableStateOf(false) }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (canAdd) {
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clickable { showPicker = true },
+            ) {
+                Image(
+                    painter = painterResource(OpsIcon.PhotoReplaceHolder),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+        }
+        photos.forEach { path ->
+            Box(modifier = Modifier.size(80.dp)) {
+                LocalPathImage(path = path, modifier = Modifier.fillMaxSize())
+                Image(
+                    painter = painterResource(OpsIcon.PhotoDelete),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(18.dp)
+                        .clickable { onRemove(path) },
+                )
+            }
+        }
+    }
+    if (showPicker) {
+        Dialog(onDismissRequest = { showPicker = false }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, MaterialTheme.shapes.medium)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                TextButton(onClick = {
+                    showPicker = false
+                    onAddCamera()
+                }) { Text(cameraLabel) }
+                TextButton(onClick = {
+                    showPicker = false
+                    onAddAlbum()
+                }) { Text(albumLabel) }
+                onAddDemo?.let { demo ->
+                    TextButton(onClick = {
+                        showPicker = false
+                        demo()
+                    }) { Text(demoLabel) }
+                }
             }
         }
     }

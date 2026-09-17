@@ -42,6 +42,7 @@ import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleListStatusTone
 import com.luopingtech.ebike.ops.domain.vehicle.listStatus
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 import com.luopingtech.ebike.ops.ui.theme.OpsStatGreen
 import com.luopingtech.ebike.ops.ui.theme.OpsStatRed
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
@@ -77,6 +78,8 @@ fun VehicleListScreen(
         }
     }
 
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onClose)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,14 +96,7 @@ fun VehicleListScreen(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = "<",
-                    color = colors.onPrimary,
-                    fontSize = 28.sp,
-                    modifier = Modifier
-                        .clickable(onClick = onClose)
-                        .padding(4.dp),
-                )
+                OpsBackChevron(onClick = onClose)
                 Row(
                     modifier = Modifier
                         .weight(1f)
@@ -270,3 +266,4 @@ fun VehicleListScreen(
         }
     }
 }
+

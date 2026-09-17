@@ -8,6 +8,14 @@ data class FreeMoveCar(
     val carId: String,
     val imei: String = "",
     val restBattery: Int = 0,
-    /** 0 开锁中 / 1 挪车中 等，遗留字段；列表展示用. */
+    /**
+     * Riding / ops state. After unlock start, legacy forces [STATE_OPERATION]=5（运维中）.
+     */
     val state: Int = 1,
-)
+    /** Legacy batch_list izFinish: false = 开锁列表，true = 已完成关锁列表. */
+    val izFinish: Boolean = false,
+) {
+    companion object {
+        const val STATE_OPERATION = 5
+    }
+}

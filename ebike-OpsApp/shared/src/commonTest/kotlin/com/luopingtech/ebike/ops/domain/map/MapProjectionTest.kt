@@ -31,6 +31,27 @@ class MapProjectionTest {
     }
 
     @Test
+    fun cellDegreesShrinksAsZoomGrows() {
+        val wide = MapClusterer.cellDegreesForZoom(8f, latitude = 30.0)
+        val tight = MapClusterer.cellDegreesForZoom(16f, latitude = 30.0)
+        assertTrue(tight < wide / 8.0)
+    }
+
+    @Test
+    fun highZoomSplitsNearbyPins() {
+        val pins = listOf(
+            MapPin("1", 28.0, 112.0, "1"),
+            MapPin("2", 28.005, 112.005, "2"),
+        )
+        val low = MapClusterer.cluster(pins, MapClusterer.cellDegreesForZoom(11f, 28.0))
+        val high = MapClusterer.cluster(pins, MapClusterer.cellDegreesForZoom(18f, 28.0))
+        assertEquals(1, low.size)
+        assertTrue(low.first().isCluster)
+        assertEquals(2, high.size)
+        assertTrue(high.none { it.isCluster })
+    }
+
+    @Test
     fun clusterMergesNearbyPins() {
         val pins = listOf(
             MapPin("1", 28.0, 112.0, "1"),
@@ -41,6 +62,32 @@ class MapProjectionTest {
         assertEquals(2, clustered.size)
         assertTrue(clustered.any { it.isCluster && it.memberCount == 2 })
         assertTrue(clustered.any { !it.isCluster })
+        val pair = clustered.first { it.isCluster }
+        assertEquals(28.0001, pair.lat, 1e-9)
+        assertEquals(112.0001, pair.lng, 1e-9)
+    }
+
+    @Test
+    fun clusterInViewportOnlyUsesVisiblePins() {
+        val pins = listOf(
+            MapPin("in", 28.0, 112.0, "in"),
+            MapPin("out", 40.0, 120.0, "out"),
+            MapPin("near", 28.001, 112.001, "near"),
+        )
+        val visible = LatLngBounds(27.9, 28.1, 111.9, 112.1)
+        val clustered = MapClusterer.clusterInViewport(
+            pins,
+            cellDegrees = 0.01,
+            visible = visible,
+        )
+        assertTrue(clustered.all { it.lat in 27.9..28.1 })
+        assertTrue(clustered.none { it.id.contains("out") || it.memberIds.contains("out") })
+    }
+
+    @Test
+    fun filterNearCenterKeepsAllUnder300() {
+        val pins = (1..50).map { MapPin("$it", 28.0 + it * 0.01, 112.0, "$it") }
+        assertEquals(50, MapClusterer.filterNearCenter(pins, 28.0, 112.0).size)
     }
 
     @Test

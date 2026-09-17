@@ -54,6 +54,16 @@ fun WarehouseScreen(
         onClose()
     }
 
+    fun handleSystemBack() {
+        when (state.page) {
+            WarehousePage.Operate -> app.warehouseFeature.backToKindMenu()
+            WarehousePage.Detail -> scope.launch { app.warehouseFeature.openRecords() }
+            WarehousePage.KindMenu, WarehousePage.Records -> close()
+        }
+    }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = ::handleSystemBack)
+
     Column(
         modifier = Modifier
             .fillMaxSize()

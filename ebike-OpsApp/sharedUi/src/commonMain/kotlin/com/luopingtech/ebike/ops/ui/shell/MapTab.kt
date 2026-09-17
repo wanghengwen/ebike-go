@@ -3,57 +3,58 @@ package com.luopingtech.ebike.ops.ui.shell
 import com.luopingtech.ebike.ops.OpsApp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import com.luopingtech.ebike.ops.ui.home.HomeAlarmFilterSlide
 import com.luopingtech.ebike.ops.ui.home.HomeAreaTitleBar
 import com.luopingtech.ebike.ops.ui.home.HomeFilterHandle
 import com.luopingtech.ebike.ops.ui.home.HomeMapToolsRail
 import com.luopingtech.ebike.ops.ui.home.HomeStatItem
 import com.luopingtech.ebike.ops.ui.home.HomeStatisticsPanel
+import com.luopingtech.ebike.ops.ui.home.HomeVehiclePopupCard
+import com.luopingtech.ebike.ops.ui.home.buildHomeVehicleStatusChips
 import com.luopingtech.ebike.ops.ui.home.homeStatColor
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.layout.size
-import androidx.compose.ui.zIndex
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.result.OpsResult
 import com.luopingtech.ebike.ops.domain.control.ControlChannel
 import com.luopingtech.ebike.ops.domain.control.VehicleAction
 import com.luopingtech.ebike.ops.domain.model.MapPin
 import com.luopingtech.ebike.ops.domain.model.Vehicle
+import com.luopingtech.ebike.ops.domain.model.homeMapBadgeDrawableName
+import com.luopingtech.ebike.ops.domain.model.homeMapPinIcon
+import com.luopingtech.ebike.ops.ui.home.SimpleCarListScreen
 import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
-import com.luopingtech.ebike.ops.domain.vehicle.VehicleAlarmFilter
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleAlarmFilterLogic
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleMapFilter
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleMapFilterLogic
 import com.luopingtech.ebike.ops.feature.home.HomeUiState
 import com.luopingtech.ebike.ops.ui.map.OpsMapSpec
 import com.luopingtech.ebike.ops.ui.map.OpsMapView
-import com.luopingtech.ebike.ops.ui.vehicle.VehicleDetailSection
+import com.luopingtech.ebike.ops.ui.vehicle.LocalOpenVehicleDetail
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import kotlinx.coroutines.launch
 
 @Composable
@@ -65,29 +66,64 @@ internal fun MapTab(
 ) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
+    val openVehicleDetail = LocalOpenVehicleDetail.current
+    val clipboard = LocalClipboardManager.current
     val scope = rememberCoroutineScope()
     var filter by remember { mutableStateOf(VehicleMapFilter.All) }
     var selectedAlarms by remember { mutableStateOf(setOf<Int>()) }
     var alarmPanelOpen by remember { mutableStateOf(false) }
     var cardMessage by remember { mutableStateOf<String?>(null) }
-    var detailOpen by remember { mutableStateOf(false) }
+    /** 左侧围栏：停车区/禁停区显隐（服务区轮廓始终可显示）。 */
     var showFence by remember { mutableStateOf(false) }
     var mapTypeSatellite by remember { mutableStateOf(false) }
-    var clusterOverview by remember { mutableStateOf(true) }
-    var clusterExpandIds by remember { mutableStateOf<List<String>?>(null) }
+    /** true=聚合打点；左侧「详情」选中时为 false。默认跟 12300401（有码优先聚合）。 */
+    var clusterOverview by remember(permissions.homeClusterFirst) {
+        mutableStateOf(permissions.homeClusterFirst)
+    }
+    var clusterList by remember { mutableStateOf<List<Vehicle>?>(null) }
+    /** 对齐 locationToServiceByCalculate：切服务区 / 围栏到位后 fit 服务区，而不是 fit 全部车点。 */
+    var serviceFitNonce by remember { mutableIntStateOf(0) }
     val selected = homeState.vehicles.firstOrNull { it.carId == homeState.selectedCarId }
     val detailMap by app.vehicleDetailMapFeature.state.collectAsState()
     val vehicles = homeState.vehicles
+    val areaId = homeState.currentArea?.id?.takeIf { it.isNotBlank() }
+    val showStatistics = permissions.showHomeStatistics
+    val showAlarmFilter = permissions.showHomeAlarmFilter
+
+    // 进页/切服务区时预拉围栏（对齐原版进页就拉，按钮只切显隐）
+    LaunchedEffect(areaId) {
+        showFence = false
+        clusterOverview = permissions.homeClusterFirst
+        mapTypeSatellite = false
+        clusterList = null
+        if (areaId != null) {
+            app.vehicleDetailMapFeature.loadFence(areaId)
+        }
+    }
+
+    val fencePolygons = remember(detailMap.fence, showFence) {
+        val bundle = detailMap.fence
+        val service = bundle?.serviceAreas.orEmpty()
+        val parking = if (showFence) {
+            bundle?.parkings.orEmpty() + bundle?.noParkings.orEmpty()
+        } else {
+            emptyList()
+        }
+        service + parking
+    }
+
+    // 服务区轮廓到位后缩放到服务区（对齐 BaseHomeMapFragment.locationToServiceByCalculate）
+    LaunchedEffect(areaId, detailMap.fence?.serviceAreas) {
+        if (!detailMap.fence?.serviceAreas.isNullOrEmpty()) {
+            serviceFitNonce += 1
+        }
+    }
     val counts = remember(vehicles) {
         VehicleMapFilterLogic.counts(vehicles)
     }
-    val alarmCounts = remember(vehicles) {
-        VehicleAlarmFilterLogic.counts(vehicles)
-    }
     val filtered = remember(vehicles, filter, selectedAlarms) {
-        val alarmActive = selectedAlarms.isNotEmpty()
         vehicles.filter {
-            (!alarmActive || !VehicleAlarmFilterLogic.isSoldOut(it.operationStates)) &&
+            !VehicleAlarmFilterLogic.isSoldOut(it.operationStates) &&
                 VehicleMapFilterLogic.matches(
                     ridingState = it.ridingState,
                     operationStates = it.operationStates,
@@ -143,32 +179,40 @@ internal fun MapTab(
                     ridingState = it.ridingState,
                     memberCount = 1,
                     memberIds = listOf(it.carId),
+                    icon = it.homeMapPinIcon(),
+                    badgeDrawableName = it.homeMapBadgeDrawableName(),
                 )
             },
             selectedCarId = homeState.selectedCarId,
             mapReady = homeState.mapReady,
             mapProviderKind = homeState.mapProviderKind,
             clusterOverview = clusterOverview,
-            fencePolygons = if (showFence || (detailOpen && detailMap.showFence)) {
-                detailMap.fence?.all.orEmpty()
-            } else {
-                emptyList()
-            },
-            trackPoints = if (detailOpen && detailMap.showTrack) detailMap.track else emptyList(),
+            fencePolygons = fencePolygons,
+            trackPoints = emptyList(),
+            mapTypeSatellite = mapTypeSatellite,
+            // 首页不刷 debug 条；不因车点变化反复 fit（原版 fit 服务区）
+            showStatusOverlay = false,
+            autoFitOnPins = false,
+            animateToSelection = false,
+            fitNonce = serviceFitNonce,
             onPinClick = {
-                detailOpen = false
-                clusterExpandIds = null
+                clusterList = null
                 cardMessage = null
                 app.homeFeature.selectVehicle(it)
+                // 对齐点车后 fetchCarStatus：刷新该车电量等到列表缓存
+                scope.launch {
+                    app.vehicleFeature.refreshDetail(it)
+                }
             },
             onClusterClick = { ids ->
-                detailOpen = false
-                if (ids.size <= 1) {
-                    clusterExpandIds = null
-                    app.homeFeature.selectVehicle(ids.firstOrNull())
+                val idSet = ids.toSet()
+                val list = filtered.filter { it.carId in idSet }
+                if (list.size <= 1) {
+                    clusterList = null
+                    app.homeFeature.selectVehicle(list.firstOrNull()?.carId ?: ids.firstOrNull())
                 } else {
-                    clusterOverview = false
-                    clusterExpandIds = ids
+                    // Legacy handleClusterClick at zoom≥16: SimpleCarListActivity, keep cluster mode.
+                    clusterList = list
                 }
             },
             modifier = Modifier.fillMaxSize(),
@@ -183,106 +227,210 @@ internal fun MapTab(
                 .zIndex(2f),
         )
 
+        if (selected != null || cardMessage != null) {
+            val chips = selected?.let { v ->
+                buildHomeVehicleStatusChips(
+                    vehicle = v,
+                    canUseLabel = t(Str.VehicleCanUse),
+                    helmetNotClosedLabel = t(Str.HelmetNotClosed),
+                    offlineLabel = t(Str.Offline),
+                    soldOutLabel = t(Str.OpsSoldOut),
+                    lowBatteryLabel = t(Str.FilterLowBattery),
+                    repairingLabel = t(Str.FilterRepairing),
+                    movingLabel = t(Str.FilterMoving),
+                    ridingLabel = t(Str.FilterRiding),
+                    tempParkingLabel = t(Str.FilterTempParking),
+                    bookingLabel = t(Str.FilterBooking),
+                )
+            }.orEmpty()
+            HomeVehiclePopupCard(
+                vehicle = selected,
+                message = cardMessage,
+                detailOpen = false,
+                showUnlock = permissions.canScanUnlock,
+                showDetails = permissions.canScanDetails || permissions.showMap,
+                carNumberLabel = t(Str.VehicleCarNumberColon).let { s ->
+                    if (s.endsWith(":") || s.endsWith("：")) s else "$s："
+                },
+                deviceNoLabel = t(Str.VehicleDeviceNoColon),
+                statusLabel = t(Str.VehicleStatusColon),
+                ringLabel = t(Str.Ring),
+                unlockLabel = t(Str.ScanUnlock),
+                lockLabel = t(Str.ScanLock),
+                detailLabel = t(Str.Detail),
+                pickHint = t(Str.MapPickVehicle),
+                statusChips = chips,
+                detailContent = null,
+                onCopyCarId = {
+                    val id = selected?.carId?.takeIf { it.isNotBlank() } ?: return@HomeVehiclePopupCard
+                    clipboard.setText(AnnotatedString(id))
+                    cardMessage = t(Str.Copied)
+                },
+                onCopyImei = {
+                    val imei = selected?.imei?.takeIf { it.isNotBlank() } ?: return@HomeVehiclePopupCard
+                    clipboard.setText(AnnotatedString(imei))
+                    cardMessage = t(Str.Copied)
+                },
+                onRing = {
+                    scope.launch {
+                        val carId = selected?.carId ?: return@launch
+                        cardMessage = when (
+                            val r = app.vehicleControl.execute(
+                                carId,
+                                VehicleAction.Ring,
+                                ControlChannel.BlePreferred,
+                            )
+                        ) {
+                            is OpsResult.Ok -> t(Str.RingOk, carId)
+                            is OpsResult.Err -> t(Str.RingFailed, r.error.message)
+                        }
+                    }
+                },
+                onUnlock = {
+                    scope.launch {
+                        val carId = selected?.carId ?: return@launch
+                        if (!permissions.canScanUnlock) {
+                            cardMessage = t(Str.NoUnlockPermission)
+                            return@launch
+                        }
+                        cardMessage = when (
+                            val r = app.vehicleControl.execute(
+                                carId,
+                                VehicleAction.Unlock,
+                                ControlChannel.BlePreferred,
+                            )
+                        ) {
+                            is OpsResult.Ok -> t(Str.ActionOk, t(Str.ScanUnlock), carId)
+                            is OpsResult.Err -> t(Str.ActionFailed, t(Str.ScanUnlock), r.error.message)
+                        }
+                    }
+                },
+                onLock = {
+                    scope.launch {
+                        val carId = selected?.carId ?: return@launch
+                        if (!permissions.canScanUnlock) {
+                            cardMessage = t(Str.NoUnlockPermission)
+                            return@launch
+                        }
+                        cardMessage = when (
+                            val r = app.vehicleControl.execute(
+                                carId,
+                                VehicleAction.Lock,
+                                ControlChannel.BlePreferred,
+                            )
+                        ) {
+                            is OpsResult.Ok -> t(Str.ActionOk, t(Str.ScanLock), carId)
+                            is OpsResult.Err -> t(Str.ActionFailed, t(Str.ScanLock), r.error.message)
+                        }
+                    }
+                },
+                onDetails = {
+                    val v = selected ?: return@HomeVehiclePopupCard
+                    // 对齐 HomeVehiclePop → CarDetailActivity：先气泡，再整页详情。
+                    scope.launch {
+                        val fresh = when (val r = app.vehicleFeature.refreshDetail(v.carId)) {
+                            is OpsResult.Ok -> r.value
+                            is OpsResult.Err -> v
+                        }
+                        openVehicleDetail.open(fresh, homeState.currentArea?.id)
+                    }
+                },
+                cardModifier = Modifier
+                    .align(Alignment.TopCenter)
+                    // Legacy HomeVehiclePop: Gravity.TOP + 85dp
+                    .statusBarsPadding()
+                    .padding(top = 52.dp)
+                    .zIndex(2f),
+            )
+        }
+
         HomeMapToolsRail(
             refreshLabel = t(Str.Refresh),
             detailLabel = t(Str.Detail),
             fenceLabel = t(Str.MapToolFence),
             switchLabel = t(Str.MapToolSwitch),
-            detailSelected = detailOpen,
+            // 选中=单车点模式（非聚合），对齐 obsVehicleDetailSelect
+            detailSelected = !clusterOverview,
             fenceSelected = showFence,
             switchSelected = mapTypeSatellite,
-            onRefresh = { scope.launch { app.homeFeature.reloadVehicles() } },
-            onDetail = {
-                val opening = !detailOpen
-                detailOpen = opening
-                if (opening && selected != null) {
-                    scope.launch { app.homeFeature.refreshSelectedDetail() }
+            onRefresh = {
+                scope.launch {
+                    app.homeFeature.reloadVehicles()
+                    areaId?.let { app.vehicleDetailMapFeature.loadFence(it) }
                 }
             },
+            onDetail = {
+                // 对齐 onDetailSwitch：选中详情 → 关聚合；取消 → 开聚合
+                clusterOverview = !clusterOverview
+                clusterList = null
+            },
             onFence = {
-                showFence = !showFence
-                if (showFence && selected != null) {
-                    scope.launch { app.homeFeature.refreshSelectedDetail() }
+                val next = !showFence
+                showFence = next
+                if (next && detailMap.fence == null) {
+                    scope.launch {
+                        areaId?.let { app.vehicleDetailMapFeature.loadFence(it) }
+                    }
                 }
             },
             onSwitch = { mapTypeSatellite = !mapTypeSatellite },
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = 12.dp)
-                .zIndex(2f),
+                // Legacy home_map_control_layout_v3：底栏上方留白，避免压住统计
+                .padding(start = 12.dp, bottom = if (showStatistics) 148.dp else 24.dp)
+                .zIndex(4f),
         )
 
-        HomeFilterHandle(
-            label = t(Str.FilterHandle),
-            open = alarmPanelOpen,
-            onClick = { alarmPanelOpen = !alarmPanelOpen },
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .zIndex(2f),
-        )
-
-        if (alarmPanelOpen) {
-            Surface(
+        if (showAlarmFilter && !alarmPanelOpen) {
+            HomeFilterHandle(
+                label = t(Str.FilterHandle),
+                open = false,
+                onClick = { alarmPanelOpen = true },
                 modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .fillMaxWidth(0.82f)
-                    .fillMaxSize()
-                    .zIndex(3f),
-                color = Color.White,
-                shadowElevation = 8.dp,
-            ) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(t(Str.Alarms), fontWeight = FontWeight.Medium)
-                        TextButton(onClick = { alarmPanelOpen = false }) { Text(t(Str.Close)) }
-                    }
-                    AlarmFilterPanel(
-                        app = app,
-                        selected = selectedAlarms,
-                        counts = alarmCounts,
-                        onToggle = { code ->
-                            selectedAlarms = if (code in selectedAlarms) {
-                                selectedAlarms - code
-                            } else {
-                                selectedAlarms + code
-                            }
-                        },
-                        onClear = { selectedAlarms = emptySet() },
-                    )
-                }
-            }
+                    // Legacy fragment_home_v3 viewHomeFilterSwitch vertical_bias=0.55
+                    .align(BiasAlignment(horizontalBias = 1f, verticalBias = 0.55f))
+                    .zIndex(2f),
+            )
         }
 
-        clusterExpandIds?.takeIf { it.size > 1 }?.let { ids ->
-            Surface(
-                tonalElevation = 2.dp,
+        if (showAlarmFilter) {
+            HomeAlarmFilterSlide(
+                visible = alarmPanelOpen,
+                applied = selectedAlarms,
+                title = t(Str.AlarmFilterTitle),
+                resetLabel = t(Str.StationFilterReset),
+                sureLabel = t(Str.FilterSure),
+                sureWithCountLabel = { n -> t(Str.FilterSureWithCount, n) },
+                onDismiss = { alarmPanelOpen = false },
+                onApply = { selectedAlarms = it },
+            )
+        }
+
+        clusterList?.takeIf { it.size > 1 }?.let { list ->
+            Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(horizontal = 24.dp)
-                    .zIndex(2f),
+                    .fillMaxSize()
+                    .zIndex(20f),
             ) {
-                Column(
-                    modifier = Modifier.padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Text(
-                        t(Str.ClusterVehicles, ids.size),
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                    ids.take(10).forEach { id ->
-                        TextButton(
-                            onClick = {
-                                clusterExpandIds = null
-                                app.homeFeature.selectVehicle(id)
-                            },
-                        ) { Text(id) }
-                    }
-                    TextButton(onClick = { clusterExpandIds = null }) { Text(t(Str.Close)) }
-                }
+                SimpleCarListScreen(
+                    vehicles = list,
+                    title = t(Str.VehicleList),
+                    backLabel = t(Str.Back),
+                    colId = t(Str.VehicleTagCarId),
+                    colStatus = t(Str.VehicleListColStatus),
+                    colBattery = t(Str.VehicleListColBattery),
+                    onBack = { clusterList = null },
+                    onVehicleClick = { vehicle ->
+                        clusterList = null
+                        scope.launch {
+                            val fresh = when (val r = app.vehicleFeature.refreshDetail(vehicle.carId)) {
+                                is OpsResult.Ok -> r.value
+                                is OpsResult.Err -> vehicle
+                            }
+                            openVehicleDetail.open(fresh, homeState.currentArea?.id)
+                        }
+                    },
+                )
             }
         }
 
@@ -292,73 +440,6 @@ internal fun MapTab(
                 .fillMaxWidth()
                 .zIndex(2f),
         ) {
-            if (selected != null || cardMessage != null) {
-                SelectedVehicleCard(
-                    app = app,
-                    vehicle = selected,
-                    message = cardMessage,
-                    detailOpen = detailOpen,
-                    serviceAreaId = homeState.currentArea?.id,
-                    showChangeBattery = permissions.showChangeBattery,
-                    showDetails = permissions.canScanDetails || permissions.showMap,
-                    canBindBattery = permissions.canBindBatterySn,
-                    onRing = {
-                        scope.launch {
-                            val carId = selected?.carId ?: return@launch
-                            cardMessage = when (
-                                val r = app.vehicleControl.execute(
-                                    carId,
-                                    VehicleAction.Ring,
-                                    ControlChannel.BlePreferred,
-                                )
-                            ) {
-                                is OpsResult.Ok -> t(Str.RingOk, carId)
-                                is OpsResult.Err -> t(Str.RingFailed, r.error.message)
-                            }
-                        }
-                    },
-                    onOpenBattery = {
-                        scope.launch {
-                            val carId = selected?.carId ?: return@launch
-                            cardMessage = when (
-                                val r = app.vehicleControl.execute(
-                                    carId,
-                                    VehicleAction.OpenBatteryBox,
-                                    ControlChannel.BlePreferred,
-                                )
-                            ) {
-                                is OpsResult.Ok -> t(Str.OpenBoxOkShort, carId)
-                                is OpsResult.Err -> t(Str.OpenBoxFailedShort, r.error.message)
-                            }
-                        }
-                    },
-                    onFinishSwap = {
-                        scope.launch {
-                            val carId = selected?.carId ?: return@launch
-                            cardMessage = when (
-                                val r = app.vehicleControl.execute(
-                                    carId,
-                                    VehicleAction.CloseBatteryBox,
-                                    ControlChannel.BlePreferred,
-                                )
-                            ) {
-                                is OpsResult.Ok -> {
-                                    app.homeFeature.reloadVehicles()
-                                    t(Str.FinishSwapOk, carId)
-                                }
-                                is OpsResult.Err -> t(Str.FinishSwapFailed, r.error.message)
-                            }
-                        }
-                    },
-                    onDetails = {
-                        val opening = !detailOpen
-                        detailOpen = opening
-                        if (opening) {
-                            scope.launch { app.homeFeature.refreshSelectedDetail() }
-                        }
-                    },
-                )
-            }
             homeState.errorMessage?.let {
                 Text(
                     text = it,
@@ -369,136 +450,12 @@ internal fun MapTab(
                         .padding(horizontal = 16.dp, vertical = 4.dp),
                 )
             }
-            HomeStatisticsPanel(
-                items = statItems,
-                selected = filter,
-                onSelect = { filter = it },
-            )
-        }
-    }
-}
-
-@Composable
-private fun SelectedVehicleCard(
-    app: OpsApp,
-    vehicle: Vehicle?,
-    message: String?,
-    detailOpen: Boolean,
-    serviceAreaId: String? = null,
-    showChangeBattery: Boolean,
-    showDetails: Boolean,
-    canBindBattery: Boolean = false,
-    onRing: () -> Unit,
-    onOpenBattery: () -> Unit,
-    onFinishSwap: () -> Unit,
-    onDetails: () -> Unit,
-) {
-    val language by app.i18n.languageFlow.collectAsState()
-    fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
-    Surface(
-        tonalElevation = 2.dp,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            if (vehicle == null) {
-                Text(
-                    text = t(Str.MapPickVehicle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            if (showStatistics) {
+                HomeStatisticsPanel(
+                    items = statItems,
+                    selected = filter,
+                    onSelect = { filter = it },
                 )
-            } else {
-                Text(
-                    text = "${vehicle.carId} · ${vehicle.batteryLabel} · ${vehicle.ridingLabel}" +
-                        if (vehicle.isOnline) " · ${t(Str.Online)}" else " · ${t(Str.Offline)}",
-                    style = MaterialTheme.typography.titleSmall,
-                )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = onRing, modifier = Modifier.weight(1f)) { Text(t(Str.Ring)) }
-                    if (showChangeBattery) {
-                        Button(onClick = onOpenBattery, modifier = Modifier.weight(1f)) {
-                            Text(t(Str.OpenBatteryBox))
-                        }
-                        Button(onClick = onFinishSwap, modifier = Modifier.weight(1f)) {
-                            Text(t(Str.FinishChangeBattery))
-                        }
-                    }
-                    if (showDetails) {
-                        TextButton(onClick = onDetails) {
-                            Text(if (detailOpen) t(Str.Collapse) else t(Str.Detail))
-                        }
-                    }
-                }
-                if (detailOpen) {
-                    VehicleDetailSection(
-                        app = app,
-                        vehicle = vehicle,
-                        serviceAreaId = serviceAreaId,
-                        canBindBattery = canBindBattery,
-                    )
-                }
-            }
-            message?.let { Text(text = it, style = MaterialTheme.typography.bodySmall) }
-        }
-    }
-}
-
-@Composable
-private fun AlarmFilterPanel(
-    app: OpsApp,
-    selected: Set<Int>,
-    counts: Map<VehicleAlarmFilter, Int>,
-    onToggle: (Int) -> Unit,
-    onClear: () -> Unit,
-) {
-    val language by app.i18n.languageFlow.collectAsState()
-    fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
-    Surface(
-        tonalElevation = 2.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(t(Str.Alarms), style = MaterialTheme.typography.titleSmall)
-                TextButton(onClick = onClear, enabled = selected.isNotEmpty()) {
-                    Text(t(Str.Clear))
-                }
-            }
-            Text(
-                text = t(Str.AlarmFilterHint),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            VehicleAlarmFilter.entries.chunked(3).forEach { row ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                ) {
-                    row.forEach { item ->
-                        FilterChip(
-                            selected = item.code in selected,
-                            onClick = { onToggle(item.code) },
-                            label = {
-                                Text("${item.label} ${counts[item] ?: 0}")
-                            },
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                    repeat(3 - row.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
             }
         }
     }
@@ -517,6 +474,11 @@ private fun MapSurface(
     clusterOverview: Boolean = true,
     fencePolygons: List<com.luopingtech.ebike.ops.domain.model.FencePolygon> = emptyList(),
     trackPoints: List<com.luopingtech.ebike.ops.domain.model.TrackPoint> = emptyList(),
+    mapTypeSatellite: Boolean = false,
+    showStatusOverlay: Boolean = false,
+    autoFitOnPins: Boolean = false,
+    animateToSelection: Boolean = false,
+    fitNonce: Int = 0,
 ) {
     val language by app.i18n.languageFlow.collectAsState()
     fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
@@ -554,6 +516,11 @@ private fun MapSurface(
                     clusterOverview = clusterOverview,
                     fencePolygons = fencePolygons,
                     trackPoints = trackPoints,
+                    mapTypeSatellite = mapTypeSatellite,
+                    showStatusOverlay = showStatusOverlay,
+                    autoFitOnPins = autoFitOnPins,
+                    animateToSelection = animateToSelection,
+                    fitNonce = fitNonce,
                 ),
                 modifier = modifier,
             )

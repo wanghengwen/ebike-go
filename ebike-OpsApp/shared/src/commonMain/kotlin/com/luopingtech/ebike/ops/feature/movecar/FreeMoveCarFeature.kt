@@ -6,6 +6,7 @@ import com.luopingtech.ebike.ops.core.result.OpsError
 import com.luopingtech.ebike.ops.core.result.OpsResult
 import com.luopingtech.ebike.ops.data.movecar.FreeMoveCarRepository
 import com.luopingtech.ebike.ops.data.staff.ServiceUserRepository
+import com.luopingtech.ebike.ops.data.vehicle.VehicleRepository
 import com.luopingtech.ebike.ops.domain.model.FreeMoveCar
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
 import com.luopingtech.ebike.ops.domain.model.TeamWorker
@@ -43,11 +44,14 @@ data class FreeMoveCarUiState(
 
 /**
  * Free move-car: scan/add → in-progress list → multi-select finish (photo if 23326).
- * PhotographAudit for free-move also allows optional [TeamWorker] co-operators.
- * Remark is optional (legacy PHOTOGRAPH_MOVE_CAR); phone is required on finish body.
+ *
+ * Unlock path mirrors legacy MoveCarActivity.addToOpenCarList:
+ * carPermissionCheck → paas/device/detail → start_permission → move_car/start
+ * → insert local bean with state=5 into the open (izFinish=false) list.
  */
 class FreeMoveCarFeature(
     private val repository: FreeMoveCarRepository,
+    private val vehicleRepository: VehicleRepository? = null,
     private val serviceUserRepository: ServiceUserRepository? = null,
     private val mediaUploader: MediaUploader = DemoMediaUploader(),
     private val phoneProvider: () -> String = { "" },
@@ -128,12 +132,14 @@ class FreeMoveCarFeature(
         )
         when (val result = repository.list(area.id)) {
             is OpsResult.Ok -> {
-                val keep = _state.value.selectedCarIds.filter { id -> result.value.any { it.carId == id } }.toSet()
+                // Legacy splits batch_list by izFinish: open tab = not finished.
+                val openCars = result.value.filterNot { it.izFinish }
+                val keep = _state.value.selectedCarIds.filter { id -> openCars.any { it.carId == id } }.toSet()
                 _state.value = _state.value.copy(
                     loading = false,
-                    cars = result.value,
+                    cars = openCars,
                     selectedCarIds = keep,
-                    message = Strings.t(Str.FreeMoveInProgress, result.value.size),
+                    message = Strings.t(Str.FreeMoveInProgress, openCars.size),
                 )
             }
             is OpsResult.Err -> {
@@ -176,13 +182,31 @@ class FreeMoveCarFeature(
         return addByCarId(carId, area)
     }
 
+    /**
+     * Legacy addToOpenCarList:
+     * 1) carPermissionCheck
+     * 2) paas/device/detail (getMoveCarInfo)
+     * 3) start_permission
+     * 4) move_car/start — empty list = failure
+     * 5) insert local bean with state=5 at list head (not raw API rows)
+     */
     suspend fun addByCarId(carId: String, area: ServiceArea?): Boolean {
         val trimmed = carId.trim()
         if (trimmed.isBlank()) {
             _state.value = _state.value.copy(errorMessage = Strings.t(Str.EnterCarId))
             return false
         }
+        // Legacy AppConfig.isValidVehicleNum: length 1..10
+        if (trimmed.length !in 1..10) {
+            _state.value = _state.value.copy(errorMessage = Strings.t(Str.InvalidVehicleId))
+            return false
+        }
         if (area == null) {
+            _state.value = _state.value.copy(errorMessage = Strings.t(Str.SelectServiceAreaFirst))
+            return false
+        }
+        val serviceId = area.id.trim()
+        if (serviceId.isBlank()) {
             _state.value = _state.value.copy(errorMessage = Strings.t(Str.SelectServiceAreaFirst))
             return false
         }
@@ -190,24 +214,74 @@ class FreeMoveCarFeature(
             _state.value = _state.value.copy(errorMessage = Strings.t(Str.FreeMoveAlreadyInList), carInput = "")
             return false
         }
-        _state.value = _state.value.copy(loading = true, errorMessage = null, message = null)
-        when (val perm = repository.checkPermission(trimmed, area.id)) {
+        _state.value = _state.value.copy(
+            loading = true,
+            errorMessage = null,
+            message = null,
+            serviceAreaId = serviceId,
+        )
+
+        val vehicles = vehicleRepository
+        if (vehicles != null) {
+            when (val belong = vehicles.checkServicePermission(trimmed, serviceId)) {
+                is OpsResult.Err -> {
+                    _state.value = _state.value.copy(loading = false, errorMessage = belong.error.message)
+                    return false
+                }
+                is OpsResult.Ok -> Unit
+            }
+        }
+
+        val local = when (val detail = vehicles?.getDetail(trimmed)) {
+            is OpsResult.Ok -> FreeMoveCar(
+                carId = detail.value.carId.ifBlank { trimmed },
+                imei = detail.value.imei,
+                restBattery = detail.value.restBattery,
+                state = FreeMoveCar.STATE_OPERATION,
+                izFinish = false,
+            )
+            else -> FreeMoveCar(
+                carId = trimmed,
+                state = FreeMoveCar.STATE_OPERATION,
+                izFinish = false,
+            )
+        }
+        val startCarId = local.carId
+
+        when (val perm = repository.checkPermission(startCarId, serviceId)) {
             is OpsResult.Err -> {
                 _state.value = _state.value.copy(loading = false, errorMessage = perm.error.message)
                 return false
             }
             is OpsResult.Ok -> Unit
         }
-        return when (val started = repository.start(listOf(trimmed), area.id, _state.value.pushMode)) {
+
+        return when (val started = repository.start(listOf(startCarId), serviceId, _state.value.pushMode)) {
             is OpsResult.Ok -> {
-                val merged = (_state.value.cars + started.value)
-                    .distinctBy { it.carId }
+                // Legacy HttpRequestImpl: empty list = network command failed.
+                if (started.value.isEmpty()) {
+                    _state.value = _state.value.copy(
+                        loading = false,
+                        errorMessage = Strings.t(Str.ActionFailed, Strings.t(Str.ScanUnlock), "网络命令失败"),
+                    )
+                    return false
+                }
+                val fromApi = started.value.firstOrNull { it.carId.equals(startCarId, ignoreCase = true) }
+                val inserted = local.copy(
+                    imei = local.imei.ifBlank { fromApi?.imei.orEmpty() },
+                    restBattery = if (local.restBattery > 0) local.restBattery else (fromApi?.restBattery ?: 0),
+                    state = FreeMoveCar.STATE_OPERATION,
+                    izFinish = false,
+                )
+                val merged = (listOf(inserted) + _state.value.cars.filterNot {
+                    it.carId.equals(inserted.carId, ignoreCase = true)
+                })
                 _state.value = _state.value.copy(
                     loading = false,
                     cars = merged,
                     carInput = "",
-                    selectedCarIds = _state.value.selectedCarIds + trimmed,
-                    message = Strings.t(Str.FreeMoveJoined, trimmed),
+                    selectedCarIds = _state.value.selectedCarIds + inserted.carId,
+                    message = Strings.t(Str.FreeMoveJoined, inserted.carId),
                 )
                 true
             }
@@ -216,6 +290,20 @@ class FreeMoveCarFeature(
                 false
             }
         }
+    }
+
+    /** Legacy addToCloseCarList: only finish a car already on the open list. */
+    suspend fun finishOneCar(carId: String): OpsResult<Unit> {
+        val trimmed = carId.trim()
+        val found = _state.value.cars.firstOrNull { it.carId.equals(trimmed, ignoreCase = true) }
+        if (found == null) {
+            val err = OpsResult.Err(OpsError.business("MOVE_NOT_OPEN", Strings.t(Str.FreeMoveCarNotUnlocked)))
+            _state.value = _state.value.copy(errorMessage = err.error.message, message = null)
+            return err
+        }
+        clearSelection()
+        toggleSelect(found.carId)
+        return finishSelected()
     }
 
     suspend fun removeCar(carId: String) {
@@ -274,7 +362,7 @@ class FreeMoveCarFeature(
         val remark = _state.value.remark.trim().takeIf { it.isNotEmpty() }
         val teamWorkers = _state.value.selectedTeamWorkers
         val phone = phoneProvider()
-        return when (val result = repository.finish(carIds, phone, pictures, remark, teamWorkers)) {
+        return when (val result = repository.finish(carIds, serviceId, phone, pictures, remark, teamWorkers)) {
             is OpsResult.Ok -> {
                 _state.value = _state.value.copy(
                     loading = false,

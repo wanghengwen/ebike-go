@@ -23,6 +23,12 @@ interface LocationTracker {
     fun startTracking() {}
 
     fun stopTracking() {}
+
+    /**
+     * Sync last-known fix for request common params (legacy LocationHelper.getLocation).
+     * Prefer a cached / lastKnown value; may be null before the first fix.
+     */
+    fun lastKnownOrNull(): GeoPoint? = null
 }
 
 class UnsupportedLocationTracker : LocationTracker {

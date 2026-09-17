@@ -73,6 +73,13 @@ fun ReturnCarAnalysisMapScreen(
     val showAbnormal = state.statusFilter != ReturnCarStatusFilter.Normal
     val result = state.result
 
+    fun closePage() {
+        app.returnCarAnalysisFeature.clear()
+        onClose()
+    }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = ::closePage)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,10 +106,7 @@ fun ReturnCarAnalysisMapScreen(
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
-                            onClick = {
-                                app.returnCarAnalysisFeature.clear()
-                                onClose()
-                            },
+                            onClick = ::closePage,
                         )
                         .padding(8.dp),
                 )

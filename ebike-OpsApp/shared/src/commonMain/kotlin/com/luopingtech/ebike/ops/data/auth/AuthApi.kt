@@ -115,6 +115,7 @@ class AuthApi(
             "business/ebike-management/user/update-password",
             bodyJson,
             session,
+            failMessage = "修改密码失败",
         )
     }
 
@@ -283,19 +284,24 @@ class AuthApi(
         path: String,
         bodyJson: String,
         session: NetworkSession,
+        failMessage: String = "request failed",
     ): OpsResult<Unit> {
         return try {
             val response = client.post(path) {
                 requestAuth.applyPostJson(this, bodyJson, session, AuthHeaderMode.Bearer)
                 setBody(bodyJson)
             }
-            decodeUnit(response.status, response.bodyAsText())
+            decodeUnit(response.status, response.bodyAsText(), failMessage)
         } catch (t: Throwable) {
             OpsResult.Err(OpsError.network(t.message ?: "request failed", t))
         }
     }
 
-    private fun decodeUnit(status: HttpStatusCode, raw: String): OpsResult<Unit> {
+    private fun decodeUnit(
+        status: HttpStatusCode,
+        raw: String,
+        failMessage: String = "request failed",
+    ): OpsResult<Unit> {
         if (raw.isBlank()) {
             return if (status.isSuccess()) {
                 OpsResult.Ok(Unit)
@@ -308,13 +314,13 @@ class AuthApi(
                 ApiEnvelope.serializer(JsonElement.serializer()),
                 raw,
             )
-            if (envelope.isSuccessful || status.isSuccess()) {
+            if (envelope.isSuccessful) {
                 OpsResult.Ok(Unit)
             } else {
                 OpsResult.Err(
                     OpsError.business(
                         envelope.code.ifBlank { "BUSINESS" },
-                        envelope.msg ?: "request failed",
+                        envelope.msg?.takeIf { it.isNotBlank() } ?: failMessage,
                     ),
                 )
             }

@@ -1,5 +1,6 @@
 package com.luopingtech.ebike.ops.ui.task
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,9 +27,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import com.luopingtech.ebike.ops.ui.theme.OpsToolIcon
 
@@ -40,6 +45,7 @@ fun TaskFullscreenTopBar(
     trailingLabel: String? = null,
     onTrailing: (() -> Unit)? = null,
 ) {
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,18 +58,9 @@ fun TaskFullscreenTopBar(
                 .height(48.dp)
                 .padding(horizontal = 8.dp),
         ) {
-            Text(
-                text = "<",
-                color = Color.White,
-                fontSize = 22.sp,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = onBack,
-                    )
-                    .padding(8.dp),
+            OpsBackChevron(
+                onClick = onBack,
+                modifier = Modifier.align(Alignment.CenterStart),
             )
             Text(
                 text = title,
@@ -163,13 +160,12 @@ fun TaskMapSideTools(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                SideToolItem(symbol = "↻", label = refreshLabel, selected = false, onClick = onRefresh)
-                SideToolItem(symbol = "⌖", label = locateLabel, selected = false, onClick = onLocate)
+                SideToolItem(icon = OpsIcon.HomeRefresh, label = refreshLabel, onClick = onRefresh)
+                SideToolItem(icon = OpsIcon.MapLocation, label = locateLabel, onClick = onLocate)
                 if (showMoreMenu) {
                     SideToolItem(
-                        symbol = "▦",
+                        icon = if (moreOpen) OpsIcon.MapMoreSelected else OpsIcon.MapMore,
                         label = moreLabel,
-                        selected = moreOpen,
                         onClick = { moreOpen = !moreOpen },
                     )
                 }
@@ -187,21 +183,21 @@ fun TaskMapSideTools(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 MoreMenuItem(
-                    symbol = "P",
+                    icon = if (parkingSelected) OpsIcon.IconParking else OpsIcon.IconParking,
                     label = parkingLabel,
                     selected = parkingSelected,
                     selectedColor = colors.primary,
                     onClick = onToggleParking,
                 )
                 MoreMenuItem(
-                    symbol = "🛰",
+                    icon = if (satelliteSelected) OpsIcon.MapSatelliteSelected else OpsIcon.MapSatellite,
                     label = satelliteLabel,
                     selected = satelliteSelected,
                     selectedColor = colors.primary,
                     onClick = onToggleSatellite,
                 )
                 MoreMenuItem(
-                    symbol = "ⓘ",
+                    icon = if (detailSelected) OpsIcon.HomeDetailSelected else OpsIcon.HomeDetail,
                     label = detailLabel,
                     selected = detailSelected,
                     selectedColor = colors.primary,
@@ -230,8 +226,8 @@ fun TaskMapSimpleSideTools(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        SideToolItem(symbol = "↻", label = refreshLabel, selected = false, onClick = onRefresh)
-        SideToolItem(symbol = "⌖", label = locateLabel, selected = false, onClick = onLocate)
+        SideToolItem(icon = OpsIcon.HomeRefresh, label = refreshLabel, onClick = onRefresh)
+        SideToolItem(icon = OpsIcon.MapLocation, label = locateLabel, onClick = onLocate)
     }
 }
 
@@ -254,7 +250,12 @@ fun TaskMapSwitchAreaButton(
             .padding(vertical = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "⧉", color = Color(0xFF48506C), fontSize = 16.sp)
+        Image(
+            painter = painterResource(OpsIcon.HomeSwitch),
+            contentDescription = label,
+            modifier = Modifier.size(20.dp),
+            contentScale = ContentScale.Fit,
+        )
         Spacer(modifier = Modifier.height(4.dp))
         Text(text = label, color = Color(0xFF48506C), fontSize = 10.sp)
     }
@@ -262,12 +263,10 @@ fun TaskMapSwitchAreaButton(
 
 @Composable
 private fun SideToolItem(
-    symbol: String,
+    icon: OpsIcon,
     label: String,
-    selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val color = if (selected) OpsTheme.colors.primary else OpsToolIcon
     Column(
         modifier = Modifier
             .width(40.dp)
@@ -279,14 +278,19 @@ private fun SideToolItem(
             .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = symbol, color = color, fontSize = 15.sp)
-        Text(text = label, color = color, fontSize = 10.sp)
+        Image(
+            painter = painterResource(icon),
+            contentDescription = label,
+            modifier = Modifier.size(20.dp),
+            contentScale = ContentScale.Fit,
+        )
+        Text(text = label, color = OpsToolIcon, fontSize = 10.sp)
     }
 }
 
 @Composable
 private fun MoreMenuItem(
-    symbol: String,
+    icon: OpsIcon,
     label: String,
     selected: Boolean,
     selectedColor: Color,
@@ -304,11 +308,11 @@ private fun MoreMenuItem(
             .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = symbol,
-            color = color,
-            fontSize = 16.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+        Image(
+            painter = painterResource(icon),
+            contentDescription = label,
+            modifier = Modifier.size(20.dp),
+            contentScale = ContentScale.Fit,
         )
         Text(text = label, color = color, fontSize = 9.sp, maxLines = 1)
     }

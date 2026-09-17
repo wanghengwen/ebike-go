@@ -32,19 +32,18 @@ data class BindVehicleInfoDto(
 
 @Serializable
 data class ShelfCheckDto(
-    val id: String = "",
-    val carId: String = "",
-    val carNo: String = "",
-    val brand: String = "",
-    val serviceId: String = "",
-    val serviceName: String = "",
+    val carId: String? = null,
+    val carNo: String? = null,
+    val brand: String? = null,
+    val serviceId: String? = null,
+    val serviceName: String? = null,
 ) {
-    fun toDomain(): ShelfCheckResult = ShelfCheckResult(
-        carId = carId,
-        carNo = carNo,
-        brand = brand,
-        serviceId = serviceId,
-        serviceName = serviceName,
+    fun toDomain(fallbackCarId: String = ""): ShelfCheckResult = ShelfCheckResult(
+        carId = carId?.takeIf { it.isNotBlank() } ?: fallbackCarId,
+        carNo = carNo.orEmpty(),
+        brand = brand.orEmpty(),
+        serviceId = serviceId.orEmpty(),
+        serviceName = serviceName.orEmpty(),
     )
 }
 

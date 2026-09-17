@@ -2,8 +2,13 @@ package com.luopingtech.ebike.ops.data.fence
 
 import com.luopingtech.ebike.ops.core.result.OpsError
 import com.luopingtech.ebike.ops.core.result.OpsResult
+import com.luopingtech.ebike.ops.domain.analysis.StationTag
 import com.luopingtech.ebike.ops.domain.model.FenceBundle
 import com.luopingtech.ebike.ops.domain.model.FenceKind
+import com.luopingtech.ebike.ops.domain.model.FenceNoParkingCreate
+import com.luopingtech.ebike.ops.domain.model.FenceNoParkingUpdate
+import com.luopingtech.ebike.ops.domain.model.FenceParkingCreate
+import com.luopingtech.ebike.ops.domain.model.FenceParkingUpdate
 import com.luopingtech.ebike.ops.domain.model.FencePolygon
 import com.luopingtech.ebike.ops.domain.model.GeoLatLng
 
@@ -14,6 +19,26 @@ interface FenceRepository {
         serviceId: String,
         locations: List<GeoLatLng>,
     ): OpsResult<FenceBundle>
+
+    suspend fun createParking(req: FenceParkingCreate): OpsResult<Unit>
+
+    suspend fun createNoParking(req: FenceNoParkingCreate): OpsResult<Unit>
+
+    suspend fun updateParking(req: FenceParkingUpdate): OpsResult<Unit>
+
+    suspend fun updateNoParking(req: FenceNoParkingUpdate): OpsResult<Unit>
+
+    suspend fun deleteParking(id: String): OpsResult<Unit>
+
+    suspend fun deleteNoParking(id: String): OpsResult<Unit>
+
+    suspend fun enableParkingBatch(ids: List<String>): OpsResult<Unit>
+
+    suspend fun disableParkingBatch(ids: List<String>): OpsResult<Unit>
+
+    suspend fun deleteParkingBatch(ids: List<String>): OpsResult<Unit>
+
+    suspend fun deleteNoParkingBatch(ids: List<String>): OpsResult<Unit>
 }
 
 class FenceRepositoryImpl(
@@ -46,6 +71,76 @@ class FenceRepositoryImpl(
         return api.getNearFenceByLocations(serviceId.trim(), locations)
     }
 
+    override suspend fun createParking(req: FenceParkingCreate): OpsResult<Unit> {
+        if (req.points.size < 3) {
+            return OpsResult.Err(OpsError.business("FENCE", "need >= 3 points"))
+        }
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.createParking(req)
+    }
+
+    override suspend fun createNoParking(req: FenceNoParkingCreate): OpsResult<Unit> {
+        if (req.points.size < 3) {
+            return OpsResult.Err(OpsError.business("FENCE", "need >= 3 points"))
+        }
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.createNoParking(req)
+    }
+
+    override suspend fun updateParking(req: FenceParkingUpdate): OpsResult<Unit> {
+        if (req.id.isBlank()) return OpsResult.Err(OpsError.business("FENCE", "id empty"))
+        if (req.points.size < 3) {
+            return OpsResult.Err(OpsError.business("FENCE", "need >= 3 points"))
+        }
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.updateParking(req)
+    }
+
+    override suspend fun updateNoParking(req: FenceNoParkingUpdate): OpsResult<Unit> {
+        if (req.id.isBlank()) return OpsResult.Err(OpsError.business("FENCE", "id empty"))
+        if (req.points.size < 3) {
+            return OpsResult.Err(OpsError.business("FENCE", "need >= 3 points"))
+        }
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.updateNoParking(req)
+    }
+
+    override suspend fun deleteParking(id: String): OpsResult<Unit> {
+        if (id.isBlank()) return OpsResult.Err(OpsError.business("FENCE", "id empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.deleteParking(id.trim())
+    }
+
+    override suspend fun deleteNoParking(id: String): OpsResult<Unit> {
+        if (id.isBlank()) return OpsResult.Err(OpsError.business("FENCE", "id empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.deleteNoParking(id.trim())
+    }
+
+    override suspend fun enableParkingBatch(ids: List<String>): OpsResult<Unit> {
+        if (ids.isEmpty()) return OpsResult.Err(OpsError.business("FENCE", "ids empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.enableParkingBatch(ids)
+    }
+
+    override suspend fun disableParkingBatch(ids: List<String>): OpsResult<Unit> {
+        if (ids.isEmpty()) return OpsResult.Err(OpsError.business("FENCE", "ids empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.disableParkingBatch(ids)
+    }
+
+    override suspend fun deleteParkingBatch(ids: List<String>): OpsResult<Unit> {
+        if (ids.isEmpty()) return OpsResult.Err(OpsError.business("FENCE", "ids empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.deleteParkingBatch(ids)
+    }
+
+    override suspend fun deleteNoParkingBatch(ids: List<String>): OpsResult<Unit> {
+        if (ids.isEmpty()) return OpsResult.Err(OpsError.business("FENCE", "ids empty"))
+        if (demoMode || api == null) return OpsResult.Ok(Unit)
+        return api.deleteNoParkingBatch(ids)
+    }
+
     companion object {
         fun demoFence(serviceId: String, near: Boolean = false): FenceBundle {
             val cLat = 28.22
@@ -72,6 +167,8 @@ class FenceRepositoryImpl(
                         kind = FenceKind.ServiceArea,
                         carCount = 128,
                         izEnable = true,
+                        centerLat = cLat,
+                        centerLng = cLng,
                     ),
                 ),
                 parkings = listOf(
@@ -84,6 +181,10 @@ class FenceRepositoryImpl(
                         currentParkingNumber = 6,
                         maxParkingNumber = 20,
                         izEnable = true,
+                        centerLat = cLat,
+                        centerLng = cLng,
+                        address = "Demo street 1",
+                        tags = listOf(StationTag("1", "学校")),
                     ),
                 ),
                 noParkings = listOf(
@@ -93,6 +194,10 @@ class FenceRepositoryImpl(
                         points = parkRing.map { GeoLatLng(it.lat + 0.002, it.lng + 0.002) },
                         kind = FenceKind.NoParking,
                         izEnable = true,
+                        centerLat = cLat + 0.002,
+                        centerLng = cLng + 0.002,
+                        area = 120.5,
+                        address = "Demo street 2",
                     ),
                 ),
             )

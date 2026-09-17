@@ -28,6 +28,7 @@ data class FreeMoveCarDto(
         imei = imei,
         restBattery = restBattery ?: battery ?: 0,
         state = state,
+        izFinish = izFinish,
     )
 }
 
@@ -86,13 +87,17 @@ class FreeMoveCarApi(
     }
 
     suspend fun list(serviceId: String): OpsResult<List<FreeMoveCar>> {
+        // Legacy MoveVehicleRepositoryV2.getAllVehicle: common params only (no serviceId).
         val body = CommonRequestBody.toJsonString(
             source = "/business/ebike-operation/move_car/batch_list",
             tenantId = tenantIdProvider(),
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            put("serviceId", serviceId)
+            // Keep serviceId when backend variants require it; legacy omits it.
+            if (serviceId.isNotBlank()) {
+                put("serviceId", serviceId)
+            }
         }
         return when (
             val result = signedApi.post(
@@ -108,6 +113,7 @@ class FreeMoveCarApi(
 
     suspend fun finish(
         carIds: List<String>,
+        serviceId: String,
         phone: String,
         pictures: List<String> = emptyList(),
         remark: String? = null,
@@ -119,8 +125,9 @@ class FreeMoveCarApi(
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            // Legacy MoveVehicleRepositoryV2.moveBikesBatchEnd: carIds + phone (+ pictures/remark/teamWorker).
-            // No serviceId on finish.
+            // Legacy DevicesRepositoryV2.moveBikesBatchEnd (MoveCarActivity 关锁/完成):
+            // serviceId + carIds (+ pictures/remark). phone/teamWorker 来自拍照审核路径。
+            put("serviceId", serviceId)
             put("carIds", buildJsonArray { carIds.forEach { add(JsonPrimitive(it)) } })
             if (phone.isNotBlank()) {
                 put("phone", phone)
@@ -131,7 +138,7 @@ class FreeMoveCarApi(
             if (!remark.isNullOrBlank()) {
                 put("remark", remark)
             }
-            // Legacy: teamWorker = list of JSON *strings* {"name","phone"}.
+            // Legacy MoveVehicleRepositoryV2: teamWorker = list of JSON *strings* {"name","phone"}.
             if (teamWorkers.isNotEmpty()) {
                 put(
                     "teamWorker",

@@ -1,16 +1,8 @@
 package com.luopingtech.ebike.ops.ui.shell
 
 import com.luopingtech.ebike.ops.OpsApp
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,16 +21,17 @@ import com.luopingtech.ebike.ops.ui.workbench.WorkbenchModuleItem
 import com.luopingtech.ebike.ops.ui.workbench.WorkbenchModuleSection
 import com.luopingtech.ebike.ops.ui.workbench.WorkbenchScaffold
 import com.luopingtech.ebike.ops.platform.SecureStore
-import androidx.compose.foundation.layout.size
 import com.luopingtech.ebike.ops.core.config.H5ScreenKind
 import com.luopingtech.ebike.ops.core.config.H5ScreenUrls
-import com.luopingtech.ebike.ops.core.i18n.OpsLanguage
 import com.luopingtech.ebike.ops.core.i18n.Str
+import com.luopingtech.ebike.ops.core.result.OpsResult
+import com.luopingtech.ebike.ops.domain.model.BusinessTenant
 import com.luopingtech.ebike.ops.domain.model.WarehouseOperationType
 import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
 import com.luopingtech.ebike.ops.feature.home.HomeUiState
 import com.luopingtech.ebike.ops.feature.production.ShelfMode
-import com.luopingtech.ebike.ops.ui.order.OrderQueryScreen
+import com.luopingtech.ebike.ops.ui.auth.BusinessPickerScaffold
+import com.luopingtech.ebike.ops.ui.auth.UpdatePasswordScaffold
 import kotlinx.coroutines.launch
 
 @Composable
@@ -46,7 +39,6 @@ internal fun WorkbenchTab(
     app: OpsApp,
     homeState: HomeUiState,
     permissions: OpsPermissions,
-    trackPermissionHint: String?,
     onOpenWarehouse: () -> Unit,
     onOpenProduction: () -> Unit,
     onOpenFaultReport: () -> Unit,
@@ -78,10 +70,14 @@ internal fun WorkbenchTab(
     val authState by app.authFeature.state.collectAsState()
     val scope = rememberCoroutineScope()
     var settingsOpen by remember { mutableStateOf(false) }
-    var showUpdatePwd by remember { mutableStateOf(false) }
-    var showTrackSettings by remember { mutableStateOf(false) }
-    var oldPwd by remember { mutableStateOf("") }
-    var newPwd by remember { mutableStateOf("") }
+    var switchBusinessOpen by remember { mutableStateOf(false) }
+    var switchTenants by remember { mutableStateOf<List<BusinessTenant>>(emptyList()) }
+    var switchQuery by remember { mutableStateOf("") }
+    var updatePasswordOpen by remember { mutableStateOf(false) }
+    var oldPassword by remember { mutableStateOf("") }
+    var newPassword by remember { mutableStateOf("") }
+    var oldPasswordVisible by remember { mutableStateOf(false) }
+    var newPasswordVisible by remember { mutableStateOf(false) }
 
     val toast = LocalOpsToast.current
     fun comingSoon() = toast(t(Str.FeatureComingSoon))
@@ -338,6 +334,69 @@ internal fun WorkbenchTab(
         ?.takeIf { it.isNotBlank() }
         ?: t(Str.AdminRole)
 
+    if (updatePasswordOpen) {
+        UpdatePasswordScaffold(
+            title = t(Str.ChangePassword),
+            originalTitle = t(Str.OldPassword),
+            originalHint = t(Str.OriginalPasswordHint),
+            originalValue = oldPassword,
+            onOriginalChange = { oldPassword = it },
+            originalVisible = oldPasswordVisible,
+            onToggleOriginalVisible = { oldPasswordVisible = !oldPasswordVisible },
+            newTitle = t(Str.NewPassword),
+            newHint = t(Str.UpdatePasswordNewHint),
+            newValue = newPassword,
+            onNewChange = { newPassword = it },
+            newVisible = newPasswordVisible,
+            onToggleNewVisible = { newPasswordVisible = !newPasswordVisible },
+            confirmLabel = t(Str.Confirm),
+            loading = authState.loading,
+            errorMessage = authState.errorMessage,
+            backLabel = t(Str.Back),
+            onBack = { updatePasswordOpen = false },
+            onConfirm = {
+                scope.launch {
+                    when (app.authFeature.updatePassword(oldPassword, newPassword)) {
+                        is OpsResult.Ok -> {
+                            toast(t(Str.PasswordChangeSuccess))
+                            updatePasswordOpen = false
+                            oldPassword = ""
+                            newPassword = ""
+                        }
+                        is OpsResult.Err -> Unit
+                    }
+                }
+            },
+        )
+        return
+    }
+
+    if (switchBusinessOpen) {
+        BusinessPickerScaffold(
+            title = t(Str.SelectBusiness),
+            searchHint = t(Str.Search),
+            query = switchQuery,
+            onQueryChange = { switchQuery = it },
+            businesses = switchTenants,
+            loading = authState.loading,
+            errorMessage = authState.errorMessage,
+            backLabel = t(Str.Back),
+            onBack = { switchBusinessOpen = false },
+            onSelect = { tenantId ->
+                scope.launch {
+                    when (val r = app.authFeature.switchBusiness(tenantId)) {
+                        is OpsResult.Ok -> {
+                            switchBusinessOpen = false
+                            settingsOpen = false
+                        }
+                        is OpsResult.Err -> toast(r.error.message)
+                    }
+                }
+            },
+        )
+        return
+    }
+
     WorkbenchScaffold(
         areaName = homeState.currentArea?.name?.takeIf { it.isNotBlank() }
             ?: t(Str.SelectServiceArea),
@@ -381,146 +440,22 @@ internal fun WorkbenchTab(
             }
         },
         settingsContent = {
-            TextButton(onClick = { showTrackSettings = !showTrackSettings }) {
-                Text(if (showTrackSettings) t(Str.CollapseTrackUpload) else t(Str.TrackUpload))
-            }
-            if (showTrackSettings) {
-                TrackUploadStatus(
-                    app = app,
-                    permissionHint = trackPermissionHint,
-                )
-            }
-            TextButton(onClick = { showUpdatePwd = !showUpdatePwd }) {
-                Text(if (showUpdatePwd) t(Str.CollapseChangePassword) else t(Str.ChangePassword))
-            }
-            if (showUpdatePwd) {
-                OutlinedTextField(
-                    value = oldPwd,
-                    onValueChange = { oldPwd = it },
-                    label = { Text(t(Str.OldPassword)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                )
-                OutlinedTextField(
-                    value = newPwd,
-                    onValueChange = { newPwd = it },
-                    label = { Text(t(Str.NewPasswordHint)) },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                )
-                Button(
-                    onClick = {
-                        scope.launch { app.authFeature.updatePassword(oldPwd, newPwd) }
-                    },
-                    enabled = !authState.loading,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(if (authState.loading) t(Str.Submitting) else t(Str.ConfirmChange))
-                }
-            }
-            Text(t(Str.Language))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                FilterChip(
-                    selected = language == OpsLanguage.ZH_CN,
-                    onClick = { app.i18n.setLanguage(OpsLanguage.ZH_CN) },
-                    label = { Text(t(Str.LanguageZh)) },
-                )
-                FilterChip(
-                    selected = language == OpsLanguage.EN,
-                    onClick = { app.i18n.setLanguage(OpsLanguage.EN) },
-                    label = { Text(t(Str.LanguageEn)) },
-                )
-            }
-            Text(
-                text = if (app.bleTransport.isAvailable) {
-                    t(Str.BleModeSimulator)
-                } else {
-                    t(Str.BleModeNativeMissing)
+            WorkbenchSettingsContent(
+                app = app,
+                authState = authState,
+                onOpenSwitchBusiness = { tenants ->
+                    switchTenants = tenants
+                    switchQuery = ""
+                    switchBusinessOpen = true
                 },
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                onOpenUpdatePassword = {
+                    oldPassword = ""
+                    newPassword = ""
+                    oldPasswordVisible = false
+                    newPasswordVisible = false
+                    updatePasswordOpen = true
+                },
             )
-            authState.errorMessage?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.error)
-            }
-            authState.infoMessage?.let {
-                Text(text = it, color = MaterialTheme.colorScheme.primary)
-            }
-            Button(
-                onClick = {
-                    scope.launch {
-                        app.trackUploadFeature.setEnabled(false)
-                        app.warehouseFeature.clear()
-                        app.productionFeature.clear()
-                        app.faultReportFeature.clear()
-                        app.repairTaskFeature.clear()
-                        app.inspectionTaskFeature.clear()
-                        app.moveCarTaskFeature.clear()
-                        app.freeMoveCarFeature.clear()
-                        app.changeBatteryTaskFeature.clear()
-                        app.scanFeature.clear()
-                        app.vehicleFeature.clear()
-                        app.serviceAreaFeature.clear()
-                        app.authFeature.logout()
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(t(Str.Logout))
-            }
-            if (app.isDemoMode) {
-                Text(
-                    text = "shared ${OpsApp.LIBRARY_VERSION} · demo",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
         },
     )
-}
-
-@Composable
-private fun TrackUploadStatus(
-    app: OpsApp,
-    permissionHint: String?,
-) {
-    val language by app.i18n.languageFlow.collectAsState()
-    fun t(key: Str, vararg args: Any?) = app.i18n.t(key, *args)
-    val trackState by app.trackUploadFeature.state.collectAsState()
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(
-            text = buildString {
-                append(t(Str.TrackUpload))
-                append(" · ")
-                append(if (trackState.enabled) t(Str.TrackOn) else t(Str.TrackOff))
-                if (trackState.collecting) {
-                    append(" · ")
-                    append(t(Str.TrackCollecting))
-                }
-                append(" · ")
-                append(t(Str.TrackPointsUploaded, trackState.uploadCount))
-            },
-            style = MaterialTheme.typography.bodySmall,
-        )
-        Text(
-            text = t(Str.TrackAutoHint),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        trackState.lastMessage?.let {
-            Text(it, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelSmall)
-        }
-        (permissionHint ?: trackState.errorMessage)?.let {
-            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.labelSmall)
-        }
-        if (trackState.enabled) {
-            TextButton(onClick = { app.trackUploadFeature.setEnabled(false) }) {
-                Text(t(Str.PauseTrack))
-            }
-        } else {
-            TextButton(onClick = { app.trackUploadFeature.setEnabled(true) }) {
-                Text(t(Str.ResumeTrack))
-            }
-        }
-    }
 }

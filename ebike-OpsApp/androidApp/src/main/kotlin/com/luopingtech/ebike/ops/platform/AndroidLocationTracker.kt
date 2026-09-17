@@ -50,6 +50,8 @@ class AndroidLocationTracker(
         return requestSingleUpdate()
     }
 
+    override fun lastKnownOrNull(): GeoPoint? = lastKnown()?.toGeo()
+
     override fun track(): Flow<GeoPoint> = callbackFlow {
         if (!hasPermission()) {
             close(IllegalStateException("location permission required"))

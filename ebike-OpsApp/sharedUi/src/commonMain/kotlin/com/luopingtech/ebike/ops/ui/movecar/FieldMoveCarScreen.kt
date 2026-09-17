@@ -21,8 +21,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -43,8 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.OpsApp
 import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.core.result.OpsResult
-import com.luopingtech.ebike.ops.domain.control.ControlChannel
-import com.luopingtech.ebike.ops.domain.control.VehicleAction
+import com.luopingtech.ebike.ops.domain.model.FreeMoveCar
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
 import com.luopingtech.ebike.ops.domain.scan.ScanCodeParser
 import com.luopingtech.ebike.ops.domain.scan.ScanTarget
@@ -64,6 +66,8 @@ fun FieldMoveCarScreen(
     currentArea: ServiceArea?,
     onClose: () -> Unit,
     onBleSearch: () -> Unit = {},
+    /** Legacy MoveCarActivity.start(carId): preload then addCar. */
+    initialCarId: String? = null,
     scanPreview: @Composable (
         modifier: Modifier,
         torchOn: Boolean,
@@ -82,50 +86,68 @@ fun FieldMoveCarScreen(
     var tab by remember { mutableStateOf(FieldMoveTab.Unlock) }
     var actionHint by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(currentArea?.id) {
+    LaunchedEffect(currentArea?.id, initialCarId) {
+        // Warm last-known GPS so move_car requests carry latitude/longitude (legacy ParamsUtil).
+        app.locationTracker.currentLocation()
         app.freeMoveCarFeature.load(currentArea)
+        val seed = initialCarId?.trim().orEmpty()
+        if (seed.isNotBlank()) {
+            app.freeMoveCarFeature.setCarInput(seed)
+            app.freeMoveCarFeature.addByCarId(seed, currentArea)
+        }
     }
 
     fun carIdFromRaw(raw: String): String? {
         val hosts = app.authFeature.state.value.runtimeConfig?.qrHosts.orEmpty()
         return when (val target = ScanCodeParser.parse(raw, hosts)) {
             is ScanTarget.CarId -> target.value
-            is ScanTarget.Imei -> target.value
-            null -> raw.trim().takeIf { it.isNotBlank() }
+            // Legacy DecodeUtil.decodeCarId on this page does not accept bare IMEI as carId.
+            is ScanTarget.Imei -> null
+            null -> {
+                val trimmed = raw.trim()
+                // Plain numeric car id typed/scanned without URL wrapper.
+                trimmed.takeIf { it.length in 1..10 && it.all { ch -> ch.isDigit() } }
+            }
         }
     }
 
     fun handleUnlock(carId: String) {
         scope.launch {
-            app.freeMoveCarFeature.addByCarId(carId, currentArea)
+            val ok = app.freeMoveCarFeature.addByCarId(carId, currentArea)
+            if (!ok) lastCode = null
         }
     }
 
     fun handleLock(carId: String) {
         scope.launch {
-            when (
-                val result = app.vehicleControl.execute(
-                    vehicleId = carId,
-                    action = VehicleAction.Lock,
-                    channel = ControlChannel.NetworkOnly,
-                )
-            ) {
-                is OpsResult.Ok -> actionHint = t(Str.ActionOk, t(Str.ScanLock), carId)
+            // Legacy addToCloseCarList: only finish if already on open list; else「车子未开锁」.
+            when (val result = app.freeMoveCarFeature.finishOneCar(carId)) {
+                is OpsResult.Ok -> {
+                    actionHint = null
+                    lastCode = null
+                }
                 is OpsResult.Err -> {
-                    actionHint = t(Str.ActionFailed, t(Str.ScanLock), result.error.message)
+                    actionHint = result.error.message
+                    lastCode = null
                 }
             }
         }
     }
 
     fun onScannedOrSubmit(raw: String) {
-        val carId = carIdFromRaw(raw) ?: return
+        val carId = carIdFromRaw(raw) ?: run {
+            lastCode = null
+            actionHint = t(Str.InvalidVehicleId)
+            return
+        }
         app.freeMoveCarFeature.setCarInput(carId)
         when (tab) {
             FieldMoveTab.Unlock -> handleUnlock(carId)
             FieldMoveTab.Lock -> handleLock(carId)
         }
     }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onClose)
 
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         Box(
@@ -231,23 +253,41 @@ fun FieldMoveCarScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            BasicTextField(
-                value = state.carInput,
-                onValueChange = { app.freeMoveCarFeature.setCarInput(it) },
-                singleLine = true,
-                textStyle = TextStyle(fontSize = 15.sp, color = colors.textPrimary),
-                cursorBrush = SolidColor(colors.primary),
-                modifier = Modifier
-                    .weight(1f)
-                    .border(1.dp, colors.divider, RoundedCornerShape(6.dp))
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                decorationBox = { inner ->
-                    if (state.carInput.isEmpty()) {
-                        Text(t(Str.FieldChangeBatteryHint), color = colors.textTertiary, fontSize = 15.sp)
-                    }
-                    inner()
-                },
+            // 车号输入：深底 + 白色输入文字，避免黑字看不清。
+            val inputTextStyle = TextStyle(
+                fontSize = 16.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Medium,
             )
+            CompositionLocalProvider(
+                LocalContentColor provides Color.White,
+                LocalTextStyle provides inputTextStyle,
+            ) {
+                BasicTextField(
+                    value = state.carInput,
+                    onValueChange = { app.freeMoveCarFeature.setCarInput(it) },
+                    singleLine = true,
+                    textStyle = inputTextStyle,
+                    cursorBrush = SolidColor(Color.White),
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(Color(0xFF242936), RoundedCornerShape(6.dp))
+                        .border(1.dp, Color(0xFF3A4158), RoundedCornerShape(6.dp))
+                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                    decorationBox = { inner ->
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            if (state.carInput.isEmpty()) {
+                                Text(
+                                    t(Str.FieldChangeBatteryHint),
+                                    color = Color(0xFF9AA0B5),
+                                    fontSize = 15.sp,
+                                )
+                            }
+                            inner()
+                        }
+                    },
+                )
+            }
             Box(
                 modifier = Modifier
                     .background(colors.primary, RoundedCornerShape(6.dp))
@@ -335,6 +375,7 @@ fun FieldMoveCarScreen(
             items(state.cars, key = { it.carId }) { car ->
                 val selected = car.carId in state.selectedCarIds
                 val statusText = when (car.state) {
+                    FreeMoveCar.STATE_OPERATION -> t(Str.RidingOperation)
                     0 -> t(Str.FreeMoveUnlocking)
                     else -> t(Str.FreeMoveMoving)
                 }

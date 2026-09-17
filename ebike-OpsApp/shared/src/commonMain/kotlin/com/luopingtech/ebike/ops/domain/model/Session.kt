@@ -16,6 +16,8 @@ data class UserSession(
     val hasPassword: Boolean = true,
     /** Role display name from getUserByToken (`roleName`). */
     val roleName: String = "",
+    /** HQ account may switch operators (legacy `izRoot`). */
+    val izRoot: Boolean = false,
 )
 
 data class ServiceArea(

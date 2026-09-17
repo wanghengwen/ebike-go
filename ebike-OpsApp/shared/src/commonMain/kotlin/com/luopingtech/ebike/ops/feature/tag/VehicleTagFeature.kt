@@ -87,10 +87,9 @@ class VehicleTagFeature(
 
     suspend fun load(area: ServiceArea?) {
         if (area == null) {
-            _state.value = _state.value.copy(
-                loading = false,
-                errorMessage = Strings.t(Str.SelectServiceAreaFirst),
-            )
+            // Legacy does not hard-block the tag screen when area is missing at open;
+            // leave types empty and let add/submit show「请先选择服务区」.
+            _state.value = _state.value.copy(loading = false, types = emptyList())
             return
         }
         _state.value = _state.value.copy(loading = true, errorMessage = null)
@@ -99,9 +98,11 @@ class VehicleTagFeature(
                 loading = false,
                 types = r.value,
             )
+            // Align with ManagerApp ApiCallback.onFail{}: type-list failure is silent.
+            // UI stays usable for scan / pending list; type picker is simply empty.
             is OpsResult.Err -> _state.value = _state.value.copy(
                 loading = false,
-                errorMessage = r.error.message,
+                types = emptyList(),
             )
         }
     }

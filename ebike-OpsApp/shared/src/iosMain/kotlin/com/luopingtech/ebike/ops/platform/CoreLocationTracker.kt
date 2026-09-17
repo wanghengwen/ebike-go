@@ -85,6 +85,11 @@ class CoreLocationTracker(
             ?: OpsResult.Err(OpsError.unsupported("Location unavailable"))
     }
 
+    override fun lastKnownOrNull(): GeoPoint? {
+        manager.location?.let { return it.toGeoPoint() }
+        return updates.replayCache.lastOrNull()
+    }
+
     override fun track(): Flow<GeoPoint> = updates.asSharedFlow()
 
     override fun startTracking() = onMain {

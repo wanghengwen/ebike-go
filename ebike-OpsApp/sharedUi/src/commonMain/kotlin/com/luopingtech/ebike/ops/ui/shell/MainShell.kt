@@ -1,13 +1,16 @@
 package com.luopingtech.ebike.ops.ui.shell
 
-import com.luopingtech.ebike.ops.OpsApp
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,30 +21,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.luopingtech.ebike.ops.OpsApp
+import com.luopingtech.ebike.ops.core.config.H5ScreenKind
+import com.luopingtech.ebike.ops.core.i18n.Str
+import com.luopingtech.ebike.ops.domain.analysis.TaskStatisticsKind
+import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
+import com.luopingtech.ebike.ops.feature.home.HomeUiState
 import com.luopingtech.ebike.ops.ui.analysis.OfflineOpsScreen
 import com.luopingtech.ebike.ops.ui.analysis.ReturnCarAnalysisMapScreen
 import com.luopingtech.ebike.ops.ui.analysis.StationAnalysisScreen
 import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionMapScreen
 import com.luopingtech.ebike.ops.ui.analysis.VehicleConditionDistributionScreen
-import com.luopingtech.ebike.ops.ui.theme.OpsTheme
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.graphics.Color
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.NavigationBarItemDefaults
-import com.luopingtech.ebike.ops.core.config.H5ScreenKind
-import com.luopingtech.ebike.ops.core.i18n.Str
-import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
-import com.luopingtech.ebike.ops.feature.home.HomeUiState
 import com.luopingtech.ebike.ops.ui.feedback.LocalOpsToast
+import com.luopingtech.ebike.ops.ui.fence.FenceBrowseScreen
 import com.luopingtech.ebike.ops.ui.h5.H5Screen
-import com.luopingtech.ebike.ops.ui.permission.LocalOpsTrackPermissionGate
-import com.luopingtech.ebike.ops.ui.scan.LocalOpsScanPreview
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.movecar.FieldMoveCarScreen
 import com.luopingtech.ebike.ops.ui.order.OrderQueryScreen
+import com.luopingtech.ebike.ops.ui.permission.LocalOpsTrackPermissionGate
 import com.luopingtech.ebike.ops.ui.production.ProductionScreen
+import com.luopingtech.ebike.ops.ui.relocation.RelocationScreen
 import com.luopingtech.ebike.ops.ui.report.FaultReportScreen
+import com.luopingtech.ebike.ops.ui.scan.LocalOpsScanPreview
+import com.luopingtech.ebike.ops.ui.staff.StaffManageScreen
 import com.luopingtech.ebike.ops.ui.task.BatchMoveCarSection
 import com.luopingtech.ebike.ops.ui.task.ChangeBatteryMapScreen
 import com.luopingtech.ebike.ops.ui.task.FreeMoveCarSection
@@ -50,14 +57,11 @@ import com.luopingtech.ebike.ops.ui.task.MoveCarMapScreen
 import com.luopingtech.ebike.ops.ui.task.RepairTaskScreen
 import com.luopingtech.ebike.ops.ui.task.TaskFullscreenTopBar
 import com.luopingtech.ebike.ops.ui.task.TaskStatisticsScreen
-import com.luopingtech.ebike.ops.domain.analysis.TaskStatisticsKind
-import com.luopingtech.ebike.ops.ui.relocation.RelocationScreen
-import com.luopingtech.ebike.ops.ui.tools.FieldChangeBatteryScreen
-import com.luopingtech.ebike.ops.ui.tools.UnlockedVehiclesScreen
-import com.luopingtech.ebike.ops.ui.tools.OpsSettingScreen
+import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import com.luopingtech.ebike.ops.ui.tools.BluetoothRadarScreen
-import com.luopingtech.ebike.ops.ui.fence.FenceBrowseScreen
-import com.luopingtech.ebike.ops.ui.staff.StaffDirectoryScreen
+import com.luopingtech.ebike.ops.ui.tools.FieldChangeBatteryScreen
+import com.luopingtech.ebike.ops.ui.tools.OpsSettingScreen
+import com.luopingtech.ebike.ops.ui.tools.UnlockedVehiclesScreen
 import com.luopingtech.ebike.ops.ui.tag.VehicleTagScreen
 import com.luopingtech.ebike.ops.ui.admin.ProfessionAuditScreen
 import com.luopingtech.ebike.ops.ui.admin.ObjectionOrderScreen
@@ -126,7 +130,6 @@ internal fun MainShell(
     var repairOrderOpen by remember { mutableStateOf(false) }
     var h5Screen by remember { mutableStateOf<H5ScreenKind?>(null) }
     var scanOpen by remember { mutableStateOf(false) }
-    var trackPermissionHint by remember { mutableStateOf<String?>(null) }
     val trackPermissionGate = LocalOpsTrackPermissionGate.current
     val toast = LocalOpsToast.current
     val scanner = LocalOpsScanPreview.current
@@ -137,7 +140,6 @@ internal fun MainShell(
         if (homeState.session == null) return@LaunchedEffect
         if (app.trackUploadFeature.state.value.enabled) return@LaunchedEffect
         trackPermissionGate.request { denied ->
-            trackPermissionHint = denied
             if (denied == null) app.trackUploadFeature.setEnabled(true)
         }
     }
@@ -162,7 +164,13 @@ internal fun MainShell(
         return
     }
     if (vehicleTagOpen) {
-        VehicleTagScreen(app = app, onClose = { vehicleTagOpen = false })
+        VehicleTagScreen(
+            app = app,
+            onClose = { vehicleTagOpen = false },
+            scanPreview = { modifier, torchOn, enabled, onCode ->
+                scanner.Preview(modifier, torchOn, enabled, onCode)
+            },
+        )
         return
     }
     if (bluetoothRadarOpen) {
@@ -170,7 +178,7 @@ internal fun MainShell(
         return
     }
     if (staffDirectoryOpen) {
-        StaffDirectoryScreen(app = app, onClose = { staffDirectoryOpen = false })
+        StaffManageScreen(app = app, onClose = { staffDirectoryOpen = false })
         return
     }
     if (professionAuditOpen) {
@@ -348,6 +356,9 @@ internal fun MainShell(
                 productionOpen = false
                 tab = MainTab.Map
             },
+            scanPreview = { modifier, torchOn, enabled, onCode ->
+                scanner.Preview(modifier, torchOn, enabled, onCode)
+            },
         )
         return
     }
@@ -428,6 +439,9 @@ internal fun MainShell(
             app = app,
             currentArea = homeState.currentArea,
             onClose = { relocationOpen = false },
+            scanPreview = { modifier, torchOn, enabled, onCode ->
+                scanner.Preview(modifier, torchOn, enabled, onCode)
+            },
         )
         return
     }
@@ -500,7 +514,11 @@ internal fun MainShell(
                         selected = tab == MainTab.Map,
                         onClick = { tab = MainTab.Map },
                         colors = itemColors,
-                        icon = { Text("◉", fontSize = 16.sp) },
+                        icon = {
+                            TabIcon(
+                                icon = if (tab == MainTab.Map) OpsIcon.TabMapSelected else OpsIcon.TabMap,
+                            )
+                        },
                         label = { Text(app.i18n.t(Str.TabMap), fontSize = 11.sp) },
                     )
                 }
@@ -511,7 +529,11 @@ internal fun MainShell(
                             tab = MainTab.Tasks
                         },
                         colors = itemColors,
-                        icon = { Text("☑", fontSize = 16.sp) },
+                        icon = {
+                            TabIcon(
+                                icon = if (tab == MainTab.Tasks) OpsIcon.TabTaskSelected else OpsIcon.TabTask,
+                            )
+                        },
                         label = { Text(app.i18n.t(Str.TabTasks), fontSize = 11.sp) },
                     )
                 }
@@ -527,7 +549,12 @@ internal fun MainShell(
                                     .background(OpsTheme.colors.primary, CircleShape),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                Text("⬚", color = Color.White, fontSize = 18.sp)
+                                Image(
+                                    painter = painterResource(OpsIcon.TabScan),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp),
+                                    contentScale = ContentScale.Fit,
+                                )
                             }
                         },
                         label = { Text("") },
@@ -537,14 +564,22 @@ internal fun MainShell(
                     selected = tab == MainTab.Analysis,
                     onClick = { tab = MainTab.Analysis },
                     colors = itemColors,
-                    icon = { Text("📈", fontSize = 14.sp) },
+                    icon = {
+                        TabIcon(
+                            icon = if (tab == MainTab.Analysis) OpsIcon.TabAnalysisSelected else OpsIcon.TabAnalysis,
+                        )
+                    },
                     label = { Text(app.i18n.t(Str.TabAnalysis), fontSize = 11.sp) },
                 )
                 NavigationBarItem(
                     selected = tab == MainTab.Workbench,
                     onClick = { tab = MainTab.Workbench },
                     colors = itemColors,
-                    icon = { Text("▦", fontSize = 16.sp) },
+                    icon = {
+                        TabIcon(
+                            icon = if (tab == MainTab.Workbench) OpsIcon.TabMineSelected else OpsIcon.TabMine,
+                        )
+                    },
                     label = { Text(app.i18n.t(Str.TabWorkbench), fontSize = 11.sp) },
                 )
             }
@@ -598,7 +633,6 @@ internal fun MainShell(
                     app = app,
                     homeState = homeState,
                     permissions = permissions,
-                    trackPermissionHint = trackPermissionHint,
                     onOpenWarehouse = { warehouseOpen = true },
                     onOpenProduction = { productionOpen = true },
                     onOpenFaultReport = { faultReportOpen = true },
@@ -631,4 +665,14 @@ internal fun MainShell(
             }
         }
     }
+}
+
+@Composable
+private fun TabIcon(icon: OpsIcon) {
+    Image(
+        painter = painterResource(icon),
+        contentDescription = null,
+        modifier = Modifier.size(24.dp),
+        contentScale = ContentScale.Fit,
+    )
 }
