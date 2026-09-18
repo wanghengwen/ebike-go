@@ -70,6 +70,8 @@ class IosHostMapPin(
     val abnormal: Boolean = false,
     /** Legacy drawable name, e.g. icon_vehicle_ready. */
     val iconName: String = "ico_vehicle_normal",
+    /** 对齐 legacy Cluster.showCluster：聚合模式下 1 台车也画数字气泡。 */
+    val showCluster: Boolean = false,
 )
 
 class IosHostMapFence(
@@ -222,6 +224,7 @@ private fun MapPin.toHostPin() = IosHostMapPin(
     memberCount = memberCount,
     memberIds = memberIds,
     iconName = icon.legacyDrawableName(),
+    showCluster = showCluster,
 )
 
 private fun FencePolygon.toHostFence() = IosHostMapFence(

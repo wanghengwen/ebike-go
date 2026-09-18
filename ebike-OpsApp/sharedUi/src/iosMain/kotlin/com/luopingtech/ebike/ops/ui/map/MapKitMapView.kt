@@ -588,7 +588,7 @@ private fun MapPin.tintColor(): UIColor = when {
     else -> UIColor.systemTealColor
 }
 
-private fun MapPin.glyph(): String? = if (isCluster) memberCount.toString() else null
+private fun MapPin.glyph(): String? = if (isClusterBubble) memberCount.toString() else null
 
 @OptIn(ExperimentalForeignApi::class)
 private fun polygonOf(fence: FencePolygon): MKPolygon? {

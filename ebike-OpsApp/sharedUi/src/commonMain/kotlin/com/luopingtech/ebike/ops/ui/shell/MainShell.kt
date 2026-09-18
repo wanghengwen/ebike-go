@@ -134,8 +134,8 @@ internal fun MainShell(
     val toast = LocalOpsToast.current
     val scanner = LocalOpsScanPreview.current
 
-    // 登录完成就接着上报轨迹（进程被杀 / 重启由宿主的常驻服务兜）。
-    // 「拿到许可就开上报」是业务规则，留在共享层；怎么向用户要权限是平台的事。
+    // 登录完成就接着上报轨迹（对齐原版 MainActivity 收定位 → MainViewModel.reportLocation）。
+    // 保活通知仅在退后台出现，样式对齐 APPKeepService（无「轨迹上报进行中」文案）。
     LaunchedEffect(homeState.session?.userId) {
         if (homeState.session == null) return@LaunchedEffect
         if (app.trackUploadFeature.state.value.enabled) return@LaunchedEffect

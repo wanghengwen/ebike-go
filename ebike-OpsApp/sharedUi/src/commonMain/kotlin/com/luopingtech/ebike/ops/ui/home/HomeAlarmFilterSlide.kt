@@ -50,6 +50,8 @@ import com.luopingtech.ebike.ops.ui.theme.OpsTheme
  * - 总宽 330dp = 关闭条 30dp + 白面板 305dp
  * - 蒙层 / 关闭条 / 重置·确定 后关闭；点选仅改草稿，确定才生效
  * - Chip：112×40、圆角 4、选中主题色、未选中 #F4F4F4+#D7D7D7
+ * - 底部确定文案：首页统计面板不调 setFilterNumber，恒为「确定」
+ *   （车辆列表才是「确定(N辆)」且 N=匹配车辆数；勿用已选告警项数）
  */
 @Composable
 fun HomeAlarmFilterSlide(
@@ -58,7 +60,6 @@ fun HomeAlarmFilterSlide(
     title: String,
     resetLabel: String,
     sureLabel: String,
-    sureWithCountLabel: (Int) -> String,
     onDismiss: () -> Unit,
     onApply: (Set<Int>) -> Unit,
     modifier: Modifier = Modifier,
@@ -168,9 +169,10 @@ fun HomeAlarmFilterSlide(
                     }
 
                     // Bottom bar: reset / sure — VehicleFilterLayoutScrollView
+                    // 对齐 PanelStatisticsView：首页不 setFilterNumber，确定按钮无「N辆」
                     FilterBottomBar(
                         resetLabel = resetLabel,
-                        sureLabel = if (draft.isEmpty()) sureLabel else sureWithCountLabel(draft.size),
+                        sureLabel = sureLabel,
                         onReset = {
                             draft = emptySet()
                             onApply(emptySet())

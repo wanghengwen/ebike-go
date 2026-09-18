@@ -220,8 +220,16 @@ data class MapPin(
     val icon: MapPinIcon = MapPinIcon.Default,
     /** Legacy tips_* 角标资源名；null 表示无角标。 */
     val badgeDrawableName: String? = null,
+    /** 对齐 legacy Cluster.showCluster：聚合模式下即使只有 1 台车也画数字气泡。 */
+    val showCluster: Boolean = false,
 ) {
     val isCluster: Boolean get() = memberCount > 1
+
+    /**
+     * 对齐 legacy DefaultOptionGenerator：`clusterItems.size > 1 || showCluster == true` 时画数字气泡，
+     * 否则画车辆状态图标。注意点击语义仍看 [isCluster]（气泡里只有 1 台车时 tag 是那台车）。
+     */
+    val isClusterBubble: Boolean get() = memberCount > 1 || showCluster
 }
 
 /**

@@ -116,6 +116,8 @@ fun TencentMapView(
     val batchScreenToLatLngUpdated by rememberUpdatedState(onBatchScreenToLatLng)
     val latLngToScreenUpdated by rememberUpdatedState(onLatLngToScreen)
 
+    // 聚合只认「相机停下」后的视野（对齐 AMapClusterManagerV3：仅 onCameraIdle 才 assignClusters），
+    // 缩放过程中不重算，否则会在聚合/单点之间来回闪。
     var cameraZoom by remember { mutableStateOf(12f) }
     var visibleBounds by remember {
         mutableStateOf<com.luopingtech.ebike.ops.domain.map.LatLngBounds?>(null)
@@ -127,9 +129,10 @@ fun TencentMapView(
         if (!clusterOverview) {
             val near = MapClusterer.filterNearCenter(pins, lat, lng)
             val inView = visibleBounds?.let { MapClusterer.pinsInBounds(near, it.padded(0.08)) } ?: near
-            inView.map { it.copy(memberCount = 1, memberIds = listOf(it.id)) }
+            inView.map { it.copy(memberCount = 1, memberIds = listOf(it.id), showCluster = false) }
         } else if (pins.size <= 1) {
-            pins
+            // 对齐原版：聚合模式下单车也是「1」的数字气泡
+            pins.map { it.copy(memberCount = 1, memberIds = listOf(it.id), showCluster = true) }
         } else {
             MapClusterer.clusterInViewport(
                 pins = pins,
@@ -139,6 +142,13 @@ fun TencentMapView(
                 ),
                 visible = visibleBounds,
             )
+        }
+    }
+    /** 内容一致时不重建 marker，避免相机停下后无谓地删一遍再加一遍（视觉上就是闪一下）。 */
+    val displayPinsKey = remember(displayPins) {
+        displayPins.joinToString("|") { p ->
+            "${p.id}@${p.lat},${p.lng}#${p.memberCount}${if (p.showCluster) "c" else ""}" +
+                ":${p.icon}:${p.badgeDrawableName}"
         }
     }
 
@@ -211,8 +221,6 @@ fun TencentMapView(
                     map.setOnCameraChangeListener(object : TencentMap.OnCameraChangeListener {
                         override fun onCameraChange(cameraPosition: com.tencent.tencentmap.mapsdk.maps.model.CameraPosition?) {
                             cameraPosition?.let {
-                                cameraZoom = it.zoom
-                                cameraCenter = it.target.latitude to it.target.longitude
                                 cameraMoveUpdated?.invoke(it.target.latitude, it.target.longitude)
                             }
                         }
@@ -267,9 +275,8 @@ fun TencentMapView(
             if (!mapLoaded) return@LaunchedEffect
             map.setOnCameraChangeListener(object : TencentMap.OnCameraChangeListener {
                 override fun onCameraChange(cameraPosition: com.tencent.tencentmap.mapsdk.maps.model.CameraPosition?) {
-                    // 对齐原版 onCameraIdle(false) → ON_MOVE → invalidate 重投影
+                    // 对齐原版 onCameraIdle(false) → ON_MOVE → invalidate 重投影；聚合不在这里重算
                     cameraPosition?.let {
-                        cameraZoom = it.zoom
                         cameraMoveUpdated?.invoke(it.target.latitude, it.target.longitude)
                     }
                 }
@@ -357,12 +364,11 @@ fun TencentMapView(
             )
         }
 
-        LaunchedEffect(displayPins, selectedCarId, mapLoaded, tencentMap, fencePolygons, trackPoints, fitNonce, clusterArgb, density, autoFitOnPins) {
+        // 围栏 / 轨迹只随自身数据重建，不跟着聚合结果一起删了重画
+        LaunchedEffect(tencentMap, mapLoaded, fencePolygons, trackPoints) {
             val map = tencentMap ?: return@LaunchedEffect
             if (!mapLoaded) return@LaunchedEffect
             try {
-                markers.forEach { it.remove() }
-                markers.clear()
                 polygons.forEach { it.remove() }
                 polygons.clear()
                 polyline?.remove()
@@ -407,12 +413,26 @@ fun TencentMapView(
                     line.width(8f)
                     polyline = map.addPolyline(line)
                 }
+                mapError = null
+            } catch (t: Throwable) {
+                mapError = t.message ?: Strings.t(Str.TencentMapRenderFailed)
+            }
+        }
+
+        // marker 只在聚合结果真的变化时重建（对齐原版 onCameraIdle → ClusterRenderer.render）
+        LaunchedEffect(tencentMap, mapLoaded, displayPinsKey, clusterArgb, density) {
+            val map = tencentMap ?: return@LaunchedEffect
+            if (!mapLoaded) return@LaunchedEffect
+            try {
+                markers.forEach { it.remove() }
+                markers.clear()
 
                 val valid = displayPins.filter { it.lat != 0.0 || it.lng != 0.0 }
                 valid.forEach { pin ->
                     // Legacy MapConfig.MARK_ZOOM = 999; selected vehicle does not change icon/zIndex.
                     val options = MarkerOptions(LatLng(pin.lat, pin.lng)).zIndex(999f)
-                    if (pin.isCluster) {
+                    // 对齐 DefaultOptionGenerator：size>1 或聚合模式的单点都画数字气泡
+                    if (pin.isClusterBubble) {
                         val bitmap = ClusterMarkerBitmap.obtain(
                             count = pin.memberCount.coerceAtLeast(pin.memberIds.size),
                             fillColorArgb = clusterArgb,
@@ -489,7 +509,16 @@ fun TencentMapView(
                     )
                     markers.add(marker)
                 }
+                mapError = null
+            } catch (t: Throwable) {
+                mapError = t.message ?: Strings.t(Str.TencentMapRenderFailed)
+            }
+        }
 
+        LaunchedEffect(tencentMap, mapLoaded, pins, fencePolygons, trackPoints, fitNonce, autoFitOnPins) {
+            val map = tencentMap ?: return@LaunchedEffect
+            if (!mapLoaded) return@LaunchedEffect
+            try {
                 val sourcePins = pins.filter {
                     (it.lat != 0.0 || it.lng != 0.0) && it.id != ORDER_PLAYBACK_PIN_ID
                 }

@@ -67,6 +67,20 @@ class MapProjectionTest {
         assertEquals(112.0001, pair.lng, 1e-9)
     }
 
+    /** 对齐 legacy DefaultOptionGenerator：聚合模式下单车也画「1」气泡，但点击仍是单车语义。 */
+    @Test
+    fun clusterMarksSinglePinAsBubble() {
+        val pins = listOf(
+            MapPin("1", 28.0, 112.0, "1"),
+            MapPin("2", 29.0, 113.0, "2"),
+        )
+        val clustered = MapClusterer.cluster(pins, cellDegrees = 0.01)
+        assertEquals(2, clustered.size)
+        assertTrue(clustered.all { it.showCluster && it.isClusterBubble })
+        assertTrue(clustered.none { it.isCluster })
+        assertTrue(clustered.all { it.memberCount == 1 && it.memberIds.size == 1 })
+    }
+
     @Test
     fun clusterInViewportOnlyUsesVisiblePins() {
         val pins = listOf(

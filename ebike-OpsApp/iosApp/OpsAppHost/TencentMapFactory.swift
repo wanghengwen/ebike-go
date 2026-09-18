@@ -143,8 +143,8 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
         }
     }
 
+    /// 对齐 legacy AMapClusterManagerV3：聚合模式下每个簇都是数字气泡，单车显示「1」。
     private static func clustered(_ pins: [IosHostMapPin], zoom: Double, latitude: Double) -> [IosHostMapPin] {
-        guard pins.count > 1 else { return pins }
         let cell = cellDegrees(zoom: zoom, latitude: latitude)
         var buckets: [String: [IosHostMapPin]] = [:]
         for pin in pins {
@@ -156,7 +156,23 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
         var out: [IosHostMapPin] = []
         for group in buckets.values {
             if group.count == 1 {
-                out.append(group[0])
+                let only = group[0]
+                out.append(
+                    IosHostMapPin(
+                        id: only.id,
+                        lat: only.lat,
+                        lng: only.lng,
+                        title: only.title,
+                        subtitle: only.subtitle,
+                        restBattery: only.restBattery,
+                        ridingState: only.ridingState,
+                        memberCount: 1,
+                        memberIds: only.memberIds.isEmpty ? [only.id] : only.memberIds,
+                        abnormal: only.abnormal,
+                        iconName: only.iconName,
+                        showCluster: true
+                    )
+                )
             } else if let last = group.last {
                 let ids = group.map(\.id)
                 out.append(
@@ -171,7 +187,8 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
                         memberCount: Int32(group.count),
                         memberIds: ids,
                         abnormal: false,
-                        iconName: last.iconName
+                        iconName: last.iconName,
+                        showCluster: true
                     )
                 )
             }
@@ -336,13 +353,15 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
 
     func mapView(_ mapView: QMapView!, viewFor annotation: QAnnotation!) -> QAnnotationView! {
         guard let point = annotation as? OpsPointAnnotation else { return nil }
-        let reuseId = point.pin.memberCount > 1 ? "ops-cluster" : "ops-vehicle"
+        // 对齐 DefaultOptionGenerator：size>1 或聚合模式的单点都画数字气泡
+        let isBubble = point.pin.memberCount > 1 || point.pin.showCluster
+        let reuseId = isBubble ? "ops-cluster" : "ops-vehicle"
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
             ?? QAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
         view?.annotation = annotation
         view?.canShowCallout = false
         view?.centerOffset = .zero
-        if point.pin.memberCount > 1 {
+        if isBubble {
             view?.image = Self.clusterImage(count: Int(point.pin.memberCount))
         } else if let image = UIImage(named: point.pin.iconName)
             ?? UIImage(named: "\(point.pin.iconName).webp") {

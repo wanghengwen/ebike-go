@@ -262,7 +262,7 @@ fun SimulatorMapView(
 
             projected.forEach { (pin, point) ->
                 val selected = !pin.isCluster && pin.memberIds.contains(selectedCarId)
-                val radius = if (pin.isCluster) 28f else 16f
+                val radius = if (pin.isClusterBubble) 28f else 16f
                 val fill = when (pin.icon) {
                     com.luopingtech.ebike.ops.domain.model.MapPinIcon.TrackOrigin -> Color(0xFF00B68A)
                     com.luopingtech.ebike.ops.domain.model.MapPinIcon.TrackEnd -> Color(0xFFEF2E6E)
@@ -275,7 +275,7 @@ fun SimulatorMapView(
                     com.luopingtech.ebike.ops.domain.model.MapPinIcon.ParkingHidden -> Color(0xFFF2A626)
                     com.luopingtech.ebike.ops.domain.model.MapPinIcon.NoParking -> Color(0xFFE02020)
                     else -> when {
-                        pin.isCluster -> clusterColor
+                        pin.isClusterBubble -> clusterColor
                         pin.restBattery in 1..30 -> Color(0xFFE67E22)
                         pin.ridingState == 1 -> scheme.primary
                         else -> scheme.secondary
@@ -286,7 +286,7 @@ fun SimulatorMapView(
                     radius = radius,
                     center = Offset(point.x, point.y),
                 )
-                if (pin.isCluster) {
+                if (pin.isClusterBubble) {
                     val count = pin.memberCount.coerceAtLeast(pin.memberIds.size)
                     val textPaint = AndroidPaint(AndroidPaint.ANTI_ALIAS_FLAG).apply {
                         color = android.graphics.Color.WHITE

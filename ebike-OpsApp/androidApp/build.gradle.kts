@@ -89,7 +89,7 @@ val syncTenantConfig by tasks.registering {
         outDir.mkdirs()
         val outFile = outDir.resolve("tenant.json")
         tenantConfigFile.copyTo(outFile, overwrite = true)
-        logger.lifecycle("Synced ${tenantConfigFile.name} → assets/tenant.json (appId=$configApplicationId)")
+        logger.lifecycle("Synced ${tenantConfigFile.name} → assets/tenant.json (appId=$configApplicationId name=$configDisplayName)")
     }
 }
 

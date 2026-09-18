@@ -400,7 +400,6 @@ internal fun MapTab(
                 title = t(Str.AlarmFilterTitle),
                 resetLabel = t(Str.StationFilterReset),
                 sureLabel = t(Str.FilterSure),
-                sureWithCountLabel = { n -> t(Str.FilterSureWithCount, n) },
                 onDismiss = { alarmPanelOpen = false },
                 onApply = { selectedAlarms = it },
             )

@@ -162,6 +162,10 @@ object MapClusterer {
         }
     }
 
+    /**
+     * 聚合模式建簇。对齐 legacy AMapClusterManagerV3：簇的 showCluster 恒为 true，
+     * 所以只含 1 台车的簇同样画「1」数字气泡（非聚合模式走 [filterNearCenter]，不进这里）。
+     */
     fun cluster(pins: List<MapPin>, cellDegrees: Double, maxMarkers: Int = MAX_MARKERS): List<MapPin> {
         if (pins.isEmpty()) return emptyList()
         val cell = cellDegrees.coerceAtLeast(1e-6)
@@ -174,7 +178,11 @@ object MapClusterer {
         }
         val clustered = buckets.values.map { group ->
             if (group.size == 1) {
-                group.first().copy(memberCount = 1, memberIds = listOf(group.first().id))
+                group.first().copy(
+                    memberCount = 1,
+                    memberIds = listOf(group.first().id),
+                    showCluster = true,
+                )
             } else {
                 // Legacy DefaultOptionGenerator: clusterItems.getLast() so the bubble
                 // stays on a real vehicle instead of the geographic average (can sit outside the service area).
@@ -192,6 +200,7 @@ object MapClusterer {
                     memberIds = ids,
                     icon = last.icon,
                     badgeDrawableName = last.badgeDrawableName,
+                    showCluster = true,
                 )
             }
         }
