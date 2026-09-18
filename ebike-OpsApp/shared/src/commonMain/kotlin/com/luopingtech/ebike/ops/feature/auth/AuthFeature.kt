@@ -148,14 +148,12 @@ class AuthFeature(
         _state.value = AuthUiState(loginArea = repository.loginAreaCode())
     }
 
-    suspend fun updatePassword(oldPassword: String, newPassword: String) {
+    suspend fun updatePassword(oldPassword: String, newPassword: String): OpsResult<Unit> {
         _state.value = _state.value.copy(loading = true, errorMessage = null, infoMessage = null)
-        when (val result = repository.updatePassword(oldPassword, newPassword)) {
+        val result = repository.updatePassword(oldPassword, newPassword)
+        when (result) {
             is OpsResult.Ok -> {
-                _state.value = _state.value.copy(
-                    loading = false,
-                    infoMessage = Strings.t(Str.PasswordChanged),
-                )
+                _state.value = _state.value.copy(loading = false)
             }
             is OpsResult.Err -> {
                 _state.value = _state.value.copy(
@@ -164,11 +162,40 @@ class AuthFeature(
                 )
             }
         }
+        return result
     }
 
     suspend fun logout() {
         repository.logout()
         _state.value = AuthUiState(loginArea = repository.loginAreaCode())
+    }
+
+    suspend fun listTenantsForSwitch(): OpsResult<List<BusinessTenant>> =
+        repository.listTenantsForSwitch()
+
+    fun canSwitchBusiness(): Boolean = repository.canSwitchBusiness()
+
+    suspend fun switchBusiness(tenantId: String): OpsResult<UserSession> {
+        _state.value = _state.value.copy(loading = true, errorMessage = null, infoMessage = null)
+        return when (val result = repository.switchBusiness(tenantId)) {
+            is OpsResult.Ok -> {
+                _state.value = AuthUiState(
+                    loading = false,
+                    session = result.value,
+                    needSetPassword = !result.value.hasPassword,
+                    runtimeConfig = repository.runtimeConfig(),
+                    loginArea = repository.loginAreaCode(),
+                )
+                result
+            }
+            is OpsResult.Err -> {
+                _state.value = _state.value.copy(
+                    loading = false,
+                    errorMessage = result.error.message,
+                )
+                result
+            }
+        }
     }
 
     fun refreshSessionFromStore() {

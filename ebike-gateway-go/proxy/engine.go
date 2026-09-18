@@ -55,7 +55,9 @@ func targetKey(u *url.URL) string {
 	if u == nil {
 		return ""
 	}
-	return u.Scheme + "://" + u.Host
+	// Include Path so two routes to the same host with different URI paths
+	// do not share one ReverseProxy (NewSingleHostReverseProxy joins target.Path).
+	return u.Scheme + "://" + u.Host + u.Path
 }
 
 func (pe *ProxyEngine) pruneProxyCache(routes []Route) {

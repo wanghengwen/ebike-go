@@ -45,6 +45,17 @@ interface AuthRepository {
     fun currentSession(): UserSession?
     fun markSessionInvalid(message: String)
     fun consumeSessionInvalid()
+
+    /** 设置页「切换运营商」：对齐 SettingActivity，优先用登录时缓存的 tenantList。 */
+    suspend fun listTenantsForSwitch(): OpsResult<List<BusinessTenant>>
+
+    /** 总部账号且缓存租户数 > 1 时才展示「切换运营商」。 */
+    fun canSwitchBusiness(): Boolean
+
+    /**
+     * 对齐 SelectBusinessActivity(switchMerchantLogin)：用缓存 secret 换 token，无感切换。
+     */
+    suspend fun switchBusiness(tenantId: String): OpsResult<UserSession>
 }
 
 class AuthRepositoryImpl(
@@ -153,19 +164,18 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun updatePassword(oldPassword: String, newPassword: String): OpsResult<Unit> {
-        PasswordRules.validationError(newPassword)?.let {
-            return OpsResult.Err(OpsError.business("AUTH_PWD", it))
-        }
-        if (oldPassword.isBlank()) {
-            return OpsResult.Err(OpsError.business("AUTH_INVALID", "old password empty"))
-        }
+        // Legacy LoginRepository.updatePwd: no extra checks, body oldPwd + newPwd.
         val current = session
             ?: return OpsResult.Err(OpsError.unauthorized("not signed in"))
         if (demoMode || authApi == null) {
             return OpsResult.Ok(Unit)
         }
         val networkSession = NetworkSession(accessToken = current.accessToken)
-        return authApi.updatePassword(networkSession, oldPassword, newPassword.trim())
+        return authApi.updatePassword(
+            networkSession,
+            oldPassword.trim(),
+            newPassword.trim(),
+        )
     }
 
     override suspend fun loginWithSms(phone: String, messageCode: String): OpsResult<UserSession> {
@@ -281,6 +291,52 @@ class AuthRepositoryImpl(
         _sessionInvalidMessage.value = null
     }
 
+    override suspend fun listTenantsForSwitch(): OpsResult<List<BusinessTenant>> {
+        session ?: return OpsResult.Err(OpsError.unauthorized())
+        // Legacy SettingActivity: AppConfig.getTenantModel().tenantList only, no refetch.
+        if (demoMode || authApi == null) {
+            val cached = loadCachedTenants()
+            return OpsResult.Ok(cached.ifEmpty { DEMO_BUSINESSES })
+        }
+        return OpsResult.Ok(loadCachedTenants())
+    }
+
+    override fun canSwitchBusiness(): Boolean {
+        val current = session ?: return false
+        return current.izRoot || demoMode
+    }
+
+    override suspend fun switchBusiness(tenantId: String): OpsResult<UserSession> {
+        val current = session ?: return OpsResult.Err(OpsError.unauthorized())
+        val id = tenantId.trim()
+        if (id.isBlank()) {
+            return OpsResult.Err(OpsError.business("AUTH_BUSINESS", "tenantId empty"))
+        }
+        if (id == current.tenantId) {
+            return OpsResult.Ok(withArea(current))
+        }
+        val tenants = loadCachedTenants().ifEmpty {
+            when (val listed = listTenantsForSwitch()) {
+                is OpsResult.Ok -> listed.value
+                is OpsResult.Err -> return listed
+            }
+        }
+        val secret = loadCachedBusinessSecret()
+        if (secret.isBlank()) {
+            return OpsResult.Err(OpsError.business("AUTH_SECRET", Strings.t(Str.AuthNoBusinessTenant)))
+        }
+        val selected = tenants.firstOrNull { it.tenantId == id }
+            ?: return OpsResult.Err(OpsError.business("AUTH_BUSINESS", "unknown business"))
+        pending = PendingBusinessAuth(
+            phone = current.phone.ifBlank { selected.displayLabel },
+            businesses = tenants,
+            businessSecret = secret,
+        )
+        // Legacy ServiceAreaHelper.clearServiceArea() before silent switch
+        secureStore.remove(SecureStore.KEY_SERVICE_AREA_ID)
+        secureStore.remove(SecureStore.KEY_SERVICE_AREA_NAME)
+        return selectBusiness(id)
+    }
 
     /**
      * After HQ oauth token (legacy NewLoginViewModel):
@@ -327,7 +383,9 @@ class AuthRepositoryImpl(
                         OpsError.business("AUTH_SECRET", Strings.t(Str.AuthNoBusinessTenant)),
                     )
                 }
-                // Department / non-root: never show the full HQ tenant catalog.
+                // Legacy getTenantList:
+                // department (!izRoot): only need secret, do not saveTenantModel, auto own tenant.
+                // HQ (izRoot): AppConfig.saveTenantModel(full list), picker if >1.
                 if (!user.izRoot) {
                     val ownId = user.tenantId.trim()
                     if (ownId.isBlank()) {
@@ -341,6 +399,7 @@ class AuthRepositoryImpl(
                             tenantId = ownId,
                             tenantName = user.tenantName.ifBlank { user.nickname },
                         )
+                    persistTenantCatalog(listOf(own), secret, izRoot = false)
                     pending = PendingBusinessAuth(
                         phone = phone,
                         businesses = listOf(own),
@@ -348,6 +407,12 @@ class AuthRepositoryImpl(
                     )
                     return selectBusiness(ownId)
                 }
+                persistTenantCatalog(list, secret, izRoot = true)
+                pending = PendingBusinessAuth(
+                    phone = phone,
+                    businesses = list,
+                    businessSecret = secret,
+                )
                 when {
                     list.isEmpty() -> {
                         clearLocalSession()
@@ -355,22 +420,8 @@ class AuthRepositoryImpl(
                             OpsError.business("AUTH_NO_TENANT", Strings.t(Str.AuthNoBusinessTenant)),
                         )
                     }
-                    list.size == 1 -> {
-                        pending = PendingBusinessAuth(
-                            phone = phone,
-                            businesses = list,
-                            businessSecret = secret,
-                        )
-                        selectBusiness(list.first().tenantId)
-                    }
-                    else -> {
-                        pending = PendingBusinessAuth(
-                            phone = phone,
-                            businesses = list,
-                            businessSecret = secret,
-                        )
-                        OpsResult.Err(selectBusinessError())
-                    }
+                    list.size == 1 -> selectBusiness(list.first().tenantId)
+                    else -> OpsResult.Err(selectBusinessError())
                 }
             }
         }
@@ -383,9 +434,14 @@ class AuthRepositoryImpl(
     }
 
     private fun persistHqOauthTokens(accessToken: String, refreshToken: String) {
+        // Same as legacy UserHelper.setOauthToken + setDepartmentAccessToken at first login:
+        // keep HQ Bearer separately so queryList can still load the full tenant catalog
+        // after phone_secret overwrites KEY_ACCESS_TOKEN with the 分部 token.
         secureStore.putString(SecureStore.KEY_ACCESS_TOKEN, accessToken)
+        secureStore.putString(KEY_HQ_ACCESS_TOKEN, accessToken)
         if (refreshToken.isNotBlank()) {
             secureStore.putString(SecureStore.KEY_REFRESH_TOKEN, refreshToken)
+            secureStore.putString(KEY_HQ_REFRESH_TOKEN, refreshToken)
         }
     }
 
@@ -432,6 +488,7 @@ class AuthRepositoryImpl(
                     permissionCodes = user.codes.filter { it.isNotBlank() }.distinct(),
                     hasPassword = user.hasPassword,
                     roleName = user.roleName.trim(),
+                    izRoot = user.izRoot || secureStore.getString(KEY_IZ_ROOT) == "1",
                 )
                 persistTokens(next)
             }
@@ -468,6 +525,8 @@ class AuthRepositoryImpl(
         requestAuth?.clearOauthBasicOverride()
         secureStore.remove(SecureStore.KEY_ACCESS_TOKEN)
         secureStore.remove(SecureStore.KEY_REFRESH_TOKEN)
+        secureStore.remove(KEY_HQ_ACCESS_TOKEN)
+        secureStore.remove(KEY_HQ_REFRESH_TOKEN)
         // Fall back to config.tenantId (HQ) on next oauth Basic / body tenantId.
         secureStore.remove(SecureStore.KEY_TENANT_ID)
         secureStore.remove(KEY_DISPLAY_NAME)
@@ -478,6 +537,9 @@ class AuthRepositoryImpl(
         secureStore.remove(KEY_ROLE_NAME)
         secureStore.remove(KEY_QR_HOSTS)
         secureStore.remove(KEY_RUNTIME_TENANT_NAME)
+        secureStore.remove(KEY_IZ_ROOT)
+        secureStore.remove(KEY_TENANT_CATALOG)
+        secureStore.remove(KEY_BUSINESS_SECRET)
     }
 
     private fun saveDemoSession(
@@ -499,10 +561,12 @@ class AuthRepositoryImpl(
             permissionCodes = codes,
             hasPassword = !account.equals("nopwd", ignoreCase = true),
             roleName = "管理员",
+            izRoot = true,
         )
         persistTokens(next)
         runtimeConfig = DEMO_RUNTIME_CONFIG
         persistRuntimeConfig(runtimeConfig!!)
+        persistTenantCatalog(DEMO_BUSINESSES, DEMO_BUSINESS_SECRET, izRoot = true)
         session = next
         return OpsResult.Ok(withArea(next))
     }
@@ -528,6 +592,7 @@ class AuthRepositoryImpl(
         secureStore.putString(KEY_PERMISSION_CODES, encodeCodes(session.permissionCodes))
         secureStore.putString(KEY_HAS_PASSWORD, if (session.hasPassword) "1" else "0")
         secureStore.putString(KEY_ROLE_NAME, session.roleName)
+        secureStore.putString(KEY_IZ_ROOT, if (session.izRoot) "1" else "0")
         if (session.serviceAreaId.isNotBlank()) {
             secureStore.putString(SecureStore.KEY_SERVICE_AREA_ID, session.serviceAreaId)
         }
@@ -535,6 +600,46 @@ class AuthRepositoryImpl(
             secureStore.putString(SecureStore.KEY_SERVICE_AREA_NAME, session.serviceAreaName)
         }
     }
+
+    private fun persistTenantCatalog(
+        tenants: List<BusinessTenant>,
+        secret: String,
+        izRoot: Boolean,
+    ) {
+        // Pipe lines: id|name|company|alias  (legacy AppConfig.saveTenantModel)
+        val encoded = tenants.joinToString("\n") { t ->
+            listOf(t.tenantId, t.tenantName, t.companyName, t.aliasName)
+                .joinToString("|") { it.replace('|', '/').replace('\n', ' ') }
+        }
+        secureStore.putString(KEY_TENANT_CATALOG, encoded)
+        if (secret.isNotBlank()) {
+            secureStore.putString(KEY_BUSINESS_SECRET, secret)
+        }
+        secureStore.putString(KEY_IZ_ROOT, if (izRoot) "1" else "0")
+    }
+
+    private fun loadCachedTenants(): List<BusinessTenant> {
+        val raw = secureStore.getString(KEY_TENANT_CATALOG).orEmpty()
+        if (raw.isBlank()) return emptyList()
+        return raw.lineSequence()
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+            .mapNotNull { line ->
+                val parts = line.split('|')
+                val id = parts.getOrNull(0).orEmpty().trim()
+                if (id.isBlank()) return@mapNotNull null
+                BusinessTenant(
+                    tenantId = id,
+                    tenantName = parts.getOrNull(1).orEmpty(),
+                    companyName = parts.getOrNull(2).orEmpty(),
+                    aliasName = parts.getOrNull(3).orEmpty(),
+                )
+            }
+            .toList()
+    }
+
+    private fun loadCachedBusinessSecret(): String =
+        secureStore.getString(KEY_BUSINESS_SECRET).orEmpty()
 
     private suspend fun refreshRuntimeConfig(networkSession: NetworkSession): OpsResult<Unit> {
         val api = authApi ?: return OpsResult.Ok(Unit)
@@ -580,6 +685,7 @@ class AuthRepositoryImpl(
             permissionCodes = decodeCodes(secureStore.getString(KEY_PERMISSION_CODES)),
             hasPassword = secureStore.getString(KEY_HAS_PASSWORD) != "0",
             roleName = secureStore.getString(KEY_ROLE_NAME).orEmpty(),
+            izRoot = secureStore.getString(KEY_IZ_ROOT) == "1",
         )
     }
 
@@ -598,6 +704,12 @@ class AuthRepositoryImpl(
         private const val KEY_PERMISSION_CODES = "user_permission_codes"
         private const val KEY_HAS_PASSWORD = "user_has_password"
         private const val KEY_ROLE_NAME = "user_role_name"
+        private const val KEY_IZ_ROOT = "user_iz_root"
+        /** Legacy UserHelper.departmentAccessToken — HQ oauth kept after phone_secret. */
+        private const val KEY_HQ_ACCESS_TOKEN = "hq_access_token"
+        private const val KEY_HQ_REFRESH_TOKEN = "hq_refresh_token"
+        private const val KEY_TENANT_CATALOG = "tenant_catalog"
+        private const val KEY_BUSINESS_SECRET = "business_secret"
         private const val KEY_QR_HOSTS = "runtime_qr_hosts"
         private const val KEY_RUNTIME_TENANT_NAME = "runtime_tenant_name"
         private const val DEMO_BUSINESS_SECRET = "demo-business-secret"

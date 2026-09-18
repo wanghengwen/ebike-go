@@ -378,6 +378,8 @@ private fun AreaCodePickerScreen(
         com.luopingtech.ebike.ops.data.auth.CallingCodeCatalog.filter(query)
     }
 
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
+
     Column(
         modifier = Modifier
             .fillMaxSize()

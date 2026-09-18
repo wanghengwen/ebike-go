@@ -159,6 +159,32 @@ class VehicleFeature(
         }
     }
 
+    /**
+     * Legacy CarDetailViewModel.unBindBattery: bindBatterySn(carId, "").
+     */
+    suspend fun unbindBatterySn(carId: String): OpsResult<Vehicle> {
+        val id = carId.trim()
+        if (id.isBlank()) {
+            return OpsResult.Err(
+                com.luopingtech.ebike.ops.core.result.OpsError.business(
+                    "CAR",
+                    Strings.t(Str.EnterCarId),
+                ),
+            )
+        }
+        _state.value = _state.value.copy(detailLoading = true, errorMessage = null)
+        return when (val bind = repository.bindBatterySn(id, "")) {
+            is OpsResult.Err -> {
+                _state.value = _state.value.copy(
+                    detailLoading = false,
+                    errorMessage = bind.error.message,
+                )
+                bind
+            }
+            is OpsResult.Ok -> refreshDetail(id)
+        }
+    }
+
     fun clear() {
         _state.value = VehicleUiState()
     }

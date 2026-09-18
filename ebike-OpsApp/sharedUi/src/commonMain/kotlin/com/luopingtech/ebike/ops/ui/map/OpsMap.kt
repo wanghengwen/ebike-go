@@ -21,6 +21,42 @@ data class OpsMapSpec(
     val providerLabel: String = "",
     val onSelectCarId: (String) -> Unit = {},
     val onSelectCluster: (List<String>) -> Unit = {},
+    /** 点空白地图（一般业务用；围栏选点不走这个）。 */
+    val onMapTap: ((lat: Double, lng: Double) -> Unit)? = null,
+    /** 相机停止后回传中心经纬度。 */
+    val onCameraIdle: ((lat: Double, lng: Double) -> Unit)? = null,
+    /**
+     * 相机移动中回传中心（对齐原版 obsMapIdle=false → onGestureChange(ON_MOVE)）。
+     * 选点编辑用它持续 latLng→screen，避免区域钉在屏幕上跟着拖。
+     */
+    val onCameraMove: ((lat: Double, lng: Double) -> Unit)? = null,
+    /**
+     * 递增后把 [screenPickX]/[screenPickY]（相对地图视图像素）转成经纬度，
+     * 通过 [onScreenToLatLng] 回传（对齐原版准星 centerPoint → fromScreenLocation）。
+     */
+    val screenToLatLngNonce: Int = 0,
+    val screenPickX: Float = 0f,
+    val screenPickY: Float = 0f,
+    val onScreenToLatLng: ((lat: Double, lng: Double) -> Unit)? = null,
+    /**
+     * 批量屏幕坐标 → 经纬度（贴片四角）。递增 [batchScreenToLatLngNonce] 触发。
+     */
+    val batchScreenToLatLngNonce: Int = 0,
+    val batchScreenPoints: List<Pair<Float, Float>> = emptyList(),
+    val onBatchScreenToLatLng: ((List<Pair<Double, Double>>) -> Unit)? = null,
+    /**
+     * 批量经纬度 → 屏幕坐标（选点顶点重绘，对齐 screenLocation）。
+     * 递增 [latLngToScreenNonce] 触发；结果为相对地图视图像素。
+     */
+    val latLngToScreenNonce: Int = 0,
+    val latLngToScreenPoints: List<Pair<Double, Double>> = emptyList(),
+    val onLatLngToScreen: ((List<Pair<Float, Float>>) -> Unit)? = null,
+    /** false 时不因 pins 变化自动 fit（围栏绘制页选点会跳动）。 */
+    val autoFitOnPins: Boolean = true,
+    /**
+     * 选中车辆后是否飞到该车（首页地图对齐原版不跟飞，详情页等可开）。
+     */
+    val animateToSelection: Boolean = true,
     val clusterOverview: Boolean = true,
     val fencePolygons: List<FencePolygon> = emptyList(),
     val trackPoints: List<TrackPoint> = emptyList(),
@@ -34,6 +70,8 @@ data class OpsMapSpec(
     val followNonce: Int = 0,
     val followLat: Double? = null,
     val followLng: Double? = null,
+    /** 跟飞缩放，对齐原版 FENCE_DEFAULT_ZOOM=17。 */
+    val followZoom: Float = 17f,
     val mapTypeSatellite: Boolean = false,
     val showStatusOverlay: Boolean = true,
 )
@@ -84,8 +122,27 @@ object SimulatorMapRenderer : OpsMapRenderer {
             providerLabel = spec.providerLabel.ifBlank { Strings.t(Str.SimulatorMap) },
             onSelectCarId = spec.onSelectCarId,
             onSelectCluster = spec.onSelectCluster,
+            onMapTap = spec.onMapTap,
+            trackPoints = spec.trackPoints,
             modifier = modifier,
             clusterOverview = spec.clusterOverview,
+            onCameraIdle = spec.onCameraIdle,
+            onCameraMove = spec.onCameraMove,
+            followNonce = spec.followNonce,
+            followLat = spec.followLat,
+            followLng = spec.followLng,
+            followZoom = spec.followZoom,
+            screenToLatLngNonce = spec.screenToLatLngNonce,
+            screenPickX = spec.screenPickX,
+            screenPickY = spec.screenPickY,
+            onScreenToLatLng = spec.onScreenToLatLng,
+            batchScreenToLatLngNonce = spec.batchScreenToLatLngNonce,
+            batchScreenPoints = spec.batchScreenPoints,
+            onBatchScreenToLatLng = spec.onBatchScreenToLatLng,
+            latLngToScreenNonce = spec.latLngToScreenNonce,
+            latLngToScreenPoints = spec.latLngToScreenPoints,
+            onLatLngToScreen = spec.onLatLngToScreen,
+            autoFitOnPins = spec.autoFitOnPins,
         )
     }
 }

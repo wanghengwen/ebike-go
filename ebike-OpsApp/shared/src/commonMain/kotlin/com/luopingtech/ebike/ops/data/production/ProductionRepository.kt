@@ -47,7 +47,9 @@ class ProductionRepositoryImpl(
 
     override suspend fun bind(carId: String, imei: String?, helmet: String?): OpsResult<Unit> {
         if (carId.isBlank()) return OpsResult.Err(OpsError.business("PROD_EMPTY", "carId empty"))
-        if (imei.isNullOrBlank()) return OpsResult.Err(OpsError.business("PROD_IMEI", "imei required"))
+        if (imei.isNullOrBlank() && helmet.isNullOrBlank()) {
+            return OpsResult.Err(OpsError.business("PROD_IMEI", "imei or helmet required"))
+        }
         if (demoMode || api == null) {
             demoBinds[carId] = BindVehicleInfo(
                 id = "demo-$carId",
@@ -55,7 +57,7 @@ class ProductionRepositoryImpl(
                 carNo = carId.takeLast(6),
                 brand = "Demo",
                 model = "Ops",
-                imei = imei.trim(),
+                imei = imei.orEmpty().trim(),
                 helmet = helmet.orEmpty().trim(),
                 bindTime = "demo-now",
             )

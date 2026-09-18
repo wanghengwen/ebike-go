@@ -2,6 +2,7 @@ package com.luopingtech.ebike.ops.data.fence
 
 import com.luopingtech.ebike.ops.data.analysis.FlexibleIntSerializer
 import com.luopingtech.ebike.ops.data.analysis.FlexibleStringSerializer
+import com.luopingtech.ebike.ops.data.analysis.StationTagDto
 import com.luopingtech.ebike.ops.domain.model.FenceBundle
 import com.luopingtech.ebike.ops.domain.model.FenceKind
 import com.luopingtech.ebike.ops.domain.model.FencePolygon
@@ -37,6 +38,10 @@ data class FenceInfoDto(
     val maxParkingNumber: Int = 0,
     val izEnable: Boolean? = null,
     val address: String? = null,
+    val centerLat: Double? = null,
+    val centerLng: Double? = null,
+    val area: Double? = null,
+    val refTags: List<StationTagDto> = emptyList(),
 ) {
     fun toDomain(kind: FenceKind): FencePolygon {
         val pts = pointList.orEmpty().mapNotNull { pair ->
@@ -54,6 +59,10 @@ data class FenceInfoDto(
             maxParkingNumber = maxParkingNumber,
             izEnable = izEnable,
             address = address.orEmpty(),
+            centerLat = centerLat?.takeIf { it != 0.0 },
+            centerLng = centerLng?.takeIf { it != 0.0 },
+            area = area?.takeIf { it > 0.0 },
+            tags = refTags.map { it.toDomain() }.filter { it.id.isNotBlank() },
         )
     }
 }

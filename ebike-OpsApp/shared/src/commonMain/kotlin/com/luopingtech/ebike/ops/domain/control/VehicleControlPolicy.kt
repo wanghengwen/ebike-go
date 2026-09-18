@@ -14,6 +14,9 @@ enum class ControlChannel {
 
     /** Network / MQTT-style remote command only. */
     NetworkOnly,
+
+    /** Legacy NETWORK_FIRST: try network, fall back to BLE. */
+    NetworkPreferred,
 }
 
 enum class VehicleAction {
@@ -30,6 +33,7 @@ enum class VehicleAction {
     CloseHelmetLock,
     OpenBackWheelLock,
     CloseBackWheelLock,
+    Restart,
 }
 
 /**
@@ -77,6 +81,10 @@ class VehicleControlPolicy(
                 val bleResult = executeBle(vehicleId, action)
                 if (bleResult.isOk) bleResult else network.execute(vehicleId, action, imei)
             }
+            ControlChannel.NetworkPreferred -> {
+                val netResult = network.execute(vehicleId, action, imei)
+                if (netResult.isOk) netResult else executeBle(vehicleId, action)
+            }
         }
     }
 
@@ -101,6 +109,7 @@ class VehicleControlPolicy(
             VehicleAction.CloseHelmetLock -> BleCommand.CloseHelmetLock(vehicleId)
             VehicleAction.OpenBackWheelLock -> BleCommand.OpenBackWheelLock(vehicleId)
             VehicleAction.CloseBackWheelLock -> BleCommand.CloseBackWheelLock(vehicleId)
+            VehicleAction.Restart -> BleCommand.Restart(vehicleId)
         }
         val sent = ble.sendCommand(command)
         return when (sent) {

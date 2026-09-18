@@ -22,8 +22,8 @@ import kotlin.coroutines.resume
  * Matches legacy domestic cadence: minTime≈5s, minDistance=0.
  * Does not depend on Google Play Services.
  *
- * [startTracking] / [stopTracking] promote a location-type FGS so fixes continue
- * while the UI is backgrounded (legacy used an empty keep-alive FGS; we use type=location).
+ * 保活 FGS 对齐原版 APPKeepService：由 [MainActivity] 在退后台时拉起、回前台时停掉，
+ * 这里只标记是否在采点，不直接 startForeground。
  */
 class AndroidLocationTracker(
     context: Context,
@@ -32,12 +32,18 @@ class AndroidLocationTracker(
     private val locationManager =
         appContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+    /** 当前是否在采点上报（登录后 TrackUploadFeature 打开）。 */
+    @Volatile
+    var trackingActive: Boolean = false
+        private set
+
     override fun startTracking() {
         if (!hasPermission()) return
-        TrackLocationService.start(appContext)
+        trackingActive = true
     }
 
     override fun stopTracking() {
+        trackingActive = false
         TrackLocationService.stop(appContext)
     }
 
@@ -49,6 +55,8 @@ class AndroidLocationTracker(
         if (last != null) return OpsResult.Ok(last.toGeo())
         return requestSingleUpdate()
     }
+
+    override fun lastKnownOrNull(): GeoPoint? = lastKnown()?.toGeo()
 
     override fun track(): Flow<GeoPoint> = callbackFlow {
         if (!hasPermission()) {

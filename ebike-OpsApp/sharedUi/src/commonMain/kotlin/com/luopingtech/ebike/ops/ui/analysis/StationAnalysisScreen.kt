@@ -57,6 +57,7 @@ import com.luopingtech.ebike.ops.feature.analysis.StationAnalysisPage
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 import kotlinx.coroutines.launch
 import kotlin.math.max
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 
 private val PageBg = Color(0xFFF6F7F9)
 private val TextDark = Color(0xFF282828)
@@ -230,6 +231,7 @@ private enum class StationFilterPanel { Tags, Status, Sort }
 
 @Composable
 private fun StationTopBar(title: String, primary: Color, onBack: () -> Unit) {
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -242,18 +244,9 @@ private fun StationTopBar(title: String, primary: Color, onBack: () -> Unit) {
                 .height(48.dp)
                 .padding(horizontal = 8.dp),
         ) {
-            Text(
-                text = "<",
-                color = Color.White,
-                fontSize = 28.sp,
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null,
-                        onClick = onBack,
-                    )
-                    .padding(8.dp),
+            OpsBackChevron(
+                onClick = onBack,
+                modifier = Modifier.align(Alignment.CenterStart),
             )
             Text(
                 text = title,

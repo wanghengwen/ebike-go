@@ -35,6 +35,69 @@ object OfflineOpsTimeRanges {
     private const val DAY_MS = 86_400_000L
     private const val ZONE_OFFSET_MS = 8 * 3_600_000L // Asia/Shanghai
 
+    fun lastDays(days: Int, nowMs: Long = nowEpoch()): TimeRange {
+        val n = days.coerceAtLeast(1)
+        val todayStart = dayStart(nowMs)
+        val start = todayStart - (n - 1) * DAY_MS
+        return TimeRange(start, todayStart + DAY_MS - 1_000L)
+    }
+
+    /**
+     * 原版异议工单默认：`(now - 7天)` 的日历日 00:00:00 ~ 今天 23:59:59
+     *（跨度为 8 个日历日，与 [lastDays] 的「含今天共 N 日」不同）。
+     */
+    fun objectionDefaultRange(nowMs: Long = nowEpoch()): TimeRange {
+        val todayStart = dayStart(nowMs)
+        return TimeRange(todayStart - 7 * DAY_MS, todayStart + DAY_MS - 1_000L)
+    }
+
+    /** `yyyy-MM-dd`（东八区日历日）。 */
+    fun formatDate(epochMs: Long): String {
+        val p = ymd(dayStart(epochMs))
+        return pad4(p[0]) + "-" + pad2(p[1]) + "-" + pad2(p[2])
+    }
+
+    /** 解析 `yyyy-MM-dd` 或 `yyyy-MM-dd HH:mm:ss`，返回该日 00:00:00（东八区）毫秒；失败返回 null。 */
+    fun parseDateStart(text: String): Long? {
+        val datePart = text.trim().take(10)
+        if (datePart.length != 10) return null
+        val parts = datePart.split('-')
+        if (parts.size != 3) return null
+        val y = parts[0].toIntOrNull() ?: return null
+        val m = parts[1].toIntOrNull() ?: return null
+        val d = parts[2].toIntOrNull() ?: return null
+        if (m !in 1..12 || d !in 1..daysInMonth(y, m)) return null
+        return dateStart(y, m, d)
+    }
+
+    fun dayEndOf(dayStartMs: Long): Long = dayStart(dayStartMs) + DAY_MS - 1_000L
+
+    fun yesterdayDateText(nowMs: Long = nowEpoch()): String = formatDate(dayStart(nowMs) - DAY_MS)
+
+    fun todayDateText(nowMs: Long = nowEpoch()): String = formatDate(dayStart(nowMs))
+
+    /** 选中日 00:00:00 的秒级时间戳。 */
+    fun dateStartEpochSec(dateText: String): Long? = parseDateStart(dateText)?.div(1_000L)
+
+    /** 选中日 23:59:59 的秒级时间戳（对齐原版 `+86400-1`）。 */
+    fun dateEndEpochSec(dateText: String): Long? =
+        parseDateStart(dateText)?.let { it / 1_000L + 86_400L - 1L }
+
+    fun ymdParts(epochMs: Long): IntArray = ymd(dayStart(epochMs))
+
+    fun dateStartOf(year: Int, month: Int, day: Int): Long = dateStart(year, month, day)
+
+    fun daysInMonth(year: Int, month: Int): Int {
+        val mdays = intArrayOf(31, if (isLeap(year)) 29 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+        return mdays[(month - 1).coerceIn(0, 11)]
+    }
+
+    /** 周一=0 … 周日=6（按东八区日历日）。 */
+    fun weekdayMondayIndex(dayStartMs: Long): Int {
+        val localDay = (dayStart(dayStartMs) + ZONE_OFFSET_MS) / DAY_MS
+        return ((localDay + 3) % 7).toInt()
+    }
+
     fun period(period: OfflineOpsPeriod, nowMs: Long = nowEpoch()): TimeRange {
         val todayStart = dayStart(nowMs)
         return when (period) {

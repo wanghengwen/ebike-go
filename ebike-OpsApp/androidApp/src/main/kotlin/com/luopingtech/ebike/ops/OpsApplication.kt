@@ -16,6 +16,8 @@ import com.luopingtech.ebike.ops.platform.BindablePhotoCapture
 import com.luopingtech.ebike.ops.platform.SecureStore
 import com.luopingtech.ebike.ops.platform.SimulatorLocationTracker
 import com.luopingtech.ebike.ops.platform.DemoReverseGeocoder
+import com.luopingtech.ebike.ops.platform.bindOpsDiskCacheContext
+import com.luopingtech.ebike.ops.platform.createDeviceInfo
 import com.tencent.tencentmap.mapsdk.maps.TencentMapInitializer
 import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +39,7 @@ class OpsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        bindOpsDiskCacheContext(this)
         // Required by Tencent Map SDK ≥4.5.6 before any MapView is created.
         TencentMapInitializer.setAgreePrivacy(true)
 
@@ -57,6 +60,10 @@ class OpsApplication : Application() {
         }
         val secureStore = AndroidSecureStore(this)
         val config = mergeMapKey(loadTenantConfig())
+        val versionName = runCatching {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0).versionName
+        }.getOrNull().orEmpty().ifBlank { "1.0.0" }
         val locationTracker = if (config.api.baseUrl.isBlank()) {
             SimulatorLocationTracker(intervalMs = 5_000L)
         } else {
@@ -71,6 +78,7 @@ class OpsApplication : Application() {
             config = config,
             logger = logger,
             secureStore = secureStore,
+            deviceInfo = createDeviceInfo(appVersion = versionName),
             codeScanner = codeScannerBridge,
             photoCapture = photoCaptureBridge,
             locationTracker = locationTracker,

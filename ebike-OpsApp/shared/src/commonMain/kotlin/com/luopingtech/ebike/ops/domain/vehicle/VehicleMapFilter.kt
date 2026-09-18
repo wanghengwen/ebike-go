@@ -15,16 +15,18 @@ object VehicleRidingStates {
     const val OPERATION: Int = 5 // 运维中
 }
 
-/** Legacy [VehicleStateOperation] subset used by home statistics / sold-out. */
+/** Legacy [VehicleStateOperation] subset used by home statistics / sold-out / badges. */
 object VehicleOperationStates {
     const val OFF: Int = 1 // 下架（首页始终隐藏）
-    const val MOVING_CAR: Int = 2 // 挪车中
+    const val MOVING_CAR: Int = 2 // 挪车中 / 调度
+    const val CHANGING_BATTERY: Int = 3 // 换电中
     const val LOW_BATTERY: Int = 4 // 低电
     const val REPAIRING: Int = 5 // 报修
+    const val DRAG_BACK: Int = 6 // 拖回
 }
 
 /**
- * Legacy [HomeFilterVehicleState] alarm codes for the home right-side filter panel.
+ * Legacy [HomeFilterVehicleState] / [VehicleStateAlarm] codes for filter panel + badges.
  */
 object VehicleAlarmStates {
     const val MOVE: Int = 2 // 异常移动
@@ -35,6 +37,8 @@ object VehicleAlarmStates {
     const val OFFLINE: Int = 7 // 异常离线
     const val ORDER_WITHOUT_GPS: Int = 8 // 有单无程
     const val LOST: Int = 9 // 报失
+    const val TOO_LONG_ORDER: Int = 10 // 订单超长
+    const val TOO_SHORT_ORDER: Int = 11 // 短时订单
     const val UNLOCK_ABNORMAL: Int = 12 // 异常开锁
     const val HELMET_LOST: Int = 13 // 头盔丢失
     const val HELMET_FAULT: Int = 14 // 头盔故障

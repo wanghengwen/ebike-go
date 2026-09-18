@@ -40,6 +40,7 @@ class VehicleDtoTest {
               "serviceName":"Demo",
               "model":"2",
               "izHaveOverload":true,
+              "gsmSignal":-71,
               "isOnline":0,
               "alarmState":[7,3],
               "operationState":[4],
@@ -58,11 +59,35 @@ class VehicleDtoTest {
         assertEquals(true, v.isOutOfServiceArea)
         assertEquals(2100.0, v.totalMiles)
         assertEquals(true, v.izHaveOverload)
+        assertEquals(-71, v.gsmSignal)
+        assertEquals("-71dbm", v.signalLabel)
         assertTrue(v.siteLabel.contains("边缘站"))
         assertTrue(v.siteLabel.contains("超区"))
         assertTrue(v.alarmStates.contains(VehicleAlarmStates.OFFLINE))
         assertEquals(1_710_000_000_000L, v.lockTimeMs)
         assertEquals(1_709_000_000_000L, v.unlockTimeMs)
+    }
+
+    @Test
+    fun acceptsLegacyIntFlags() {
+        val dto = json.decodeFromString(
+            VehicleDto.serializer(),
+            """
+            {
+              "carId":"D1001-009",
+              "imei":"860000000000009",
+              "isOutofServAera":0,
+              "isFenceEnable":1,
+              "izHaveOverload":0,
+              "isOnline":1
+            }
+            """.trimIndent(),
+        )
+        val v = dto.toDomain()
+        assertEquals(false, v.isOutOfServiceArea)
+        assertEquals(true, v.isFenceEnable)
+        assertEquals(false, v.izHaveOverload)
+        assertEquals(true, v.isOnline)
     }
 }
 

@@ -41,6 +41,7 @@ import com.luopingtech.ebike.ops.core.i18n.Str
 import com.luopingtech.ebike.ops.domain.analysis.VehicleConditionBuckets
 import com.luopingtech.ebike.ops.feature.analysis.VcdPage
 import com.luopingtech.ebike.ops.feature.analysis.VcdTab
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 
 /**
@@ -137,6 +138,8 @@ fun VcdTopBar(
     title: String,
     onBack: () -> Unit,
 ) {
+    // 对齐遗留 Activity.finish()：系统返回与顶栏返回同一语义，不结束宿主。
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
     val colors = OpsTheme.colors
     Box(
         modifier = Modifier
@@ -145,19 +148,9 @@ fun VcdTopBar(
             .statusBarsPadding()
             .height(48.dp),
     ) {
-        Text(
-            text = "‹",
-            color = colors.onPrimary,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Light,
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = onBack,
-                )
-                .padding(horizontal = 16.dp),
+        OpsBackChevron(
+            onClick = onBack,
+            modifier = Modifier.align(Alignment.CenterStart),
         )
         Text(
             text = title,
@@ -340,3 +333,4 @@ private fun VcdBucketRow(
         }
     }
 }
+

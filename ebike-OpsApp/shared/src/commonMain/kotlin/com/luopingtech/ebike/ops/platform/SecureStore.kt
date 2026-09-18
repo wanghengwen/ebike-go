@@ -27,6 +27,8 @@ interface SecureStore {
         const val KEY_TRACK_UPLOAD_ENABLED = "track_upload_enabled"
         /** Pipe-separated workbench favorite module ids (legacy toolNavCodes). */
         const val KEY_COMMON_MODULE_IDS = "common_module_ids"
+        /** "1" = map performance mode (legacy KEY_PERFORMANCE_MODE / mapPerformanceMode). */
+        const val KEY_MAP_PERFORMANCE_MODE = "map_performance_mode"
     }
 }
 

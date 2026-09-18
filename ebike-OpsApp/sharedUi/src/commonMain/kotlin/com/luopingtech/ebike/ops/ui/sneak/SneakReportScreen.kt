@@ -45,6 +45,21 @@ fun SneakReportScreen(
     val state by app.sneakReportFeature.state.collectAsState()
     val scope = rememberCoroutineScope()
 
+    fun closeAll() {
+        app.sneakReportFeature.clear()
+        onClose()
+    }
+
+    fun handleSystemBack() {
+        when (state.page) {
+            SneakPage.Hub -> closeAll()
+            SneakPage.Submit, SneakPage.History -> app.sneakReportFeature.openHub()
+            SneakPage.Detail -> scope.launch { app.sneakReportFeature.openHistory() }
+        }
+    }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = ::handleSystemBack)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,10 +71,7 @@ fun SneakReportScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(t(Str.SneakReportTitle), style = MaterialTheme.typography.headlineSmall)
-            TextButton(onClick = {
-                app.sneakReportFeature.clear()
-                onClose()
-            }) { Text(t(Str.Close)) }
+            TextButton(onClick = ::closeAll) { Text(t(Str.Close)) }
         }
 
         when (state.page) {

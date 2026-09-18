@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.domain.model.ServiceArea
+import com.luopingtech.ebike.ops.ui.icons.OpsBackChevron
 import com.luopingtech.ebike.ops.ui.theme.OpsTheme
 
 @Composable
@@ -50,6 +51,7 @@ fun AreaGateScaffold(
     onSelect: (ServiceArea) -> Unit,
 ) {
     val colors = OpsTheme.colors
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(enabled = allowCancel, onBack = onBack)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,18 +65,9 @@ fun AreaGateScaffold(
                 .height(48.dp),
         ) {
             if (allowCancel) {
-                Text(
-                    text = "‹",
-                    color = colors.onPrimary,
-                    fontSize = 28.sp,
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = onBack,
-                        )
-                        .padding(horizontal = 16.dp),
+                OpsBackChevron(
+                    onClick = onBack,
+                    modifier = Modifier.align(Alignment.CenterStart),
                 )
             }
             Text(
@@ -139,27 +132,30 @@ fun AreaGateScaffold(
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val gap = 8.dp
                 val cellW = (maxWidth - gap * 2) / 3
-                areas.chunked(3).forEach { row ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = gap),
-                        horizontalArrangement = Arrangement.spacedBy(gap),
-                    ) {
-                        row.forEach { area ->
-                            val selected = area.id == selectedAreaId
-                            ServiceAreaGridCell(
-                                name = area.name,
-                                id = area.id,
-                                selected = selected,
-                                modifier = Modifier
-                                    .width(cellW)
-                                    .height(84.dp),
-                                onClick = { onSelect(area) },
-                            )
-                        }
-                        repeat(3 - row.size) {
-                            Spacer(modifier = Modifier.width(cellW))
+                // Box stacks children; wrap rows in Column so every chunked row is visible.
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    areas.chunked(3).forEach { row ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = gap),
+                            horizontalArrangement = Arrangement.spacedBy(gap),
+                        ) {
+                            row.forEach { area ->
+                                val selected = area.id == selectedAreaId
+                                ServiceAreaGridCell(
+                                    name = area.name,
+                                    id = area.id,
+                                    selected = selected,
+                                    modifier = Modifier
+                                        .width(cellW)
+                                        .height(84.dp),
+                                    onClick = { onSelect(area) },
+                                )
+                            }
+                            repeat(3 - row.size) {
+                                Spacer(modifier = Modifier.width(cellW))
+                            }
                         }
                     }
                 }
@@ -214,3 +210,4 @@ private fun ServiceAreaGridCell(
         )
     }
 }
+

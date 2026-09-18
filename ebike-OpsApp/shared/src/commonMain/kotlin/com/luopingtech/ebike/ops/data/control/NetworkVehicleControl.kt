@@ -88,12 +88,19 @@ class RemoteNetworkVehicleControl(
             VehicleAction.DefendOff -> postDevice(vehicleId, imei, "business/paas/device/defend") {
                 put("defend", 0)
             }
-            // Legacy: sw 0 = open, 1 = close
-            VehicleAction.OpenBatteryBox -> postDevice(vehicleId, imei, "business/paas/device/batteryCompartment") {
-                put("sw", 0)
+            // Legacy CarDetailViewModel.openBatBox / closeBatBox:
+            // change_battery/open_bat_box|close_bat_box with carId only (no imei / paas).
+            VehicleAction.OpenBatteryBox -> post(
+                path = "business/ebike-operation/change_battery/open_bat_box",
+                source = "/business/ebike-operation/change_battery/open_bat_box",
+            ) {
+                put("carId", vehicleId)
             }
-            VehicleAction.CloseBatteryBox -> postDevice(vehicleId, imei, "business/paas/device/batteryCompartment") {
-                put("sw", 1)
+            VehicleAction.CloseBatteryBox -> post(
+                path = "business/ebike-operation/change_battery/close_bat_box",
+                source = "/business/ebike-operation/change_battery/close_bat_box",
+            ) {
+                put("carId", vehicleId)
             }
             VehicleAction.OpenHelmetLock -> postDevice(vehicleId, imei, "business/paas/device/helmetLock") {
                 put("sw", 0)
@@ -106,6 +113,8 @@ class RemoteNetworkVehicleControl(
             }
             VehicleAction.CloseBackWheelLock -> postDevice(vehicleId, imei, "business/paas/device/rearWheelLock") {
                 put("sw", 1)
+            }
+            VehicleAction.Restart -> postDevice(vehicleId, imei, "business/paas/device/restart") {
             }
         }
     }

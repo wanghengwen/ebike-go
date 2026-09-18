@@ -18,14 +18,15 @@ data class ShelfCheckResult(
     val brand: String = "",
     val serviceId: String = "",
     val serviceName: String = "",
+    /** Legacy CarNumber*ShelvesMode.status；新增默认未勾选。 */
+    val selected: Boolean = false,
 )
 
+/** Legacy VehicleDetectHelper.actionDatas: 寻车音 / 刷新 / 重启. */
 enum class DetectStepKind {
-    Unlock,
-    Lock,
     Ring,
-    OpenBox,
-    CloseBox,
+    Refresh,
+    Reboot,
 }
 
 data class DetectStepState(

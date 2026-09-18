@@ -1,5 +1,6 @@
 package com.luopingtech.ebike.ops.ui.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -20,12 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luopingtech.ebike.ops.domain.vehicle.VehicleMapFilter
-import com.luopingtech.ebike.ops.ui.theme.OpsFilterHandle
+import com.luopingtech.ebike.ops.ui.icons.OpsIcon
+import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.theme.OpsStatBlue
 import com.luopingtech.ebike.ops.ui.theme.OpsStatGreen
 import com.luopingtech.ebike.ops.ui.theme.OpsStatItemBg
@@ -60,7 +64,12 @@ fun HomeAreaTitleBar(
             fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text = "▾", color = colors.textPrimary, fontSize = 12.sp)
+        Image(
+            painter = painterResource(OpsIcon.ArrowDown),
+            contentDescription = null,
+            modifier = Modifier.size(12.dp),
+            contentScale = ContentScale.Fit,
+        )
     }
 }
 
@@ -88,21 +97,35 @@ fun HomeMapToolsRail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        MapToolItem(symbol = "↻", label = refreshLabel, selected = false, onClick = onRefresh)
-        MapToolItem(symbol = "ⓘ", label = detailLabel, selected = detailSelected, onClick = onDetail)
-        MapToolItem(symbol = "▦", label = fenceLabel, selected = fenceSelected, onClick = onFence)
-        MapToolItem(symbol = "⇄", label = switchLabel, selected = switchSelected, onClick = onSwitch)
+        MapToolItem(
+            icon = OpsIcon.HomeRefresh,
+            label = refreshLabel,
+            onClick = onRefresh,
+        )
+        MapToolItem(
+            icon = if (detailSelected) OpsIcon.HomeDetailSelected else OpsIcon.HomeDetail,
+            label = detailLabel,
+            onClick = onDetail,
+        )
+        MapToolItem(
+            icon = if (fenceSelected) OpsIcon.HomeFenceSelected else OpsIcon.HomeFence,
+            label = fenceLabel,
+            onClick = onFence,
+        )
+        MapToolItem(
+            icon = if (switchSelected) OpsIcon.HomeSwitchSelected else OpsIcon.HomeSwitch,
+            label = switchLabel,
+            onClick = onSwitch,
+        )
     }
 }
 
 @Composable
 private fun MapToolItem(
-    symbol: String,
+    icon: OpsIcon,
     label: String,
-    selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val color = if (selected) OpsTheme.colors.primary else OpsToolIcon
     Column(
         modifier = Modifier
             .width(40.dp)
@@ -110,47 +133,40 @@ private fun MapToolItem(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick,
-            ),
+            )
+            .padding(vertical = 4.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = symbol, color = color, fontSize = 16.sp)
-        Text(text = label, color = color, fontSize = 11.sp)
+        Image(
+            painter = painterResource(icon),
+            contentDescription = label,
+            modifier = Modifier.size(22.dp),
+            contentScale = ContentScale.Fit,
+        )
+        Text(text = label, color = OpsToolIcon, fontSize = 11.sp)
     }
 }
 
 @Composable
 fun HomeFilterHandle(
     label: String,
-    open: Boolean,
+    @Suppress("UNUSED_PARAMETER") open: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    // Legacy viewHomeFilterSwitch: 30dp wide ImageView src=btn_filter_drawer_open
+    Image(
+        painter = painterResource(OpsIcon.FilterDrawerOpen),
+        contentDescription = label,
         modifier = modifier
-            .width(28.dp)
-            .height(88.dp)
-            .background(
-                color = OpsFilterHandle,
-                shape = RoundedCornerShape(topStart = 8.dp, bottomStart = 8.dp),
-            )
+            .width(30.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = onClick,
             ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = if (open) "›" else "‹",
-                color = Color.White,
-                fontSize = 12.sp,
-            )
-            label.forEach { ch ->
-                Text(text = ch.toString(), color = Color.White, fontSize = 11.sp)
-            }
-        }
-    }
+        contentScale = ContentScale.FillWidth,
+    )
 }
 
 data class HomeStatItem(
@@ -171,6 +187,8 @@ fun HomeStatisticsPanel(
     Column(
         modifier = modifier
             .fillMaxWidth()
+            // Legacy fragment_home_v3 viewHomeStatistics height=124dp
+            .height(124.dp)
             .shadow(8.dp, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             .background(
                 colors.pageBackground,

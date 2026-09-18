@@ -10,6 +10,12 @@ object OpsPermissionCodes {
     const val SCAN_SWITCH_LOCK: String = "122302"
 
     const val HOME_MAP: String = "123004"
+    /** 首页优先聚合模式。遗留 PCODE_HOME_CLUSTER_FIRST。 */
+    const val HOME_CLUSTER_FIRST: String = "12300401"
+    /** 首页底部状态统计栏。遗留 PCODE_HOME_STATISTICS_SHOW。 */
+    const val HOME_STATISTICS_SHOW: String = "12300402"
+    /** 首页右侧告警筛选。遗留 PCODE_HOME_STATISTICS_FILTER_SHOW。 */
+    const val HOME_STATISTICS_FILTER_SHOW: String = "12300403"
 
     const val TASK_CENTER: String = "1234"
     const val TASK_CHANGE_BATTERY: String = "123401"
@@ -124,6 +130,9 @@ object OpsPermissionCodes {
         SCAN_DETAILS,
         SCAN_SWITCH_LOCK,
         HOME_MAP,
+        HOME_CLUSTER_FIRST,
+        HOME_STATISTICS_SHOW,
+        HOME_STATISTICS_FILTER_SHOW,
         TASK_CENTER,
         TASK_CHANGE_BATTERY,
         TASK_MOVE_CAR,
@@ -192,6 +201,12 @@ class OpsPermissions(
     fun hasAny(vararg code: String): Boolean = code.any { codes.contains(it) }
 
     val showMap: Boolean get() = has(OpsPermissionCodes.HOME_MAP)
+    /** 有码则默认开聚合；无码仍可手动切「详情」。 */
+    val homeClusterFirst: Boolean get() = has(OpsPermissionCodes.HOME_CLUSTER_FIRST)
+    /** 底部 8 格状态统计。 */
+    val showHomeStatistics: Boolean get() = has(OpsPermissionCodes.HOME_STATISTICS_SHOW)
+    /** 右侧告警筛选把手。 */
+    val showHomeAlarmFilter: Boolean get() = has(OpsPermissionCodes.HOME_STATISTICS_FILTER_SHOW)
     val showScan: Boolean get() = has(OpsPermissionCodes.SCAN)
     val showTaskCenter: Boolean get() = has(OpsPermissionCodes.TASK_CENTER)
 

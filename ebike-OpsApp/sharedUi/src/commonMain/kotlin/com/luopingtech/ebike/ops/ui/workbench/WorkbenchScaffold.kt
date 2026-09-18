@@ -239,6 +239,9 @@ private fun WorkbenchToolbar(
     onSettings: (() -> Unit)?,
     onTitleClick: (() -> Unit)?,
 ) {
+    if (showBack && onBack != null) {
+        com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onBack)
+    }
     val colors = OpsTheme.colors
     Box(
         modifier = Modifier

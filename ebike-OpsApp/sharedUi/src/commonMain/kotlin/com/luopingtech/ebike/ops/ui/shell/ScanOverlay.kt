@@ -15,11 +15,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,8 +31,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,7 @@ import com.luopingtech.ebike.ops.domain.permission.OpsPermissions
 import com.luopingtech.ebike.ops.ui.icons.OpsIcon
 import com.luopingtech.ebike.ops.ui.icons.painterResource
 import com.luopingtech.ebike.ops.ui.scan.LocalOpsScanPreview
-import com.luopingtech.ebike.ops.ui.vehicle.VehicleDetailSection
+import com.luopingtech.ebike.ops.ui.vehicle.LocalOpenVehicleDetail
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -72,6 +73,7 @@ internal fun ScanOverlay(
     val scope = rememberCoroutineScope()
     val scanState by app.scanFeature.state.collectAsState()
     val homeState by app.homeFeature.state.collectAsState()
+    val openVehicleDetail = LocalOpenVehicleDetail.current
 
     var torchOn by remember { mutableStateOf(false) }
     var showManual by remember { mutableStateOf(false) }
@@ -91,12 +93,22 @@ internal fun ScanOverlay(
         showManual = false
     }
 
+    fun handleSystemBack() {
+        if (showManual) {
+            showManual = false
+            return
+        }
+        onClose()
+    }
+
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = ::handleSystemBack)
+
     suspend fun handleRaw(raw: String) {
         val trimmed = raw.trim()
         if (trimmed.isEmpty() || busy || trimmed == lastRaw) return
         lastRaw = trimmed
         busy = true
-        when (app.scanFeature.resolveManual(trimmed)) {
+        when (val result = app.scanFeature.resolveManual(trimmed)) {
             is OpsResult.Err -> {
                 busy = false
                 // 识别错了允许马上再扫；同码也允许重试。error 已写入 scanFeature.state。
@@ -104,8 +116,10 @@ internal fun ScanOverlay(
             }
             is OpsResult.Ok -> when (mode) {
                 ScanMode.Detail -> {
-                    // 详情留在本页展示 VehicleDetailSection；分析继续开着以便扫下一辆。
+                    // 对齐 ScanActivity：校验通过后打开 CarDetailActivity 并 finish 扫码页。
+                    openVehicleDetail.open(result.value, homeState.currentArea?.id)
                     busy = false
+                    onClose()
                 }
                 ScanMode.Unlock -> {
                     app.scanFeature.unlock()
@@ -213,6 +227,19 @@ internal fun ScanOverlay(
                         label = { Text(t(Str.VehicleIdImeiQr)) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
+                        textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            disabledTextColor = Color.White.copy(alpha = 0.6f),
+                            cursorColor = Color.White,
+                            focusedBorderColor = Color(0xFF4A90E2),
+                            unfocusedBorderColor = Color(0xFF4A90E2),
+                            focusedLabelColor = Color(0xFF7EC8F8),
+                            unfocusedLabelColor = Color(0xFF7EC8F8),
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                        ),
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -282,36 +309,6 @@ internal fun ScanOverlay(
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                )
-            }
-        }
-
-        // 详情单独占一块可滚动区域，不再跟预览抢 weight。
-        if (mode == ScanMode.Detail && scanState.vehicle != null && !showManual) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                val vehicle = scanState.vehicle!!
-                Text(
-                    text = t(
-                        Str.ParsedVehicleSummary,
-                        vehicle.carId,
-                        vehicle.batteryLabel,
-                        vehicle.ridingLabel,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                )
-                VehicleDetailSection(
-                    app = app,
-                    vehicle = vehicle,
-                    serviceAreaId = homeState.currentArea?.id,
-                    canBindBattery = permissions.canBindBatterySn,
                 )
             }
         }

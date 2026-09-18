@@ -9,6 +9,7 @@ import com.luopingtech.ebike.ops.domain.model.ShelfCheckResult
 import com.luopingtech.ebike.ops.platform.DeviceInfo
 import kotlinx.serialization.json.add
 import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 class ProductionApi(
@@ -82,7 +83,7 @@ class ProductionApi(
                 deserializer = ShelfCheckDto.serializer(),
             )
         ) {
-            is OpsResult.Ok -> OpsResult.Ok(result.value.toDomain())
+            is OpsResult.Ok -> OpsResult.Ok(result.value.toDomain(fallbackCarId = carId))
             is OpsResult.Err -> result
         }
     }
@@ -103,7 +104,7 @@ class ProductionApi(
                 deserializer = ShelfCheckDto.serializer(),
             )
         ) {
-            is OpsResult.Ok -> OpsResult.Ok(result.value.toDomain())
+            is OpsResult.Ok -> OpsResult.Ok(result.value.toDomain(fallbackCarId = carId))
             is OpsResult.Err -> result
         }
     }
@@ -116,7 +117,15 @@ class ProductionApi(
             deviceId = deviceIdProvider(),
         ) {
             put("serviceId", serviceId)
-            put("carList", buildJsonArray { carIds.forEach { add(it) } })
+            // Legacy CarInfo(carId): [{ "carId": "…" }, …] — not a string array.
+            put(
+                "carList",
+                buildJsonArray {
+                    carIds.forEach { id ->
+                        add(buildJsonObject { put("carId", id) })
+                    }
+                },
+            )
         }
         return signedApi.postUnit("business/ebike-management/carInfo/onlineByCarList", body)
     }
@@ -128,7 +137,14 @@ class ProductionApi(
             deviceInfo = deviceInfo,
             deviceId = deviceIdProvider(),
         ) {
-            put("carList", buildJsonArray { carIds.forEach { add(it) } })
+            put(
+                "carList",
+                buildJsonArray {
+                    carIds.forEach { id ->
+                        add(buildJsonObject { put("carId", id) })
+                    }
+                },
+            )
         }
         return signedApi.postUnit("business/ebike-management/carInfo/offlineByCarList", body)
     }

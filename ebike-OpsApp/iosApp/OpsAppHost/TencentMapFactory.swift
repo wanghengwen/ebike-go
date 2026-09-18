@@ -13,7 +13,7 @@ import UIKit
 /// 模拟器构建时这个文件被整体排除，共享层自动落到 `MapKitOpsMapRenderer`。
 /// SDK 类型经 bridging header 引入，所以这里没有 `import QMapKit`。
 ///
-/// 聚合已经在 Kotlin 侧算好（`memberCount > 1` 就是聚合点），这里只负责画。
+/// 聚合在宿主按 zoom 网格计算（对齐 Android `MapClusterer.cellDegreesForZoom`）。
 final class TencentMapFactory: NSObject, IosHostMapFactory {
 
     private static var registered = false
@@ -49,7 +49,11 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
 
     /// QMapView 是命令式的，Compose 每次重组都会调 apply；记住上次输入才不会
     /// 把相机反复重置（用户会拖不动地图）。
-    private var pinsKey: String?
+    private var sourcePins: [IosHostMapPin] = []
+    private var wantsCluster = true
+    private var lastClusterZoom: Double = -1
+    private var pinsIdentity: String?
+    private var lastWantsCluster: Bool?
     private var overlayKey: String?
     private var selectedCarId: String?
     /// 跟 Android / MapKit 一样：按「坐标集 + 围栏 + 轨迹 + nonce」贴视野，
@@ -100,13 +104,15 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
             parts.append(pin.id)
             parts.append(String(pin.lat))
             parts.append(String(pin.lng))
-            parts.append(String(pin.memberCount))
         }
         let key = parts.joined(separator: "|")
-        if pinsKey != key {
-            pinsKey = key
-            mapView.removeAnnotations(mapView.annotations)
-            mapView.addAnnotations(update.pins.map { OpsPointAnnotation(pin: $0) })
+        sourcePins = update.pins
+        wantsCluster = update.clusterOverview
+        let identityChanged = pinsIdentity != key || lastWantsCluster != wantsCluster
+        pinsIdentity = key
+        lastWantsCluster = wantsCluster
+        if identityChanged {
+            refreshClusteredAnnotations(force: true)
         }
         if selectedCarId != update.selectedCarId {
             selectedCarId = update.selectedCarId
@@ -117,6 +123,90 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
                 mapView.selectAnnotation(hit, animated: true)
             }
         }
+    }
+
+    private func refreshClusteredAnnotations(force: Bool) {
+        let zoom = mapView.zoomLevel
+        if !force && abs(zoom - lastClusterZoom) < 0.08 { return }
+        lastClusterZoom = zoom
+        let lat = sourcePins.first(where: { $0.lat != 0 || $0.lng != 0 })?.lat ?? 30
+        let display = wantsCluster
+            ? Self.clustered(sourcePins, zoom: zoom, latitude: lat)
+            : sourcePins
+        mapView.removeAnnotations(mapView.annotations)
+        mapView.addAnnotations(display.map { OpsPointAnnotation(pin: $0) })
+        if let target = selectedCarId,
+           let hit = mapView.annotations
+               .compactMap({ $0 as? OpsPointAnnotation })
+               .first(where: { $0.pin.id == target || $0.pin.memberIds.contains(target) }) {
+            mapView.selectAnnotation(hit, animated: false)
+        }
+    }
+
+    /// 对齐 legacy AMapClusterManagerV3：聚合模式下每个簇都是数字气泡，单车显示「1」。
+    private static func clustered(_ pins: [IosHostMapPin], zoom: Double, latitude: Double) -> [IosHostMapPin] {
+        let cell = cellDegrees(zoom: zoom, latitude: latitude)
+        var buckets: [String: [IosHostMapPin]] = [:]
+        for pin in pins {
+            let keyLat = Int64(floor(pin.lat / cell))
+            let keyLng = Int64(floor(pin.lng / cell))
+            let key = "\(keyLat):\(keyLng)"
+            buckets[key, default: []].append(pin)
+        }
+        var out: [IosHostMapPin] = []
+        for group in buckets.values {
+            if group.count == 1 {
+                let only = group[0]
+                out.append(
+                    IosHostMapPin(
+                        id: only.id,
+                        lat: only.lat,
+                        lng: only.lng,
+                        title: only.title,
+                        subtitle: only.subtitle,
+                        restBattery: only.restBattery,
+                        ridingState: only.ridingState,
+                        memberCount: 1,
+                        memberIds: only.memberIds.isEmpty ? [only.id] : only.memberIds,
+                        abnormal: only.abnormal,
+                        iconName: only.iconName,
+                        showCluster: true
+                    )
+                )
+            } else if let last = group.last {
+                let ids = group.map(\.id)
+                out.append(
+                    IosHostMapPin(
+                        id: "cluster:" + ids.sorted().joined(separator: ","),
+                        lat: last.lat,
+                        lng: last.lng,
+                        title: "\(group.count)",
+                        subtitle: "vehicles",
+                        restBattery: last.restBattery,
+                        ridingState: last.ridingState,
+                        memberCount: Int32(group.count),
+                        memberIds: ids,
+                        abnormal: false,
+                        iconName: last.iconName,
+                        showCluster: true
+                    )
+                )
+            }
+        }
+        if out.count > 100 { return Array(out.prefix(100)) }
+        return out
+    }
+
+    private static func cellDegrees(zoom: Double, latitude: Double) -> Double {
+        let dp: Double
+        if zoom < 10 { dp = 60 }
+        else if zoom < 13 { dp = 50 }
+        else if zoom < 14 { dp = 40 }
+        else { dp = 60 }
+        let px = dp * 3
+        let z = min(max(zoom, 3), 22)
+        let metersPerPixel = 156543.03392 * max(abs(cos(latitude * .pi / 180)), 0.2) / pow(2, z)
+        return max((px * metersPerPixel) / 111320.0, 1e-6)
     }
 
     private func applyOverlays(_ update: IosHostMapUpdate) {
@@ -263,25 +353,65 @@ private final class TencentMapHostView: NSObject, IosHostMapView, QMapViewDelega
 
     func mapView(_ mapView: QMapView!, viewFor annotation: QAnnotation!) -> QAnnotationView! {
         guard let point = annotation as? OpsPointAnnotation else { return nil }
-        let reuseId = "ops-pin"
-        let reused = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
-        guard let view = reused
-            ?? QPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId) else {
-            return nil
-        }
-        view.annotation = annotation
-        view.canShowCallout = !point.pin.title.isEmpty
-        if let pinView = view as? QPinAnnotationView {
-            pinView.pinColor = point.pin.markerColor
+        // 对齐 DefaultOptionGenerator：size>1 或聚合模式的单点都画数字气泡
+        let isBubble = point.pin.memberCount > 1 || point.pin.showCluster
+        let reuseId = isBubble ? "ops-cluster" : "ops-vehicle"
+        let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
+            ?? QAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+        view?.annotation = annotation
+        view?.canShowCallout = false
+        view?.centerOffset = .zero
+        if isBubble {
+            view?.image = Self.clusterImage(count: Int(point.pin.memberCount))
+        } else if let image = UIImage(named: point.pin.iconName)
+            ?? UIImage(named: "\(point.pin.iconName).webp") {
+            view?.image = image
+        } else {
+            view?.image = UIImage(named: "icon_vehicle") ?? UIImage(named: "icon_vehicle.webp")
         }
         return view
+    }
+
+    private static func clusterImage(count: Int) -> UIImage {
+        let size: CGFloat = 20
+        let renderer = UIGraphicsImageRenderer(size: CGSize(width: size, height: size))
+        return renderer.image { ctx in
+            UIColor(red: 41 / 255, green: 95 / 255, blue: 204 / 255, alpha: 1).setFill()
+            ctx.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: size, height: size))
+            let text = count > 10 ? "\(count)" : " \(count) "
+            let attrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.boldSystemFont(ofSize: 11),
+                .foregroundColor: UIColor.white,
+            ]
+            let ns = text as NSString
+            let textSize = ns.size(withAttributes: attrs)
+            ns.draw(
+                at: CGPoint(x: (size - textSize.width) / 2, y: (size - textSize.height) / 2),
+                withAttributes: attrs
+            )
+        }
+    }
+
+    func mapView(_ mapView: QMapView!, regionDidChangeAnimated animated: Bool) {
+        refreshClusteredAnnotations(force: false)
     }
 
     func mapView(_ mapView: QMapView!, didSelect view: QAnnotationView!) {
         guard let point = view.annotation as? OpsPointAnnotation else { return }
         let pin = point.pin
         if pin.memberCount > 1 {
-            onSelectCluster(pin.memberIds.isEmpty ? [pin.id] : pin.memberIds)
+            // Legacy handleClusterClick: zoom+1 under 16 (center on cluster), else vehicle list.
+            if mapView.zoomLevel < 16 {
+                mapView.deselectAnnotation(view.annotation, animated: false)
+                let next = min(mapView.zoomLevel + 1, mapView.maxZoomLevel)
+                mapView.setCenterCoordinate(
+                    CLLocationCoordinate2D(latitude: pin.lat, longitude: pin.lng),
+                    animated: true
+                )
+                mapView.setZoomLevel(next, animated: true)
+            } else {
+                onSelectCluster(pin.memberIds.isEmpty ? [pin.id] : pin.memberIds)
+            }
         } else {
             onSelectCarId(pin.id)
         }
@@ -327,16 +457,6 @@ private final class OpsPointAnnotation: QPointAnnotation {
         coordinate = CLLocationCoordinate2D(latitude: pin.lat, longitude: pin.lng)
         title = pin.title
         subtitle = pin.subtitle
-    }
-}
-
-private extension IosHostMapPin {
-    /// QPinAnnotationView 只给了红 / 绿 / 紫三色，所以按重要程度压缩：
-    /// 聚合紫、需要处理的（低电 / 异常）红、其余绿。
-    var markerColor: QPinAnnotationColor {
-        if memberCount > 1 { return QPinAnnotationColorPurple }
-        if abnormal || (restBattery >= 1 && restBattery <= 30) { return QPinAnnotationColorRed }
-        return QPinAnnotationColorGreen
     }
 }
 

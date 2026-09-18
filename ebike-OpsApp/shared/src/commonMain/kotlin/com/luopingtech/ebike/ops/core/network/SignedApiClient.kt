@@ -30,6 +30,7 @@ class SignedApiClient(
     private val client: HttpClient,
     private val requestAuth: RequestAuth,
     private val json: Json,
+    private val baseUrl: String,
     private val sessionProvider: () -> NetworkSession,
     private val refreshAccessToken: suspend () -> OpsResult<String>,
     private val onSessionInvalid: (code: String, message: String) -> Unit = { _, _ -> },
@@ -61,6 +62,12 @@ class SignedApiClient(
         fields: Map<String, String>,
     ): OpsResult<Unit> = withAuthRetryMultipart(path, fields) { status, raw ->
         decodeUnit(status, raw)
+    }
+
+    private fun resolveUrl(path: String): String {
+        val absolutePath = "/" + path.trimStart('/')
+        val base = baseUrl.trim().trimEnd('/')
+        return if (base.isBlank()) absolutePath else base + absolutePath
     }
 
     private suspend fun <T> withAuthRetry(
@@ -103,10 +110,13 @@ class SignedApiClient(
         bodyJson: String,
         session: NetworkSession,
     ): RawResponse {
-        val clean = path.trimStart('/')
-        val response = client.post(clean) {
+        // Full absolute URL — matches Retrofit baseUrl + @POST("/…") and avoids any
+        // relative merge against defaultRequest / sticky OkHttp paths.
+        val fullUrl = resolveUrl(path)
+        val response = client.post(fullUrl) {
             requestAuth.applyPostJson(this, bodyJson, session, AuthHeaderMode.Bearer)
-            setBody(bodyJson)
+            // TextContent bypasses ContentNegotiation so the body is not JSON-string-wrapped.
+            setBody(io.ktor.http.content.TextContent(bodyJson, io.ktor.http.ContentType.Application.Json))
         }
         return RawResponse(response.status, response.bodyAsText())
     }
@@ -151,9 +161,9 @@ class SignedApiClient(
         fields: Map<String, String>,
         session: NetworkSession,
     ): RawResponse {
-        val clean = path.trimStart('/')
+        val fullUrl = resolveUrl(path)
         val signBody = "{}"
-        val response = client.post(clean) {
+        val response = client.post(fullUrl) {
             requestAuth.applyPostJson(this, signBody, session, AuthHeaderMode.Bearer)
             setBody(
                 MultiPartFormDataContent(
@@ -193,6 +203,17 @@ class SignedApiClient(
                         envelope.msg ?: "request failed",
                     ),
                 )
+                // 业务成功但 data=null（常见空列表）：按空数组/空对象落成 Ok，避免把「成功！」当错误展示
+                envelope.isSuccessful || status.isSuccess() -> {
+                    emptyDataFallback(deserializer)?.let { OpsResult.Ok(it) }
+                        ?: OpsResult.Err(
+                            OpsError.business(
+                                envelope.code.ifBlank { "EMPTY" },
+                                envelope.msg?.takeUnless { it.isBlank() || it.contains("成功") }
+                                    ?: "empty data",
+                            ),
+                        )
+                }
                 !status.isSuccess() ->
                     OpsResult.Err(OpsError.network("HTTP ${status.value}: ${envelope.msg ?: "error"}"))
                 else -> OpsResult.Err(
@@ -205,6 +226,18 @@ class SignedApiClient(
         } catch (t: Throwable) {
             OpsResult.Err(OpsError.network("parse failed: ${t.message}", t))
         }
+    }
+
+    /** data=null 时尝试 [] / {}，覆盖 List / 部分对象 DTO。 */
+    private fun <T> emptyDataFallback(deserializer: KSerializer<T>): T? {
+        listOf("[]", "{}").forEach { raw ->
+            try {
+                return json.decodeFromString(deserializer, raw)
+            } catch (_: Throwable) {
+                // try next
+            }
+        }
+        return null
     }
 
     private fun decodeUnit(status: HttpStatusCode, raw: String): OpsResult<Unit> {

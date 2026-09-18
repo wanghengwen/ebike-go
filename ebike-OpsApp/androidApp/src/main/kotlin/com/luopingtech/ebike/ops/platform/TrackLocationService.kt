@@ -3,22 +3,22 @@ package com.luopingtech.ebike.ops.platform
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
-import com.luopingtech.ebike.ops.MainActivity
+import androidx.core.app.NotificationCompat
 import com.luopingtech.ebike.ops.R
-import com.luopingtech.ebike.ops.core.i18n.Str
-import com.luopingtech.ebike.ops.core.i18n.Strings
 
 /**
- * Location-type foreground service so track upload keeps receiving fixes when
- * the UI is backgrounded. Does not collect points itself — [AndroidLocationTracker]
- * + [TrackUploadFeature] own the stream; this only holds the FGS contract.
+ * 对齐原版 [com.xyytech.lite.service.APPKeepService]：
+ * - 仅在 App 退到后台时拉起，回前台即停（见 [MainActivity]）
+ * - 通知无标题/正文，渠道名「服务常驻通知」
+ * - 自身不采点；采点/上报仍由 [AndroidLocationTracker] + TrackUploadFeature 负责
+ *
+ * 现代系统要求声明 FGS type；因后台仍要收定位，使用 location 类型（原版未声明 type）。
  */
 class TrackLocationService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
@@ -53,49 +53,35 @@ class TrackLocationService : Service() {
     private fun ensureChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = getSystemService(NotificationManager::class.java) ?: return
-        val existing = manager.getNotificationChannel(CHANNEL_ID)
-        if (existing != null) return
-        manager.createNotificationChannel(
-            NotificationChannel(
-                CHANNEL_ID,
-                Strings.t(Str.TrackFgChannel),
-                NotificationManager.IMPORTANCE_LOW,
-            ).apply {
-                description = Strings.t(Str.TrackFgBody)
-                setShowBadge(false)
-            },
-        )
+        if (manager.getNotificationChannel(CHANNEL_ID) != null) return
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH,
+        ).apply {
+            setLockscreenVisibility(Notification.VISIBILITY_PUBLIC)
+            setShowBadge(false)
+        }
+        manager.createNotificationChannel(channel)
     }
 
+    /** 对齐 APPKeepService.getNotification：不设 title/text，仅常驻。 */
     private fun buildNotification(): Notification {
-        val launch = PendingIntent.getActivity(
-            this,
-            0,
-            Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-        )
-        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Notification.Builder(this, CHANNEL_ID)
-        } else {
-            @Suppress("DEPRECATION")
-            Notification.Builder(this)
-        }
-        return builder
-            .setContentTitle(Strings.t(Str.TrackFgTitle))
-            .setContentText(Strings.t(Str.TrackFgBody))
-            .setSmallIcon(R.drawable.ic_track_fg)
-            .setContentIntent(launch)
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.qit)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setOngoing(true)
-            .setOnlyAlertOnce(true)
             .setCategory(Notification.CATEGORY_SERVICE)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setSilent(true)
             .build()
     }
 
     companion object {
-        const val CHANNEL_ID = "ops_track_location"
-        const val NOTIFICATION_ID = 41001
+        /** 对齐原版 channelId=Service_Id / channelName=服务常驻通知 */
+        const val CHANNEL_ID = "Service_Id"
+        const val CHANNEL_NAME = "服务常驻通知"
+        const val NOTIFICATION_ID = 1001
         const val ACTION_STOP = "com.luopingtech.ebike.ops.TRACK_FG_STOP"
 
         fun start(context: Context) {

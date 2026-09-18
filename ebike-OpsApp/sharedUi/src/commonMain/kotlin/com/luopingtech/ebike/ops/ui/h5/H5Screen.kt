@@ -90,6 +90,9 @@ fun H5Screen(
     val url = remember(kind, language) { app.resolveH5ScreenUrl(kind) }
     val host = remember { WebViewHost() }
 
+    // WebView 未挂载时（无 URL）仍要拦系统返回；有 WebView 时由其 BackHandler 优先处理历史栈。
+    com.luopingtech.ebike.ops.ui.navigation.OpsBackHandler(onBack = onClose)
+
     // iOS 宿主是全屏 Compose（ContentView 里 ignoresSafeArea），不留这层内边距
     // 标题栏会压在状态栏上；Android 非 edge-to-edge 下这里的 inset 是 0，加了无副作用。
     Column(

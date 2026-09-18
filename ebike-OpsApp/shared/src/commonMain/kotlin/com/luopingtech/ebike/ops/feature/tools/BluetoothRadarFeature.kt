@@ -14,13 +14,23 @@ import kotlinx.coroutines.flow.asStateFlow
 
 data class BluetoothRadarUiState(
     val scanning: Boolean = false,
-    val ringing: Boolean = false,
+    val ringingId: String? = null,
     val bleAvailable: Boolean = true,
+    val filter: String = "",
     val devices: List<BleDevice> = emptyList(),
-    val selectedId: String? = null,
     val message: String? = null,
     val errorMessage: String? = null,
-)
+) {
+    val filteredDevices: List<BleDevice>
+        get() {
+            val q = filter.trim()
+            if (q.isEmpty()) return devices
+            return devices.filter {
+                (it.name ?: it.id).contains(q, ignoreCase = true) ||
+                    it.id.contains(q, ignoreCase = true)
+            }
+        }
+}
 
 class BluetoothRadarFeature(
     private val bleTransport: BleTransport,
@@ -35,8 +45,8 @@ class BluetoothRadarFeature(
         _state.value = BluetoothRadarUiState(bleAvailable = bleTransport.isAvailable)
     }
 
-    fun selectDevice(id: String) {
-        _state.value = _state.value.copy(selectedId = id, errorMessage = null)
+    fun setFilter(value: String) {
+        _state.value = _state.value.copy(filter = value.filter { it.isDigit() }.take(9))
     }
 
     suspend fun scan() {
@@ -49,31 +59,36 @@ class BluetoothRadarFeature(
             is OpsResult.Ok -> _state.value = _state.value.copy(
                 scanning = false,
                 devices = result.value,
-                selectedId = result.value.firstOrNull()?.id,
             )
-            is OpsResult.Err -> _state.value = _state.value.copy(scanning = false, errorMessage = result.error.message)
+            is OpsResult.Err -> _state.value = _state.value.copy(
+                scanning = false,
+                errorMessage = result.error.message,
+            )
         }
     }
 
-    suspend fun ring() {
-        val deviceId = _state.value.selectedId
-        if (deviceId.isNullOrBlank()) {
+    suspend fun ring(deviceId: String) {
+        val id = deviceId.trim()
+        if (id.isEmpty()) {
             _state.value = _state.value.copy(errorMessage = Strings.t(Str.BleSelectDevice))
             return
         }
-        _state.value = _state.value.copy(ringing = true, errorMessage = null, message = null)
+        _state.value = _state.value.copy(ringingId = id, errorMessage = null, message = null)
         when (
             val result = control.execute(
-                vehicleId = deviceId,
+                vehicleId = id,
                 action = VehicleAction.Ring,
                 channel = ControlChannel.NetworkOnly,
             )
         ) {
             is OpsResult.Ok -> _state.value = _state.value.copy(
-                ringing = false,
-                message = Strings.t(Str.ActionOk, Strings.t(Str.BleRing), deviceId),
+                ringingId = null,
+                message = Strings.t(Str.ActionOk, Strings.t(Str.BleRing), id),
             )
-            is OpsResult.Err -> _state.value = _state.value.copy(ringing = false, errorMessage = result.error.message)
+            is OpsResult.Err -> _state.value = _state.value.copy(
+                ringingId = null,
+                errorMessage = result.error.message,
+            )
         }
     }
 }
