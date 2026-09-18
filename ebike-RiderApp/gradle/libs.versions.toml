@@ -13,6 +13,7 @@ android-compileSdk = "37"
 android-targetSdk = "34"
 tencent-map = "4.5.12"
 tencent-map-utilities = "1.0.6"
+wechat-sdk = "6.8.0"
 # Compose Multiplatform。1.12.0 尚在 beta，取 1.11.1 稳定版。
 compose-multiplatform = "1.11.1"
 
@@ -46,6 +47,7 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit-barcode" }
 tencent-map-vector-sdk = { module = "com.tencent.map:tencent-map-vector-sdk", version.ref = "tencent-map" }
 tencent-map-sdk-utilities = { module = "com.tencent.map:sdk-utilities", version.ref = "tencent-map-utilities" }
+wechat-sdk = { module = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta", version.ref = "wechat-sdk" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -26,6 +26,13 @@ fun H5HostScreen(
     app: RiderApp,
     kind: H5ScreenKind? = null,
     hashRoute: String? = null,
+    /** 每次从原生入口打开递增；同 kind/hash 再进也要回到入口页，不能留在上次子页。 */
+    openEpoch: Int = 0,
+    /**
+     * 容器是否盖在首页上。隐藏复用 WebView 时必须为 false，否则 Android
+     * BackHandler 仍会吞掉系统返回，首页无法退到桌面。
+     */
+    active: Boolean = true,
     onClose: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -34,8 +41,8 @@ fun H5HostScreen(
     val scope = rememberCoroutineScope()
     var overrideHash by remember { mutableStateOf<String?>(null) }
 
-    // 父级再次 openH5（换 kind/hash）时清掉内部覆盖路由，按新入口加载
-    LaunchedEffect(kind, hashRoute) {
+    // 换入口或同入口再次打开时，清掉桥内 navigate 覆盖，并强制 WebView 复位
+    LaunchedEffect(kind, hashRoute, openEpoch) {
         overrideHash = null
     }
 
@@ -89,6 +96,8 @@ fun H5HostScreen(
     H5Screen(
         title = title,
         url = url,
+        openEpoch = openEpoch,
+        active = active,
         placeholder = app.i18n.t(Str.H5NotConfigured),
         failText = app.i18n.t(Str.H5LoadFailed),
         retryText = app.i18n.t(Str.Retry),

@@ -97,15 +97,12 @@ private fun MapKitMapView(spec: RiderMapSpec, modifier: Modifier) {
             modifier = Modifier.fillMaxSize(),
             update = { map -> sync.apply(map, spec) },
         )
-        if (spec.showStatusOverlay) {
+        if (spec.showStatusOverlay && spec.pins.isNotEmpty()) {
             Text(
                 // 名字要说实话：spec.providerLabel 是共享层按配置算的（demo 下是「模拟地图」），
                 // 这里真正在渲染的是 MapKit，跟 Android 用「腾讯地图 · …」是同一种自报。
-                text = if (spec.pins.isEmpty()) {
-                    Strings.t(Str.NoVehicleCoords)
-                } else {
-                    Strings.t(Str.AppleMapPins, spec.pins.size, spec.pins.size)
-                },
+                // 无车点时不显示「暂无车辆坐标」——首页空态是常态。
+                text = Strings.t(Str.AppleMapPins, spec.pins.size, spec.pins.size),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.align(Alignment.TopStart).padding(10.dp),

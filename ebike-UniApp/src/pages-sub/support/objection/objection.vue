@@ -39,20 +39,22 @@
         <view class="ques_title">{{ t('support.objectionPhoto') }}</view>
         <view class="photo-wrap">
           <view v-for="(item, index) in imgs" :key="index" class="img-wrap">
-            <image :src="item" class="img-item" mode="aspectFill" @click="preview(index)" />
-            <view class="delete" @click="delImage(index)">
+            <image :src="item" class="img-item" mode="aspectFill" @tap="preview(index)" />
+            <view class="delete" @tap.stop="delImage(index)">
               <image v-if="deleteIcon" class="delete-icon" :src="deleteIcon" mode="widthFix" />
               <text v-else class="delete-fallback">×</text>
             </view>
           </view>
-          <image
-            v-if="imgs.length < 3 && addIcon"
+          <view
+            v-if="imgs.length < 3"
             class="add"
-            :src="addIcon"
-            mode="aspectFit"
-            @click="shooting"
-          />
-          <view v-else-if="imgs.length < 3" class="add add--fallback" @click="shooting">+</view>
+            :class="{ 'add--fallback': !addIcon }"
+            @tap.stop="shooting"
+            @click.stop="shooting"
+          >
+            <image v-if="addIcon" class="add-icon" :src="addIcon" mode="aspectFit" />
+            <text v-else class="add-plus">+</text>
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -85,8 +87,9 @@ import {
 import { navigate, setNavTitle } from '@/shared/navigate'
 import { storage } from '@/shared/storage'
 import { getIconCfg } from '@/shared/tenantSkin'
-import { uploadFile } from '@/shared/upload'
+import { uploadFile, pickAndUploadPhoto } from '@/shared/upload'
 import { logger } from '@/shared/logger'
+import { isNative, nativeHost } from '@/shared/nativeHost'
 
 const { t } = useI18n()
 
@@ -105,6 +108,7 @@ const isDisabled = ref(true)
 const orderId = ref('')
 const chooseImgWay = ref<Array<'camera' | 'album'>>(['camera'])
 const submitting = ref(false)
+const picking = ref(false)
 
 const deleteIcon = computed(() => getIconCfg('iconDelete'))
 const addIcon = computed(() => getIconCfg('uploadImg') || getIconCfg('add_photo') || '')
@@ -166,16 +170,43 @@ function delImage(i: number) {
 }
 
 function shooting() {
+  if (picking.value) return
   if (imgs.value.length >= 3) {
     uni.showToast({ title: t('support.objectionPhotoMax'), icon: 'none' })
     return
   }
+
+  // 有原生桥就走桥：不要依赖 isNative() 的 class 检测，也不要先弹 sheet（WebView 里常看不见）。
+  const host = nativeHost()
+  if (host || isNative()) {
+    const ways = chooseImgWay.value.length
+      ? chooseImgWay.value
+      : (['camera'] as Array<'camera' | 'album'>)
+    const source: 'camera' | 'album' = ways.includes('camera') ? 'camera' : 'album'
+    void runNativePick(source)
+    return
+  }
+
   const maxSize = Number((getTenantConfig() as { fileSize?: number }).fileSize) || 10485760
+  // WebView 里 chooseImage 可能既不回 success 也不回 fail，看起来就是「点了没反应」。
+  let settled = false
+  const watchdog = setTimeout(() => {
+    if (settled) return
+    settled = true
+    uni.showModal({
+      title: '无法选择照片',
+      content: `当前环境不支持选图，且未检测到原生拍照能力。\nplatform=${nativeEnvHint()}`,
+      showCancel: false,
+    })
+  }, 1500)
+
   uni.chooseImage({
     count: 3 - imgs.value.length,
     sizeType: ['compressed'],
     sourceType: chooseImgWay.value,
     success: async (res) => {
+      settled = true
+      clearTimeout(watchdog)
       const tempFiles = (res.tempFiles || []) as Array<{ path?: string; size?: number }>
       let oversized = false
       for (const item of tempFiles) {
@@ -192,7 +223,50 @@ function shooting() {
         uni.showToast({ title: t('support.objectionUploadFail'), icon: 'none' })
       }
     },
+    fail: (err) => {
+      settled = true
+      clearTimeout(watchdog)
+      logger.warn('chooseImage fail', err)
+      uni.showModal({
+        title: '无法选择照片',
+        content: String((err as { errMsg?: string })?.errMsg || t('support.objectionUploadFail')),
+        showCancel: false,
+      })
+    },
   })
+}
+
+/** 排查用：告诉我们原生桥到底有没有注入。 */
+function nativeEnvHint(): string {
+  const w = window as unknown as {
+    __riderNative?: unknown
+    __riderNativePlatform?: string
+    webkit?: { messageHandlers?: { riderNative?: unknown } }
+  }
+  const flags = [
+    `bridge=${w.__riderNative ? 'y' : 'n'}`,
+    `wk=${w.webkit?.messageHandlers?.riderNative ? 'y' : 'n'}`,
+    `plat=${w.__riderNativePlatform || '-'}`,
+  ]
+  return flags.join(' ')
+}
+
+async function runNativePick(source: 'camera' | 'album') {
+  if (picking.value) return
+  picking.value = true
+  try {
+    const url = await pickAndUploadPhoto(source)
+    if (url) imgs.value.push(url)
+  } catch (e) {
+    logger.error('runNativePick fail', e)
+    uni.showModal({
+      title: '提示',
+      content: t('support.objectionUploadFail'),
+      showCancel: false,
+    })
+  } finally {
+    picking.value = false
+  }
 }
 
 async function uploadAndSubmit() {
@@ -362,20 +436,29 @@ async function uploadAndSubmit() {
   text-align: center;
 }
 .add {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 120rpx;
   width: 120rpx;
   background: #f6f6f6;
   border-radius: 29rpx;
+  box-sizing: border-box;
+}
+.add-icon {
+  height: 120rpx;
+  width: 120rpx;
+  border-radius: 29rpx;
+  /* Android WebView 上子 image 常抢走点击，导致外层 @tap 完全无反应 */
+  pointer-events: none;
 }
 .add--fallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 2rpx solid #e5e5e5;
+}
+.add-plus {
   font-size: 64rpx;
   color: #696969;
-  box-sizing: border-box;
+  line-height: 1;
 }
 .btn-box {
   position: fixed;

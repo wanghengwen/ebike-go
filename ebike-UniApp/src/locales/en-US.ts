@@ -780,6 +780,8 @@ export default {
     objectionNeedPhoto: 'Upload at least one photo',
     objectionDupSubmit: 'Do not submit repeatedly',
     objectionSuccess: 'Dispute ticket submitted',
+    objPickCamera: 'Take photo',
+    objPickAlbum: 'Choose from album',
     objUnlockFail: 'Unlock failed',
     objBikeFault: 'Bike fault',
     objNoParking: 'No-parking misjudge',

@@ -320,14 +320,17 @@ fun TencentMapView(
             }
         }
 
-        if (showStatusOverlay) {
+        val statusText = when {
+            mapError != null -> mapError
+            showStatusOverlay && !mapLoaded -> Strings.t(Str.TencentMapLoading)
+            // 无车点时不显示「暂无车辆」——首页空态是常态，不必占左上角。
+            showStatusOverlay && pins.isNotEmpty() ->
+                Strings.t(Str.TencentMapPins, displayPins.size, pins.size)
+            else -> null
+        }
+        if (statusText != null && showStatusOverlay) {
             Text(
-                text = when {
-                    mapError != null -> mapError!!
-                    !mapLoaded -> Strings.t(Str.TencentMapLoading)
-                    pins.isEmpty() -> Strings.t(Str.TencentMapNoPins)
-                    else -> Strings.t(Str.TencentMapPins, displayPins.size, pins.size)
-                },
+                text = statusText,
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(10.dp),

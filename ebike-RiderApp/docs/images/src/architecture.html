@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg width="1200" height="960" viewBox="0 0 1200 960" xmlns="http://www.w3.org/2000/svg"
+     font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f3e46"/>
+    </marker>
+    <marker id="ahd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8080"/>
+    </marker>
+    <marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c9721f"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="960" fill="#ffffff"/>
+
+  <text x="600" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#17303a">代码归属（生产代码 17,637 行 / 153 文件）</text>
+  <text x="600" y="58" text-anchor="middle" font-size="13" fill="#6c7f88">共享层 89.4%　·　Android 宿主 8.5%　·　iOS 宿主 2.1%</text>
+
+  <rect x="80" y="72" width="1040" height="28" rx="8" fill="#eef4f5"/>
+  <rect x="80" y="72" width="930" height="28" rx="8" fill="#0f8080"/>
+  <rect x="1010" y="72" width="88" height="28" fill="#3d8bfd"/>
+  <rect x="1098" y="72" width="22" height="28" rx="8" fill="#7c5cbf"/>
+  <rect x="1098" y="72" width="12" height="28" fill="#7c5cbf"/>
+  <text x="545" y="91" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">shared 10,048 行 ＋ sharedUi 5,711 行 ＝ 15,759 行</text>
+  <text x="1054" y="91" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1,500</text>
+  <text x="1109" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#7c5cbf">378</text>
+
+  <!-- 宿主层 -->
+  <rect x="80" y="132" width="500" height="96" rx="14" fill="#eef4ff" stroke="#3d8bfd" stroke-width="2"/>
+  <text x="330" y="160" text-anchor="middle" font-size="17" font-weight="700" fill="#1e3a5f">① androidApp · 1,500 行</text>
+  <text x="330" y="184" text-anchor="middle" font-size="13" fill="#4a6478">腾讯地图 340 · CameraX 扫码 236 · 定位 240</text>
+  <text x="330" y="204" text-anchor="middle" font-size="13" fill="#4a6478">拍照 181 · 上传 67 · 权限 112 · 逆地理 32</text>
+  <text x="330" y="222" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e3a5f">启动与注入只占 188 行（MainActivity 58）</text>
+
+  <rect x="620" y="132" width="500" height="96" rx="14" fill="#f3eefc" stroke="#7c5cbf" stroke-width="2"/>
+  <text x="870" y="160" text-anchor="middle" font-size="17" font-weight="700" fill="#3a2a5a">① iosApp · Swift 378 行</text>
+  <text x="870" y="184" text-anchor="middle" font-size="13" fill="#5a4a70">TencentMapFactory 331 · TencentMapHost 21</text>
+  <text x="870" y="204" text-anchor="middle" font-size="13" fill="#5a4a70">其余平台能力写在 sharedUi/iosMain（Kotlin）</text>
+  <text x="870" y="222" text-anchor="middle" font-size="12.5" font-weight="600" fill="#3a2a5a">启动壳只有 26 行，没有一屏是 SwiftUI 重写的</text>
+
+  <line x1="600" y1="228" x2="600" y2="262" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+  <text x="618" y="252" font-size="12" fill="#5b6d76">仅薄宿主</text>
+
+  <!-- sharedUi -->
+  <rect x="80" y="264" width="1040" height="284" rx="16" fill="#f7fbfb" stroke="#0f8080" stroke-width="2.5"/>
+  <text x="600" y="294" text-anchor="middle" font-size="20" font-weight="700" fill="#0c6b6b">② sharedUi · Compose Multiplatform · 5,711 行</text>
+  <text x="600" y="316" text-anchor="middle" font-size="13" fill="#5b6d76">骑行主循环全部原生实现，commonMain 4,374 行双端共用</text>
+
+  <g transform="translate(104,336)">
+    <rect width="154" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="77" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">首页地图</text>
+    <circle cx="45" cy="62" r="8" fill="#0f8080"/>
+    <circle cx="98" cy="52" r="8" fill="#5bb3b3"/>
+    <circle cx="72" cy="88" r="8" fill="#5bb3b3"/>
+    <circle cx="112" cy="92" r="8" fill="#9fc4c4"/>
+    <rect x="24" y="112" width="106" height="24" rx="12" fill="#0f8080"/>
+    <text x="77" y="129" text-anchor="middle" font-size="12" fill="#fff">立即用车</text>
+  </g>
+  <g transform="translate(278,336)">
+    <rect width="154" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="77" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">扫码</text>
+    <rect x="34" y="44" width="86" height="70" rx="6" fill="none" stroke="#0f8080" stroke-width="2.5"/>
+    <line x1="34" y1="79" x2="120" y2="79" stroke="#e0553c" stroke-width="2"/>
+    <text x="77" y="134" text-anchor="middle" font-size="11" fill="#6c7f88">CameraX / AVFoundation</text>
+  </g>
+  <g transform="translate(452,336)">
+    <rect width="154" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="77" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">确认开锁</text>
+    <rect x="22" y="42" width="110" height="16" rx="4" fill="#eef4f5"/>
+    <rect x="22" y="66" width="110" height="16" rx="4" fill="#eef4f5"/>
+    <rect x="22" y="102" width="110" height="28" rx="8" fill="#0f8080"/>
+    <text x="77" y="121" text-anchor="middle" font-size="12.5" fill="#fff">开锁</text>
+  </g>
+  <g transform="translate(626,336)">
+    <rect width="154" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="77" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">骑行中 / 临停</text>
+    <polyline points="24,110 48,84 74,94 100,58 132,72" fill="none" stroke="#0f8080" stroke-width="2.5"/>
+    <circle cx="132" cy="72" r="5" fill="#e0553c"/>
+    <rect x="24" y="122" width="50" height="16" rx="8" fill="#eef4f5"/>
+    <rect x="82" y="122" width="50" height="16" rx="8" fill="#eef4f5"/>
+  </g>
+  <g transform="translate(800,336)">
+    <rect width="154" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="77" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">还车 / 申诉</text>
+    <path d="M 40 60 L 114 60 L 114 108 L 40 108 Z" fill="none" stroke="#9fc4c4" stroke-width="2" stroke-dasharray="5 4"/>
+    <circle cx="77" cy="84" r="9" fill="#0f8080"/>
+    <text x="77" y="132" text-anchor="middle" font-size="11" fill="#6c7f88">围栏 / 停车点判定</text>
+  </g>
+  <g transform="translate(974,336)">
+    <rect width="122" height="146" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+    <text x="61" y="26" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">结费</text>
+    <rect x="20" y="44" width="82" height="14" rx="4" fill="#eef4f5"/>
+    <rect x="20" y="64" width="82" height="14" rx="4" fill="#eef4f5"/>
+    <rect x="20" y="84" width="82" height="14" rx="4" fill="#eef4f5"/>
+    <rect x="20" y="112" width="82" height="24" rx="8" fill="#f4e4c8" stroke="#c9721f" stroke-width="1.5"/>
+    <text x="61" y="129" text-anchor="middle" font-size="11" fill="#8a5210">去支付→H5</text>
+  </g>
+
+  <text x="600" y="524" text-anchor="middle" font-size="12.5" fill="#6c7f88">另有 H5Screen 容器 · 登录 · 主题；平台差异只落在 androidMain 239 行 / iosMain 1,098 行</text>
+
+  <line x1="600" y1="548" x2="600" y2="582" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- shared -->
+  <rect x="80" y="584" width="1040" height="176" rx="16" fill="#f7fbfb" stroke="#0f8080" stroke-width="2.5"/>
+  <text x="600" y="614" text-anchor="middle" font-size="20" font-weight="700" fill="#0c6b6b">③ shared · Kotlin Multiplatform · 10,048 行</text>
+  <text x="600" y="636" text-anchor="middle" font-size="13" fill="#5b6d76">业务内核：与 UI 解耦，248 个用例全部跑在这一层</text>
+
+  <rect x="106" y="654" width="196" height="86" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="204" y="678" text-anchor="middle" font-size="14.5" font-weight="600" fill="#20303a">Domain</text>
+  <text x="204" y="700" text-anchor="middle" font-size="12" fill="#5b6d76">RideStateMachine</text>
+  <text x="204" y="720" text-anchor="middle" font-size="12" fill="#5b6d76">BleFrame · 围栏判定</text>
+
+  <rect x="318" y="654" width="196" height="86" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="416" y="678" text-anchor="middle" font-size="14.5" font-weight="600" fill="#20303a">Feature</text>
+  <text x="416" y="700" text-anchor="middle" font-size="12" fill="#5b6d76">RidingFeature 编排</text>
+  <text x="416" y="720" text-anchor="middle" font-size="12" fill="#5b6d76">杀进程恢复</text>
+
+  <rect x="530" y="654" width="196" height="86" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="628" y="678" text-anchor="middle" font-size="14.5" font-weight="600" fill="#20303a">Data</text>
+  <text x="628" y="700" text-anchor="middle" font-size="12" fill="#5b6d76">SignedApiClient</text>
+  <text x="628" y="720" text-anchor="middle" font-size="12" fill="#5b6d76">Api · DTO · Demo 假数据</text>
+
+  <rect x="742" y="654" width="152" height="86" rx="12" fill="#fff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="818" y="678" text-anchor="middle" font-size="14.5" font-weight="600" fill="#20303a">i18n</text>
+  <text x="818" y="700" text-anchor="middle" font-size="12" fill="#5b6d76">227 键 × 中英</text>
+  <text x="818" y="720" text-anchor="middle" font-size="12" fill="#5b6d76">Accept-Language</text>
+
+  <rect x="910" y="654" width="186" height="86" rx="12" fill="#fff" stroke="#c9721f" stroke-width="2"/>
+  <text x="1003" y="678" text-anchor="middle" font-size="14.5" font-weight="600" fill="#8a5210">core/h5</text>
+  <text x="1003" y="700" text-anchor="middle" font-size="12" fill="#8a5210">NativeHostBridge</text>
+  <text x="1003" y="720" text-anchor="middle" font-size="12" fill="#8a5210">路由表 · 请求白名单</text>
+
+  <line x1="380" y1="760" x2="380" y2="794" stroke="#2f3e46" stroke-width="2" marker-end="url(#ah)"/>
+  <line x1="1003" y1="760" x2="1003" y2="794" stroke="#c9721f" stroke-width="2" marker-end="url(#ahw)"/>
+
+  <!-- 底层 -->
+  <rect x="80" y="796" width="560" height="66" rx="14" fill="#eef4f5" stroke="#2f3e46" stroke-width="2"/>
+  <text x="360" y="825" text-anchor="middle" font-size="16" font-weight="600" fill="#20303a">client 业务网关（后端 API，商户签名）</text>
+  <text x="360" y="847" text-anchor="middle" font-size="12" fill="#5b6d76">H5 的请求也从这里出去 —— 由原生代签，不给 H5 密钥</text>
+
+  <rect x="680" y="796" width="440" height="66" rx="14" fill="#fdf5e8" stroke="#c9721f" stroke-width="2"/>
+  <text x="900" y="825" text-anchor="middle" font-size="16" font-weight="600" fill="#8a5210">ebike-UniApp build:h5 静态站点</text>
+  <text x="900" y="847" text-anchor="middle" font-size="12" fill="#8a5210">49 屏长尾原样复用，独立发版不过应用商店</text>
+
+  <!-- 注入虚线 -->
+  <path d="M 80 176 L 40 176 L 40 690 L 104 690" fill="none" stroke="#0f8080" stroke-width="2"
+        stroke-dasharray="7 6" marker-end="url(#ahd)"/>
+  <text x="26" y="440" text-anchor="middle" font-size="13" fill="#0f8080"
+        transform="rotate(-90 26 440)">宿主注入地图 / 扫码 / 定位 / 蓝牙 / 上传</text>
+
+  <!-- 图例 -->
+  <rect x="80" y="884" width="1040" height="58" rx="10" fill="#fbfcfc" stroke="#dfe6e9" stroke-width="1.5"/>
+  <rect x="100" y="905" width="18" height="14" rx="3" fill="#0f8080"/>
+  <text x="128" y="917" font-size="13.5" fill="#3f5058">共享层 89.4%</text>
+  <rect x="260" y="905" width="18" height="14" rx="3" fill="#3d8bfd"/>
+  <text x="288" y="917" font-size="13.5" fill="#3f5058">Android 宿主 8.5%</text>
+  <rect x="452" y="905" width="18" height="14" rx="3" fill="#7c5cbf"/>
+  <text x="480" y="917" font-size="13.5" fill="#3f5058">iOS 宿主 2.1%</text>
+  <rect x="628" y="905" width="18" height="14" rx="3" fill="#c9721f"/>
+  <text x="656" y="917" font-size="13.5" fill="#3f5058">H5 复用链路</text>
+  <text x="790" y="917" font-size="13" fill="#6c7f88">青色虚线 = 宿主往共享层的契约里填实现</text>
+</svg>
+</body>
+</html>

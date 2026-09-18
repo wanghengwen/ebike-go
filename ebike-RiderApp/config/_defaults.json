@@ -59,5 +59,10 @@
   },
   "h5": {
     "baseUrl": ""
+  },
+  "pay": {
+    "wechatAppId": "",
+    "channelType": "WXAPP",
+    "saleType": "ORDER"
   }
 }

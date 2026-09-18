@@ -73,6 +73,7 @@ enum class Str {
     ScannedVehicle,
     PhotoRequired,
     MediaReadFailed,
+    MediaTooLarge,
     NoPhotoTaken,
     ScanEmpty,
     ScanFailed,
@@ -107,6 +108,9 @@ enum class Str {
     H5LoadFailed,
     H5NotConfigured,
     H5PayUnsupported,
+    PayCancelled,
+    PayFailed,
+    PayWeChatNotInstalled,
 
     // 还车判定 / 骑行围栏横幅
     ReturnReasonNormal,

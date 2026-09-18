@@ -41,6 +41,22 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
+    <queries>
+        <package android:name="com.tencent.mm" />
+        <!-- Android 11+ 包可见性：不声明则 TakePicture / 选图可能直接失败且无界面 -->
+        <intent>
+            <action android:name="android.media.action.IMAGE_CAPTURE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.PICK" />
+            <data android:mimeType="image/*" />
+        </intent>
+    </queries>
+
     <application
         android:name=".RiderApplication"
         android:allowBackup="false"
@@ -67,6 +83,12 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EbikeRider" />
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <service
             android:name=".platform.TrackLocationService"

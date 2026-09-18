@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.luopingtech.ebike.rider.core.h5.NativeHostBridge
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -33,12 +34,20 @@ actual fun PlatformWebView(
     host: WebViewHost,
     bridge: NativeHostBridge,
     onNavigateOut: () -> Unit,
+    openEpoch: Int,
+    backEnabled: Boolean,
     modifier: Modifier,
 ) {
     var webView by remember { mutableStateOf<WebView?>(null) }
     val scope = rememberCoroutineScope()
-    // 本次容器打开时的入口 URL（含 hash）。栈底再 back 应关容器，而不是退到 launch/profile。
-    val entryUrl = remember(url.substringBefore('#'), H5BackPolicy.hashPath(url)) { url }
+    // 每次从功能入口打开都记一次入口；栈底再 back 应关容器。
+    val entryUrl = remember(openEpoch, url.substringBefore('#'), H5BackPolicy.hashPath(url)) { url }
+    val session = remember {
+        object {
+            var appliedEpoch: Int = -1
+            var clearHistoryAfterLoad: Boolean = false
+        }
+    }
 
     DisposableEffect(host) {
         onDispose { host.controller = null }
@@ -78,7 +87,7 @@ actual fun PlatformWebView(
         }
     }
 
-    BackHandler { handleBack() }
+    BackHandler(enabled = backEnabled) { handleBack() }
 
     AndroidView(
         factory = { context ->
@@ -89,8 +98,10 @@ actual fun PlatformWebView(
                 )
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
-                settings.cacheMode = WebSettings.LOAD_DEFAULT
+                // H5 是持续迭代的外部产物；缓存住 index.html / chunk 会让线上更新长期不生效。
+                settings.cacheMode = WebSettings.LOAD_NO_CACHE
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+                clearCache(true)
                 webChromeClient = WebChromeClient()
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, pageUrl: String?, favicon: Bitmap?) {
@@ -104,6 +115,10 @@ actual fun PlatformWebView(
                     override fun onPageFinished(view: WebView?, pageUrl: String?) {
                         host.loading = false
                         host.initialLoadDone = true
+                        if (session.clearHistoryAfterLoad) {
+                            session.clearHistoryAfterLoad = false
+                            view?.clearHistory()
+                        }
                         val atEntry = H5BackPolicy.atEntry(pageUrl, entryUrl)
                         host.canGoBack = view?.canGoBack() == true && !atEntry
                         view?.evaluateJavascript(H5HostChromeJs.bootstrap("android"), null)
@@ -143,6 +158,10 @@ actual fun PlatformWebView(
                     override fun reload() = self.reload()
                     override fun goBack() = handleBack()
                 }
+                session.appliedEpoch = openEpoch
+                session.clearHistoryAfterLoad = true
+                host.initialLoadDone = false
+                host.loading = true
                 loadUrl(url)
             }
         },
@@ -154,7 +173,17 @@ actual fun PlatformWebView(
                 override fun reload() = view.reload()
                 override fun goBack() = handleBack()
             }
-            // SPA：同文档只改 hash 时也要跳（父级再次打开钱包/个人中心等）
+            // 每次从原生入口打开：整页 load 到入口并清 history，避免仍停在上次子页。
+            if (openEpoch != session.appliedEpoch) {
+                session.appliedEpoch = openEpoch
+                session.clearHistoryAfterLoad = true
+                host.initialLoadDone = false
+                host.loading = true
+                host.failed = false
+                view.loadUrl(url)
+                return@AndroidView
+            }
+            // SPA：同文档只改 hash 时也要跳（父级打开不同长尾页且 epoch 未变的兜底）
             val currentDoc = view.url?.substringBefore('#')
             val targetDoc = url.substringBefore('#')
             val currentHash = H5BackPolicy.hashPath(view.url)
@@ -193,7 +222,8 @@ private class RiderNativeJsInterface(
 ) {
     @JavascriptInterface
     fun invoke(payload: String) {
-        scope.launch {
+        // JS 接口回调不在主线程；拍照 / Activity Result 必须在 Main 启动。
+        scope.launch(Dispatchers.Main) {
             val (id, result) = bridge.handlePayload(payload)
             reply(id, result)
         }

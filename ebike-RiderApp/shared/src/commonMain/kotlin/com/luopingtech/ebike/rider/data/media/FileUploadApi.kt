@@ -1,6 +1,8 @@
 package com.luopingtech.ebike.rider.data.media
 
 import com.luopingtech.ebike.rider.core.i18n.LocaleContext
+import com.luopingtech.ebike.rider.core.i18n.Str
+import com.luopingtech.ebike.rider.core.i18n.Strings
 import com.luopingtech.ebike.rider.core.network.NetworkSession
 import com.luopingtech.ebike.rider.core.network.RequestAuth
 import com.luopingtech.ebike.rider.core.result.RiderError
@@ -111,7 +113,17 @@ class FileUploadApi(
                 )
             }
         } catch (t: Throwable) {
-            RiderResult.Err(RiderError.network("upload parse failed: ${t.message}", t))
+            // 网关（nginx）拦下来时回的是 HTML 错误页，直接把整页当消息弹给用户毫无意义。
+            if (!status.isSuccess()) {
+                RiderResult.Err(RiderError.network(gatewayHint(status)))
+            } else {
+                RiderResult.Err(RiderError.network("upload parse failed (HTTP ${status.value})", t))
+            }
         }
+    }
+
+    private fun gatewayHint(status: HttpStatusCode): String = when (status.value) {
+        413 -> Strings.t(Str.MediaTooLarge)
+        else -> "HTTP ${status.value}"
     }
 }

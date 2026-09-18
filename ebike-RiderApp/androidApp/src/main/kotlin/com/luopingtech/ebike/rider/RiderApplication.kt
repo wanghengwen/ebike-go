@@ -14,6 +14,7 @@ import com.luopingtech.ebike.rider.platform.AndroidSecureStore
 import com.luopingtech.ebike.rider.platform.BindableCodeScanner
 import com.luopingtech.ebike.rider.platform.BindableMediaUploader
 import com.luopingtech.ebike.rider.platform.BindablePhotoCapture
+import com.luopingtech.ebike.rider.pay.AndroidWeChatPay
 import com.luopingtech.ebike.rider.platform.DemoReverseGeocoder
 import com.luopingtech.ebike.rider.platform.SecureStore
 import com.luopingtech.ebike.rider.platform.SimulatorLocationTracker
@@ -50,7 +51,7 @@ class RiderApplication : Application() {
             }
         }
         val secureStore = AndroidSecureStore(this)
-        val config = mergeMapKey(loadTenantConfig())
+        val config = mergePay(mergeMapKey(loadTenantConfig()))
         val locationTracker = if (config.api.baseUrl.isBlank()) {
             SimulatorLocationTracker(intervalMs = 5_000L)
         } else {
@@ -78,6 +79,7 @@ class RiderApplication : Application() {
             nativeBle = NativeBleTransport(this),
         )
         bindMediaUploader()
+        bindWeChatPay()
         if (config.tenantId.isNotBlank()) {
             secureStore.putString(SecureStore.KEY_TENANT_ID, config.tenantId)
         }
@@ -92,6 +94,19 @@ class RiderApplication : Application() {
         val api = riderApp.fileUploadApi ?: return
         val bridge = riderApp.mediaUploader as? BindableMediaUploader ?: return
         bridge.bind(AndroidMediaUploader(this, api))
+    }
+
+    private fun bindWeChatPay() {
+        riderApp.wechatPay.bind(
+            AndroidWeChatPay(this) {
+                riderApp.config.pay.wechatAppId.ifBlank { BuildConfig.WECHAT_APP_ID }
+            },
+        )
+    }
+
+    private fun mergePay(base: TenantConfig): TenantConfig {
+        val id = base.pay.wechatAppId.trim().ifBlank { BuildConfig.WECHAT_APP_ID.trim() }
+        return if (id.isBlank()) base else base.copy(pay = base.pay.copy(wechatAppId = id))
     }
 
     private fun loadTenantConfig(): TenantConfig {

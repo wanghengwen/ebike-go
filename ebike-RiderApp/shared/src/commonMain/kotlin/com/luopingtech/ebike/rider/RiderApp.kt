@@ -27,6 +27,9 @@ import com.luopingtech.ebike.rider.feature.auth.AuthFeature
 import com.luopingtech.ebike.rider.data.ble.BleTokenApi
 import com.luopingtech.ebike.rider.data.ble.BleTokenRemote
 import com.luopingtech.ebike.rider.data.ble.DemoBleTokenApi
+import com.luopingtech.ebike.rider.data.pay.DemoPayRemote
+import com.luopingtech.ebike.rider.data.pay.PayApi
+import com.luopingtech.ebike.rider.data.pay.PayRemote
 import com.luopingtech.ebike.rider.data.map.DemoNearbyVehicleRemote
 import com.luopingtech.ebike.rider.data.map.NearbyVehicleApi
 import com.luopingtech.ebike.rider.data.map.NearbyVehicleRemote
@@ -52,6 +55,7 @@ import com.luopingtech.ebike.rider.feature.riding.RideSessionStore
 import com.luopingtech.ebike.rider.feature.riding.RidingFeature
 import com.luopingtech.ebike.rider.feature.riding.UnlockPolicy
 import com.luopingtech.ebike.rider.platform.BindableMediaUploader
+import com.luopingtech.ebike.rider.platform.BindableWeChatPay
 import com.luopingtech.ebike.rider.platform.BleTransport
 import com.luopingtech.ebike.rider.platform.BleTransportFactory
 import com.luopingtech.ebike.rider.platform.CodeScanner
@@ -250,6 +254,19 @@ class RiderApp private constructor(
 
     val rideSessionStore: RideSessionStore = RideSessionStore(secureStore)
 
+    val wechatPay: BindableWeChatPay = BindableWeChatPay()
+
+    val payRemote: PayRemote = if (isDemoMode) {
+        DemoPayRemote()
+    } else {
+        PayApi(
+            signedApi = signedApiClient,
+            tenantIdProvider = tenantIdProvider,
+            deviceInfo = deviceInfo,
+            deviceIdProvider = { deviceId },
+        )
+    }
+
     val ridingFeature: RidingFeature = RidingFeature(
         riding = ridingRemote,
         bleRide = bleRideRemote,
@@ -267,6 +284,11 @@ class RiderApp private constructor(
             UnlockPolicy.NetworkPreferred
         },
         bleAvailable = { bleTransport.isAvailable },
+        pay = payRemote,
+        wechatPay = wechatPay,
+        payChannelType = { config.pay.channelType },
+        wechatAppId = { config.pay.wechatAppId },
+        paySaleType = { config.pay.saleType },
     )
 
     val mediaUploader: MediaUploader = mediaUploader

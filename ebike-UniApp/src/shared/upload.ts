@@ -9,36 +9,68 @@ type LoginInfo = {
   tokenType?: string
 }
 
+export type PhotoSource = 'camera' | 'album'
+
+/**
+ * 原生壳内选图并上传：一次桥调用完成（拍照/相册 → 签名 multipart → CDN URL）。
+ * 不要先 `uni.chooseImage` 再调本函数，否则会弹两次选图。
+ */
+export async function pickAndUploadPhoto(
+  source: PhotoSource = 'camera',
+): Promise<string | undefined> {
+  const host = nativeHost()
+  if (!host) {
+    uni.showModal({
+      title: '提示',
+      content: '原生拍照桥不可用（未检测到 App 壳）',
+      showCancel: false,
+    })
+    return undefined
+  }
+  try {
+    // 拍照过程不要 mask loading，部分机型会挡住相机/权限弹窗。
+    const res = await host.capturePhoto({ source })
+    const uri = String(res?.uri || '').trim()
+    if (!uri) {
+      uni.showModal({
+        title: '提示',
+        content: t('support.objectionUploadFail'),
+        showCancel: false,
+      })
+      return undefined
+    }
+    return uri
+  } catch (e) {
+    logger.error('native pickAndUploadPhoto fail', e)
+    const msg = e instanceof Error ? e.message : ''
+    if (/cancel|PHOTO_CANCELLED|CANCELLED/i.test(msg)) {
+      uni.showToast({ title: t('common.cancel'), icon: 'none' })
+      return undefined
+    }
+    uni.showModal({
+      title: '拍照失败',
+      content: msg || t('support.objectionUploadFail'),
+      showCancel: false,
+    })
+    return undefined
+  }
+}
+
 /**
  * Upload a local file to `/client/file/upload` (multipart), matching legacy commonFun.uploadFile.
  * Returns the remote URL string on success.
  *
- * Rider WebView（isNative）：H5 没有 Bearer，改走原生 `capturePhoto`（选图 + 签名上传）。
- * 调用方若先 `chooseImage` 再 upload，在 native 下会再弹一次选图 —— 可接受；后续可统一改成本函数。
+ * Rider WebView（isNative）：忽略 filePath，走原生 `capturePhoto`（选图 + 签名上传）。
+ * 新代码请优先用 [pickAndUploadPhoto]，避免 chooseImage + upload 双弹窗。
  */
 export async function uploadFile(filePath: string): Promise<string | undefined> {
+  const path = String(filePath || '').trim()
+  // 原生 chooseImage polyfill / 已上传 CDN 地址，勿再弹一次相机。
+  if (/^https?:\/\//i.test(path) || path.startsWith('//')) {
+    return path.startsWith('//') ? `https:${path}` : path
+  }
   if (isNative()) {
-    const host = nativeHost()
-    if (!host) {
-      uni.showToast({ title: t('common.networkError'), icon: 'none' })
-      return undefined
-    }
-    uni.showLoading({ title: t('common.loading'), mask: true })
-    try {
-      const res = await host.capturePhoto()
-      const uri = String(res?.uri || '').trim()
-      if (!uri) {
-        uni.showToast({ title: t('common.networkError'), icon: 'none' })
-        return undefined
-      }
-      return uri
-    } catch (e) {
-      logger.error('native upload fail', e)
-      uni.showToast({ title: t('common.networkError'), icon: 'none' })
-      return undefined
-    } finally {
-      uni.hideLoading()
-    }
+    return pickAndUploadPhoto('camera')
   }
 
   const tenant = getTenantConfig()

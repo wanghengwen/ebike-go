@@ -32,7 +32,7 @@ private data class H5Nav(
  * - 进首页不创建 WebView
  * - 第一次打开长尾页才挂 [H5HostScreen]
  * - 「关闭 / 回首页」只隐藏，不拆掉容器，首页一直在底下
- * - 再次打开同一容器，按新的 kind/hash 跳转
+ * - 每次从功能入口打开都递增 [openEpoch]，强制 WebView 回到该入口，而不是停留在上次子页
  */
 @Composable
 fun RiderAppRoot(app: RiderApp) {
@@ -40,6 +40,7 @@ fun RiderAppRoot(app: RiderApp) {
     var h5Nav by remember { mutableStateOf<H5Nav?>(null) }
     var h5Created by remember { mutableStateOf(false) }
     var h5Visible by remember { mutableStateOf(false) }
+    var h5OpenEpoch by remember { mutableStateOf(0) }
 
     LaunchedEffect(Unit) {
         app.start(this)
@@ -51,11 +52,13 @@ fun RiderAppRoot(app: RiderApp) {
             h5Created = false
             h5Visible = false
             h5Nav = null
+            h5OpenEpoch = 0
         }
     }
 
     fun openH5(kind: H5ScreenKind?, hash: String?) {
         h5Nav = H5Nav(kind = kind, hashRoute = hash)
+        h5OpenEpoch += 1
         h5Created = true
         h5Visible = true
     }
@@ -89,6 +92,8 @@ fun RiderAppRoot(app: RiderApp) {
                                 app = app,
                                 kind = nav.kind,
                                 hashRoute = nav.hashRoute,
+                                openEpoch = h5OpenEpoch,
+                                active = h5Visible,
                                 onClose = { hideH5() },
                             )
                         }

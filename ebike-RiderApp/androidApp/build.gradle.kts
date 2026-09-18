@@ -47,6 +47,9 @@ val configDisplayName: String = tenantString("app", "displayName", default = "Ri
 val configTencentKey: String = tenantString("map", "tencentKey")
 val tencentMapKey: String = prop("rider.map.tencentKey", configTencentKey)
     .ifBlank { configTencentKey }
+val configWechatAppId: String = tenantString("pay", "wechatAppId")
+val wechatAppId: String = prop("rider.pay.wechatAppId", configWechatAppId)
+    .ifBlank { configWechatAppId }
 
 android {
     // 包名固定，applicationId 才是随租户变的那个。
@@ -65,6 +68,7 @@ android {
         // 地图 SDK 还没接，Key 先透进来，接的时候不用再改构建脚本。
         manifestPlaceholders["TENCENT_MAP_KEY"] = tencentMapKey
         buildConfigField("String", "TENCENT_MAP_KEY", "\"${tencentMapKey.replace("\"", "\\\"")}\"")
+        buildConfigField("String", "WECHAT_APP_ID", "\"${wechatAppId.replace("\"", "\\\"")}\"")
         // 真机只跑 ARM；地图 / 蓝牙类 AAR 自带 x86 slice，不滤掉会白白进包。
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a")
@@ -138,5 +142,6 @@ dependencies {
     implementation(libs.mlkit.barcode.scanning)
     implementation(libs.tencent.map.vector.sdk)
     implementation(libs.tencent.map.sdk.utilities)
+    implementation(libs.wechat.sdk)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

@@ -348,6 +348,8 @@ fun HomeMapScreen(
                         followNonce = followNonce,
                         followLat = followLat,
                         followLng = followLng,
+                        // 首页不要左上角「暂无车辆」/ 车点计数调试条。
+                        showStatusOverlay = false,
                     ),
                     modifier = Modifier.fillMaxSize(),
                 )

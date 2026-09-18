@@ -57,7 +57,8 @@ targets:
         UIBackgroundModes:
           - location
         # 权限文案会原样显示在系统弹窗里，改动等于改 UI。
-        NSCameraUsageDescription: 扫描车身二维码开锁需要使用相机
+        NSCameraUsageDescription: 扫描车身二维码开锁、费用异议与报修上传照片需要使用相机
+        NSPhotoLibraryUsageDescription: 费用异议与报修需要从相册选择照片
         # 只申请 whenInUse：配合 UIBackgroundModes.location，骑行中系统显示蓝色状态条，
         # 熄屏也能持续定位，不必要求 always。文案要说清「骑行过程中」这个时间范围。
         NSLocationWhenInUseUsageDescription: 查找附近车辆、骑行计费与判定还车区域需要获取您的位置；骑行过程中会在后台持续定位

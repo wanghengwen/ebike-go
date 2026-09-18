@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import com.luopingtech.ebike.rider.RiderApp
 import com.luopingtech.ebike.rider.core.config.H5ScreenKind
 import com.luopingtech.ebike.rider.core.config.H5ScreenUrls
+import com.luopingtech.ebike.rider.core.i18n.Str
 import com.luopingtech.ebike.rider.domain.riding.ReturnDecision
 import com.luopingtech.ebike.rider.domain.riding.RidePhase
+import com.luopingtech.ebike.rider.feature.pay.NativePayOutcome
 import com.luopingtech.ebike.rider.ui.feedback.LocalRiderToast
 import com.luopingtech.ebike.rider.ui.home.HomeMapScreen
 import com.luopingtech.ebike.rider.ui.permission.LocalRiderBlePermissionGate
@@ -227,12 +229,24 @@ fun RideFlowHost(
             state = state,
             onFinish = { feature.finishSettlement() },
             onPay = {
-                val orderId = state.settlement?.orderId.orEmpty().ifBlank { state.session.orderId }
-                val hash = H5ScreenUrls.appendQuery(
-                    H5ScreenKind.Pay.route,
-                    if (orderId.isBlank()) emptyMap() else mapOf("orderId" to orderId),
-                )
-                onOpenH5(null, hash)
+                scope.launch {
+                    when (val outcome = feature.payPendingOrder()) {
+                        NativePayOutcome.Paid -> Unit
+                        NativePayOutcome.Cancelled -> toast(app.i18n.t(Str.PayCancelled))
+                        is NativePayOutcome.Failed -> toast(
+                            outcome.message.ifBlank { app.i18n.t(Str.PayFailed) },
+                        )
+                        NativePayOutcome.FallbackH5 -> {
+                            val orderId = state.settlement?.orderId.orEmpty()
+                                .ifBlank { state.session.orderId }
+                            val hash = H5ScreenUrls.appendQuery(
+                                H5ScreenKind.Pay.route,
+                                if (orderId.isBlank()) emptyMap() else mapOf("orderId" to orderId),
+                            )
+                            onOpenH5(null, hash)
+                        }
+                    }
+                }
             },
             onOpenBilling = { onOpenH5(H5ScreenKind.BillingRules, null) },
             onOpenRepair = {

@@ -25,7 +25,9 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>近距离蓝牙开锁需要访问蓝牙</string>
 	<key>NSCameraUsageDescription</key>
-	<string>扫描车身二维码开锁需要使用相机</string>
+	<string>扫描车身二维码开锁、费用异议与报修上传照片需要使用相机</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>费用异议与报修需要从相册选择照片</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>查找附近车辆、骑行计费与判定还车区域需要获取您的位置；骑行过程中会在后台持续定位</string>
 	<key>RiderTencentMapKey</key>

@@ -60,6 +60,9 @@ expect fun PlatformWebView(
     host: WebViewHost,
     bridge: NativeHostBridge,
     onNavigateOut: () -> Unit,
+    openEpoch: Int = 0,
+    /** 为 false 时不注册系统返回拦截（容器已隐藏但仍挂在组合树里）。 */
+    backEnabled: Boolean = true,
     modifier: Modifier = Modifier,
 )
 
@@ -78,6 +81,8 @@ fun H5Screen(
     backText: String,
     bridge: NativeHostBridge,
     onClose: () -> Unit,
+    openEpoch: Int = 0,
+    active: Boolean = true,
     modifier: Modifier = Modifier,
 ) {
     val host = remember { WebViewHost() }
@@ -118,6 +123,8 @@ fun H5Screen(
                 host = host,
                 bridge = bridge,
                 onNavigateOut = onClose,
+                openEpoch = openEpoch,
+                backEnabled = active,
                 modifier = Modifier.fillMaxSize(),
             )
             if (host.loading) {

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg width="1280" height="820" viewBox="0 0 1280 820" xmlns="http://www.w3.org/2000/svg"
+     font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif">
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c9721f"/>
+    </marker>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0f8080"/>
+    </marker>
+    <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c0392b"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="820" fill="#ffffff"/>
+
+  <text x="640" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#17303a">H5 长尾怎么嵌：nativeHost 桥的一次 request</text>
+  <text x="640" y="60" text-anchor="middle" font-size="13" fill="#6c7f88">H5 不持有任何密钥，也不直连后端；网络一律由原生代签转发</text>
+
+  <!-- WebView 侧 -->
+  <rect x="60" y="96" width="330" height="452" rx="16" fill="#fdf5e8" stroke="#c9721f" stroke-width="2.5"/>
+  <text x="225" y="126" text-anchor="middle" font-size="17" font-weight="700" fill="#8a5210">WebView（UniApp build:h5）</text>
+  <text x="225" y="148" text-anchor="middle" font-size="12.5" fill="#a0763a">49 屏长尾，Vue3 代码一行没改</text>
+
+  <rect x="86" y="166" width="278" height="120" rx="12" fill="#ffffff" stroke="#d9a56a" stroke-width="1.5"/>
+  <text x="225" y="190" text-anchor="middle" font-size="13.5" font-weight="600" fill="#20303a">shared/nativeHost.ts</text>
+  <text x="102" y="214" font-size="12" fill="#5b6d76">isNative() 运行时判断宿主</text>
+  <text x="102" y="236" font-size="12" fill="#5b6d76">invoke(method, args) → Promise</text>
+  <text x="102" y="258" font-size="12" fill="#5b6d76">按 method 设超时：扫码 120s</text>
+  <text x="102" y="278" font-size="12" fill="#5b6d76">未注入则回落原 uni.* 路径</text>
+
+  <rect x="86" y="300" width="132" height="72" rx="10" fill="#ffffff" stroke="#d9a56a" stroke-width="1.5"/>
+  <text x="152" y="324" text-anchor="middle" font-size="12.5" font-weight="600" fill="#20303a">Android</text>
+  <text x="152" y="345" text-anchor="middle" font-size="11" fill="#5b6d76">window</text>
+  <text x="152" y="362" text-anchor="middle" font-size="11" fill="#5b6d76">.__riderNative</text>
+
+  <rect x="232" y="300" width="132" height="72" rx="10" fill="#ffffff" stroke="#d9a56a" stroke-width="1.5"/>
+  <text x="298" y="324" text-anchor="middle" font-size="12.5" font-weight="600" fill="#20303a">iOS</text>
+  <text x="298" y="345" text-anchor="middle" font-size="11" fill="#5b6d76">messageHandlers</text>
+  <text x="298" y="362" text-anchor="middle" font-size="11" fill="#5b6d76">.riderNative</text>
+
+  <rect x="86" y="390" width="278" height="140" rx="12" fill="#fbeee0" stroke="#d9a56a" stroke-width="1.5"/>
+  <text x="225" y="414" text-anchor="middle" font-size="13" font-weight="600" fill="#8a5210">H5 拿不到、也不需要的东西</text>
+  <text x="102" y="440" font-size="12" fill="#a03a2b">✕ accessToken / refreshToken</text>
+  <text x="102" y="462" font-size="12" fill="#a03a2b">✕ signSecret / businessSecret</text>
+  <text x="102" y="484" font-size="12" fill="#a03a2b">✕ 直连 /oauth/token</text>
+  <text x="102" y="508" font-size="12" fill="#5b6d76">URL 只拼 lang / tenantId / themeColor</text>
+
+  <!-- 中间桥 -->
+  <rect x="452" y="96" width="356" height="452" rx="16" fill="#f7fbfb" stroke="#0f8080" stroke-width="2.5"/>
+  <text x="630" y="126" text-anchor="middle" font-size="17" font-weight="700" fill="#0c6b6b">shared/core/h5 · NativeHostBridge</text>
+  <text x="630" y="148" text-anchor="middle" font-size="12.5" fill="#5b6d76">写在 commonMain，双端共用同一份分发逻辑</text>
+
+  <rect x="476" y="166" width="308" height="34" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="630" y="188" text-anchor="middle" font-size="12.5" fill="#20303a">1. handlePayload：解 {id, method, args}</text>
+
+  <rect x="476" y="208" width="308" height="34" rx="8" fill="#ffffff" stroke="#c0392b" stroke-width="1.8"/>
+  <text x="630" y="230" text-anchor="middle" font-size="11.5" fill="#8c2d22">2. H5OriginPolicy：origin 必须等于租户 baseUrl</text>
+
+  <rect x="476" y="250" width="308" height="34" rx="8" fill="#ffffff" stroke="#c0392b" stroke-width="1.8"/>
+  <text x="630" y="272" text-anchor="middle" font-size="11.5" fill="#8c2d22">3. H5RequestGuard：只放行 /client/，拒 /oauth/token</text>
+
+  <rect x="476" y="292" width="308" height="34" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="630" y="314" text-anchor="middle" font-size="12.5" fill="#20303a">4. 补 traceId / platform / deviceId / tenantId</text>
+
+  <rect x="476" y="334" width="308" height="34" rx="8" fill="#e8f6f6" stroke="#0f8080" stroke-width="1.8"/>
+  <text x="630" y="356" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0c6b6b">5. SignedApiClient 加 _t / _s / Authorization</text>
+
+  <rect x="476" y="376" width="308" height="34" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="630" y="398" text-anchor="middle" font-size="12.5" fill="#20303a">6. 401 → 关容器，回原生登录页</text>
+
+  <rect x="476" y="418" width="308" height="34" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="630" y="440" text-anchor="middle" font-size="12.5" fill="#20303a">7. __riderNativeOnResult(id, result) 回包</text>
+
+  <rect x="476" y="464" width="308" height="70" rx="10" fill="#f0f7f7" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="630" y="484" text-anchor="middle" font-size="12.5" font-weight="600" fill="#0c6b6b">另外 13 个方法</text>
+  <text x="630" y="503" text-anchor="middle" font-size="10.5" fill="#5b6d76">scanCode · capturePhoto · currentLocation · openNavigation</text>
+  <text x="630" y="518" text-anchor="middle" font-size="10.5" fill="#5b6d76">getProfile · getLanguage · setLanguage · platform · pay</text>
+  <text x="630" y="529" text-anchor="middle" font-size="10.5" fill="#5b6d76">navigate · close · setTitle · toast</text>
+
+  <!-- 右侧 -->
+  <rect x="870" y="96" width="350" height="210" rx="16" fill="#eef4f5" stroke="#2f3e46" stroke-width="2"/>
+  <text x="1045" y="126" text-anchor="middle" font-size="17" font-weight="700" fill="#20303a">client 业务网关</text>
+  <text x="1045" y="150" text-anchor="middle" font-size="12.5" fill="#5b6d76">和原生骑行主循环走的是同一个客户端、</text>
+  <text x="1045" y="170" text-anchor="middle" font-size="12.5" fill="#5b6d76">同一套签名、同一个 Accept-Language</text>
+  <rect x="898" y="188" width="294" height="34" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="1045" y="210" text-anchor="middle" font-size="12" fill="#20303a">POST /client/pay/wallet/getBalance …</text>
+  <rect x="898" y="230" width="294" height="60" rx="8" fill="#ffffff" stroke="#9fc4c4" stroke-width="1.5"/>
+  <text x="1045" y="252" text-anchor="middle" font-size="12" fill="#5b6d76">网关只看到原生发来的请求，</text>
+  <text x="1045" y="272" text-anchor="middle" font-size="12" fill="#5b6d76">分不清也不用分清它来自 H5 还是原生屏</text>
+
+  <rect x="870" y="330" width="350" height="218" rx="16" fill="#fdf0ee" stroke="#c0392b" stroke-width="2"/>
+  <text x="1045" y="358" text-anchor="middle" font-size="16" font-weight="700" fill="#8c2d22">pay：唯一一个还没通的方法</text>
+  <rect x="898" y="374" width="294" height="72" rx="8" fill="#ffffff" stroke="#e0a49b" stroke-width="1.5"/>
+  <text x="914" y="396" font-size="12" fill="#5b6d76">"pay" -&gt; buildJsonObject {</text>
+  <text x="928" y="416" font-size="12" fill="#8c2d22">put("success", false)</text>
+  <text x="928" y="436" font-size="12" fill="#8c2d22">put("code", "UNSUPPORTED")</text>
+  <text x="1045" y="470" text-anchor="middle" font-size="12.5" fill="#8c2d22">结费屏只读展示费用，「去支付」跳 H5</text>
+  <text x="1045" y="492" text-anchor="middle" font-size="12.5" fill="#5b6d76">微信 / 支付宝 SDK 都还没进仓库</text>
+  <text x="1045" y="518" text-anchor="middle" font-size="12" fill="#8a5210">一个单测钉住了这个占位行为，防止误以为已实现</text>
+
+  <!-- 箭头 -->
+  <path d="M 390 322 L 448 322" stroke="#c9721f" stroke-width="2.5" marker-end="url(#a1)"/>
+  <text x="419" y="312" text-anchor="middle" font-size="11" fill="#8a5210">JSON</text>
+  <path d="M 808 232 L 866 208" stroke="#0f8080" stroke-width="2.5" marker-end="url(#a2)"/>
+  <path d="M 866 268 L 808 340" stroke="#0f8080" stroke-width="2.5" marker-end="url(#a2)" stroke-dasharray="6 5"/>
+  <path d="M 448 436 L 390 436" stroke="#0f8080" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="419" y="428" text-anchor="middle" font-size="11" fill="#0c6b6b">回包</text>
+
+  <!-- 底部：原生 vs H5 分工 -->
+  <rect x="60" y="580" width="1160" height="204" rx="14" fill="#fbfcfc" stroke="#dfe6e9" stroke-width="1.5"/>
+  <text x="640" y="610" text-anchor="middle" font-size="18" font-weight="700" fill="#17303a">分工线画在哪：碰硬件的进原生，剩下的留 H5</text>
+
+  <rect x="88" y="628" width="540" height="134" rx="12" fill="#f0f7f7" stroke="#0f8080" stroke-width="2"/>
+  <text x="358" y="654" text-anchor="middle" font-size="15" font-weight="700" fill="#0c6b6b">原生 Compose · 15 屏</text>
+  <text x="110" y="682" font-size="13" fill="#20303a">相机取景扫码 · 地图与附近车 · 蓝牙近场开锁</text>
+  <text x="110" y="706" font-size="13" fill="#20303a">熄屏后台连续定位 · 骑行状态机与杀进程恢复</text>
+  <text x="110" y="730" font-size="13" fill="#20303a">围栏还车判定 · 结费展示</text>
+  <text x="110" y="752" font-size="12" fill="#6c7f88">判据：需要系统权限、传感器、或者不能丢的状态</text>
+
+  <rect x="652" y="628" width="540" height="134" rx="12" fill="#fdf5e8" stroke="#c9721f" stroke-width="2"/>
+  <text x="922" y="654" text-anchor="middle" font-size="15" font-weight="700" fill="#8a5210">H5 长尾 · 49 屏</text>
+  <text x="674" y="682" font-size="13" fill="#20303a">钱包 · 充值 · 提现 · 退押金 · 发票 · 账户明细</text>
+  <text x="674" y="706" font-size="13" fill="#20303a">行程列表 · 卡券 · 活动 · 邀请 · 信用分 · 计费规则</text>
+  <text x="674" y="730" font-size="13" fill="#20303a">设置 · 协议 · 帮助 · FAQ · 客服 · 报修 · 举报</text>
+  <text x="674" y="752" font-size="12" fill="#6c7f88">判据：表单 + 列表 + 富文本，改文案比改代码勤</text>
+</svg>
+</body>
+</html>

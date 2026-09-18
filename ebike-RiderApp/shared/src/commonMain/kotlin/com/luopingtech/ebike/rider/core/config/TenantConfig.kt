@@ -24,6 +24,8 @@ data class TenantConfig(
     val documents: DocumentsConfig = DocumentsConfig(),
     /** UniApp H5 长尾页基址。空则原生只展示占位，不加载 WebView。 */
     val h5: H5ScreensConfig = H5ScreensConfig(),
+    /** 微信支付。AppID / 渠道类型可后补，空则结费回退 H5。 */
+    val pay: PayConfig = PayConfig(),
 ) {
     companion object {
         fun demo(): TenantConfig = TenantConfig(
@@ -147,6 +149,23 @@ data class DocumentsConfig(
 data class H5ScreensConfig(
     val baseUrl: String = "",
 )
+
+@Serializable
+data class PayConfig(
+    /** 微信开放平台移动应用 AppID，不是小程序 AppID。 */
+    val wechatAppId: String = "",
+    /**
+     * createPay 的 `channel_type`。原生 APP 支付默认 [CHANNEL_WXAPP]；
+     * 仍是 `WXLITE` / `BAOFU_WXLITE` 时不调 SDK，回退 H5。
+     */
+    val channelType: String = CHANNEL_WXAPP,
+    /** createPay 的 `sale_type`，行程待支付默认 ORDER。 */
+    val saleType: String = "ORDER",
+) {
+    companion object {
+        const val CHANNEL_WXAPP: String = "WXAPP"
+    }
+}
 
 object TenantConfigLoader {
     private val json = Json {

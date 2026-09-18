@@ -44,6 +44,7 @@ object SimulatorMapRenderer : RiderMapRenderer {
             onSelectCluster = spec.onSelectCluster,
             modifier = modifier,
             clusterOverview = spec.clusterOverview,
+            showStatusOverlay = spec.showStatusOverlay,
         )
     }
 }

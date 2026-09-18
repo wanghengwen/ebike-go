@@ -39,7 +39,7 @@ export type NativeHost = {
   getProfile(): Promise<NativeProfile>
   pay(payload?: NativePayPayload): Promise<Record<string, unknown>>
   scanCode(): Promise<{ code?: string }>
-  capturePhoto(): Promise<{ uri?: string }>
+  capturePhoto(opts?: { source?: 'camera' | 'album' }): Promise<{ uri?: string }>
   currentLocation(): Promise<{ latitude?: number; longitude?: number }>
   openNavigation(lat: number, lng: number, name?: string): Promise<void>
   navigate(opts: { type: string; url?: string; delta?: number }): Promise<void>
@@ -170,8 +170,10 @@ const hostImpl: NativeHost = {
   scanCode() {
     return invoke('scanCode') as Promise<{ code?: string }>
   },
-  capturePhoto() {
-    return invoke('capturePhoto') as Promise<{ uri?: string }>
+  capturePhoto(opts) {
+    return invoke('capturePhoto', {
+      source: opts?.source || 'camera',
+    }) as Promise<{ uri?: string }>
   },
   currentLocation() {
     return invoke('currentLocation') as Promise<{ latitude?: number; longitude?: number }>

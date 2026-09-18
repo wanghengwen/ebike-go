@@ -28,11 +28,14 @@ import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
+@Suppress("UNUSED_PARAMETER")
 actual fun PlatformWebView(
     url: String,
     host: WebViewHost,
     bridge: NativeHostBridge,
     onNavigateOut: () -> Unit,
+    openEpoch: Int,
+    backEnabled: Boolean,
     modifier: Modifier,
 ) {
     val scope = rememberCoroutineScope()
@@ -56,6 +59,7 @@ actual fun PlatformWebView(
             setOpaque(false)
         }
     }
+    val entryUrl = remember(openEpoch, url.substringBefore('#'), H5BackPolicy.hashPath(url)) { url }
 
     DisposableEffect(host, webView, bridge) {
         bridge.currentPageUrl = { webView.URL?.absoluteString }
@@ -71,7 +75,6 @@ actual fun PlatformWebView(
             }
 
             override fun goBack() {
-                val entryUrl = url
                 webView.evaluateJavaScript(H5HostBackJs.SCRIPT) { raw, _ ->
                     when (H5HostBackJs.parseResult(raw as? String)) {
                         "kept" -> {
@@ -109,13 +112,17 @@ actual fun PlatformWebView(
         }
     }
 
-    // 文档基址变化才整页 load；仅 hash 变化则 assign，供再次打开不同长尾页
-    LaunchedEffect(url, webView) {
+    // openEpoch 变化：强制整页加载入口，丢掉上次子页；仅 URL 变化时再按文档/hash 跳转
+    LaunchedEffect(openEpoch, url, webView) {
         val current = webView.URL?.absoluteString
         val currentDoc = current?.substringBefore('#')
         val targetDoc = url.substringBefore('#')
+        val epochChanged = navigationDelegate.consumeOpenEpoch(openEpoch)
         when {
-            currentDoc.isNullOrBlank() || currentDoc != targetDoc -> {
+            epochChanged || currentDoc.isNullOrBlank() || currentDoc != targetDoc -> {
+                host.initialLoadDone = false
+                host.loading = true
+                host.failed = false
                 NSURL.URLWithString(url)?.let { webView.loadRequest(NSURLRequest.requestWithURL(it)) }
             }
             H5BackPolicy.hashPath(current) != H5BackPolicy.hashPath(url) -> {
@@ -135,6 +142,15 @@ actual fun PlatformWebView(
 private class WebNavigationDelegate(
     private val host: WebViewHost,
 ) : NSObject(), WKNavigationDelegateProtocol {
+
+    private var appliedOpenEpoch: Int = -1
+
+    /** @return true 表示这是一次新的入口打开，需要整页加载。 */
+    fun consumeOpenEpoch(epoch: Int): Boolean {
+        if (epoch == appliedOpenEpoch) return false
+        appliedOpenEpoch = epoch
+        return true
+    }
 
     @ObjCSignatureOverride
     override fun webView(webView: WKWebView, didStartProvisionalNavigation: WKNavigation?) {

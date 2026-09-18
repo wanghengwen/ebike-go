@@ -11,6 +11,11 @@ org.gradle.java.home=
 rider.tenant=renren
 rider.mode=release
 
+# 微信开放平台移动应用 AppID（不是小程序 AppID）。空则结费走 H5。
+# 回调 Activity 在 namespace com.luopingtech.ebike.rider.wxapi；
+# 租户 androidApplicationId 需与开放平台登记包名一致，否则支付结果回不来。
+rider.pay.wechatAppId=
+
 # 腾讯地图 Key（写进 AndroidManifest TencentMapSDK / iOS Info.plist RiderTencentMapKey）。
 # 该 Key 在 provider 为 none/tencent 时启用真图。
 # 包名 / Bundle ID 需与控制台登记一致。

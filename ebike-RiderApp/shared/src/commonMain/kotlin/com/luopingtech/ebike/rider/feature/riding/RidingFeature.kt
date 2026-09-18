@@ -8,6 +8,9 @@ import com.luopingtech.ebike.rider.core.network.ApiOutcome
 import com.luopingtech.ebike.rider.core.result.RiderResult
 import com.luopingtech.ebike.rider.core.time.nowEpochMillis
 import com.luopingtech.ebike.rider.data.fence.FenceRemote
+import com.luopingtech.ebike.rider.data.pay.DemoPayRemote
+import com.luopingtech.ebike.rider.data.pay.PayRemote
+import com.luopingtech.ebike.rider.data.pay.WeChatPayParams
 import com.luopingtech.ebike.rider.data.riding.ApplyReturnRemote
 import com.luopingtech.ebike.rider.data.riding.BleAccessoryReport
 import com.luopingtech.ebike.rider.data.riding.BleRideRemote
@@ -37,7 +40,10 @@ import com.luopingtech.ebike.rider.domain.riding.VehicleDetail
 import com.luopingtech.ebike.rider.domain.tracking.TrackBufferEvent
 import com.luopingtech.ebike.rider.domain.tracking.TrackPointBuffer
 import com.luopingtech.ebike.rider.feature.ble.BleSessionFeature
+import com.luopingtech.ebike.rider.feature.pay.NativePayOutcome
 import com.luopingtech.ebike.rider.platform.GeoPoint
+import com.luopingtech.ebike.rider.platform.UnsupportedWeChatPay
+import com.luopingtech.ebike.rider.platform.WeChatPayLauncher
 import com.luopingtech.ebike.rider.platform.LocationTracker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -141,12 +147,18 @@ class RidingFeature(
     private val unlockPolicy: UnlockPolicy = UnlockPolicy.BlePreferred,
     /** 是否有可用蓝牙硬件。false 时策略自动退化成纯网络。 */
     private val bleAvailable: () -> Boolean = { true },
+    private val pay: PayRemote? = null,
+    private val wechatPay: WeChatPayLauncher = UnsupportedWeChatPay,
+    private val payChannelType: () -> String = { "WXAPP" },
+    private val wechatAppId: () -> String = { "" },
+    private val paySaleType: () -> String = { "ORDER" },
 ) {
     private val _state = MutableStateFlow(RidingUiState())
     val state: StateFlow<RidingUiState> = _state.asStateFlow()
 
     /** 开锁 / 还车这类改状态机相位的动作串行化，避免双击造出两张单。 */
     private val commandMutex = Mutex()
+    private val payMutex = Mutex()
 
     /**
      * 抽稀器只负责「这一批要不要收进折线」；[committedTrack] 才是完整轨迹。
@@ -866,6 +878,64 @@ class RidingFeature(
         }
     }
 
+    /**
+     * 结费「去支付」：能拿到 APP 预下单参数就调微信，否则 [NativePayOutcome.FallbackH5]。
+     * 商户资料未配时也走 H5，不挡编译、不挡联调。
+     */
+    suspend fun payPendingOrder(): NativePayOutcome = payMutex.withLock {
+        val summary = _state.value.settlement
+        val waitPay = summary?.waitPayFen ?: 0
+        if (summary == null || waitPay <= 0 || summary.settled) {
+            return@withLock NativePayOutcome.Paid
+        }
+        val channel = payChannelType().ifBlank { "WXAPP" }
+        val appId = wechatAppId().trim()
+        if (appId.isBlank() || isLiteChannel(channel)) {
+            return@withLock NativePayOutcome.FallbackH5
+        }
+        val remote = pay ?: return@withLock NativePayOutcome.FallbackH5
+        val created = remote.create(
+            amountFen = waitPay,
+            orderId = summary.orderId,
+            pin = store.userPin,
+            serviceAreaId = store.serviceAreaId,
+            channelType = channel,
+            saleType = paySaleType().ifBlank { "ORDER" },
+        )
+        when (created) {
+            is RiderResult.Err -> {
+                if (created.error.code == DemoPayRemote.CODE_FALLBACK_H5) {
+                    NativePayOutcome.FallbackH5
+                } else {
+                    NativePayOutcome.Failed(created.error.message)
+                }
+            }
+            is RiderResult.Ok -> {
+                val params = WeChatPayParams.parse(created.value, fallbackAppId = appId)
+                if (params == null || !params.isAppPayReady) {
+                    return@withLock NativePayOutcome.FallbackH5
+                }
+                val req = params.copy(appId = params.appId.ifBlank { appId })
+                when (val launched = wechatPay.pay(req)) {
+                    is RiderResult.Ok -> {
+                        hydrateSettlement()
+                        NativePayOutcome.Paid
+                    }
+                    is RiderResult.Err -> {
+                        if (launched.error.code == "CANCELLED") {
+                            remote.cancel(store.userPin, req.outTradeNo)
+                            NativePayOutcome.Cancelled
+                        } else if (launched.error.code == "UNSUPPORTED") {
+                            NativePayOutcome.FallbackH5
+                        } else {
+                            NativePayOutcome.Failed(launched.error.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /** 结费屏点「完成」。支付未接通时这就是全部收尾。 */
     fun finishSettlement() {
         dispatch(RideEvent.SettleDone)
@@ -1164,6 +1234,11 @@ class RidingFeature(
     private fun elapsedFrom(session: RideSession): Long {
         if (session.startedAtMillis <= 0L || !session.isOnTrip) return 0L
         return ((nowEpochMillis() - session.startedAtMillis) / 1000L).coerceAtLeast(0L)
+    }
+
+    private fun isLiteChannel(channelType: String): Boolean {
+        val t = channelType.trim().uppercase()
+        return t.contains("LITE") || t.contains("JSAPI")
     }
 
     companion object {

@@ -778,6 +778,8 @@ export default {
     objectionNeedPhoto: '至少上传一张图片',
     objectionDupSubmit: '请勿重复提交',
     objectionSuccess: '异议工单提交成功',
+    objPickCamera: '拍照',
+    objPickAlbum: '从相册选择',
     objUnlockFail: '开启失败',
     objBikeFault: '车辆故障',
     objNoParking: '禁停区误判',

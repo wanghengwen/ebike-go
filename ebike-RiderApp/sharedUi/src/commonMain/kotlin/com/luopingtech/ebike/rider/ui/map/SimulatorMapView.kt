@@ -39,6 +39,7 @@ fun SimulatorMapView(
     onSelectCluster: (List<String>) -> Unit = {},
     modifier: Modifier = Modifier,
     clusterOverview: Boolean = true,
+    showStatusOverlay: Boolean = true,
 ) {
     val scheme = MaterialTheme.colorScheme
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -138,17 +139,16 @@ fun SimulatorMapView(
             }
         }
 
-        Text(
-            text = when {
-                pins.isEmpty() -> Strings.t(Str.NoVehicleCoords)
-                else -> Strings.t(Str.SimulatorMapStatus, providerLabel, markers.size, pins.size)
-            },
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(10.dp),
-            style = MaterialTheme.typography.labelMedium,
-            color = scheme.onSurfaceVariant,
-            textAlign = TextAlign.Start,
-        )
+        if (showStatusOverlay && pins.isNotEmpty()) {
+            Text(
+                text = Strings.t(Str.SimulatorMapStatus, providerLabel, markers.size, pins.size),
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(10.dp),
+                style = MaterialTheme.typography.labelMedium,
+                color = scheme.onSurfaceVariant,
+                textAlign = TextAlign.Start,
+            )
+        }
     }
 }

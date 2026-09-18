@@ -78,7 +78,7 @@ class NativeHostBridge(
                 is RiderResult.Ok -> buildJsonObject { put("code", result.value) }
                 is RiderResult.Err -> errorObj(result.error.code, result.error.message)
             }
-            "capturePhoto" -> captureAndMaybeUpload()
+            "capturePhoto" -> captureAndMaybeUpload(args)
             "currentLocation" -> when (val result = app.locationTracker.currentLocation()) {
                 is RiderResult.Ok -> buildJsonObject {
                     put("latitude", result.value.latitude)
@@ -181,15 +181,30 @@ class NativeHostBridge(
         }
     }
 
-    private suspend fun captureAndMaybeUpload(): JsonObject {
-        return when (val shot = app.photoCapture.takePhoto("h5")) {
-            is RiderResult.Err -> errorObj(shot.error.code, shot.error.message)
+    private suspend fun captureAndMaybeUpload(args: JsonObject): JsonObject {
+        val source = args.string("source")
+            ?.trim()
+            ?.lowercase()
+            .orEmpty()
+        hooks.toast(app.i18n.t(Str.ApplyReturnAddPhoto))
+        val shot = when (source) {
+            "album", "gallery" -> app.photoCapture.pickFromGallery()
+            else -> app.photoCapture.takePhoto("h5")
+        }
+        return when (shot) {
+            is RiderResult.Err -> {
+                hooks.toast(shot.error.message.ifBlank { shot.error.code })
+                errorObj(shot.error.code, shot.error.message)
+            }
             is RiderResult.Ok -> {
                 when (val uploaded = app.mediaUploader.upload(listOf(shot.value))) {
                     is RiderResult.Ok -> buildJsonObject {
                         put("uri", uploaded.value.firstOrNull().orEmpty())
                     }
-                    is RiderResult.Err -> buildJsonObject { put("uri", shot.value) }
+                    is RiderResult.Err -> {
+                        hooks.toast(uploaded.error.message.ifBlank { uploaded.error.code })
+                        errorObj(uploaded.error.code, uploaded.error.message)
+                    }
                 }
             }
         }

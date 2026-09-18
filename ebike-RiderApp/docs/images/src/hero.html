@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<style>
+  html, body { margin: 0; padding: 0; background: #ffffff; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"
+     font-family="'Microsoft YaHei','PingFang SC','Noto Sans CJK SC',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d2b33"/>
+      <stop offset="55%" stop-color="#0f4a4a"/>
+      <stop offset="100%" stop-color="#0c6b6b"/>
+    </linearGradient>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7ee0d0"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+
+  <!-- 标题 -->
+  <text x="80" y="112" font-size="46" font-weight="700" fill="#ffffff">2 天，把 uni-app 电单车用户端</text>
+  <text x="80" y="172" font-size="46" font-weight="700" fill="#7ee0d0">搬成了 Android / iOS 双端原生</text>
+  <text x="80" y="216" font-size="19" fill="#a9c8c8">Kotlin Multiplatform + Compose Multiplatform ＋ 内嵌 WebView 复用既有 H5</text>
+
+  <line x1="80" y1="250" x2="1200" y2="250" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <!-- 迁移示意 -->
+  <rect x="80" y="286" width="290" height="196" rx="16" fill="#123a42" stroke="#3f7f7f" stroke-width="2"/>
+  <text x="225" y="322" text-anchor="middle" font-size="18" font-weight="700" fill="#d8efef">起点：ebike-UniApp</text>
+  <text x="225" y="356" text-anchor="middle" font-size="14" fill="#93b8b8">85 个 .vue ＋ 89 个 js/ts</text>
+  <text x="225" y="384" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">30,879 行</text>
+  <text x="225" y="412" text-anchor="middle" font-size="14" fill="#93b8b8">Vue3 前端，一套代码打 H5 / 小程序</text>
+  <text x="225" y="450" text-anchor="middle" font-size="14" fill="#f0c98a">扫码 · 蓝牙 · 后台定位撞天花板</text>
+
+  <path d="M 386 384 L 458 384" stroke="#7ee0d0" stroke-width="3" marker-end="url(#ar)"/>
+
+  <rect x="474" y="286" width="330" height="196" rx="16" fill="#0f5b56" stroke="#7ee0d0" stroke-width="2.5"/>
+  <text x="639" y="322" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">搬成原生：骑行主循环</text>
+  <text x="639" y="356" text-anchor="middle" font-size="14" fill="#a9dede">153 个源文件 · Kotlin ＋ 26 行 Swift</text>
+  <text x="639" y="384" text-anchor="middle" font-size="30" font-weight="700" fill="#7ee0d0">17,637 行</text>
+  <text x="639" y="412" text-anchor="middle" font-size="14" fill="#a9dede">其中 15,759 行（89%）双端共用</text>
+  <text x="639" y="450" text-anchor="middle" font-size="14" fill="#ffffff">248 个共享层单测用例把规则钉死</text>
+
+  <path d="M 820 384 L 892 384" stroke="#7ee0d0" stroke-width="3" marker-end="url(#ar)"/>
+
+  <rect x="908" y="286" width="292" height="196" rx="16" fill="#123a42" stroke="#3f7f7f" stroke-width="2"/>
+  <text x="1054" y="322" text-anchor="middle" font-size="18" font-weight="700" fill="#d8efef">原样复用：长尾页</text>
+  <text x="1054" y="356" text-anchor="middle" font-size="14" fill="#93b8b8">钱包 · 发票 · 卡券 · 客服 · 设置…</text>
+  <text x="1054" y="384" text-anchor="middle" font-size="30" font-weight="700" fill="#ffffff">49 屏</text>
+  <text x="1054" y="412" text-anchor="middle" font-size="14" fill="#93b8b8">跑 UniApp build:h5 产物，一行没改</text>
+  <text x="1054" y="450" text-anchor="middle" font-size="14" fill="#f0c98a">内嵌 WebView ＋ nativeHost 桥</text>
+
+  <!-- 底部数字条 -->
+  <rect x="80" y="524" width="1120" height="112" rx="14" fill="#0a2429" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <text x="172" y="568" text-anchor="middle" font-size="30" font-weight="700" fill="#7ee0d0">89%</text>
+  <text x="172" y="596" text-anchor="middle" font-size="13" fill="#8fb5b5">代码双端共用</text>
+  <text x="172" y="618" text-anchor="middle" font-size="12" fill="#5f8a8a">shared + sharedUi</text>
+
+  <line x1="266" y1="546" x2="266" y2="614" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <text x="372" y="568" text-anchor="middle" font-size="30" font-weight="700" fill="#7ee0d0">58 / 26</text>
+  <text x="372" y="596" text-anchor="middle" font-size="13" fill="#8fb5b5">宿主入口行数</text>
+  <text x="372" y="618" text-anchor="middle" font-size="12" fill="#5f8a8a">MainActivity / Swift</text>
+
+  <line x1="466" y1="546" x2="466" y2="614" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <text x="572" y="568" text-anchor="middle" font-size="30" font-weight="700" fill="#7ee0d0">248</text>
+  <text x="572" y="596" text-anchor="middle" font-size="13" fill="#8fb5b5">共享层单测用例</text>
+  <text x="572" y="618" text-anchor="middle" font-size="12" fill="#5f8a8a">状态机 / BLE 帧 / 签名</text>
+
+  <line x1="666" y1="546" x2="666" y2="614" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <text x="782" y="568" text-anchor="middle" font-size="30" font-weight="700" fill="#7ee0d0">227 × 2</text>
+  <text x="782" y="596" text-anchor="middle" font-size="13" fill="#8fb5b5">中英文案键</text>
+  <text x="782" y="618" text-anchor="middle" font-size="12" fill="#5f8a8a">原生与 H5 同一语言</text>
+
+  <line x1="892" y1="546" x2="892" y2="614" stroke="#2d6b6b" stroke-width="1.5"/>
+
+  <text x="1046" y="568" text-anchor="middle" font-size="26" font-weight="700" fill="#f0c98a">支付未接</text>
+  <text x="1046" y="596" text-anchor="middle" font-size="13" fill="#8fb5b5">桥上 pay 固定 UNSUPPORTED</text>
+  <text x="1046" y="618" text-anchor="middle" font-size="12" fill="#5f8a8a">这一块下一篇再说</text>
+
+  <text x="80" y="682" font-size="14" fill="#6f9a9a">源码开放（Elastic License 2.0）· github.com/wanghengwen/ebike-go · 工程目录 ebike-RiderApp/</text>
+</svg>
+</body>
+</html>
